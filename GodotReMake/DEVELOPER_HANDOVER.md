@@ -5,7 +5,7 @@
 > **语言**: GDScript
 > **作者**: [Previous Agent]
 > **日期**: 2026-05-06
-> **最后更新**: 2026-05-08 (Prayer & Heal 重构完成，hero.gd 清理完成)
+> **最后更新**: 2026-05-08 (全部21个技能重构完成！)
 
 ---
 
@@ -31,8 +31,8 @@
 ### 当前状态
 - 核心游戏循环可运行（移动、攻击、击杀、升级、掉落）
 - 完整的21个技能系统（UI + 逻辑）
-- **技能重构进行中**：5个技能已提取为独立场景（Magic Missile、Fireball、Freezing Spear、Prayer、Heal）
-- **hero.gd 已清理**：删除了15个未重构技能的旧版内联实现，替换为占位符函数
+- **✅ 技能重构完成**：全部21个技能已提取为独立场景 + 独立脚本
+- **hero.gd 已完全重构**：所有技能调用改为 `SkillName.cast(self, mouse_pos, skill_cooldowns)` 模式
 - **技能数据已迁移**：各技能脚本管理自己的冷却、伤害、法力消耗
 - **独立冷却系统**：每个技能各自冷却，可同时施放多个技能
 - **长按持续施法**：按住技能键可持续施放（受冷却限制）
@@ -46,11 +46,24 @@
 | 按键 | 功能 |
 |------|------|
 | WASD | 移动 |
-| 鼠标左键 | Magic Missile（默认左键技能） |
+| 鼠标左键 | Magic Missile |
 | 鼠标右键 | Fireball |
 | Z | Freezing Spear |
 | X | Prayer |
 | C | Heal |
+| 2 | Teleport |
+| 3 | Mist Fog |
+| 4 | Wrath of God |
+| Q | Telekinesis |
+| R | Sacrifice |
+| E | Holy Light |
+| U | Fire Walk |
+| F | Meteor |
+| G | Armageddon |
+| H | Poison Cloud |
+| V | Fortuna |
+| B | Dark Ritual |
+| N | Nova |
 | T | 打开/关闭英雄面板（技能树 + 属性分配） |
 | F2 | 切换开发模式（DevMode） |
 
@@ -70,6 +83,18 @@ GodotReMake/
 │   ├── MagicMissile.tscn      # Magic Missile 独立场景 ✅
 │   ├── Fireball.tscn          # Fireball 独立场景 ✅
 │   ├── FreezingSpear.tscn     # Freezing Spear 独立场景 ✅
+│   ├── Prayer.tscn            # Prayer 独立场景 ✅
+│   ├── Heal.tscn              # Heal 独立场景 ✅
+│   ├── Teleport.tscn          # Teleport 独立场景 ✅
+│   ├── MistFog.tscn           # Mist Fog 独立场景 ✅
+│   ├── WrathOfGod.tscn        # Wrath of God 独立场景 ✅
+│   ├── HolyLight.tscn         # Holy Light 独立场景 ✅
+│   ├── FireWalk.tscn          # Fire Walk 独立场景 ✅
+│   ├── Meteor.tscn            # Meteor 独立场景 ✅
+│   ├── Armageddon.tscn        # Armageddon 独立场景 ✅
+│   ├── PoisonCloud.tscn       # Poison Cloud 独立场景 ✅
+│   ├── Nova.tscn              # Nova 独立场景 ✅
+│   ├── DarkRitual.tscn        # Dark Ritual 独立场景 ✅
 │   ├── Explosion.tscn         # 爆炸特效
 │   ├── PickupItem.tscn        # 拾取物品
 │   ├── HUD.tscn               # 游戏内HUD（血条/蓝条/经验条）
@@ -86,6 +111,20 @@ GodotReMake/
 │   ├── freezing_spear.gd      # Freezing Spear 独立脚本 ✅
 │   ├── prayer.gd              # Prayer 独立脚本 ✅
 │   ├── heal.gd                # Heal 独立脚本 ✅
+│   ├── teleport.gd            # Teleport 独立脚本 ✅
+│   ├── mistfog.gd             # Mist Fog 独立脚本 ✅
+│   ├── wrath_of_god.gd        # Wrath of God 独立脚本 ✅
+│   ├── telekinesis.gd         # Telekinesis 独立脚本 ✅
+│   ├── sacrifice.gd           # Sacrifice 独立脚本 ✅
+│   ├── holy_light.gd          # Holy Light 独立脚本 ✅
+│   ├── stone_enchanted.gd     # Stone Enchanted 独立脚本 ✅
+│   ├── fire_walk.gd           # Fire Walk 独立脚本 ✅
+│   ├── meteor.gd              # Meteor 独立脚本 ✅
+│   ├── armageddon.gd          # Armageddon 独立脚本 ✅
+│   ├── poison_cloud.gd        # Poison Cloud 独立脚本 ✅
+│   ├── fortuna.gd             # Fortuna 独立脚本 ✅
+│   ├── dark_ritual.gd         # Dark Ritual 独立脚本 ✅
+│   ├── nova.gd                # Nova 独立脚本 ✅
 │   ├── explosion.gd           # 爆炸特效逻辑
 │   ├── pickup_item.gd         # 拾取物品逻辑
 │   ├── loot_manager.gd        # 掉落管理器（自动加载）
@@ -136,9 +175,23 @@ GodotReMake/
 - [x] **Freezing Spear 重构**：独立场景 + 直线穿透 + 冰冻效果 + water属性伤害
 - [x] **Prayer 重构**：独立场景 + 持续扣血回蓝 + 蓝色气泡特效 + 绑定X键
 - [x] **Heal 重构**：独立场景 + 持续回血 + 红色+号特效 + 绑定C键
+- [x] **Teleport 重构**：独立场景 + 位移到鼠标位置 + 2键绑定
+- [x] **MistFog 重构**：独立场景 + 区域减速 + 3键绑定
+- [x] **WrathOfGod 重构**：独立场景 + 全屏AOE + 4键绑定
+- [x] **Telekinesis 重构**：独立场景 + 隔空取物 + Q键绑定
+- [x] **Sacrifice 重构**：独立场景 + 消耗生命秒杀 + R键绑定
+- [x] **HolyLight 重构**：独立场景 + 射线伤害 + E键绑定
+- [x] **StoneEnchanted 重构**：独立脚本 + 被动石化反击
+- [x] **FireWalk 重构**：独立场景 + 火焰轨迹 + U键绑定
+- [x] **Meteor 重构**：独立场景 + 延迟AOE + F键绑定
+- [x] **Armageddon 重构**：独立场景 + 全屏随机伤害 + G键绑定
+- [x] **PoisonCloud 重构**：独立场景 + 区域持续伤害 + H键绑定
+- [x] **Fortuna 重构**：独立脚本 + 被动增加掉率 + V键绑定
+- [x] **DarkRitual 重构**：独立场景 + 延迟秒杀 + B键绑定
+- [x] **Nova 重构**：独立场景 + 自身圆形AOE + N键绑定
 - [x] **技能数据迁移**：冷却、伤害、法力消耗已移至各技能脚本
-- [x] **hero.gd 清理**：删除15个未重构技能的旧版内联实现，替换为占位符函数
-- [ ] **其余13个技能**：仍使用占位符函数，待重构为独立场景
+- [x] **hero.gd 完全重构**：所有21个技能调用改为独立脚本模式
+- [x] **✅ 技能重构全部完成**：21/21个技能已重构为独立场景/脚本
 
 ### 3.4 技能树布局（最终版）
 
@@ -241,17 +294,29 @@ var drop_rate_multiplier := 1.0          # 掉落率倍率（Fortuna）
 
 所有技能通过 `_unhandled_input()` 处理，使用 `InputEventAction` 判断。
 
-**当前输入映射：**
+**当前输入映射（全部21个技能已绑定）：**
 ```
 spell_magic_missile  → 鼠标左键
 spell_fireball       → 鼠标右键
 spell_freezing_spear → 键盘 Z
 spell_prayer         → 键盘 X
 spell_heal           → 键盘 C
-...（其余技能未绑定常用按键）
+spell_teleport       → 键盘 2
+spell_mistfog        → 键盘 3
+spell_wrath_of_god   → 键盘 4
+spell_telekinesis    → 键盘 Q
+spell_sacrifice      → 键盘 R
+spell_holy_light     → 键盘 E
+spell_fire_walk      → 键盘 U
+spell_meteor         → 键盘 F
+spell_armageddon     → 键盘 G
+spell_poison_cloud   → 键盘 H
+spell_fortuna        → 键盘 V
+spell_dark_ritual    → 键盘 B
+spell_nova           → 键盘 N
 ```
 
-**注意：** 已重构的5个技能绑定了输入。其余13个技能使用占位符函数，按键已改为不常用的F12（4194332），防止冲突。
+**注意：** 全部21个技能已重构并绑定按键。被动技能（StoneEnchanted、Fortuna）在 _ready() 中自动触发。
 
 ### 4.3 技能施放通用模式
 
@@ -273,28 +338,42 @@ func cast_xxx():
 
 ### 4.4 技能效果实现方式
 
-**新架构（推荐）**：5个技能已重构为独立场景模式：
-- 每个技能有独立的 `.tscn` 场景文件 + `.gd` 脚本文件
+**架构（已完成）**：全部21个技能已重构为独立场景/脚本模式：
+- 每个技能有独立的 `.tscn` 场景文件 + `.gd` 脚本文件（被动技能可能无场景）
 - 场景包含：Area2D（根节点）+ CollisionShape2D + Sprite2D + CPUParticles2D
 - 脚本继承自 Area2D，包含完整的移动、碰撞、伤害、特效逻辑
 - hero.gd 中通过 `preload("res://Scenes/XXX.tscn").instantiate()` 创建实例
 
-**已重构技能**：
+**全部已重构技能**：
+
+投射物类：
 - Magic Missile (`Scripts/magic_missile.gd` + `Scenes/MagicMissile.tscn`)
 - Fireball (`Scripts/fireball.gd` + `Scenes/Fireball.tscn`)
 - Freezing Spear (`Scripts/freezing_spear.gd` + `Scenes/FreezingSpear.tscn`)
+
+持续效果类：
 - Prayer (`Scripts/prayer.gd` + `Scenes/Prayer.tscn`)
 - Heal (`Scripts/heal.gd` + `Scenes/Heal.tscn`)
 
-**占位符架构**：其余13个技能使用空函数占位：
-- hero.gd 中有 `cast_teleport()`, `cast_mistfog()` 等15个空函数
-- 按对应按键会执行 `pass`，不会报错，但没有任何效果
-- 需要逐步重构为独立场景，替换空函数为调用 `SkillName.cast()`
+位移/区域类：
+- Teleport (`Scripts/teleport.gd` + `Scenes/Teleport.tscn`)
+- MistFog (`Scripts/mistfog.gd` + `Scenes/MistFog.tscn`)
+- HolyLight (`Scripts/holy_light.gd` + `Scenes/HolyLight.tscn`)
+- FireWalk (`Scripts/fire_walk.gd` + `Scenes/FireWalk.tscn`)
+- Meteor (`Scripts/meteor.gd` + `Scenes/Meteor.tscn`)
+- Armageddon (`Scripts/armageddon.gd` + `Scenes/Armageddon.tscn`)
+- PoisonCloud (`Scripts/poison_cloud.gd` + `Scenes/PoisonCloud.tscn`)
+- Nova (`Scripts/nova.gd` + `Scenes/Nova.tscn`)
+- DarkRitual (`Scripts/dark_ritual.gd` + `Scenes/DarkRitual.tscn`)
 
-**重构建议**：
-- 参考 prayer.gd / heal.gd（最新重构的技能，包含持续效果 + 粒子特效）
-- 也参考 magic_missile.gd / fireball.gd / freezing_spear.gd（投射物类技能）
-- **下一步**：将剩余13个技能逐步重构为独立场景模式
+即时效果类：
+- WrathOfGod (`Scripts/wrath_of_god.gd` + `Scenes/WrathOfGod.tscn`)
+- Telekinesis (`Scripts/telekinesis.gd`)
+- Sacrifice (`Scripts/sacrifice.gd`)
+
+被动技能类（无场景，脚本直接生效）：
+- StoneEnchanted (`Scripts/stone_enchanted.gd`)
+- Fortuna (`Scripts/fortuna.gd`)
 
 ---
 
@@ -306,32 +385,34 @@ func cast_xxx():
 |---|--------|------|------|----------|------|------|------|------|----------|
 | 1 | magic_missile | Magic Missile | 基础 | **basic** | 无 | 5法力 | 0.5s | 发射投射物，伤害10+力量×1.5，追踪+加速+转弯减速 | ✅ 独立场景 |
 | 2 | prayer | Prayer | Earth | - | magic_missile | 生命 | 20s | 持续10秒，每秒扣3%生命回5%法力 | ✅ 独立场景 |
-| 3 | teleport | Teleport | Earth | - | prayer | 35法力 | 20s | 0.2秒施法后传送到鼠标位置 | ⏳ 占位符 |
-| 4 | mistfog | Mist Fog | Earth | - | prayer | 25法力 | 5s | 棕色雾气减速敌人35% | ⏳ 占位符 |
-| 5 | stone_enchanted | Stone Enchanted | Earth | - | teleport | 被动 | - | 被击时30%几率石化攻击者 | ⏳ 占位符 |
-| 6 | wrath_of_god | Wrath of God | Earth | **earth** | teleport | 55法力 | 2s | 10个锤子环绕飞出，伤害200 | ⏳ 占位符 |
-| 7 | telekinesis | Telekinesis | Air | - | magic_missile | 无 | 1.0s | 远距离拾取物品 | ⏳ 占位符 |
-| 8 | holy_light | Holy Light | Air | **air** | telekinesis | 35法力 | 1s | 3道光线射向鼠标，伤害120 | ⏳ 占位符 |
-| 9 | sacrifice | Sacrifice | Air | **air** | telekinesis | 55%生命 | 3s | 秒杀鼠标附近敌人 | ⏳ 占位符 |
-| 10 | ball_lightning | Ball Lightning | Air | **air** | holy_light | 45法力 | 2s | 银球自动攻击附近敌人 | ⏳ 占位符 |
-| 11 | chain_lightning | Chain Lightning | Air | **air** | holy_light | 55法力 | 1s | 闪电矛弹跳3次，伤害1000 | ⏳ 占位符 |
+| 3 | teleport | Teleport | Earth | - | prayer | 35法力 | 20s | 0.2秒施法后传送到鼠标位置 | ✅ 独立场景 |
+| 4 | mistfog | Mist Fog | Earth | - | prayer | 25法力 | 5s | 棕色雾气减速敌人35% | ✅ 独立场景 |
+| 5 | stone_enchanted | Stone Enchanted | Earth | - | teleport | 被动 | - | 被击时30%几率石化攻击者 | ✅ 独立脚本 |
+| 6 | wrath_of_god | Wrath of God | Earth | **earth** | teleport | 55法力 | 2s | 10个锤子环绕飞出，伤害200 | ✅ 独立场景 |
+| 7 | telekinesis | Telekinesis | Air | - | magic_missile | 无 | 1.0s | 远距离拾取物品 | ✅ 独立脚本 |
+| 8 | holy_light | Holy Light | Air | **air** | telekinesis | 35法力 | 1s | 3道光线射向鼠标，伤害120 | ✅ 独立场景 |
+| 9 | sacrifice | Sacrifice | Air | **air** | telekinesis | 55%生命 | 3s | 秒杀鼠标附近敌人 | ✅ 独立脚本 |
+| 10 | ball_lightning | Ball Lightning | Air | **air** | holy_light | 45法力 | 2s | 银球自动攻击附近敌人 | ❌ 已移除 |
+| 11 | chain_lightning | Chain Lightning | Air | **air** | holy_light | 55法力 | 1s | 闪电矛弹跳3次，伤害1000 | ❌ 已移除 |
 | 12 | fireball | Fireball | Fire | **fire** | magic_missile | 10法力 | 0.3s | 发射火球，伤害15+力量×2，爆炸AOE | ✅ 独立场景 |
 | 13 | heal | Heal | Fire | - | fireball | 35法力 | 15s | 持续10秒，每秒回复5.5%生命 | ✅ 独立场景 |
-| 14 | fire_walk | Fire Walk | Fire | **fire** | fireball | 被动 | - | 留下火焰轨迹，30伤害/秒 | ⏳ 占位符 |
-| 15 | meteor | Meteor | Fire | **fire** | heal | 45法力 | 5s | 陨石雨，伤害250，范围130 | ⏳ 占位符 |
-| 16 | armageddon | Armageddon | Fire | **fire** | heal | 55法力 | 20s | 全屏随机火blast，伤害250 | ⏳ 占位符 |
+| 14 | fire_walk | Fire Walk | Fire | **fire** | fireball | 被动 | - | 留下火焰轨迹，30伤害/秒 | ✅ 独立场景 |
+| 15 | meteor | Meteor | Fire | **fire** | heal | 45法力 | 5s | 陨石雨，伤害250，范围130 | ✅ 独立场景 |
+| 16 | armageddon | Armageddon | Fire | **fire** | heal | 55法力 | 20s | 全屏随机火blast，伤害250 | ✅ 独立场景 |
 | 17 | freezing_spear | Freezing Spear | Water | **water** | magic_missile | 25法力 | 3s | 冰矛直线穿透，伤害50，冻结2秒 | ✅ 独立场景 |
-| 18 | poison_cloud | Poison Cloud | Water | **water** | freezing_spear | 35法力 | 5s | 绿色毒雾，60伤害/秒 | ⏳ 占位符 |
-| 19 | fortuna | Fortuna | Water | - | freezing_spear | 被动 | - | 增加掉落率15% | ⏳ 占位符 |
-| 20 | dark_ritual | Dark Ritual | Water | **water** | poison_cloud | 55法力 | 5.5s | 黑雾，2秒后30%几率秒杀 | ⏳ 占位符 |
-| 21 | nova | Nova | Water | **water** | poison_cloud | 45法力 | 2s | 雪球爆炸冻结，伤害200 | ⏳ 占位符 |
+| 18 | poison_cloud | Poison Cloud | Water | **water** | freezing_spear | 35法力 | 5s | 绿色毒雾，60伤害/秒 | ✅ 独立场景 |
+| 19 | fortuna | Fortuna | Water | - | freezing_spear | 被动 | - | 增加掉落率15% | ✅ 独立脚本 |
+| 20 | dark_ritual | Dark Ritual | Water | **water** | poison_cloud | 55法力 | 5.5s | 黑雾，2秒后30%几率秒杀 | ✅ 独立场景 |
+| 21 | nova | Nova | Water | **water** | poison_cloud | 45法力 | 2s | 雪球爆炸冻结，伤害200 | ✅ 独立场景 |
 
 **伤害属性分类**：
 - **basic**: magic_missile
 - **earth**: stone_enchanted, wrath_of_god
-- **air**: holy_light, sacrifice, ball_lightning, chain_lightning
+- **air**: holy_light, sacrifice
 - **fire**: fireball, fire_walk, meteor, armageddon
 - **water**: freezing_spear, poison_cloud, dark_ritual, nova
+
+> **注意**：ball_lightning 和 chain_lightning 是 LLM 幻觉技能，已移除。
 
 ### 5.2 技能等级成长
 
@@ -367,20 +448,15 @@ func cast_xxx():
 
 ### 6.1 高优先级问题
 
-1. **技能重构进行中（13个技能待完成）**
-   - ✅ 已重构5个技能：Magic Missile、Fireball、Freezing Spear、Prayer、Heal
-   - ⏳ 其余13个技能使用占位符函数（空实现），需要逐步重构
-   - **重构模式**：每个技能创建独立的 `.tscn` + `.gd` 文件，参考现有技能的代码结构
-   - **重构顺序建议**：按系别分批重构（Earth → Air → Fire → Water）
-   - **参考模板**：
-     - 投射物类：magic_missile.gd / fireball.gd / freezing_spear.gd
-     - 持续效果类：prayer.gd / heal.gd（含粒子特效、Timer管理）
+1. **✅ 技能重构已完成（21/21个技能）**
+   - 全部21个技能已重构为独立场景/脚本
+   - hero.gd 中所有技能调用已改为 `SkillName.cast()` 模式
+   - 被动技能（StoneEnchanted、Fortuna）在 _ready() 中自动触发
 
-2. **技能视觉效果简陋**
-   - ✅ Magic Missile、Fireball、Freezing Spear 已有独立视觉效果（Sprite2D + CPUParticles2D）
-   - ⏳ 其余技能使用程序化生成的ColorRect/Line2D
-   - 没有音效
-   - **建议：** 继续将剩余技能重构为独立场景预制体
+2. **技能视觉效果**
+   - ✅ 全部技能已有独立视觉效果（Sprite2D + CPUParticles2D）
+   - ❌ 没有音效
+   - **建议：** 添加技能施放音效和背景音乐
 
 3. **怪物种类单一**
    - 目前只有一种怪物（Monster.tscn）

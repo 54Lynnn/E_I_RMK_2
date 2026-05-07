@@ -17,51 +17,56 @@
 
 ## 🎯 当前核心任务
 
-### 上一个 Agent 已完成的工作（2026-05-08）
+### ✅ 技能重构已完成（2026-05-08）
 
-1. **重构了 5 个技能为独立场景**：
-   - ✅ **Magic Missile** (`MagicMissile.tscn` + `magic_missile.gd`)
-     - 特性：追踪目标、发射后缓慢加速、转弯减速效果、10秒生命周期
-     - 伤害属性：basic
-   - ✅ **Fireball** (`Fireball.tscn` + `fireball.gd`)
-     - 特性：直线飞行、命中后爆炸AOE、fire属性伤害
-   - ✅ **Freezing Spear** (`FreezingSpear.tscn` + `freezing_spear.gd`)
-     - 特性：直线穿透、冰冻敌人1秒（不能移动不能攻击）、water属性伤害
-     - 按键：Z
-   - ✅ **Prayer** (`Prayer.tscn` + `prayer.gd`)
-     - 特性：持续10秒，每秒扣3%生命回5%法力，蓝色气泡粒子特效
-     - 按键：X
-   - ✅ **Heal** (`Heal.tscn` + `heal.gd`)
-     - 特性：持续10秒，每秒回复5.5%生命，红色+号粒子特效
-     - 按键：C
+**全部21个技能已重构为独立场景/脚本！**
 
-2. **更新了伤害类型系统**：
-   - 五种元素属性：basic, earth, air, fire, water
-   - 所有技能按系别分配对应属性
+1. **投射物类（3个）**：
+   - ✅ Magic Missile — 追踪+加速+转弯减速
+   - ✅ Fireball — 直线飞行+爆炸AOE
+   - ✅ Freezing Spear — 直线穿透+冰冻
 
-3. **实现了技能独立冷却系统**：
-   - 每个技能有自己的冷却时间，互不干扰
-   - 可同时施放多个技能（如左键+右键+Z同时按）
-   - 长按可持续施法（受冷却限制）
+2. **持续效果类（2个）**：
+   - ✅ Prayer — 扣血回蓝+蓝色粒子
+   - ✅ Heal — 持续回血+红色+号粒子
 
-4. **移除了 Lightning 技能**（LLM幻觉技能）
+3. **位移/区域类（9个）**：
+   - ✅ Teleport — 位移到鼠标位置
+   - ✅ MistFog — 区域减速
+   - ✅ HolyLight — 射线伤害
+   - ✅ FireWalk — 火焰轨迹
+   - ✅ Meteor — 延迟AOE
+   - ✅ Armageddon — 全屏随机伤害
+   - ✅ PoisonCloud — 区域持续伤害
+   - ✅ Nova — 自身圆形AOE
+   - ✅ DarkRitual — 延迟秒杀
 
-5. **实现了技能数据封装**：
+4. **即时效果类（3个）**：
+   - ✅ WrathOfGod — 全屏AOE
+   - ✅ Telekinesis — 隔空取物
+   - ✅ Sacrifice — 消耗生命秒杀
+
+5. **被动技能类（2个）**：
+   - ✅ StoneEnchanted — 被击石化反击
+   - ✅ Fortuna — 增加掉落率
+
+6. **架构改进**：
+   - hero.gd 完全重构：所有技能调用改为 `SkillName.cast()` 模式
    - 各技能脚本管理自己的冷却、伤害、法力消耗
-   - hero.gd 不再包含技能数据，只负责调用
-
-6. **清理了 hero.gd**：
-   - 删除了15个未重构技能的旧版内联实现
-   - 替换为占位符空函数（`pass`），防止按键报错
-   - 修复了 project.godot 中的按键冲突（Armageddon/PoisonCloud 改为 F12）
+   - 全部21个技能已绑定按键（见下方按键表）
 
 ### 你的首要任务
 
-**继续重构剩余的 13 个技能为独立场景**
+**技能重构阶段已完成。下一步建议：**
 
-这是用户明确要求的架构改进。上一个 Agent 已经建立了清晰的模式，你只需要复制这个模式。
+1. **添加音效** — 所有技能目前没有音效
+2. **扩展怪物种类** — 目前只有蜘蛛和僵尸，需添加熊、弓手、恶魔、死神等
+3. **实现存档系统** — 使用 FileAccess + JSON
+4. **添加地图/关卡系统** — 原版有多张地图
+5. **优化技能平衡性** — 测试并调整技能数值
+6. **完善UI** — 添加系别头像、更好的技能提示框等
 
-**必须遵守 `SPELL_DEVELOPMENT_GUIDE.md` 中的规范。**
+请根据用户具体要求选择下一步工作。
 
 ---
 
@@ -141,64 +146,70 @@ func cast_magic_missile():
     MagicMissile.cast(self, mouse_pos, skill_cooldowns)
 ```
 
-### hero.gd 中的占位符（待重构技能）
+### hero.gd 中的调用方式（全部技能）
 
 ```gdscript
+func cast_magic_missile():
+    MagicMissile.cast(self, mouse_pos, skill_cooldowns)
+
+func cast_fireball():
+    Fireball.cast(self, mouse_pos, skill_cooldowns)
+
+func cast_freezing_spear():
+    FreezingSpear.cast(self, mouse_pos, skill_cooldowns)
+
+func cast_prayer():
+    Prayer.cast(self, mouse_pos, skill_cooldowns)
+
+func cast_heal():
+    Heal.cast(self, mouse_pos, skill_cooldowns)
+
 func cast_teleport():
-    pass  # 待重构：创建 Teleport.tscn + teleport.gd
+    Teleport.cast(self, mouse_pos, skill_cooldowns)
 
 func cast_mistfog():
-    pass  # 待重构：创建 MistFog.tscn + mistfog.gd
-# ... 其余13个技能同理
+    MistFog.cast(self, mouse_pos, skill_cooldowns)
+
+func cast_wrath_of_god():
+    WrathOfGod.cast(self, mouse_pos, skill_cooldowns)
+
+func cast_telekinesis():
+    Telekinesis.cast(self, mouse_pos, skill_cooldowns)
+
+func cast_sacrifice():
+    Sacrifice.cast(self, mouse_pos, skill_cooldowns)
+
+func cast_holy_light():
+    HolyLight.cast(self, mouse_pos, skill_cooldowns)
+
+func cast_fire_walk():
+    FireWalk.cast(self, mouse_pos, skill_cooldowns)
+
+func cast_meteor():
+    Meteor.cast(self, mouse_pos, skill_cooldowns)
+
+func cast_armageddon():
+    Armageddon.cast(self, mouse_pos, skill_cooldowns)
+
+func cast_poison_cloud():
+    PoisonCloud.cast(self, mouse_pos, skill_cooldowns)
+
+func cast_fortuna():
+    Fortuna.cast(self, mouse_pos, skill_cooldowns)
+
+func cast_dark_ritual():
+    DarkRitual.cast(self, mouse_pos, skill_cooldowns)
+
+func cast_nova():
+    Nova.cast(self, mouse_pos, skill_cooldowns)
 ```
 
-**重构步骤**：
-1. 创建 `Scenes/SkillName.tscn` + `Scripts/skill_name.gd`
-2. 实现 `static func cast(hero, mouse_pos, skill_cooldowns) -> bool`
-3. 将 hero.gd 中的占位符替换为调用 `SkillName.cast(self, mouse_pos, skill_cooldowns)`
-4. 在 `project.godot` 中绑定合适的按键（避免与 X/C/Z 冲突）
-
----
-
-## 📊 待重构技能清单（13个）
-
-按系别分组，建议按此顺序重构：
-
-### Earth 系（3个）
-| 技能 | 伤害属性 | 实现方式 | 难度 |
-|------|----------|----------|------|
-| Teleport | - | 位移到鼠标位置 | ⭐⭐ |
-| MistFog | - | 区域减速（Area2D） | ⭐⭐⭐ |
-| StoneEnchanted | - | 被动技能 | ⭐ |
-| WrathOfGod | earth | 全屏AOE | ⭐⭐⭐ |
-
-> **注意**：Prayer 已重构完成（独立场景 + 持续扣血回蓝 + 蓝色粒子特效）
-
-### Air 系（3个）
-| 技能 | 伤害属性 | 实现方式 | 难度 |
-|------|----------|----------|------|
-| Telekinesis | - | 拾取远处物品 | ⭐⭐ |
-| HolyLight | air | 射线检测 | ⭐⭐⭐ |
-| Sacrifice | air | 消耗生命秒杀 | ⭐⭐ |
-
-> **注意**：BallLightning 和 ChainLightning 是 LLM 幻觉技能，已移除。Air 系目前只有 3 个技能。
-
-### Fire 系（3个）
-| 技能 | 伤害属性 | 实现方式 | 难度 |
-|------|----------|----------|------|
-| FireWalk | fire | 被动/留下火焰 | ⭐⭐⭐ |
-| Meteor | fire | 延迟AOE | ⭐⭐⭐ |
-| Armageddon | fire | 全屏随机伤害 | ⭐⭐⭐ |
-
-> **注意**：Heal 已重构完成（独立场景 + 持续回血 + 红色+号粒子特效）
-
-### Water 系（4个）
-| 技能 | 伤害属性 | 实现方式 | 难度 |
-|------|----------|----------|------|
-| PoisonCloud | water | 区域持续伤害 | ⭐⭐⭐ |
-| Fortuna | - | 被动/增加掉率 | ⭐ |
-| DarkRitual | water | 延迟秒杀 | ⭐⭐⭐ |
-| Nova | water | 自身圆形AOE | ⭐⭐⭐ |
+被动技能（StoneEnchanted、Fortuna）在 `_ready()` 中自动触发：
+```gdscript
+func _ready():
+    StoneEnchanted.cast(self, mouse_pos, skill_cooldowns)
+    Fortuna.cast(self, mouse_pos, skill_cooldowns)
+```
 
 ---
 
@@ -222,11 +233,25 @@ water:  freezing_spear, poison_cloud, dark_ritual, nova
 
 > **注意**：ball_lightning 和 chain_lightning 是 LLM 幻觉技能，已移除。
 
-### 3. 当前按键绑定
+### 3. 当前按键绑定（全部21个技能）
 - 鼠标左键：Magic Missile
 - 鼠标右键：Fireball
 - Z：Freezing Spear
-- 其余技能未绑定按键
+- X：Prayer
+- C：Heal
+- 2：Teleport
+- 3：Mist Fog
+- 4：Wrath of God
+- Q：Telekinesis
+- R：Sacrifice
+- E：Holy Light
+- U：Fire Walk
+- F：Meteor
+- G：Armageddon
+- H：Poison Cloud
+- V：Fortuna
+- B：Dark Ritual
+- N：Nova
 
 ### 4. 伤害系统
 - 技能伤害是**固定值**，不包含英雄属性加成
@@ -265,14 +290,13 @@ var muzzle = hero.get_node("Muzzle")             # ❌ 错误，会返回 null
 ## 💡 开发建议
 
 1. **先运行游戏**，按 F2 进入 DevMode，测试现有功能
-2. **先重构简单的技能**（如 Prayer、Fortuna、StoneEnchanted），再处理复杂的
-3. **保持代码风格一致**：
+2. **保持代码风格一致**：
    - snake_case 命名变量和函数
    - PascalCase 命名类名和节点名
    - UPPER_SNAKE_CASE 命名常量
    - Tab 缩进
-4. **测试时关注 Output 面板**，Godot 的报错信息很详细
-5. **每次重构一个技能后运行测试**，确保没有破坏现有功能
+3. **测试时关注 Output 面板**，Godot 的报错信息很详细
+4. **每次修改后运行测试**，确保没有破坏现有功能
 
 ---
 
@@ -281,15 +305,28 @@ var muzzle = hero.get_node("Muzzle")             # ❌ 错误，会返回 null
 | 文件 | 用途 |
 |------|------|
 | `Scripts/global.gd` | 全局状态（Autoload） |
-| `Scripts/hero.gd` | 英雄控制 + 技能调用（~990行） |
+| `Scripts/hero.gd` | 英雄控制 + 技能调用 |
 | `Scripts/monster.gd` | 怪物 AI |
-| `Scripts/magic_missile.gd` | ✅ 参考模板（追踪投射物） |
-| `Scripts/fireball.gd` | ✅ 参考模板（爆炸AOE） |
-| `Scripts/freezing_spear.gd` | ✅ 参考模板（穿透+冰冻） |
-| `Scenes/MagicMissile.tscn` | ✅ 参考场景 |
-| `Scenes/Fireball.tscn` | ✅ 参考场景 |
-| `Scenes/FreezingSpear.tscn` | ✅ 参考场景 |
-| `SPELL_DEVELOPMENT_GUIDE.md` | 技能开发规范（必须遵守） |
+| `Scripts/magic_missile.gd` | ✅ 追踪投射物 |
+| `Scripts/fireball.gd` | ✅ 爆炸AOE |
+| `Scripts/freezing_spear.gd` | ✅ 穿透+冰冻 |
+| `Scripts/prayer.gd` | ✅ 持续效果+粒子 |
+| `Scripts/heal.gd` | ✅ 持续效果+粒子 |
+| `Scripts/teleport.gd` | ✅ 位移技能 |
+| `Scripts/mistfog.gd` | ✅ 区域减速 |
+| `Scripts/wrath_of_god.gd` | ✅ 全屏AOE |
+| `Scripts/holy_light.gd` | ✅ 射线伤害 |
+| `Scripts/fire_walk.gd` | ✅ 火焰轨迹 |
+| `Scripts/meteor.gd` | ✅ 延迟AOE |
+| `Scripts/armageddon.gd` | ✅ 全屏随机伤害 |
+| `Scripts/poison_cloud.gd` | ✅ 区域持续伤害 |
+| `Scripts/nova.gd` | ✅ 自身圆形AOE |
+| `Scripts/dark_ritual.gd` | ✅ 延迟秒杀 |
+| `Scripts/telekinesis.gd` | ✅ 隔空取物 |
+| `Scripts/sacrifice.gd` | ✅ 消耗生命秒杀 |
+| `Scripts/stone_enchanted.gd` | ✅ 被动石化 |
+| `Scripts/fortuna.gd` | ✅ 被动掉率 |
+| `SPELL_DEVELOPMENT_GUIDE.md` | 技能开发规范 |
 | `project.godot` | 输入映射配置 |
 
 ---
@@ -299,12 +336,9 @@ var muzzle = hero.get_node("Muzzle")             # ❌ 错误，会返回 null
 1. 阅读 `DEVELOPER_HANDOVER.md` 了解项目全貌
 2. 阅读 `SPELL_DEVELOPMENT_GUIDE.md` 了解技能开发规范
 3. 运行游戏，按 F2 进入 DevMode 测试现有技能
-4. 选择一个待重构的技能（建议从 Prayer 或 Heal 开始）
-5. 参考 `magic_missile.gd` / `fireball.gd` / `freezing_spear.gd` 的代码结构
-6. 创建新的 `.tscn` + `.gd` 文件
-7. 在 `hero.gd` 中更新调用逻辑
-8. 在 `global.gd` 中添加技能等级
-9. 测试并验证
+4. 根据用户要求选择下一步工作（音效/怪物/存档/地图等）
+5. 参考现有技能代码结构进行开发
+6. 测试并验证
 
 ---
 

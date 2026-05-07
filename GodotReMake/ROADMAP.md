@@ -59,11 +59,21 @@ Evil Invasion 是一款 2006 年发布的俯视角动作 RPG（Diablo-like），
 │   ├── Monster.tscn           ← 蜘蛛兵（AI 追踪 + 攻击 + 死亡）
 │   ├── Zombie.tscn            ← ✅ 僵尸（最弱近战怪，共享 monster.gd）
 │   ├── Projectile.tscn        ← 旧版通用投射物（逐步弃用）
-│   ├── MagicMissile.tscn      ← ✅ Magic Missile 独立场景（追踪+加速+转弯减速）
-│   ├── Fireball.tscn          ← ✅ Fireball 独立场景（爆炸AOE）
-│   ├── FreezingSpear.tscn     ← ✅ Freezing Spear 独立场景（直线穿透+冰冻）
-│   ├── Prayer.tscn            ← ✅ Prayer 独立场景（持续扣血回蓝+蓝色粒子）
-│   ├── Heal.tscn              ← ✅ Heal 独立场景（持续回血+红色+号粒子）
+│   ├── MagicMissile.tscn      ← ✅ Magic Missile 独立场景
+│   ├── Fireball.tscn          ← ✅ Fireball 独立场景
+│   ├── FreezingSpear.tscn     ← ✅ Freezing Spear 独立场景
+│   ├── Prayer.tscn            ← ✅ Prayer 独立场景
+│   ├── Heal.tscn              ← ✅ Heal 独立场景
+│   ├── Teleport.tscn          ← ✅ Teleport 独立场景
+│   ├── MistFog.tscn           ← ✅ Mist Fog 独立场景
+│   ├── WrathOfGod.tscn        ← ✅ Wrath of God 独立场景
+│   ├── HolyLight.tscn         ← ✅ Holy Light 独立场景
+│   ├── FireWalk.tscn          ← ✅ Fire Walk 独立场景
+│   ├── Meteor.tscn            ← ✅ Meteor 独立场景
+│   ├── Armageddon.tscn        ← ✅ Armageddon 独立场景
+│   ├── PoisonCloud.tscn       ← ✅ Poison Cloud 独立场景
+│   ├── Nova.tscn              ← ✅ Nova 独立场景
+│   ├── DarkRitual.tscn        ← ✅ Dark Ritual 独立场景
 │   ├── Explosion.tscn         ← 爆炸特效
 │   ├── PickupItem.tscn        ← 拾取物品
 │   ├── HUD.tscn               ← 底部状态栏
@@ -74,11 +84,25 @@ Evil Invasion 是一款 2006 年发布的俯视角动作 RPG（Diablo-like），
 │   ├── hero.gd                ← 英雄控制（技能调用入口，cooldown 管理）
 │   ├── monster.gd             ← 怪物 AI（状态机，数据驱动）
 │   ├── projectile.gd          ← 旧版通用投射物逻辑（逐步弃用）
-│   ├── magic_missile.gd       ← ✅ Magic Missile 独立脚本（静态配置 + cast 方法）
-│   ├── fireball.gd            ← ✅ Fireball 独立脚本（静态配置 + cast 方法）
-│   ├── freezing_spear.gd      ← ✅ Freezing Spear 独立脚本（静态配置 + cast 方法）
-│   ├── prayer.gd              ← ✅ Prayer 独立脚本（静态配置 + cast 方法）
-│   ├── heal.gd                ← ✅ Heal 独立脚本（静态配置 + cast 方法）
+│   ├── magic_missile.gd       ← ✅ Magic Missile 独立脚本
+│   ├── fireball.gd            ← ✅ Fireball 独立脚本
+│   ├── freezing_spear.gd      ← ✅ Freezing Spear 独立脚本
+│   ├── prayer.gd              ← ✅ Prayer 独立脚本
+│   ├── heal.gd                ← ✅ Heal 独立脚本
+│   ├── teleport.gd            ← ✅ Teleport 独立脚本
+│   ├── mistfog.gd             ← ✅ Mist Fog 独立脚本
+│   ├── wrath_of_god.gd        ← ✅ Wrath of God 独立脚本
+│   ├── holy_light.gd          ← ✅ Holy Light 独立脚本
+│   ├── fire_walk.gd           ← ✅ Fire Walk 独立脚本
+│   ├── meteor.gd              ← ✅ Meteor 独立脚本
+│   ├── armageddon.gd          ← ✅ Armageddon 独立脚本
+│   ├── poison_cloud.gd        ← ✅ Poison Cloud 独立脚本
+│   ├── nova.gd                ← ✅ Nova 独立脚本
+│   ├── dark_ritual.gd         ← ✅ Dark Ritual 独立脚本
+│   ├── telekinesis.gd         ← ✅ Telekinesis 独立脚本
+│   ├── sacrifice.gd           ← ✅ Sacrifice 独立脚本
+│   ├── stone_enchanted.gd     ← ✅ Stone Enchanted 独立脚本
+│   ├── fortuna.gd             ← ✅ Fortuna 独立脚本
 │   ├── explosion.gd           ← 爆炸动画
 │   ├── pickup_item.gd         ← 拾取物品逻辑
 │   ├── loot_manager.gd        ← 掉落管理器（Autoload）
@@ -101,10 +125,23 @@ Evil Invasion 是一款 2006 年发布的俯视角动作 RPG（Diablo-like），
 | Freezing Spear（穿透+冰冻） | Z | ✅ 独立场景 + 独立脚本 |
 | Prayer（持续扣血回蓝） | X | ✅ 独立场景 + 独立脚本 |
 | Heal（持续回血） | C | ✅ 独立场景 + 独立脚本 |
+| Teleport（位移） | 2 | ✅ 独立场景 + 独立脚本 |
+| Mist Fog（区域减速） | 3 | ✅ 独立场景 + 独立脚本 |
+| Wrath of God（全屏AOE） | 4 | ✅ 独立场景 + 独立脚本 |
+| Telekinesis（隔空取物） | Q | ✅ 独立脚本 |
+| Sacrifice（消耗生命秒杀） | R | ✅ 独立脚本 |
+| Holy Light（射线伤害） | E | ✅ 独立场景 + 独立脚本 |
+| Fire Walk（火焰轨迹） | U | ✅ 独立场景 + 独立脚本 |
+| Meteor（延迟AOE） | F | ✅ 独立场景 + 独立脚本 |
+| Armageddon（全屏随机伤害） | G | ✅ 独立场景 + 独立脚本 |
+| Poison Cloud（区域持续伤害） | H | ✅ 独立场景 + 独立脚本 |
+| Fortuna（被动掉率） | V | ✅ 独立脚本 |
+| Dark Ritual（延迟秒杀） | B | ✅ 独立场景 + 独立脚本 |
+| Nova（自身圆形AOE） | N | ✅ 独立场景 + 独立脚本 |
+| Stone Enchanted（被动石化） | 被动 | ✅ 独立脚本 |
 | 独立技能冷却（可同时施放） | - | ✅ |
 | 长按持续施法 | 按住按键 | ✅ |
 | 技能数据封装（各技能脚本管理自身数据） | - | ✅ |
-| hero.gd 清理（删除旧代码，占位符函数） | - | ✅ |
 | 蜘蛛怪物追踪 AI | 自动 | ✅ |
 | 僵尸怪物追踪 AI | 自动 | ✅ |
 | 怪物数据驱动（通过场景属性配置） | - | ✅ |
@@ -120,11 +157,11 @@ Evil Invasion 是一款 2006 年发布的俯视角动作 RPG（Diablo-like），
 
 ### 待解决的问题 🔧
 
-- **13个技能仍使用占位符函数**，需要继续重构为独立场景 + 独立脚本（参考已完成的 5 个技能模式）
+- ✅ **技能重构已完成**（21/21 全部完成）
 - 怪物攻击冷却使用 `await` 可能导致协程问题
 - 需要扩展更多怪物种类（目前：蜘蛛、僵尸，还需：熊、弓手、恶魔、死神、骷髅、Boss）
-- hero.gd 已清理旧代码，15个未重构技能替换为占位符空函数
 - 已移除 LLM 幻觉技能（Lightning 系列），确保所有文档和代码中不再引用
+- 没有音效和背景音乐
 
 ---
 
@@ -237,21 +274,22 @@ func _on_died():
 ├── magic_missile.gd       ← ✅ 已重构（多发追踪）
 ├── fireball.gd            ← ✅ 已重构（爆炸AOE）
 ├── freezing_spear.gd      ← ✅ 已重构（穿透+冰冻）
-├── prayer.gd              ← 待重构
-├── teleport.gd            ← 待重构
-├── mistfog.gd             ← 待重构
-├── wrath_of_god.gd        ← 待重构
-├── telekinesis.gd         ← 待重构
-├── sacrifice.gd           ← 待重构
-├── holy_light.gd          ← 待重构
-├── heal.gd                ← 待重构
-├── fire_walk.gd           ← 待重构
-├── meteor.gd              ← 待重构
-├── armageddon.gd          ← 待重构
-├── poison_cloud.gd        ← 待重构
-├── fortuna.gd             ← 待重构
-├── dark_ritual.gd         ← 待重构
-└── nova.gd                ← 待重构
+├── prayer.gd              ← ✅ 已重构（持续扣血回蓝）
+├── teleport.gd            ← ✅ 已重构（位移）
+├── mistfog.gd             ← ✅ 已重构（区域减速）
+├── wrath_of_god.gd        ← ✅ 已重构（全屏AOE）
+├── telekinesis.gd         ← ✅ 已重构（隔空取物）
+├── sacrifice.gd           ← ✅ 已重构（消耗生命秒杀）
+├── holy_light.gd          ← ✅ 已重构（射线伤害）
+├── heal.gd                ← ✅ 已重构（持续回血）
+├── fire_walk.gd           ← ✅ 已重构（火焰轨迹）
+├── meteor.gd              ← ✅ 已重构（延迟AOE）
+├── armageddon.gd          ← ✅ 已重构（全屏随机伤害）
+├── poison_cloud.gd        ← ✅ 已重构（区域持续伤害）
+├── fortuna.gd             ← ✅ 已重构（被动掉率）
+├── dark_ritual.gd         ← ✅ 已重构（延迟秒杀）
+├── nova.gd                ← ✅ 已重构（自身圆形AOE）
+└── stone_enchanted.gd     ← ✅ 已重构（被动石化）
 ```
 
 **文件结构（当前实际结构）**：
@@ -260,6 +298,22 @@ Scripts/
 ├── magic_missile.gd        ← ✅ 已重构（静态配置 + cast 方法）
 ├── fireball.gd             ← ✅ 已重构（静态配置 + cast 方法）
 ├── freezing_spear.gd       ← ✅ 已重构（静态配置 + cast 方法）
+├── prayer.gd               ← ✅ 已重构（静态配置 + cast 方法）
+├── heal.gd                 ← ✅ 已重构（静态配置 + cast 方法）
+├── teleport.gd             ← ✅ 已重构（静态配置 + cast 方法）
+├── mistfog.gd              ← ✅ 已重构（静态配置 + cast 方法）
+├── wrath_of_god.gd         ← ✅ 已重构（静态配置 + cast 方法）
+├── telekinesis.gd          ← ✅ 已重构（静态配置 + cast 方法）
+├── sacrifice.gd            ← ✅ 已重构（静态配置 + cast 方法）
+├── holy_light.gd           ← ✅ 已重构（静态配置 + cast 方法）
+├── fire_walk.gd            ← ✅ 已重构（静态配置 + cast 方法）
+├── meteor.gd               ← ✅ 已重构（静态配置 + cast 方法）
+├── armageddon.gd           ← ✅ 已重构（静态配置 + cast 方法）
+├── poison_cloud.gd         ← ✅ 已重构（静态配置 + cast 方法）
+├── fortuna.gd              ← ✅ 已重构（静态配置 + cast 方法）
+├── dark_ritual.gd          ← ✅ 已重构（静态配置 + cast 方法）
+├── nova.gd                 ← ✅ 已重构（静态配置 + cast 方法）
+├── stone_enchanted.gd      ← ✅ 已重构（静态配置 + cast 方法）
 ├── hero.gd                 ← 英雄控制（技能调用入口， cooldown 管理）
 ├── monster.gd              ← 怪物 AI（状态机，数据驱动）
 ├── monster_spawner.gd      ← 怪物生成器
@@ -270,6 +324,18 @@ Scenes/
 ├── MagicMissile.tscn       ← ✅ 独立场景
 ├── Fireball.tscn           ← ✅ 独立场景
 ├── FreezingSpear.tscn      ← ✅ 独立场景
+├── Prayer.tscn             ← ✅ 独立场景
+├── Heal.tscn               ← ✅ 独立场景
+├── Teleport.tscn           ← ✅ 独立场景
+├── MistFog.tscn            ← ✅ 独立场景
+├── WrathOfGod.tscn         ← ✅ 独立场景
+├── HolyLight.tscn          ← ✅ 独立场景
+├── FireWalk.tscn           ← ✅ 独立场景
+├── Meteor.tscn             ← ✅ 独立场景
+├── Armageddon.tscn         ← ✅ 独立场景
+├── PoisonCloud.tscn        ← ✅ 独立场景
+├── Nova.tscn               ← ✅ 独立场景
+├── DarkRitual.tscn         ← ✅ 独立场景
 ├── Monster.tscn            ← 蜘蛛场景（共享 monster.gd）
 ├── Zombie.tscn             ← 僵尸场景（共享 monster.gd）
 └── ... 其他场景
