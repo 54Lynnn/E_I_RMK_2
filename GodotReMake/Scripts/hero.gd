@@ -30,6 +30,20 @@ const Fireball = preload("res://Scripts/fireball.gd")
 const FreezingSpear = preload("res://Scripts/freezing_spear.gd")
 const Prayer = preload("res://Scripts/prayer.gd")
 const Heal = preload("res://Scripts/heal.gd")
+const Teleport = preload("res://Scripts/teleport.gd")
+const MistFog = preload("res://Scripts/mistfog.gd")
+const StoneEnchanted = preload("res://Scripts/stone_enchanted.gd")
+const WrathOfGod = preload("res://Scripts/wrath_of_god.gd")
+const Telekinesis = preload("res://Scripts/telekinesis.gd")
+const Sacrifice = preload("res://Scripts/sacrifice.gd")
+const HolyLight = preload("res://Scripts/holy_light.gd")
+const FireWalk = preload("res://Scripts/fire_walk.gd")
+const Meteor = preload("res://Scripts/meteor.gd")
+const Armageddon = preload("res://Scripts/armageddon.gd")
+const PoisonCloud = preload("res://Scripts/poison_cloud.gd")
+const Fortuna = preload("res://Scripts/fortuna.gd")
+const DarkRitual = preload("res://Scripts/dark_ritual.gd")
+const Nova = preload("res://Scripts/nova.gd")
 
 # 基础移动速度（像素/秒）
 # 实际速度 = BASE_MOVE_SPEED + 敏捷×0.5 + 耐力×0.35
@@ -60,8 +74,7 @@ var skill_cooldowns := {
 	"telekinesis": 0.0,
 	"sacrifice": 0.0,
 	"holy_light": 0.0,
-	"ball_lightning": 0.0,
-	"chain_lightning": 0.0,
+	"stone_enchanted": 0.0,
 	"heal": 0.0,
 	"fire_walk": 0.0,
 	"meteor": 0.0,
@@ -80,43 +93,33 @@ var prayer_active := false      # 祈祷技能是否激活
 # ============================================
 
 func _ready():
-	# 初始化：连接信号和设置初始状态
-	
-	# 连接全局信号（当数据变化时更新显示）
 	Global.health_changed.connect(_on_health_changed)
 	Global.mana_changed.connect(_on_mana_changed)
 	Global.level_changed.connect(_on_level_changed)
 	Global.hero_died.connect(_on_died)
-	
-	# 应用属性计算（根据力量/智力计算最大生命/法力）
+
 	Global.apply_strength()
 	Global.apply_intelligence()
-	
-	# 设置初始生命和法力为满值
+
 	Global.health = Global.max_health
 	Global.mana = Global.max_mana
 
+	StoneEnchanted.cast(self, mouse_pos, skill_cooldowns)
+	Fortuna.cast(self, mouse_pos, skill_cooldowns)
+
 func _process(delta):
-	# 每帧执行：更新鼠标位置和角色朝向
-	
-	# 获取鼠标在世界坐标系中的位置
 	mouse_pos = get_global_mouse_position()
-	
-	# 让角色朝向鼠标方向
-	# angle_to_point计算从角色到鼠标的角度（弧度）
+
 	sprite.rotation = global_position.angle_to_point(mouse_pos)
-	
-	# 更新头顶的HUD显示
+
 	update_hud()
-	
-	# 更新技能冷却
+
 	for skill in skill_cooldowns.keys():
 		if skill_cooldowns[skill] > 0:
 			skill_cooldowns[skill] -= delta
 			if skill_cooldowns[skill] < 0:
 				skill_cooldowns[skill] = 0
-	
-	# 长按持续施法（每个技能独立冷却）
+
 	if Input.is_action_pressed("spell_magic_missile"):
 		cast_magic_missile()
 	if Input.is_action_pressed("spell_fireball"):
@@ -127,6 +130,32 @@ func _process(delta):
 		cast_prayer()
 	if Input.is_action_pressed("spell_heal"):
 		cast_heal()
+	if Input.is_action_pressed("spell_teleport"):
+		cast_teleport()
+	if Input.is_action_pressed("spell_mistfog"):
+		cast_mistfog()
+	if Input.is_action_pressed("spell_wrath_of_god"):
+		cast_wrath_of_god()
+	if Input.is_action_pressed("spell_telekinesis"):
+		cast_telekinesis()
+	if Input.is_action_pressed("spell_sacrifice"):
+		cast_sacrifice()
+	if Input.is_action_pressed("spell_holy_light"):
+		cast_holy_light()
+	if Input.is_action_pressed("spell_fire_walk"):
+		cast_fire_walk()
+	if Input.is_action_pressed("spell_meteor"):
+		cast_meteor()
+	if Input.is_action_pressed("spell_armageddon"):
+		cast_armageddon()
+	if Input.is_action_pressed("spell_poison_cloud"):
+		cast_poison_cloud()
+	if Input.is_action_pressed("spell_fortuna"):
+		cast_fortuna()
+	if Input.is_action_pressed("spell_dark_ritual"):
+		cast_dark_ritual()
+	if Input.is_action_pressed("spell_nova"):
+		cast_nova()
 
 func get_move_speed() -> float:
 	# 计算实际移动速度
@@ -166,6 +195,32 @@ func _unhandled_input(event):
 		cast_prayer()
 	if event.is_action_pressed("spell_heal"):
 		cast_heal()
+	if event.is_action_pressed("spell_teleport"):
+		cast_teleport()
+	if event.is_action_pressed("spell_mistfog"):
+		cast_mistfog()
+	if event.is_action_pressed("spell_wrath_of_god"):
+		cast_wrath_of_god()
+	if event.is_action_pressed("spell_telekinesis"):
+		cast_telekinesis()
+	if event.is_action_pressed("spell_sacrifice"):
+		cast_sacrifice()
+	if event.is_action_pressed("spell_holy_light"):
+		cast_holy_light()
+	if event.is_action_pressed("spell_fire_walk"):
+		cast_fire_walk()
+	if event.is_action_pressed("spell_meteor"):
+		cast_meteor()
+	if event.is_action_pressed("spell_armageddon"):
+		cast_armageddon()
+	if event.is_action_pressed("spell_poison_cloud"):
+		cast_poison_cloud()
+	if event.is_action_pressed("spell_fortuna"):
+		cast_fortuna()
+	if event.is_action_pressed("spell_dark_ritual"):
+		cast_dark_ritual()
+	if event.is_action_pressed("spell_nova"):
+		cast_nova()
 
 func cast_magic_missile():
 	MagicMissile.cast(self, mouse_pos, skill_cooldowns)
@@ -182,54 +237,44 @@ func cast_prayer():
 func cast_heal():
 	Heal.cast(self, mouse_pos, skill_cooldowns)
 
-# ============================================
-# 未重构技能的占位符（防止按键报错）
-# 这些技能将在后续重构为独立场景 + 脚本
-# ============================================
 func cast_teleport():
-	pass
+	Teleport.cast(self, mouse_pos, skill_cooldowns)
 
 func cast_mistfog():
-	pass
+	MistFog.cast(self, mouse_pos, skill_cooldowns)
 
 func cast_wrath_of_god():
-	pass
+	WrathOfGod.cast(self, mouse_pos, skill_cooldowns)
 
 func cast_telekinesis():
-	pass
+	Telekinesis.cast(self, mouse_pos, skill_cooldowns)
 
 func cast_sacrifice():
-	pass
+	Sacrifice.cast(self, mouse_pos, skill_cooldowns)
 
 func cast_holy_light():
-	pass
-
-func cast_ball_lightning():
-	pass
-
-func cast_chain_lightning():
-	pass
+	HolyLight.cast(self, mouse_pos, skill_cooldowns)
 
 func cast_fire_walk():
-	pass
+	FireWalk.cast(self, mouse_pos, skill_cooldowns)
 
 func cast_meteor():
-	pass
+	Meteor.cast(self, mouse_pos, skill_cooldowns)
 
 func cast_armageddon():
-	pass
+	Armageddon.cast(self, mouse_pos, skill_cooldowns)
 
 func cast_poison_cloud():
-	pass
+	PoisonCloud.cast(self, mouse_pos, skill_cooldowns)
 
 func cast_fortuna():
-	pass
+	Fortuna.cast(self, mouse_pos, skill_cooldowns)
 
 func cast_dark_ritual():
-	pass
+	DarkRitual.cast(self, mouse_pos, skill_cooldowns)
 
 func cast_nova():
-	pass
+	Nova.cast(self, mouse_pos, skill_cooldowns)
 
 
 func update_hud():

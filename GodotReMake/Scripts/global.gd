@@ -77,6 +77,7 @@ signal health_changed(health, max_health)       # 生命值变化时发射
 signal mana_changed(mana, max_mana)             # 法力值变化时发射
 signal hero_died                                # 英雄死亡时发射
 signal skill_level_changed(skill_id, level)     # 技能等级变化时发射
+signal hero_took_damage(amount, is_magic, attacker)  # 英雄受到伤害时发射（用于被动技能）
 
 # ============================================
 # 基础属性 - 玩家等级和经验
@@ -111,7 +112,7 @@ var skill_points := 0         # 当前可用的技能点数
 # Global.skill_level_changed.emit("magic_missile", 1)  # 通知UI更新
 
 var skill_levels := {
-	"magic_missile": 1,       # 魔法飞弹 - 默认已学习（1级）
+	"magic_missile": 1,       # 魔法飞弹
 	"prayer": 1,              # 祈祷
 	"teleport": 1,            # 传送
 	"mistfog": 1,             # 迷雾
@@ -120,8 +121,6 @@ var skill_levels := {
 	"telekinesis": 1,         # 心灵感应
 	"sacrifice": 1,           # 牺牲
 	"holy_light": 1,          # 圣光
-	"ball_lightning": 1,      # 球状闪电
-	"chain_lightning": 1,     # 连锁闪电
 	"fireball": 1,            # 火球术
 	"heal": 1,                # 治疗
 	"fire_walk": 1,           # 火焰行走
@@ -313,28 +312,25 @@ func gain_experience(amount: int):
 # 伤害和治疗系统
 # ============================================
 
-func take_damage(amount: float, is_magic: bool = false):
-	# 英雄受到伤害
-	# amount: 伤害数值
-	# is_magic: 是否为魔法伤害（影响抗性计算）
-	
+func take_damage(amount: float, is_magic: bool = false, attacker: Node = null):
 	if invulnerable:
-		return  # 无敌状态不受伤害
-	
-	# 应用抗性减免
+		return
+
 	if is_magic:
 		amount *= (1.0 - magic_resist)
 	else:
 		amount *= (1.0 - physic_resist)
-	
+
 	health -= amount
-	health_regen_timer = 0.0  # 受伤重置恢复计时器
+	health_regen_timer = 0.0
 	health_changed.emit(health, max_health)
-	
+
+	hero_took_damage.emit(amount, is_magic, attacker)
+
 	if health <= 0:
 		health = 0
 		health_changed.emit(health, max_health)
-		hero_died.emit()  # 发射死亡信号
+		hero_died.emit()
 
 func heal(amount: float):
 	# 立即治疗

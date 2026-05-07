@@ -69,8 +69,6 @@ const SKILL_BAR_SKILL_DATA := {
 	"telekinesis": {"name": "Telekinesis", "texture": "res://Art/Placeholder/Telekinesis.png", "input": ""},
 	"sacrifice": {"name": "Sacrifice", "texture": "res://Art/Placeholder/Sacrifice.png", "input": ""},
 	"holy_light": {"name": "Holy Light", "texture": "res://Art/Placeholder/HolyLight.png", "input": ""},
-	"ball_lightning": {"name": "Ball Lightning", "texture": "res://Art/Placeholder/BallLightning.png", "input": ""},
-	"chain_lightning": {"name": "Chain Lightning", "texture": "res://Art/Placeholder/ChainLightning.png", "input": ""},
 	"fire_ball": {"name": "Fire Ball", "texture": "res://Art/Placeholder/FireBall.png", "input": "F"},
 	"heal": {"name": "Heal", "texture": "res://Art/Placeholder/Heal.png", "input": ""},
 	"fire_walk": {"name": "Fire Walk", "texture": "res://Art/Placeholder/FireWalk.png", "input": ""},
@@ -136,7 +134,7 @@ func setup_skill_bar():
 	var skill_ids := [
 		"magic_missile", "prayer", "teleport", "mistfog",
 		"stone_enchanted", "wrath_of_god", "telekinesis", "sacrifice",
-		"holy_light", "ball_lightning", "chain_lightning", "fire_ball",
+		"holy_light", "fire_ball",
 		"heal", "fire_walk", "meteor", "armageddon",
 		"freezing_spear", "poison_cloud", "fortuna", "dark_ritual", "nova"
 	]
@@ -254,12 +252,6 @@ func _on_skill_bar_pressed(skill_id: String):
 		"holy_light":
 			if hero.can_cast:
 				hero.cast_holy_light()
-		"ball_lightning":
-			if hero.can_cast:
-				hero.cast_ball_lightning()
-		"chain_lightning":
-			if hero.can_cast:
-				hero.cast_chain_lightning()
 		"heal":
 			if hero.can_cast:
 				hero.cast_heal()

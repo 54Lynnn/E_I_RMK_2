@@ -14,14 +14,18 @@ enum State { IDLE, CHASE, ATTACK, HURT, DEATH }
 var current_state := State.IDLE
 var target: Node2D = null
 var can_attack := true
+var original_move_speed := 65.0
 
 @onready var sprite := $Sprite2D
 @onready var health_bar := $HealthBar
 @onready var state_timer := $StateTimer
 @onready var attack_cooldown_timer := $AttackCooldown
 
+var debuffs := {}
+
 func _ready():
 	add_to_group("monsters")
+	original_move_speed = move_speed
 	health_bar.max_value = max_health
 	health_bar.value = health
 	sprite.rotation = 0
@@ -33,6 +37,7 @@ func _ready():
 func _physics_process(delta):
 	if current_state == State.DEATH:
 		return
+	_process_debuffs(delta)
 	find_target()
 	match current_state:
 		State.IDLE:
@@ -62,6 +67,72 @@ func _physics_process(delta):
 				current_state = State.IDLE
 	move_and_slide()
 
+func apply_debuff(name: String, duration: float, params: Dictionary = {}):
+	if current_state == State.DEATH:
+		return
+	if debuffs.has(name):
+		debuffs[name].remaining = duration
+		debuffs[name].params = params
+	else:
+		debuffs[name] = {"remaining": duration, "duration": duration, "params": params}
+	_on_debuff_applied(name)
+
+func remove_debuff(name: String):
+	if not debuffs.has(name):
+		return
+	debuffs.erase(name)
+	if current_state == State.DEATH:
+		return
+	_on_debuff_removed(name)
+
+func has_debuff(name: String) -> bool:
+	return debuffs.has(name)
+
+func _process_debuffs(delta):
+	var expired = []
+	for name in debuffs:
+		debuffs[name].remaining -= delta
+		if debuffs[name].remaining <= 0:
+			expired.append(name)
+	for name in expired:
+		remove_debuff(name)
+
+func _on_debuff_applied(name: String):
+	match name:
+		"frozen":
+			move_speed = 0.0
+			can_attack = false
+			sprite.modulate = Color(0.5, 0.8, 1.0)
+		"slowed":
+			var factor = debuffs[name].params.get("factor", 0.5)
+			move_speed = original_move_speed * clamp(1.0 - factor, 0.0, 1.0)
+		"petrified":
+			move_speed = 0.0
+			can_attack = false
+			sprite.modulate = Color(0.3, 0.3, 0.3)
+
+func _on_debuff_removed(name: String):
+	if current_state == State.DEATH:
+		return
+	match name:
+		"frozen":
+			move_speed = original_move_speed
+			can_attack = true
+			sprite.modulate = Color.WHITE
+		"slowed":
+			_recalculate_speed()
+		"petrified":
+			die()
+
+func _recalculate_speed():
+	move_speed = original_move_speed
+	for name in debuffs:
+		var d = debuffs[name]
+		match name:
+			"slowed":
+				var factor = d.params.get("factor", 0.5)
+				move_speed *= clamp(1.0 - factor, 0.0, 1.0)
+
 func find_target():
 	var heroes = get_tree().get_nodes_in_group("hero")
 	if heroes.size() > 0:
@@ -80,7 +151,7 @@ func perform_attack():
 		attack_cooldown_timer.start(attack_cooldown)
 		var dist = target.global_position.distance_to(global_position)
 		if dist <= attack_range + 20.0:
-			Global.take_damage(damage, false)
+			Global.take_damage(damage, false, self)
 
 func _on_attack_cooldown_timeout():
 	can_attack = true
@@ -88,23 +159,19 @@ func _on_attack_cooldown_timeout():
 func take_damage(amount: float, damage_element: String = "basic"):
 	if current_state == State.DEATH:
 		return
-	
-	# 根据伤害元素类型应用抗性（后续可扩展为完整的抗性系统）
 	var resist := 0.0
 	match damage_element:
 		"earth":
-			resist = 0.0  # 土系抗性
+			resist = 0.0
 		"air":
-			resist = 0.0  # 气系抗性
+			resist = 0.0
 		"fire":
-			resist = 0.0  # 火系抗性
+			resist = 0.0
 		"water":
-			resist = 0.0  # 水系抗性
+			resist = 0.0
 		_:
-			resist = 0.0  # basic或其他类型
-	
+			resist = 0.0
 	amount *= (1.0 - resist)
-	
 	health -= amount
 	health_bar.value = health
 	health_bar.visible = true
@@ -118,7 +185,10 @@ func take_damage(amount: float, damage_element: String = "basic"):
 		state_timer.start(0.3)
 
 func die():
+	if current_state == State.DEATH:
+		return
 	current_state = State.DEATH
+	debuffs.clear()
 	health_bar.visible = false
 	set_collision_layer_value(1, false)
 	Global.gain_experience(experience_reward)
