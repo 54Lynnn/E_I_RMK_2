@@ -62,6 +62,8 @@ Evil Invasion 是一款 2006 年发布的俯视角动作 RPG（Diablo-like），
 │   ├── MagicMissile.tscn      ← ✅ Magic Missile 独立场景（追踪+加速+转弯减速）
 │   ├── Fireball.tscn          ← ✅ Fireball 独立场景（爆炸AOE）
 │   ├── FreezingSpear.tscn     ← ✅ Freezing Spear 独立场景（直线穿透+冰冻）
+│   ├── Prayer.tscn            ← ✅ Prayer 独立场景（持续扣血回蓝+蓝色粒子）
+│   ├── Heal.tscn              ← ✅ Heal 独立场景（持续回血+红色+号粒子）
 │   ├── Explosion.tscn         ← 爆炸特效
 │   ├── PickupItem.tscn        ← 拾取物品
 │   ├── HUD.tscn               ← 底部状态栏
@@ -75,6 +77,8 @@ Evil Invasion 是一款 2006 年发布的俯视角动作 RPG（Diablo-like），
 │   ├── magic_missile.gd       ← ✅ Magic Missile 独立脚本（静态配置 + cast 方法）
 │   ├── fireball.gd            ← ✅ Fireball 独立脚本（静态配置 + cast 方法）
 │   ├── freezing_spear.gd      ← ✅ Freezing Spear 独立脚本（静态配置 + cast 方法）
+│   ├── prayer.gd              ← ✅ Prayer 独立脚本（静态配置 + cast 方法）
+│   ├── heal.gd                ← ✅ Heal 独立脚本（静态配置 + cast 方法）
 │   ├── explosion.gd           ← 爆炸动画
 │   ├── pickup_item.gd         ← 拾取物品逻辑
 │   ├── loot_manager.gd        ← 掉落管理器（Autoload）
@@ -95,9 +99,12 @@ Evil Invasion 是一款 2006 年发布的俯视角动作 RPG（Diablo-like），
 | Magic Missile（追踪+加速） | 鼠标左键 | ✅ 独立场景 + 独立脚本 |
 | Fireball（爆炸AOE） | 鼠标右键 | ✅ 独立场景 + 独立脚本 |
 | Freezing Spear（穿透+冰冻） | Z | ✅ 独立场景 + 独立脚本 |
+| Prayer（持续扣血回蓝） | X | ✅ 独立场景 + 独立脚本 |
+| Heal（持续回血） | C | ✅ 独立场景 + 独立脚本 |
 | 独立技能冷却（可同时施放） | - | ✅ |
 | 长按持续施法 | 按住按键 | ✅ |
 | 技能数据封装（各技能脚本管理自身数据） | - | ✅ |
+| hero.gd 清理（删除旧代码，占位符函数） | - | ✅ |
 | 蜘蛛怪物追踪 AI | 自动 | ✅ |
 | 僵尸怪物追踪 AI | 自动 | ✅ |
 | 怪物数据驱动（通过场景属性配置） | - | ✅ |
@@ -113,10 +120,10 @@ Evil Invasion 是一款 2006 年发布的俯视角动作 RPG（Diablo-like），
 
 ### 待解决的问题 🔧
 
-- **18个技能仍使用旧版内联实现**，需要继续重构为独立场景 + 独立脚本（参考已完成的 3 个技能模式）
+- **13个技能仍使用占位符函数**，需要继续重构为独立场景 + 独立脚本（参考已完成的 5 个技能模式）
 - 怪物攻击冷却使用 `await` 可能导致协程问题
 - 需要扩展更多怪物种类（目前：蜘蛛、僵尸，还需：熊、弓手、恶魔、死神、骷髅、Boss）
-- hero.gd 仍需清理残留旧代码（已移除技能数据，但仍包含旧的内联技能实现）
+- hero.gd 已清理旧代码，15个未重构技能替换为占位符空函数
 - 已移除 LLM 幻觉技能（Lightning 系列），确保所有文档和代码中不再引用
 
 ---

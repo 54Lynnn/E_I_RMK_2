@@ -185,6 +185,8 @@ hero.get_parent().add_child(projectile)
 const MagicMissile = preload("res://Scripts/magic_missile.gd")
 const Fireball = preload("res://Scripts/fireball.gd")
 const FreezingSpear = preload("res://Scripts/freezing_spear.gd")
+const Prayer = preload("res://Scripts/prayer.gd")
+const Heal = preload("res://Scripts/heal.gd")
 ```
 
 ### 2. 添加到 skill_cooldowns
@@ -194,6 +196,8 @@ var skill_cooldowns := {
     "magic_missile": 0.0,
     "fireball": 0.0,
     "freezing_spear": 0.0,
+    "prayer": 0.0,
+    "heal": 0.0,
     # ... 其他技能
 }
 ```
@@ -206,6 +210,12 @@ func cast_magic_missile():
 
 func cast_fireball():
     Fireball.cast(self, mouse_pos, skill_cooldowns)
+
+func cast_prayer():
+    Prayer.cast(self, mouse_pos, skill_cooldowns)
+
+func cast_heal():
+    Heal.cast(self, mouse_pos, skill_cooldowns)
 ```
 
 ### 4. 输入处理
@@ -218,12 +228,20 @@ func _process(delta):
         cast_magic_missile()
     if Input.is_action_pressed("spell_fireball"):
         cast_fireball()
+    if Input.is_action_pressed("spell_prayer"):
+        cast_prayer()
+    if Input.is_action_pressed("spell_heal"):
+        cast_heal()
 
 func _unhandled_input(event):
     if event.is_action_pressed("spell_magic_missile"):
         cast_magic_missile()
     if event.is_action_pressed("spell_fireball"):
         cast_fireball()
+    if event.is_action_pressed("spell_prayer"):
+        cast_prayer()
+    if event.is_action_pressed("spell_heal"):
+        cast_heal()
 ```
 
 ---
@@ -237,6 +255,8 @@ var skill_levels := {
     "magic_missile": 1,
     "fireball": 1,
     "freezing_spear": 1,
+    "prayer": 1,
+    "heal": 1,
     # ... 其他技能
 }
 ```
@@ -377,3 +397,4 @@ static func cast(hero: Node, mouse_pos: Vector2, skill_cooldowns: Dictionary) ->
 |------|------|------|
 | 1.0 | 2026-05-07 | 初始版本，基于 Magic Missile / Fireball / Freezing Spear 重构经验 |
 | 1.1 | 2026-05-08 | 更新：确认技能数据封装规范，hero.gd 不再管理技能数据 |
+| 1.2 | 2026-05-08 | 更新：新增 Prayer / Heal 技能规范，hero.gd 占位符模式说明 |

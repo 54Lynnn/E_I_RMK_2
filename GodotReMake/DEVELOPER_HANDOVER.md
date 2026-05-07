@@ -5,7 +5,7 @@
 > **语言**: GDScript
 > **作者**: [Previous Agent]
 > **日期**: 2026-05-06
-> **最后更新**: 2026-05-08
+> **最后更新**: 2026-05-08 (Prayer & Heal 重构完成，hero.gd 清理完成)
 
 ---
 
@@ -31,7 +31,8 @@
 ### 当前状态
 - 核心游戏循环可运行（移动、攻击、击杀、升级、掉落）
 - 完整的21个技能系统（UI + 逻辑）
-- **技能重构进行中**：Magic Missile、Fireball、Freezing Spear 已提取为独立场景
+- **技能重构进行中**：5个技能已提取为独立场景（Magic Missile、Fireball、Freezing Spear、Prayer、Heal）
+- **hero.gd 已清理**：删除了15个未重构技能的旧版内联实现，替换为占位符函数
 - **技能数据已迁移**：各技能脚本管理自己的冷却、伤害、法力消耗
 - **独立冷却系统**：每个技能各自冷却，可同时施放多个技能
 - **长按持续施法**：按住技能键可持续施放（受冷却限制）
@@ -48,6 +49,8 @@
 | 鼠标左键 | Magic Missile（默认左键技能） |
 | 鼠标右键 | Fireball |
 | Z | Freezing Spear |
+| X | Prayer |
+| C | Heal |
 | T | 打开/关闭英雄面板（技能树 + 属性分配） |
 | F2 | 切换开发模式（DevMode） |
 
@@ -81,6 +84,8 @@ GodotReMake/
 │   ├── magic_missile.gd       # Magic Missile 独立脚本 ✅
 │   ├── fireball.gd            # Fireball 独立脚本 ✅
 │   ├── freezing_spear.gd      # Freezing Spear 独立脚本 ✅
+│   ├── prayer.gd              # Prayer 独立脚本 ✅
+│   ├── heal.gd                # Heal 独立脚本 ✅
 │   ├── explosion.gd           # 爆炸特效逻辑
 │   ├── pickup_item.gd         # 拾取物品逻辑
 │   ├── loot_manager.gd        # 掉落管理器（自动加载）
@@ -129,8 +134,11 @@ GodotReMake/
 - [x] **Magic Missile 重构**：独立场景 + 追踪 + 加速 + 转弯减速 + 10秒生命周期
 - [x] **Fireball 重构**：独立场景 + 爆炸AOE + fire属性伤害
 - [x] **Freezing Spear 重构**：独立场景 + 直线穿透 + 冰冻效果 + water属性伤害
+- [x] **Prayer 重构**：独立场景 + 持续扣血回蓝 + 蓝色气泡特效 + 绑定X键
+- [x] **Heal 重构**：独立场景 + 持续回血 + 红色+号特效 + 绑定C键
 - [x] **技能数据迁移**：冷却、伤害、法力消耗已移至各技能脚本
-- [ ] **其余18个技能**：仍使用旧版内联实现，待重构为独立场景
+- [x] **hero.gd 清理**：删除15个未重构技能的旧版内联实现，替换为占位符函数
+- [ ] **其余13个技能**：仍使用占位符函数，待重构为独立场景
 
 ### 3.4 技能树布局（最终版）
 
@@ -238,12 +246,12 @@ var drop_rate_multiplier := 1.0          # 掉落率倍率（Fortuna）
 spell_magic_missile  → 鼠标左键
 spell_fireball       → 鼠标右键
 spell_freezing_spear → 键盘 Z
-spell_prayer         → [未绑定键盘]
-spell_teleport       → [未绑定键盘]
-...（其余技能均未绑定键盘）
+spell_prayer         → 键盘 X
+spell_heal           → 键盘 C
+...（其余技能未绑定常用按键）
 ```
 
-**注意：** 目前只有Magic Missile、Fireball、Freezing Spear绑定了输入，其余18个技能需要通过技能树UI点击施放，或需要添加键盘绑定。
+**注意：** 已重构的5个技能绑定了输入。其余13个技能使用占位符函数，按键已改为不常用的F12（4194332），防止冲突。
 
 ### 4.3 技能施放通用模式
 
@@ -265,22 +273,28 @@ func cast_xxx():
 
 ### 4.4 技能效果实现方式
 
-**新架构（推荐）**：Magic Missile、Fireball、Freezing Spear 已重构为独立场景模式：
+**新架构（推荐）**：5个技能已重构为独立场景模式：
 - 每个技能有独立的 `.tscn` 场景文件 + `.gd` 脚本文件
 - 场景包含：Area2D（根节点）+ CollisionShape2D + Sprite2D + CPUParticles2D
 - 脚本继承自 Area2D，包含完整的移动、碰撞、伤害、特效逻辑
 - hero.gd 中通过 `preload("res://Scenes/XXX.tscn").instantiate()` 创建实例
 
-**旧架构（待重构）**：其余18个技能仍使用临时创建的Node（Area2D、Line2D、ColorRect等）实现：
-- **Lightning**: 创建Line2D画激光 + RayCast2D检测碰撞
-- **MistFog/PoisonCloud**: 创建Area2D + CircleShape2D + ColorRect视觉
-- **Meteor/Armageddon**: 创建Area2D + ColorRect
-- **HolyLight**: 创建RayCast2D + Line2D
+**已重构技能**：
+- Magic Missile (`Scripts/magic_missile.gd` + `Scenes/MagicMissile.tscn`)
+- Fireball (`Scripts/fireball.gd` + `Scenes/Fireball.tscn`)
+- Freezing Spear (`Scripts/freezing_spear.gd` + `Scenes/FreezingSpear.tscn`)
+- Prayer (`Scripts/prayer.gd` + `Scenes/Prayer.tscn`)
+- Heal (`Scripts/heal.gd` + `Scenes/Heal.tscn`)
+
+**占位符架构**：其余13个技能使用空函数占位：
+- hero.gd 中有 `cast_teleport()`, `cast_mistfog()` 等15个空函数
+- 按对应按键会执行 `pass`，不会报错，但没有任何效果
+- 需要逐步重构为独立场景，替换空函数为调用 `SkillName.cast()`
 
 **重构建议**：
-- 优点：快速原型，无需创建大量场景文件
-- 缺点：难以调整视觉效果，代码冗长，性能可能不佳
-- **下一步**：将剩余18个技能逐步重构为独立场景模式，参考 magic_missile.gd / fireball.gd / freezing_spear.gd 的代码结构
+- 参考 prayer.gd / heal.gd（最新重构的技能，包含持续效果 + 粒子特效）
+- 也参考 magic_missile.gd / fireball.gd / freezing_spear.gd（投射物类技能）
+- **下一步**：将剩余13个技能逐步重构为独立场景模式
 
 ---
 
@@ -291,26 +305,26 @@ func cast_xxx():
 | # | 技能ID | 名称 | 系别 | 伤害属性 | 前置 | 消耗 | 冷却 | 效果 | 实现状态 |
 |---|--------|------|------|----------|------|------|------|------|----------|
 | 1 | magic_missile | Magic Missile | 基础 | **basic** | 无 | 5法力 | 0.5s | 发射投射物，伤害10+力量×1.5，追踪+加速+转弯减速 | ✅ 独立场景 |
-| 2 | prayer | Prayer | Earth | - | magic_missile | 65%生命 | 20s | 10秒内回复50%法力 | ⏳ 内联实现 |
-| 3 | teleport | Teleport | Earth | - | prayer | 35法力 | 20s | 0.2秒施法后传送到鼠标位置 | ⏳ 内联实现 |
-| 4 | mistfog | Mist Fog | Earth | - | prayer | 25法力 | 5s | 棕色雾气减速敌人35% | ⏳ 内联实现 |
-| 5 | stone_enchanted | Stone Enchanted | Earth | - | teleport | 被动 | - | 被击时30%几率石化攻击者 | ⏳ 内联实现 |
-| 6 | wrath_of_god | Wrath of God | Earth | **earth** | teleport | 55法力 | 2s | 10个锤子环绕飞出，伤害200 | ⏳ 内联实现 |
-| 7 | telekinesis | Telekinesis | Air | - | magic_missile | 无 | 1.0s | 远距离拾取物品 | ⏳ 内联实现 |
-| 8 | holy_light | Holy Light | Air | **air** | telekinesis | 35法力 | 1s | 3道光线射向鼠标，伤害120 | ⏳ 内联实现 |
-| 9 | sacrifice | Sacrifice | Air | **air** | telekinesis | 55%生命 | 3s | 秒杀鼠标附近敌人 | ⏳ 内联实现 |
-| 10 | ball_lightning | Ball Lightning | Air | **air** | holy_light | 45法力 | 2s | 银球自动攻击附近敌人 | ⏳ 内联实现 |
-| 11 | chain_lightning | Chain Lightning | Air | **air** | holy_light | 55法力 | 1s | 闪电矛弹跳3次，伤害1000 | ⏳ 内联实现 |
+| 2 | prayer | Prayer | Earth | - | magic_missile | 生命 | 20s | 持续10秒，每秒扣3%生命回5%法力 | ✅ 独立场景 |
+| 3 | teleport | Teleport | Earth | - | prayer | 35法力 | 20s | 0.2秒施法后传送到鼠标位置 | ⏳ 占位符 |
+| 4 | mistfog | Mist Fog | Earth | - | prayer | 25法力 | 5s | 棕色雾气减速敌人35% | ⏳ 占位符 |
+| 5 | stone_enchanted | Stone Enchanted | Earth | - | teleport | 被动 | - | 被击时30%几率石化攻击者 | ⏳ 占位符 |
+| 6 | wrath_of_god | Wrath of God | Earth | **earth** | teleport | 55法力 | 2s | 10个锤子环绕飞出，伤害200 | ⏳ 占位符 |
+| 7 | telekinesis | Telekinesis | Air | - | magic_missile | 无 | 1.0s | 远距离拾取物品 | ⏳ 占位符 |
+| 8 | holy_light | Holy Light | Air | **air** | telekinesis | 35法力 | 1s | 3道光线射向鼠标，伤害120 | ⏳ 占位符 |
+| 9 | sacrifice | Sacrifice | Air | **air** | telekinesis | 55%生命 | 3s | 秒杀鼠标附近敌人 | ⏳ 占位符 |
+| 10 | ball_lightning | Ball Lightning | Air | **air** | holy_light | 45法力 | 2s | 银球自动攻击附近敌人 | ⏳ 占位符 |
+| 11 | chain_lightning | Chain Lightning | Air | **air** | holy_light | 55法力 | 1s | 闪电矛弹跳3次，伤害1000 | ⏳ 占位符 |
 | 12 | fireball | Fireball | Fire | **fire** | magic_missile | 10法力 | 0.3s | 发射火球，伤害15+力量×2，爆炸AOE | ✅ 独立场景 |
-| 13 | heal | Heal | Fire | - | fireball | 35法力 | 15s | 10秒内每秒回复5%生命 | ⏳ 内联实现 |
-| 14 | fire_walk | Fire Walk | Fire | **fire** | fireball | 被动 | - | 留下火焰轨迹，30伤害/秒 | ⏳ 内联实现 |
-| 15 | meteor | Meteor | Fire | **fire** | heal | 45法力 | 5s | 陨石雨，伤害250，范围130 | ⏳ 内联实现 |
-| 16 | armageddon | Armageddon | Fire | **fire** | heal | 55法力 | 20s | 全屏随机火blast，伤害250 | ⏳ 内联实现 |
+| 13 | heal | Heal | Fire | - | fireball | 35法力 | 15s | 持续10秒，每秒回复5.5%生命 | ✅ 独立场景 |
+| 14 | fire_walk | Fire Walk | Fire | **fire** | fireball | 被动 | - | 留下火焰轨迹，30伤害/秒 | ⏳ 占位符 |
+| 15 | meteor | Meteor | Fire | **fire** | heal | 45法力 | 5s | 陨石雨，伤害250，范围130 | ⏳ 占位符 |
+| 16 | armageddon | Armageddon | Fire | **fire** | heal | 55法力 | 20s | 全屏随机火blast，伤害250 | ⏳ 占位符 |
 | 17 | freezing_spear | Freezing Spear | Water | **water** | magic_missile | 25法力 | 3s | 冰矛直线穿透，伤害50，冻结2秒 | ✅ 独立场景 |
-| 18 | poison_cloud | Poison Cloud | Water | **water** | freezing_spear | 35法力 | 5s | 绿色毒雾，60伤害/秒 | ⏳ 内联实现 |
-| 19 | fortuna | Fortuna | Water | - | freezing_spear | 被动 | - | 增加掉落率15% | ⏳ 内联实现 |
-| 20 | dark_ritual | Dark Ritual | Water | **water** | poison_cloud | 55法力 | 5.5s | 黑雾，2秒后30%几率秒杀 | ⏳ 内联实现 |
-| 21 | nova | Nova | Water | **water** | poison_cloud | 45法力 | 2s | 雪球爆炸冻结，伤害200 | ⏳ 内联实现 |
+| 18 | poison_cloud | Poison Cloud | Water | **water** | freezing_spear | 35法力 | 5s | 绿色毒雾，60伤害/秒 | ⏳ 占位符 |
+| 19 | fortuna | Fortuna | Water | - | freezing_spear | 被动 | - | 增加掉落率15% | ⏳ 占位符 |
+| 20 | dark_ritual | Dark Ritual | Water | **water** | poison_cloud | 55法力 | 5.5s | 黑雾，2秒后30%几率秒杀 | ⏳ 占位符 |
+| 21 | nova | Nova | Water | **water** | poison_cloud | 45法力 | 2s | 雪球爆炸冻结，伤害200 | ⏳ 占位符 |
 
 **伤害属性分类**：
 - **basic**: magic_missile
@@ -353,11 +367,14 @@ func cast_xxx():
 
 ### 6.1 高优先级问题
 
-1. **技能重构进行中（18个技能待完成）**
-   - ✅ Magic Missile、Fireball、Freezing Spear 已重构为独立场景
-   - ⏳ 其余18个技能仍使用旧版内联实现，需要逐步重构
-   - **重构模式**：每个技能创建独立的 `.tscn` + `.gd` 文件，参考现有三个技能的代码结构
+1. **技能重构进行中（13个技能待完成）**
+   - ✅ 已重构5个技能：Magic Missile、Fireball、Freezing Spear、Prayer、Heal
+   - ⏳ 其余13个技能使用占位符函数（空实现），需要逐步重构
+   - **重构模式**：每个技能创建独立的 `.tscn` + `.gd` 文件，参考现有技能的代码结构
    - **重构顺序建议**：按系别分批重构（Earth → Air → Fire → Water）
+   - **参考模板**：
+     - 投射物类：magic_missile.gd / fireball.gd / freezing_spear.gd
+     - 持续效果类：prayer.gd / heal.gd（含粒子特效、Timer管理）
 
 2. **技能视觉效果简陋**
    - ✅ Magic Missile、Fireball、Freezing Spear 已有独立视觉效果（Sprite2D + CPUParticles2D）

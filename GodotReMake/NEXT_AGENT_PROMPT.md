@@ -1,7 +1,7 @@
 # Evil Invasion Remake — 新 Agent 交接提示词
 
 > **发送给下一个 coding agent 的提示词**
-> **日期**: 2026-05-07
+> **日期**: 2026-05-08
 > **项目位置**: `e:\EvilInvasion\GodotReMake\`
 
 ---
@@ -17,9 +17,9 @@
 
 ## 🎯 当前核心任务
 
-### 上一个 Agent 已完成的工作（2026-05-07）
+### 上一个 Agent 已完成的工作（2026-05-08）
 
-1. **重构了 3 个技能为独立场景**：
+1. **重构了 5 个技能为独立场景**：
    - ✅ **Magic Missile** (`MagicMissile.tscn` + `magic_missile.gd`)
      - 特性：追踪目标、发射后缓慢加速、转弯减速效果、10秒生命周期
      - 伤害属性：basic
@@ -28,6 +28,12 @@
    - ✅ **Freezing Spear** (`FreezingSpear.tscn` + `freezing_spear.gd`)
      - 特性：直线穿透、冰冻敌人1秒（不能移动不能攻击）、water属性伤害
      - 按键：Z
+   - ✅ **Prayer** (`Prayer.tscn` + `prayer.gd`)
+     - 特性：持续10秒，每秒扣3%生命回5%法力，蓝色气泡粒子特效
+     - 按键：X
+   - ✅ **Heal** (`Heal.tscn` + `heal.gd`)
+     - 特性：持续10秒，每秒回复5.5%生命，红色+号粒子特效
+     - 按键：C
 
 2. **更新了伤害类型系统**：
    - 五种元素属性：basic, earth, air, fire, water
@@ -44,9 +50,14 @@
    - 各技能脚本管理自己的冷却、伤害、法力消耗
    - hero.gd 不再包含技能数据，只负责调用
 
+6. **清理了 hero.gd**：
+   - 删除了15个未重构技能的旧版内联实现
+   - 替换为占位符空函数（`pass`），防止按键报错
+   - 修复了 project.godot 中的按键冲突（Armageddon/PoisonCloud 改为 F12）
+
 ### 你的首要任务
 
-**继续重构剩余的 18 个技能为独立场景**
+**继续重构剩余的 13 个技能为独立场景**
 
 这是用户明确要求的架构改进。上一个 Agent 已经建立了清晰的模式，你只需要复制这个模式。
 
@@ -121,7 +132,7 @@ Area2D (根节点)
 └── CPUParticles2D (粒子特效)
 ```
 
-### hero.gd 中的调用方式
+### hero.gd 中的调用方式（已重构技能）
 
 ```gdscript
 const MagicMissile = preload("res://Scripts/magic_missile.gd")
@@ -130,20 +141,38 @@ func cast_magic_missile():
     MagicMissile.cast(self, mouse_pos, skill_cooldowns)
 ```
 
+### hero.gd 中的占位符（待重构技能）
+
+```gdscript
+func cast_teleport():
+    pass  # 待重构：创建 Teleport.tscn + teleport.gd
+
+func cast_mistfog():
+    pass  # 待重构：创建 MistFog.tscn + mistfog.gd
+# ... 其余13个技能同理
+```
+
+**重构步骤**：
+1. 创建 `Scenes/SkillName.tscn` + `Scripts/skill_name.gd`
+2. 实现 `static func cast(hero, mouse_pos, skill_cooldowns) -> bool`
+3. 将 hero.gd 中的占位符替换为调用 `SkillName.cast(self, mouse_pos, skill_cooldowns)`
+4. 在 `project.godot` 中绑定合适的按键（避免与 X/C/Z 冲突）
+
 ---
 
-## 📊 待重构技能清单（18个）
+## 📊 待重构技能清单（13个）
 
 按系别分组，建议按此顺序重构：
 
-### Earth 系（5个）
+### Earth 系（3个）
 | 技能 | 伤害属性 | 实现方式 | 难度 |
 |------|----------|----------|------|
-| Prayer | - | Buff/治疗自身 | ⭐⭐ |
 | Teleport | - | 位移到鼠标位置 | ⭐⭐ |
 | MistFog | - | 区域减速（Area2D） | ⭐⭐⭐ |
 | StoneEnchanted | - | 被动技能 | ⭐ |
 | WrathOfGod | earth | 全屏AOE | ⭐⭐⭐ |
+
+> **注意**：Prayer 已重构完成（独立场景 + 持续扣血回蓝 + 蓝色粒子特效）
 
 ### Air 系（3个）
 | 技能 | 伤害属性 | 实现方式 | 难度 |
@@ -154,13 +183,14 @@ func cast_magic_missile():
 
 > **注意**：BallLightning 和 ChainLightning 是 LLM 幻觉技能，已移除。Air 系目前只有 3 个技能。
 
-### Fire 系（4个）
+### Fire 系（3个）
 | 技能 | 伤害属性 | 实现方式 | 难度 |
 |------|----------|----------|------|
-| Heal | - | 持续回血 | ⭐⭐ |
 | FireWalk | fire | 被动/留下火焰 | ⭐⭐⭐ |
 | Meteor | fire | 延迟AOE | ⭐⭐⭐ |
 | Armageddon | fire | 全屏随机伤害 | ⭐⭐⭐ |
+
+> **注意**：Heal 已重构完成（独立场景 + 持续回血 + 红色+号粒子特效）
 
 ### Water 系（4个）
 | 技能 | 伤害属性 | 实现方式 | 难度 |
