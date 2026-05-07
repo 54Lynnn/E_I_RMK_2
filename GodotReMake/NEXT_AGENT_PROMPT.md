@@ -10,9 +10,8 @@
 
 1. **`DEVELOPER_HANDOVER.md`** — 详细的开发者交接文档（文件结构、核心系统、技术债务、下一步建议）
 2. **`ROADMAP.md`** — 完整开发路线图和原版游戏参数参考
-3. **`AGENT_HANDOVER_PROMPT.md`** — 通用交接提示词（快速了解）
-4. **`SPELL_DEVELOPMENT_GUIDE.md`** — 技能开发规范（必须遵守）
-5. **`extracted.md`** — 原版游戏反编译数据（技能数值、怪物参数等）
+3. **`SPELL_DEVELOPMENT_GUIDE.md`** — 技能开发规范（必须遵守）
+4. **`extracted.md`** — 原版游戏反编译数据（技能数值、怪物参数等）
 
 ---
 
@@ -40,6 +39,10 @@
    - 长按可持续施法（受冷却限制）
 
 4. **移除了 Lightning 技能**（LLM幻觉技能）
+
+5. **实现了技能数据封装**：
+   - 各技能脚本管理自己的冷却、伤害、法力消耗
+   - hero.gd 不再包含技能数据，只负责调用
 
 ### 你的首要任务
 
@@ -142,14 +145,14 @@ func cast_magic_missile():
 | StoneEnchanted | - | 被动技能 | ⭐ |
 | WrathOfGod | earth | 全屏AOE | ⭐⭐⭐ |
 
-### Air 系（5个）
+### Air 系（3个）
 | 技能 | 伤害属性 | 实现方式 | 难度 |
 |------|----------|----------|------|
 | Telekinesis | - | 拾取远处物品 | ⭐⭐ |
 | HolyLight | air | 射线检测 | ⭐⭐⭐ |
 | Sacrifice | air | 消耗生命秒杀 | ⭐⭐ |
-| BallLightning | air | 追踪投射物 | ⭐⭐⭐ |
-| ChainLightning | air | 弹跳闪电 | ⭐⭐⭐⭐ |
+
+> **注意**：BallLightning 和 ChainLightning 是 LLM 幻觉技能，已移除。Air 系目前只有 3 个技能。
 
 ### Fire 系（4个）
 | 技能 | 伤害属性 | 实现方式 | 难度 |
@@ -182,10 +185,12 @@ func cast_magic_missile():
 ```
 basic:  magic_missile
 earth:  stone_enchanted, wrath_of_god
-air:    holy_light, sacrifice, ball_lightning, chain_lightning
+air:    holy_light, sacrifice
 fire:   fireball, fire_walk, meteor, armageddon
 water:  freezing_spear, poison_cloud, dark_ritual, nova
 ```
+
+> **注意**：ball_lightning 和 chain_lightning 是 LLM 幻觉技能，已移除。
 
 ### 3. 当前按键绑定
 - 鼠标左键：Magic Missile

@@ -376,3 +376,4 @@ static func cast(hero: Node, mouse_pos: Vector2, skill_cooldowns: Dictionary) ->
 | 版本 | 日期 | 说明 |
 |------|------|------|
 | 1.0 | 2026-05-07 | 初始版本，基于 Magic Missile / Fireball / Freezing Spear 重构经验 |
+| 1.1 | 2026-05-08 | 更新：确认技能数据封装规范，hero.gd 不再管理技能数据 |

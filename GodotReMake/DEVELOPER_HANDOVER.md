@@ -5,7 +5,7 @@
 > **语言**: GDScript
 > **作者**: [Previous Agent]
 > **日期**: 2026-05-06
-> **最后更新**: 2026-05-07
+> **最后更新**: 2026-05-08
 
 ---
 
@@ -32,10 +32,13 @@
 - 核心游戏循环可运行（移动、攻击、击杀、升级、掉落）
 - 完整的21个技能系统（UI + 逻辑）
 - **技能重构进行中**：Magic Missile、Fireball、Freezing Spear 已提取为独立场景
+- **技能数据已迁移**：各技能脚本管理自己的冷却、伤害、法力消耗
+- **独立冷却系统**：每个技能各自冷却，可同时施放多个技能
+- **长按持续施法**：按住技能键可持续施放（受冷却限制）
 - 伤害类型系统已更新为五种元素属性（basic, earth, air, fire, water）
 - 属性分配系统
 - 开发模式（DevMode）用于测试
-- 怪物生成与AI
+- 怪物生成与AI（数据驱动，支持多种怪物）
 - 拾取物品系统
 
 ### 游戏操作
@@ -58,7 +61,8 @@ GodotReMake/
 ├── Scenes/
 │   ├── Main.tscn              # 主场景（游戏入口）
 │   ├── Hero.tscn              # 玩家英雄场景
-│   ├── Monster.tscn           # 怪物场景
+│   ├── Monster.tscn           # 蜘蛛场景（共享 monster.gd）
+│   ├── Zombie.tscn            # 僵尸场景（共享 monster.gd）✅
 │   ├── Projectile.tscn        # 旧版通用投射物（逐步弃用）
 │   ├── MagicMissile.tscn      # Magic Missile 独立场景 ✅
 │   ├── Fireball.tscn          # Fireball 独立场景 ✅
@@ -125,6 +129,7 @@ GodotReMake/
 - [x] **Magic Missile 重构**：独立场景 + 追踪 + 加速 + 转弯减速 + 10秒生命周期
 - [x] **Fireball 重构**：独立场景 + 爆炸AOE + fire属性伤害
 - [x] **Freezing Spear 重构**：独立场景 + 直线穿透 + 冰冻效果 + water属性伤害
+- [x] **技能数据迁移**：冷却、伤害、法力消耗已移至各技能脚本
 - [ ] **其余18个技能**：仍使用旧版内联实现，待重构为独立场景
 
 ### 3.4 技能树布局（最终版）
@@ -156,6 +161,8 @@ GodotReMake/
 - [x] 受击闪烁（红色闪烁）
 - [x] 死亡动画（淡出）
 - [x] 经验值掉落
+- [x] **数据驱动**：通过场景属性配置怪物参数（血量、速度、伤害、颜色等）
+- [x] **多怪物支持**：Spider、Zombie 使用共享 monster.gd 脚本
 
 ### 3.6 怪物生成 (monster_spawner.gd)
 - [x] 定时生成（间隔2秒）

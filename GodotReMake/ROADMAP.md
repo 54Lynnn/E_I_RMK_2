@@ -57,6 +57,7 @@ Evil Invasion 是一款 2006 年发布的俯视角动作 RPG（Diablo-like），
 │   ├── Main.tscn              ← 主场景（地面 + 边界 + 怪物生成）
 │   ├── Hero.tscn              ← 英雄（移动 + 瞄准 + 施法）
 │   ├── Monster.tscn           ← 蜘蛛兵（AI 追踪 + 攻击 + 死亡）
+│   ├── Zombie.tscn            ← ✅ 僵尸（最弱近战怪，共享 monster.gd）
 │   ├── Projectile.tscn        ← 旧版通用投射物（逐步弃用）
 │   ├── MagicMissile.tscn      ← ✅ Magic Missile 独立场景（追踪+加速+转弯减速）
 │   ├── Fireball.tscn          ← ✅ Fireball 独立场景（爆炸AOE）
@@ -68,16 +69,16 @@ Evil Invasion 是一款 2006 年发布的俯视角动作 RPG（Diablo-like），
 │   └── SkillButton.tscn       ← 技能按钮UI
 ├── Scripts/
 │   ├── global.gd              ← 全局状态管理器
-│   ├── hero.gd                ← 英雄控制（~990行，21个技能）
-│   ├── monster.gd             ← 怪物 AI
+│   ├── hero.gd                ← 英雄控制（技能调用入口，cooldown 管理）
+│   ├── monster.gd             ← 怪物 AI（状态机，数据驱动）
 │   ├── projectile.gd          ← 旧版通用投射物逻辑（逐步弃用）
-│   ├── magic_missile.gd       ← ✅ Magic Missile 独立脚本
-│   ├── fireball.gd            ← ✅ Fireball 独立脚本
-│   ├── freezing_spear.gd      ← ✅ Freezing Spear 独立脚本
+│   ├── magic_missile.gd       ← ✅ Magic Missile 独立脚本（静态配置 + cast 方法）
+│   ├── fireball.gd            ← ✅ Fireball 独立脚本（静态配置 + cast 方法）
+│   ├── freezing_spear.gd      ← ✅ Freezing Spear 独立脚本（静态配置 + cast 方法）
 │   ├── explosion.gd           ← 爆炸动画
 │   ├── pickup_item.gd         ← 拾取物品逻辑
 │   ├── loot_manager.gd        ← 掉落管理器（Autoload）
-│   ├── monster_spawner.gd     ← 怪物波次生成
+│   ├── monster_spawner.gd     ← 怪物波次生成（支持多种怪物）
 │   ├── camera.gd              ← 相机跟随
 │   ├── hud.gd                 ← HUD 数据绑定
 │   ├── hero_panel.gd          ← 英雄面板逻辑
@@ -90,14 +91,16 @@ Evil Invasion 是一款 2006 年发布的俯视角动作 RPG（Diablo-like），
 | 功能 | 按键 | 状态 |
 |------|------|------|
 | 英雄移动 | WASD | ✅ |
-  | 英雄面向鼠标 | 鼠标移动 | ✅ |
-  | Magic Missile（追踪+加速） | 鼠标左键 | ✅ 独立场景 + 独立脚本 |
-  | Fireball（爆炸AOE） | 鼠标右键 | ✅ 独立场景 + 独立脚本 |
-  | Freezing Spear（穿透+冰冻） | Z | ✅ 独立场景 + 独立脚本 |
-  | 独立技能冷却（可同时施放） | - | ✅ |
-  | 长按持续施法 | 按住按键 | ✅ |
-  | 蜘蛛怪物追踪 AI | 自动 | ✅ |
-  | 僵尸怪物追踪 AI | 自动 | ✅ |
+| 英雄面向鼠标 | 鼠标移动 | ✅ |
+| Magic Missile（追踪+加速） | 鼠标左键 | ✅ 独立场景 + 独立脚本 |
+| Fireball（爆炸AOE） | 鼠标右键 | ✅ 独立场景 + 独立脚本 |
+| Freezing Spear（穿透+冰冻） | Z | ✅ 独立场景 + 独立脚本 |
+| 独立技能冷却（可同时施放） | - | ✅ |
+| 长按持续施法 | 按住按键 | ✅ |
+| 技能数据封装（各技能脚本管理自身数据） | - | ✅ |
+| 蜘蛛怪物追踪 AI | 自动 | ✅ |
+| 僵尸怪物追踪 AI | 自动 | ✅ |
+| 怪物数据驱动（通过场景属性配置） | - | ✅ |
   | 怪物攻击英雄 | 近战碰撞 | ✅ |
   | 杀怪得经验 | 自动 | ✅ |
   | 升级/属性增长 | 自动 | ✅ |
@@ -112,8 +115,9 @@ Evil Invasion 是一款 2006 年发布的俯视角动作 RPG（Diablo-like），
 
 - **18个技能仍使用旧版内联实现**，需要继续重构为独立场景 + 独立脚本（参考已完成的 3 个技能模式）
 - 怪物攻击冷却使用 `await` 可能导致协程问题
-- 需要扩展更多怪物种类（目前：蜘蛛、僵尸）
-- 技能数据（冷却、伤害、法力消耗）已迁移至各技能脚本，hero.gd 仍需清理残留旧代码
+- 需要扩展更多怪物种类（目前：蜘蛛、僵尸，还需：熊、弓手、恶魔、死神、骷髅、Boss）
+- hero.gd 仍需清理残留旧代码（已移除技能数据，但仍包含旧的内联技能实现）
+- 已移除 LLM 幻觉技能（Lightning 系列），确保所有文档和代码中不再引用
 
 ---
 
@@ -1041,12 +1045,13 @@ TOC: 从偏移16开始
 
 ```
 Phase 0: Demo 可用                    ✅ 已完成
-Phase 1: 核心战斗系统                  🔧 当前阶段 (3-5天)
+Phase 1: 完善核心体验                    🔧 当前阶段 (3-5天)
   ├── ✅ 3个技能独立重构完成（Magic Missile、Fireball、Freezing Spear）
   ├── ✅ 独立冷却系统（每个技能各自冷却，可同时施放）
   ├── ✅ 长按持续施法
-  ├── ✅ 技能数据迁移至各技能脚本
+  ├── ✅ 技能数据迁移至各技能脚本（各技能管理自己的冷却、伤害、法力消耗）
   ├── ✅ 2种怪物实现（Spider、Zombie）
+  ├── ✅ 移除 LLM 幻觉技能（Lightning 系列）
   └── 🔄 待完成：18个旧技能重构、受伤反馈、死亡重生
 Phase 2: 法术与物品系统                7-10天
 Phase 3: 怪物体系与 AI                5-7天
