@@ -174,9 +174,10 @@ func _spawn_bubble():
 	# 渐隐动画
 	tween.parallel().tween_property(bubble, "modulate:a", 0.0, bubble_lifetime)
 	
-	# 动画结束后删除气泡
+	# 动画结束后删除气泡（检查气泡是否还存在）
 	tween.finished.connect(func():
-		bubble.queue_free()
+		if is_instance_valid(bubble):
+			bubble.queue_free()
 	)
 
 # ============================================
@@ -190,7 +191,7 @@ func _on_duration_timer_timeout():
 	
 	# 清理所有剩余气泡
 	for child in get_children():
-		if child is Sprite2D and child != bubble_timer and child != duration_timer:
+		if child is Sprite2D and is_instance_valid(child) and child != bubble_timer and child != duration_timer:
 			child.queue_free()
 	
 	# 延迟后删除自身
