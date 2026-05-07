@@ -1,6 +1,7 @@
 extends Node
 
 static var skill_name := "stone_enchanted"
+static var skill_type := "passive"  # 技能类型: active, toggle, passive
 static var base_petrify_chance := 0.15
 
 static func get_petrify_chance(level: int) -> float:

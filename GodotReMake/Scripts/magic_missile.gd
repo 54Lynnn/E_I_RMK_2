@@ -15,6 +15,7 @@ extends Area2D
 # 技能配置（从 hero.gd 迁移至此）
 # ============================================
 static var skill_name := "magic_missile"
+static var skill_type := "active"  # 技能类型: active, toggle, passive
 static var base_cooldown := 1.0
 static var base_mana_cost := 5.0
 static var base_damage := 5.0
@@ -28,7 +29,16 @@ static func get_damage(level: int) -> float:
 	return base_damage + level * 5.0  # LV1=10, LV10=35
 
 static func get_missile_count(level: int) -> int:
-	return 1 + int((level - 1) / 3)  # LV1=1, LV4=2, LV7=3, LV10=4
+	# 原版数据: LV1=1, LV2=2, LV3=2, LV5=3, LV8=4, LV10=5
+	if level >= 10:
+		return 5
+	elif level >= 8:
+		return 4
+	elif level >= 5:
+		return 3
+	elif level >= 2:
+		return 2
+	return 1
 
 # 施法入口
 static func cast(hero: Node, mouse_pos: Vector2, skill_cooldowns: Dictionary) -> bool:
@@ -50,6 +60,7 @@ static func cast(hero: Node, mouse_pos: Vector2, skill_cooldowns: Dictionary) ->
 		var muzzle = hero.get_node("Sprite2D/Muzzle")
 		for i in range(missile_count):
 			var missile = preload("res://Scenes/MagicMissile.tscn").instantiate()
+			missile.name = "magic_missile_proj"
 			missile.global_position = muzzle.global_position
 			var spread = deg_to_rad(10.0)
 			var angle = hero.global_position.angle_to_point(mouse_pos) + randf_range(-spread, spread)

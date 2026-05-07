@@ -169,10 +169,48 @@ var muzzle = hero.get_node("Muzzle")             # ❌ 错误，会返回 null
 
 ```gdscript
 var projectile = preload("res://Scenes/<SpellName>.tscn").instantiate()
+projectile.name = "<spell_name>_proj"  # 必须设置节点名称！
 projectile.global_position = muzzle.global_position
 projectile.direction = hero.global_position.direction_to(mouse_pos)
 projectile.damage = damage
 hero.get_parent().add_child(projectile)
+```
+
+### 8. 节点命名规范（重要！）
+
+所有技能生成的场景节点必须遵循统一命名规范：
+
+| 节点类型 | 后缀 | 示例 |
+|---------|------|------|
+| 场地效果（zone） | `_zone` | `fire_walk_zone`, `poison_cloud_zone`, `dark_ritual_zone` |
+| 投射物（projectile） | `_proj` | `magic_missile_proj`, `fireball_proj`, `meteor_proj`, `holy_light_proj` |
+| 爆发效果（effect） | `_effect` | `nova_effect` |
+
+**规则**：
+- 使用技能ID（snake_case）+ 类型后缀
+- 节点名称必须在实例化后立即设置，在 `add_child()` 之前
+- 命名统一使用小写 + 下划线
+- 场地效果技能必须使用 `hero.get_parent().add_child()` 添加到场景根节点，不能添加到 hero 节点内部
+
+**示例**：
+```gdscript
+# ✅ 正确：投射物
+var missile = preload("res://Scenes/MagicMissile.tscn").instantiate()
+missile.name = "magic_missile_proj"
+hero.get_parent().add_child(missile)
+
+# ✅ 正确：场地效果
+var zone = preload("res://Scenes/PoisonCloud.tscn").instantiate()
+zone.name = "poison_cloud_zone"
+hero.get_parent().add_child(zone)
+
+# ❌ 错误：没有设置名称
+var missile = preload("res://Scenes/MagicMissile.tscn").instantiate()
+hero.get_parent().add_child(missile)
+
+# ❌ 错误：添加到 hero 节点内部（场地效果）
+var zone = preload("res://Scenes/FireWalk.tscn").instantiate()
+hero.add_child(zone)  # 这会导致火焰跟着玩家移动！
 ```
 
 ---

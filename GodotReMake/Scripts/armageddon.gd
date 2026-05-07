@@ -1,17 +1,18 @@
 extends Node2D
 
 static var skill_name := "armageddon"
-static var base_cooldown := 60.0
-static var base_mana_cost := 80.0
-static var base_damage := 40.0
+static var skill_type := "active"  # 技能类型: active, toggle, passive
+static var base_cooldown := 20.0
+static var base_mana_cost := 55.0
+static var base_damage := 250.0
 static var damage_element := "fire"
 static var hit_count := 5
 
 static func get_mana_cost(level: int) -> float:
-	return base_mana_cost + level * 10.0
+	return base_mana_cost + level * 2.5  # LV1=55, LV10=80 (原版数据)
 
 static func get_damage(level: int) -> float:
-	return base_damage + level * 15.0
+	return base_damage + level * 10.0  # LV1=250, LV10=300 (原版数据)
 
 static func get_hit_count(level: int) -> int:
 	return hit_count + int(level / 2)

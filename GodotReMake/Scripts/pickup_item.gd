@@ -24,8 +24,13 @@ const TEXTURE_PATH := "res://Art/Placeholder/Bonus%s.png"
 
 func _ready():
 	body_entered.connect(_on_body_entered)
+
+	# 掉落物层级：
+	# Ground: 0, PickupItem: 3, 地面效果: 5, Hero/Monster: 10
+	z_index = 3
+
 	load_texture()
-	
+
 	var tween = create_tween()
 	tween.tween_property(self, "modulate:a", 0.0, 1.0).set_delay(lifetime - 1.0)
 	tween.tween_callback(queue_free)

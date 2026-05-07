@@ -2,6 +2,7 @@ extends Node2D
 class_name TeleportHandler
 
 static var skill_name := "teleport"
+static var skill_type := "active"  # 技能类型: active, toggle, passive
 static var base_cooldown := 20.0
 static var base_mana_cost := 35.0
 

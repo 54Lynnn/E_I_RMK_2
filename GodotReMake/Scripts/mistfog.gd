@@ -1,6 +1,7 @@
 extends Area2D
 
 static var skill_name := "mistfog"
+static var skill_type := "active"  # 技能类型: active, toggle, passive
 static var base_cooldown := 5.0
 static var base_mana_cost := 25.0
 static var base_duration := 20.0
@@ -44,12 +45,33 @@ var active_monsters := []
 func _ready():
 	body_entered.connect(_on_body_entered)
 	body_exited.connect(_on_body_exited)
+
+	# 地面效果技能层级：
+	# Ground: 0, PickupItem: 3, 地面效果: 5, Hero/Monster: 10
+	z_index = 5
+
 	$CollisionShape2D.shape = CircleShape2D.new()
 	$CollisionShape2D.shape.radius = radius
 
+	# 创建圆形边界线（开发调试用，显示实际作用范围）
+	var boundary = Line2D.new()
+	boundary.name = "Boundary"
+	boundary.width = 2.0
+	boundary.default_color = Color(0.3, 0.8, 1.0, 1.0)  # 天蓝色，不透明
+	# 绘制圆形边界
+	var points = []
+	var segments = 64
+	for i in range(segments + 1):
+		var angle = float(i) / segments * TAU
+		points.append(Vector2(cos(angle), sin(angle)) * radius)
+	boundary.points = points
+	add_child(boundary)
+
 	var fog_texture = _create_fog_texture()
 	$Sprite2D.texture = fog_texture
-	$Sprite2D.scale = Vector2(radius / 64.0, radius / 64.0)
+	# 技能图标缩放：以圆形边界为参考
+	var icon_size = radius * sqrt(2)
+	$Sprite2D.scale = Vector2(icon_size / 128.0, icon_size / 128.0)  # fog_texture是128x128
 	$Sprite2D.modulate = Color(0.5, 0.5, 0.5, 0.5)
 
 func _create_fog_texture() -> ImageTexture:

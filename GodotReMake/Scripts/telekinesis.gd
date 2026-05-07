@@ -1,12 +1,13 @@
 extends Node
 
 static var skill_name := "telekinesis"
-static var base_cooldown := 3.0
-static var base_mana_cost := 10.0
+static var skill_type := "active"  # 技能类型: active, toggle, passive
+static var base_cooldown := 1.0
+static var base_mana_cost := 0.0
 static var pull_range := 300.0
 
-static func get_mana_cost(level: int) -> float:
-	return base_mana_cost + level * 2.0
+static func get_mana_cost(_level: int) -> float:
+	return 0.0  # 原版无消耗
 
 static func get_pull_range(level: int) -> float:
 	return pull_range + level * 20.0
@@ -18,13 +19,7 @@ static func cast(hero: Node, mouse_pos: Vector2, skill_cooldowns: Dictionary) ->
 	if skill_cooldowns.get(skill_name, 0.0) > 0:
 		return false
 
-	var mana_cost = get_mana_cost(level)
-
-	if Global.free_spells or Global.mana >= mana_cost:
-		if not Global.free_spells:
-			Global.mana -= mana_cost
-			Global.mana_changed.emit(Global.mana, Global.max_mana)
-
+	# Telekinesis 无消耗
 		var range = get_pull_range(level)
 		var items = hero.get_tree().get_nodes_in_group("items")
 		var closest_item = null

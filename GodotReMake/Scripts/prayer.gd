@@ -14,6 +14,7 @@ extends Node2D
 # 技能配置
 # ============================================
 static var skill_name := "prayer"
+static var skill_type := "active"  # 技能类型: active, toggle, passive
 static var base_cooldown := 20.0
 static var base_duration := 10.0
 static var base_health_cost_percent := 0.03  # 每秒扣除3%最大生命值

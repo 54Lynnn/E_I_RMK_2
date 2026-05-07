@@ -1,19 +1,23 @@
 extends Area2D
 
 static var skill_name := "nova"
-static var base_cooldown := 10.0
-static var base_mana_cost := 30.0
-static var base_damage := 20.0
+static var skill_type := "active"  # 技能类型: active, toggle, passive
+static var base_cooldown := 2.0
+static var base_mana_cost := 45.0
+static var base_damage := 200.0
 static var damage_element := "water"
 
 static func get_mana_cost(level: int) -> float:
-	return base_mana_cost + level * 5.0
+	return base_mana_cost + level * 2.2  # LV1=45, LV10=67 (原版数据)
 
 static func get_damage(level: int) -> float:
-	return base_damage + level * 8.0
+	return base_damage + level * 10.0  # LV1=200, LV10=250 (原版数据)
 
 static func get_radius(level: int) -> float:
-	return 80.0 + level * 5.0
+	return 100.0  # 原版固定100
+
+static func get_freeze_duration(level: int) -> float:
+	return 1.0 + level * 0.1  # LV1=1s, LV10=1.5s (原版数据)
 
 static func cast(hero: Node, _mouse_pos: Vector2, skill_cooldowns: Dictionary) -> bool:
 	var level = Global.skill_levels.get(skill_name, 0)
@@ -30,6 +34,7 @@ static func cast(hero: Node, _mouse_pos: Vector2, skill_cooldowns: Dictionary) -
 			Global.mana_changed.emit(Global.mana, Global.max_mana)
 
 		var nova = preload("res://Scenes/Nova.tscn").instantiate()
+		nova.name = "nova_effect"
 		nova.global_position = hero.global_position
 		nova.damage = get_damage(level)
 		nova.radius = get_radius(level)

@@ -1,19 +1,20 @@
 extends Area2D
 
 static var skill_name := "meteor"
-static var base_cooldown := 12.0
-static var base_mana_cost := 35.0
-static var base_damage := 60.0
+static var skill_type := "active"  # 技能类型: active, toggle, passive
+static var base_cooldown := 5.0
+static var base_mana_cost := 45.0
+static var base_damage := 250.0
 static var damage_element := "fire"
 
 static func get_mana_cost(level: int) -> float:
-	return base_mana_cost + level * 5.0
+	return base_mana_cost + level * 2.2  # LV1=45, LV10=67 (原版数据)
 
 static func get_damage(level: int) -> float:
-	return base_damage + level * 20.0
+	return base_damage + level * 10.0  # LV1=250, LV10=300 (原版数据)
 
 static func get_radius(level: int) -> float:
-	return 60.0 + level * 4.0
+	return 130.0  # 原版固定130
 
 static func cast(hero: Node, mouse_pos: Vector2, skill_cooldowns: Dictionary) -> bool:
 	var level = Global.skill_levels.get(skill_name, 0)
@@ -30,6 +31,7 @@ static func cast(hero: Node, mouse_pos: Vector2, skill_cooldowns: Dictionary) ->
 			Global.mana_changed.emit(Global.mana, Global.max_mana)
 
 		var meteor = preload("res://Scenes/Meteor.tscn").instantiate()
+		meteor.name = "meteor_proj"
 		meteor.global_position = mouse_pos - Vector2(0, 400)
 		meteor.target_position = mouse_pos
 		meteor.damage = get_damage(level)

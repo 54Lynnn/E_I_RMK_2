@@ -80,10 +80,12 @@ func apply_debuff(name: String, duration: float, params: Dictionary = {}):
 func remove_debuff(name: String):
 	if not debuffs.has(name):
 		return
+	# 先获取参数，再删除debuff
+	var params = debuffs[name].params
 	debuffs.erase(name)
 	if current_state == State.DEATH:
 		return
-	_on_debuff_removed(name)
+	_on_debuff_removed(name, params)
 
 func has_debuff(name: String) -> bool:
 	return debuffs.has(name)
@@ -102,6 +104,7 @@ func _on_debuff_applied(name: String):
 		"frozen":
 			move_speed = 0.0
 			can_attack = false
+			velocity = Vector2.ZERO  # 立即停止移动
 			sprite.modulate = Color(0.5, 0.8, 1.0)
 		"slowed":
 			var factor = debuffs[name].params.get("factor", 0.5)
@@ -109,9 +112,10 @@ func _on_debuff_applied(name: String):
 		"petrified":
 			move_speed = 0.0
 			can_attack = false
+			velocity = Vector2.ZERO  # 立即停止移动
 			sprite.modulate = Color(0.3, 0.3, 0.3)
 
-func _on_debuff_removed(name: String):
+func _on_debuff_removed(name: String, params: Dictionary = {}):
 	if current_state == State.DEATH:
 		return
 	match name:
@@ -123,6 +127,19 @@ func _on_debuff_removed(name: String):
 			_recalculate_speed()
 		"petrified":
 			die()
+		"dark_ritual":
+			# Dark Ritual debuff 结束时进行秒杀判定
+			var chance = params.get("chance", 0.3)
+			var dmg = params.get("damage", 100.0)
+			# 检查是否有水抗（未来可以扩展）
+			var has_water_resist = false  # 暂时所有怪物都没有水抗
+			if not has_water_resist:
+				if randf() < chance:
+					# 秒杀
+					take_damage(99999.0, "water")
+				else:
+					# 造成普通伤害
+					take_damage(dmg, "water")
 
 func _recalculate_speed():
 	move_speed = original_move_speed

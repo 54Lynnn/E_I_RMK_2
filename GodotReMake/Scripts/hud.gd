@@ -61,24 +61,24 @@ const SKILL_ICON_SIZE := 44
 # - input: 快捷键（显示在提示中）
 const SKILL_BAR_SKILL_DATA := {
 	"magic_missile": {"name": "Magic Missile", "texture": "res://Art/Placeholder/MagicMissile.png", "input": "LMB"},
-	"prayer": {"name": "Prayer", "texture": "res://Art/Placeholder/Prayer.png", "input": ""},
-	"teleport": {"name": "Teleport", "texture": "res://Art/Placeholder/Teleport.png", "input": ""},
-	"mistfog": {"name": "Mist Fog", "texture": "res://Art/Placeholder/MistFog.png", "input": ""},
+	"prayer": {"name": "Prayer", "texture": "res://Art/Placeholder/Prayer.png", "input": "X"},
+	"teleport": {"name": "Teleport", "texture": "res://Art/Placeholder/Teleport.png", "input": "2"},
+	"mistfog": {"name": "Mist Fog", "texture": "res://Art/Placeholder/MistFog.png", "input": "3"},
 	"stone_enchanted": {"name": "Stone Enchanted", "texture": "res://Art/Placeholder/StoneEnchanted.png", "input": ""},
-	"wrath_of_god": {"name": "Wrath of God", "texture": "res://Art/Placeholder/WrathOfGod.png", "input": ""},
-	"telekinesis": {"name": "Telekinesis", "texture": "res://Art/Placeholder/Telekinesis.png", "input": ""},
-	"sacrifice": {"name": "Sacrifice", "texture": "res://Art/Placeholder/Sacrifice.png", "input": ""},
-	"holy_light": {"name": "Holy Light", "texture": "res://Art/Placeholder/HolyLight.png", "input": ""},
-	"fire_ball": {"name": "Fire Ball", "texture": "res://Art/Placeholder/FireBall.png", "input": "F"},
-	"heal": {"name": "Heal", "texture": "res://Art/Placeholder/Heal.png", "input": ""},
-	"fire_walk": {"name": "Fire Walk", "texture": "res://Art/Placeholder/FireWalk.png", "input": ""},
-	"meteor": {"name": "Meteor", "texture": "res://Art/Placeholder/Meteor.png", "input": ""},
-	"armageddon": {"name": "Armageddon", "texture": "res://Art/Placeholder/Armageddon.png", "input": ""},
-	"freezing_spear": {"name": "Freezing Spear", "texture": "res://Art/Placeholder/FreezingSpear.png", "input": ""},
-	"poison_cloud": {"name": "Poison Cloud", "texture": "res://Art/Placeholder/PoisonCloud.png", "input": ""},
-	"fortuna": {"name": "Fortuna", "texture": "res://Art/Placeholder/Fortuna.png", "input": ""},
-	"dark_ritual": {"name": "Dark Ritual", "texture": "res://Art/Placeholder/DarkRitual.png", "input": ""},
-	"nova": {"name": "Nova", "texture": "res://Art/Placeholder/Nova.png", "input": ""},
+	"wrath_of_god": {"name": "Wrath of God", "texture": "res://Art/Placeholder/WrathOfGod.png", "input": "4"},
+	"telekinesis": {"name": "Telekinesis", "texture": "res://Art/Placeholder/Telekinesis.png", "input": "Q"},
+	"sacrifice": {"name": "Sacrifice", "texture": "res://Art/Placeholder/Sacrifice.png", "input": "R"},
+	"holy_light": {"name": "Holy Light", "texture": "res://Art/Placeholder/HolyLight.png", "input": "E"},
+	"fire_ball": {"name": "Fire Ball", "texture": "res://Art/Placeholder/FireBall.png", "input": "RMB"},
+	"heal": {"name": "Heal", "texture": "res://Art/Placeholder/Heal.png", "input": "C"},
+	"fire_walk": {"name": "Fire Walk", "texture": "res://Art/Placeholder/FireWalk.png", "input": "U"},
+	"meteor": {"name": "Meteor", "texture": "res://Art/Placeholder/Meteor.png", "input": "F"},
+	"armageddon": {"name": "Armageddon", "texture": "res://Art/Placeholder/Armageddon.png", "input": "G"},
+	"freezing_spear": {"name": "Freezing Spear", "texture": "res://Art/Placeholder/FreezingSpear.png", "input": "Z"},
+	"poison_cloud": {"name": "Poison Cloud", "texture": "res://Art/Placeholder/PoisonCloud.png", "input": "H"},
+	"fortuna": {"name": "Fortuna", "texture": "res://Art/Placeholder/Fortuna.png", "input": "V"},
+	"dark_ritual": {"name": "Dark Ritual", "texture": "res://Art/Placeholder/DarkRitual.png", "input": "B"},
+	"nova": {"name": "Nova", "texture": "res://Art/Placeholder/Nova.png", "input": "N"},
 }
 
 # 存储技能按钮的字典，key=技能ID，value=Button节点
@@ -167,11 +167,29 @@ func setup_skill_bar():
 
 		# 将图标添加为按钮的子节点
 		btn.add_child(icon)
-		
+
+		# 添加快捷键提示标签（右下角）
+		var input_text = data.get("input", "")
+		if not input_text.is_empty():
+			var key_label = Label.new()
+			key_label.text = input_text
+			key_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+			key_label.vertical_alignment = VERTICAL_ALIGNMENT_BOTTOM
+			key_label.position = Vector2(SKILL_ICON_SIZE - 28, SKILL_ICON_SIZE - 18)
+			key_label.size = Vector2(26, 16)
+			key_label.add_theme_font_size_override("font_size", 11)
+			# 添加黑色描边效果（使用背景面板）
+			var bg = Panel.new()
+			bg.position = Vector2(SKILL_ICON_SIZE - 30, SKILL_ICON_SIZE - 20)
+			bg.size = Vector2(28, 18)
+			bg.modulate = Color(0.0, 0.0, 0.0, 0.7)
+			btn.add_child(bg)
+			btn.add_child(key_label)
+
 		# 存储元数据（用于后续访问）
 		btn.set_meta("skill_id", skill_id)
 		btn.set_meta("icon_node", icon)
-		
+
 		# 连接点击信号
 		btn.pressed.connect(_on_skill_bar_pressed.bind(skill_id))
 

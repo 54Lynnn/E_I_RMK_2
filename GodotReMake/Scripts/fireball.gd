@@ -1,39 +1,44 @@
-extends Area2D
+extends Node2D
 
 # ============================================
-# Fireball.gd - 火球术专用脚本
+# Fireball (火球术) - 技能配置
 # ============================================
-# 火球术特性：
-# - 技能配置（冷却、伤害、法力消耗、爆炸半径）
-# - 直线飞行，不跟踪
-# - 速度恒定（无加速）
-# - 命中敌人后爆炸，造成范围伤害
-# ============================================
+# 原版效果：发射一个火球，命中敌人后爆炸，造成范围伤害
+# 伤害类型：fire
+# 使用 projectile.gd 实现投射物行为
 
-# ============================================
-# 技能配置（从 hero.gd 迁移至此）
-# ============================================
-static var skill_name := "fireball"
-static var base_cooldown := 0.5
-static var base_mana_cost := 5.0
-static var base_damage := 40.0
-static var damage_element := "fire"
+static var skill_name := "fireball"      # 技能唯一标识
+static var skill_type := "active"         # 技能类型: active, toggle, passive
+static var base_cooldown := 0.5           # 基础冷却时间（秒）
+static var base_mana_cost := 5.0          # 基础魔法消耗
+static var base_damage := 40.0            # 基础伤害值
+static var damage_element := "fire"       # 伤害元素类型（fire系技能）
 
-# 等级成长公式
-static func get_mana_cost(level: int) -> float:
-	return base_mana_cost + level * 1.0  # LV1=7, LV10=15
-
-static func get_damage(level: int) -> float:
-	return base_damage + level * 10.0  # LV1=50, LV10=140
-
+# 爆炸半径配置
+# LV1=60, LV10=70（原版数据，每级+1）
 static func get_explosion_radius(level: int) -> float:
-	return 55.0 + level  # LV1=56, LV10=65
+	return 60.0 + level * 1.0
 
-# 施法入口
+# 伤害值配置
+# LV1=50, LV10=100（原版数据，每级+10）
+static func get_damage(level: int) -> float:
+	return base_damage + level * 10.0
+
+# 魔法消耗配置
+# LV1=7, LV10=15（原版数据，每级+1）
+static func get_mana_cost(level: int) -> float:
+	return base_mana_cost + level * 1.0
+
+# ============================================
+# 施法主函数
+# ============================================
 static func cast(hero: Node, mouse_pos: Vector2, skill_cooldowns: Dictionary) -> bool:
+	# 检查技能是否已学习
 	var level = Global.skill_levels.get(skill_name, 0)
 	if level <= 0:
 		return false
+	
+	# 检查技能是否在冷却中
 	if skill_cooldowns.get(skill_name, 0.0) > 0:
 		return false
 	
@@ -41,105 +46,42 @@ static func cast(hero: Node, mouse_pos: Vector2, skill_cooldowns: Dictionary) ->
 	var damage = get_damage(level)
 	var explosion_radius = get_explosion_radius(level)
 	
+	# 检查魔法值是否足够
 	if Global.free_spells or Global.mana >= mana_cost:
+		# 扣除魔法值
 		if not Global.free_spells:
 			Global.mana -= mana_cost
 			Global.mana_changed.emit(Global.mana, Global.max_mana)
 		
+		# 获取发射位置
 		var muzzle = hero.get_node("Sprite2D/Muzzle")
-		var fireball = preload("res://Scenes/Fireball.tscn").instantiate()
+		
+		# 创建投射物（使用 Projectile.tscn）
+		var fireball = preload("res://Scenes/Projectile.tscn").instantiate()
 		fireball.global_position = muzzle.global_position
 		fireball.direction = hero.global_position.direction_to(mouse_pos)
-		fireball.damage = damage
-		fireball.explosion_damage = damage
-		fireball.explosion_radius = explosion_radius
+		fireball.speed = 300.0                     # 飞行速度
+		fireball.max_distance = 4000.0             # 最大射程
+		fireball.damage = damage                   # 直接命中伤害
+		fireball.damage_element = damage_element   # 伤害类型：fire
+		fireball.is_piercing = false               # 不穿透：命中后爆炸
+		
+		# 爆炸效果配置
+		fireball.has_explosion = true              # 启用爆炸效果
+		fireball.explosion_radius = explosion_radius  # 爆炸半径
+		fireball.explosion_damage = damage         # 爆炸伤害
+		
+		# 设置贴图
+		if fireball.has_node("Sprite2D") and ResourceLoader.exists("res://Art/Placeholder/Fireball.png"):
+			fireball.get_node("Sprite2D").texture = load("res://Art/Placeholder/Fireball.png")
+		
+		# 添加到场景
+		fireball.name = "fireball_proj"
 		hero.get_parent().add_child(fireball)
 		
+		# 设置技能冷却
 		skill_cooldowns[skill_name] = base_cooldown
 		return true
+	
+	# 魔法不足，施法失败
 	return false
-
-# ============================================
-# 实例属性（投射物行为）
-# ============================================
-
-# 基础速度（像素/秒）
-@export var speed := 300.0
-
-# 伤害值（由 cast 方法设置）
-@export var damage := 15.0
-
-# 爆炸范围伤害（由 cast 方法设置）
-@export var explosion_radius := 50.0
-@export var explosion_damage := 56.0
-
-# 最大飞行距离
-@export var max_distance := 4000
-
-# 最大存活时间（秒）
-@export var max_lifetime := 20
-
-# 内部变量
-var direction := Vector2.RIGHT
-var start_position := Vector2.ZERO
-var life_time := 0.0
-
-@onready var sprite := $Sprite2D
-
-func _ready():
-	start_position = global_position
-	direction = direction.normalized()
-	sprite.rotation = direction.angle()
-	body_entered.connect(_on_body_entered)
-	area_entered.connect(_on_area_entered)
-
-func _process(delta):
-	life_time += delta
-	
-	# 超过最大存活时间则销毁
-	if life_time > max_lifetime:
-		destroy()
-		return
-	
-	# 直线飞行（恒定速度，无加速，无跟踪）
-	var move = direction * speed * delta
-	global_position += move
-	
-	# 超出最大距离则销毁
-	if global_position.distance_to(start_position) > max_distance:
-		destroy()
-
-func _on_body_entered(body):
-	if body.is_in_group("monsters"):
-		explode()
-	elif body.is_in_group("walls"):
-		destroy()
-
-func _on_area_entered(area):
-	if area.is_in_group("monsters"):
-		explode()
-
-func explode():
-	# 对爆炸范围内的所有怪物造成伤害
-	var monsters = get_tree().get_nodes_in_group("monsters")
-	for m in monsters:
-		if not is_instance_valid(m):
-			continue
-		var dist = global_position.distance_to(m.global_position)
-		if dist <= explosion_radius:
-			if m.has_method("take_damage"):
-				# 距离越近伤害越高
-				var damage_factor = 1.0 - (dist / explosion_radius)
-				var final_damage = explosion_damage + damage * damage_factor
-				m.take_damage(final_damage, damage_element)
-	
-	# 创建爆炸特效
-	var explosion = preload("res://Scenes/Explosion.tscn").instantiate()
-	explosion.global_position = global_position
-	# 调整爆炸大小
-	explosion.scale = Vector2(explosion_radius / 30.0, explosion_radius / 30.0)
-	get_parent().add_child(explosion)
-	queue_free()
-
-func destroy():
-	queue_free()

@@ -14,6 +14,7 @@ extends Node2D
 # 技能配置
 # ============================================
 static var skill_name := "heal"
+static var skill_type := "active"  # 技能类型: active, toggle, passive
 static var base_cooldown := 15.0
 static var base_duration := 10.0
 static var base_mana_cost := 35.0
