@@ -28,6 +28,7 @@ extends CharacterBody2D
 const MagicMissile = preload("res://Scripts/magic_missile.gd")
 const Fireball = preload("res://Scripts/fireball.gd")
 const FreezingSpear = preload("res://Scripts/freezing_spear.gd")
+const Prayer = preload("res://Scripts/prayer.gd")
 
 # 基础移动速度（像素/秒）
 # 实际速度 = BASE_MOVE_SPEED + 敏捷×0.5 + 耐力×0.35
@@ -127,6 +128,8 @@ func _process(delta):
 		cast_fireball()
 	if Input.is_action_pressed("spell_freezing_spear"):
 		cast_freezing_spear()
+	if Input.is_action_pressed("spell_prayer"):
+		cast_prayer()
 
 func get_move_speed() -> float:
 	# 计算实际移动速度
@@ -164,6 +167,8 @@ func _unhandled_input(event):
 		cast_fireball()
 	if event.is_action_pressed("spell_freezing_spear"):
 		cast_freezing_spear()
+	if event.is_action_pressed("spell_prayer"):
+		cast_prayer()
 
 func cast_magic_missile():
 	MagicMissile.cast(self, mouse_pos, skill_cooldowns)
@@ -175,34 +180,7 @@ func cast_freezing_spear():
 	FreezingSpear.cast(self, mouse_pos, skill_cooldowns)
 
 func cast_prayer():
-	var level = Global.skill_levels.get("prayer", 0)
-	if level <= 0:
-		return
-	if skill_cooldowns["prayer"] > 0:
-		return
-	var health_cost = Global.max_health * (0.65 - (level - 1) * 0.03)
-	var cd = 20.0 - (level - 1) * 0.5
-	var mana_restore = Global.max_mana * 0.5
-	if Global.free_spells or Global.health > health_cost:
-		if not Global.free_spells:
-			Global.health -= health_cost
-			Global.health_changed.emit(Global.health, Global.max_health)
-		prayer_active = true
-		skill_cooldowns["prayer"] = cd
-		_restore_mana_over_time(mana_restore, 10.0)
-
-func _restore_mana_over_time(amount: float, duration: float):
-	var timer = 0.0
-	var mana_per_second = amount / duration
-	var tween = create_tween()
-	tween.set_loops(int(duration))
-	tween.tween_callback(func():
-		if prayer_active:
-			Global.mana = min(Global.mana + mana_per_second, Global.max_mana)
-			Global.mana_changed.emit(Global.mana, Global.max_mana)
-	)
-	tween.tween_interval(1.0)
-	tween.finished.connect(func(): prayer_active = false)
+	Prayer.cast(self, mouse_pos, skill_cooldowns)
 
 func cast_teleport():
 	var level = Global.skill_levels.get("teleport", 0)
