@@ -571,32 +571,7 @@ func _bounce_lightning(from_monster, damage: float, remaining_bounces: int, hit_
 		hit_monsters.append(closest)
 		_bounce_lightning(closest, damage, remaining_bounces - 1, hit_monsters)
 
-func cast_heal():
-	var level = Global.skill_levels.get("heal", 0)
-	if level <= 0:
-		return
-	if skill_cooldowns["heal"] > 0:
-		return
-	# 原版数据：LV15 治疗55% 冷却15s 法力35
-	var heal_percent = 0.1 + level * 0.09  # LV15=0.55, LV20=0.9, LV24=1.0
-	var mana_cost = 35.0 + (level - 15) * 1.9 if level > 15 else 35.0
-	var cd = 15.0 + max(0, level - 15) * 1.0 if level <= 15 else 15.0 + (level - 15) * 1.0
-	if Global.free_spells or Global.mana >= mana_cost:
-		if not Global.free_spells:
-			Global.mana -= mana_cost
-			Global.mana_changed.emit(Global.mana, Global.max_mana)
-		skill_cooldowns["heal"] = cd
-		_heal_over_time(heal_percent, 10.0)
 
-func _heal_over_time(percent_per_second: float, duration: float):
-	var timer = 0.0
-	var tween = create_tween()
-	tween.set_loops(int(duration))
-	tween.tween_callback(func():
-		Global.health = min(Global.health + Global.max_health * percent_per_second, Global.max_health)
-		Global.health_changed.emit(Global.health, Global.max_health)
-	)
-	tween.tween_interval(1.0)
 
 func cast_fire_walk():
 	var level = Global.skill_levels.get("fire_walk", 0)
