@@ -144,25 +144,27 @@ func _spawn_bubble():
 	# 创建气泡（使用 Sprite2D + Tween 实现）
 	var bubble = Sprite2D.new()
 	
-	# 创建圆形纹理
-	var image = Image.create(16, 16, false, Image.FORMAT_RGBA8)
+	# 创建圆形纹理（更大的气泡）
+	var image = Image.create(32, 32, false, Image.FORMAT_RGBA8)
 	image.fill(Color(0, 0, 0, 0))
-	var center = Vector2(8, 8)
-	for x in range(16):
-		for y in range(16):
+	var center = Vector2(16, 16)
+	for x in range(32):
+		for y in range(32):
 			var dist = Vector2(x, y).distance_to(center)
-			if dist < 6:
-				var alpha = 1.0 - (dist / 6.0)
-				image.set_pixel(x, y, Color(0.3, 0.6, 1.0, alpha * 0.6))
+			if dist < 12:
+				var alpha = 1.0 - (dist / 12.0)
+				image.set_pixel(x, y, Color(0.3, 0.6, 1.0, alpha * 0.7))
 	
 	var texture = ImageTexture.create_from_image(image)
 	bubble.texture = texture
 	
-	# 随机偏移位置（玩家周围）
-	var random_offset = Vector2(randf_range(-15, 15), randf_range(-10, 10))
+	# 随机偏移位置（玩家周围，从身体下方产生）
+	var random_offset = Vector2(randf_range(-20, 20), randf_range(5, 20))
 	bubble.position = random_offset
 	
 	# 添加气泡到 Prayer 节点（跟随玩家）
+	# 设置 z_index 确保气泡显示在玩家上方
+	bubble.z_index = 10
 	add_child(bubble)
 	
 	# 使用 Tween 实现上浮和渐隐
