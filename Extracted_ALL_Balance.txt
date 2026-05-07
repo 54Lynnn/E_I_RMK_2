@@ -1,0 +1,876 @@
+COEFF	START_VALUE
+STRENGTH_ON_HEALTH	10	0
+STRENGTH_ON_HIT_RECOVERY	-0.004	0.5
+		
+DEXTERITY_ON_SPEED	0.5	65
+DEXTERITY_ON_CHANCE_TO_BE_HIT	-0.004	1
+		
+STAMINA_ON_HEALTH_REGENERATION	0.1	0
+STAMINA_ON_SPEED	0.35	0
+
+INTELLIGENCE_ON_MANA	6	0
+INTELLIGENCE_ON_MANA_REGENERATION	0.06	0
+
+WISDOM_ON_MANA	2	0
+WISDOM_ON_MANA_REGENERATION	0.18	0
+
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+
+
+		
+		
+
+		
+					
+					
+					
+					
+
+
+
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+
+
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+
+
+					
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+
+
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+
+
+						
+						
+						
+						
+						
+						
+						
+				
+				
+				
+				
+"Hero Name";  "";                   
+"Level"; "";
+"Experience"; "";
+"Strength"; "";
+"Dexterity"; "";
+"Stamina"; "";
+"Health"; "1 strength point increases by 10 health points.";
+"Health regeneration"; "1 stamina point increases by 0.1 health point regeneration per second.";
+"Movement speed";   "1 dexterity point increases by 0.5 hero speed.\n1 stamina point increases by 0.35 hero speed.";
+"Hit recovery"; "1 strength points decreases by 0.004 seconds hit recovery time.\nBase hit recovery time is 0.5 seconds.";
+"Chance to be hit";"1 dexterity point decreases by 0.4% chance to be hit.";
+"Intelligence"; "";
+"Wisdom"; "";
+"Mana";   "1 intelligence point increases by 6 hero mana capacity.\n1 wisdom point increases by 2 hero mana capacity.";
+"Mana regeneration"; "1 intelligence point increases by 0.06 mana point regeneration per second.\n1 wisdom point increases by 0.18 mana point regeneration per second.";
+"Attribute Points"; "";
+"Skill Points"; "";
+
+"extra slow";
+"very slow";
+"slow";
+"normal";
+"fast";
+"very fast";
+"extra fast";
+HEALTH_RECOVERY_TIME	5
+MANA_RECOVERY_TIME	5
+PHYSIC_RESIST_TIME	15
+MAGIC_RESIST_TIME	15
+QUAD_DAMAGE_TIME	15
+SPEED_TIME	15
+EXPERIENCE_GIVE	0.2
+IMMUNE_TIME	15
+TIME_STOP_TIME	15
+PHYSIC_DAMAGE_REDUCTION	0.2
+MAGIC_DAMAGE_REDUCTION	0.2
+
+PROBABILITY_ITEM	0.1
+PROBABILITY_ITEM_LEVEL_1	0.4
+PROBABILITY_ITEM_LEVEL_2	0.7
+PROBABILITY_ITEM_LEVEL_3	0.85
+PROBABILITY_ITEM_LEVEL_4	0.95
+PROBABILITY_ITEM_LEVEL_5	1
+
+LIFE_TIME	10
+"Ancient Way";
+"Burned Land";
+"Desert Battle";
+"Fogotten Dunes";
+"Dark Swamp";
+"Skull Coast";
+"Snowy Pass";
+"Hell Eye";
+	MONSTER_RIG			
+EXPERIENCE	30			
+ATTACK_RATE	2			
+HITS_BASE	0			
+HITS_PER_LEVEL	7			
+DAMAGE_BASE	5			
+DAMAGE_PER_LEVEL	1			
+SPEED_BASE	60			
+SPEED_PER_LEVEL	0.85			
+ROTATION_SPEED	0.5			
+ATTACK_RANGE_MIN	0			
+ATTACK_RANGE_MAX	200			
+	MONSTER_SPIDER			
+EXPERIENCE	40			
+ATTACK_RATE	2			
+HITS_BASE	0			
+HITS_PER_LEVEL	10			
+DAMAGE_BASE	6			
+DAMAGE_PER_LEVEL	1.5			
+SPEED_BASE	60			
+SPEED_PER_LEVEL	0.9			
+ROTATION_SPEED	0.75			
+ATTACK_RANGE_MIN	0			
+ATTACK_RANGE_MAX	180			
+	MONSTER_DEMON			
+EXPERIENCE	60			
+ATTACK_RATE	2			
+HITS_BASE	0			
+HITS_PER_LEVEL	8			
+DAMAGE_BASE	8			
+DAMAGE_PER_LEVEL	2			
+SPEED_BASE	60			
+SPEED_PER_LEVEL	0.95			
+ROTATION_SPEED	0.4			
+ATTACK_RANGE_MIN	0			
+ATTACK_RANGE_MAX	220			
+	MONSTER_BEAR			
+EXPERIENCE	70			
+ATTACK_RATE	2			
+HITS_BASE	0			
+HITS_PER_LEVEL	9			
+DAMAGE_BASE	10			
+DAMAGE_PER_LEVEL	2.5			
+SPEED_BASE	65			
+SPEED_PER_LEVEL	0.9			
+ROTATION_SPEED	0.6			
+ATTACK_RANGE_MIN	0			
+ATTACK_RANGE_MAX	260			
+	MONSTER_ARCHER			
+EXPERIENCE	50			
+ATTACK_RATE	2			
+HITS_BASE	0			
+HITS_PER_LEVEL	4			
+DAMAGE_BASE	4			
+DAMAGE_PER_LEVEL	1.25			
+SPEED_BASE	65			
+SPEED_PER_LEVEL	0.95			
+ROTATION_SPEED	1.5			
+ATTACK_RANGE_MIN	150			
+ATTACK_RANGE_MAX	300			
+	MONSTER_REAPER			
+EXPERIENCE	80			
+ATTACK_RATE	5			
+HITS_BASE	1			
+HITS_PER_LEVEL	10			
+DAMAGE_BASE	4			
+DAMAGE_PER_LEVEL	1			
+SPEED_BASE	60			
+SPEED_PER_LEVEL	0.9			
+ROTATION_SPEED	1.5			
+ATTACK_RANGE_MIN	150			
+ATTACK_RANGE_MAX	340			
+	MONSTER_BOSS			
+EXPERIENCE	200			
+ATTACK_RATE	15			
+HITS_BASE	0			
+HITS_PER_LEVEL	25			
+DAMAGE_BASE	0			
+DAMAGE_PER_LEVEL	0			
+SPEED_BASE	55			
+SPEED_PER_LEVEL	0.85			
+ROTATION_SPEED	1.5			
+ATTACK_RANGE_MIN	150			
+ATTACK_RANGE_MAX	380			
+SPELL_MAGIC_MISSILE	REQUIRED_LEVEL	DAMAGE_TYPE	ROCKETS_COUNT	COOLDOWN	MANA_COST	DAMAGE
+	1	1	1	1	6	10
+	2	1	2	1	7	10
+	3	1	2	1	8	15
+	4	1	2	1	9	20
+	5	1	3	1	10	20
+	6	1	3	1	11	25
+	7	1	3	1	12	30
+	8	1	4	1	13	30
+	9	1	4	1	14	35
+	10	1	5	1	15	35
+						
+						
+SPELL_PRAYER	REQUIRED_LEVEL	COOLDOWN	HEALTH_COST	GIVE_MANA		
+	5	20	0.65	0.5		
+	6	21	0.56	0.55		
+	7	22	0.48	0.6			
+	8	23	0.41	0.65			
+	9	24	0.35	0.7			
+	10	25	0.3	0.75			
+	11	26	0.26	0.8			
+	12	27	0.23	0.85			
+	13	28	0.21	0.9			
+	14	30	0.2	1			
+							
+							
+SPELL_SLOW	REQUIRED_LEVEL	DAMAGE_TYPE	COOLDOWN	MANA_COST	RADIUS	SECONDS	SLOWS
+	10	2	5	25	150	20	0.35
+	11	2	5	26.6	150	20	0.44
+	12	2	5	28.2	150	20	0.52
+	13	2	5	29.8	150	20	0.59
+	14	2	5	31.4	150	20	0.65
+	15	2	5	33	150	20	0.7
+	16	2	5	34.6	150	20	0.74
+	17	2	5	36.2	150	20	0.77
+	18	2	5	37.8	150	20	0.79
+	19	2	5	39.4	150	20	0.8
+							
+							
+SPELL_TELEPORT	REQUIRED_LEVEL	COOLDOWN	MANA_COST				
+	15	20	35				
+	16	19	33				
+	17	18	31				
+	18	17	29				
+	19	16	27				
+	20	15	25				
+	21	14	23				
+	22	13	21				
+	23	12	19			
+	24	10	15			
+						
+						
+SKILL_STONE_ENCHANTED	REQUIRED_LEVEL	CHANCE				
+	20	0.15				
+	21	0.24				
+	22	0.32				
+	23	0.39				
+	24	0.45				
+	25	0.5				
+	26	0.54				
+	27	0.57				
+	28	0.59				
+	29	0.6				
+
+
+SPELL_WRATH_OF_GOD	REQUIRED_LEVEL	DAMAGE_TYPE	COOLDOWN	MANA_COST	RADIUS	DAMAGE
+	25	2	2	55	130	200
+	26	2	1.9	57.5	130	215
+	27	2	1.8	60	130	230
+	28	2	1.7	62.5	130	245
+	29	2	1.6	65	130	260
+	30	2	1.5	67.5	130	275
+	31	2	1.4	70	130	290
+	32	2	1.3	72.5	130	305
+	33	2	1.2	75	130	230
+	34	2	1	77.5	130	335
+
+
+SKILL_TELEKENESIS	REQUIRED_LEVEL	SECONDS				
+	5	1				
+	6	0.91		
+	7	0.83		
+	8	0.76		
+	9	0.7		
+	10	0.65		
+	11	0.61		
+	12	0.58		
+	13	0.56		
+	14	0.55		
+
+
+SPELL_SACRIFICE	REQUIRED_LEVEL	COOLDOWN	HEALTH_COST	
+	10	3	0.55	
+	11	2.8	0.46	
+	12	2.6	0.38	
+	13	2.4	0.31	
+	14	2.2	0.25			
+	15	2	0.2			
+	16	1.8	0.16			
+	17	1.6	0.13			
+	18	1.4	0.11			
+	19	1	0.1			
+
+
+SPELL_HOLY_LIGHT	REQUIRED_LEVEL	DAMAGE_TYPE	DAMAGE	COOLDOWN	MANA_COST	RAYS
+	15	4	120	1	35	3
+	16	4	120	1	36.9	4
+	17	4	130	1	38.8	4
+	18	4	130	1	40.7	5
+	19	4	140	1	42.6	5
+	20	4	150	1	44.5	5
+	21	4	150	1	46.4	6
+	22	4	160	1	48.3	6
+	23	4	170	1	50.2	6
+	24	4	170	1	52.1	7
+
+
+SPELL_BALL_LIGHTNING	REQUIRED_LEVEL	DAMAGE_TYPE	DAMAGE	COOLDOWN	MANA_COST	CHARGES
+	20	4	200	2	45	5
+	21	4	210	1.9	47.2	5
+	22	4	220	1.8	49.4	5
+	23	4	230	1.7	51.6	5
+	24	4	240	1.6	53.8	5
+	25	4	260	1.5	56	5
+	26	4	270	1.4	58.2	5
+	27	4	280	1.3	60.4	5
+	28	4	290	1.2	62.6	5
+	29	4	300	1	64.8	5
+						
+						
+SPELL_LIGHTNING	REQUIRED_LEVEL	DAMAGE_TYPE	DAMAGE	COOLDOWN	MANA_COST	
+	25	4	1000	1	55	
+	26	4	1050	1	57.5	
+	27	4	1100	1	60	
+	28	4	1150	1	62.5	
+	29	4	1200	1	65	
+	30	4	1250	1	67.5	
+	31	4	1300	1	70	
+	32	4	1350	1	72.5	
+	33	4	1400	1	75	
+	34	4	1500	1	77.5	
+
+
+SPELL_FIRE_BALL	REQUIRED_LEVEL	DAMAGE_TYPE	DAMAGE	COOLDOWN	MANA_COST	RADIUS
+	5	8	50	0.5	7	56
+	6	8	60	0.5	7	57
+	7	8	70	0.5	7	58
+	8	8	80	0.5	7	59
+	9	8	90	0.5	7	60
+	10	8	100	0.5	7	61
+	11	8	110	0.5	7	62
+	12	8	120	0.5	7	63
+	13	8	130	0.5	7	64
+	14	8	140	0.5	7	65
+
+
+SPELL_HEAL	REQUIRED_LEVEL	HEALTH_PERCENT	COOLDOWN	MANA_COST		
+	15	0.55	15	35		
+	16	0.64	16	36.9		
+	17	0.72	17	38.8		
+	18	0.79	18	40.7
+	19	0.85	19	42.6
+	20	0.9	20	44.5
+	21	0.94	21	46.4
+	22	0.97	22	48.3
+	23	0.99	23	50.2
+	24	1	24	52.1
+
+
+SKILL_FIRE_WALK	REQUIRED_LEVEL	DAMAGE_TYPE	DAMAGE	RADIUS
+	10	8	30	10
+	11	8	35	10
+	12	8	40	10
+	13	8	45	10
+	14	8	50	10
+	15	8	55	10
+	16	8	60	10		
+	17	8	65	10		
+	18	8	70	10		
+	19	8	75	10		
+						
+						
+SPELL_METEOR	REQUIRED_LEVEL	DAMAGE_TYPE	DAMAGE	COOLDOWN	MANA_COST	RADIUS
+	20	8	250	5	45	130
+	21	8	260	4.75	47.2	130
+	22	8	270	4.5	49.4	130
+	23	8	280	4.25	51.6	130
+	24	8	290	4	53.8	130
+	25	8	300	3.75	56	130
+	26	8	310	3.5	58.2	130
+	27	8	320	3.25	60.4	130
+	28	8	330	3	62.6	130
+	29	8	350	2.5	64.8	130
+
+
+SPELL_ARMAGEDDON	REQUIRED_LEVEL	DAMAGE_TYPE	DAMAGE	COOLDOWN	MANA_COST	RADIUS
+	25	8	250	20	55	56
+	26	8	260	19	57.5	57
+	27	8	270	18	60	58
+	28	8	280	17	62.5	59
+	29	8	290	16	65	60
+	30	8	300	15	67.5	61
+	31	8	310	14	70	62
+	32	8	320	13	72.5	63
+	33	8	330	12	75	64
+	34	8	340	10	77.5	65
+
+
+SPELL_FREEZING_SPEAR	REQUIRED_LEVEL	DAMAGE_TYPE	SECONDS	COOLDOWN	MANA_COST	SPEARS
+	5	16	4	1	15	1
+	6	16	4.5	1	16.3	1
+	7	16	5	1	17.6	2
+	8	16	5.5	1	18.9	2
+	9	16	6	1	20.2	3
+	10	16	6.5	1	21.5	3
+	11	16	7	1	22.8	3
+	12	16	7.5	1	24.1	4
+	13	16	8	1	25.4	4
+	14	16	8.5	1	26.7	5
+						
+						
+SKILL_FORTUNE	REQUIRED_LEVEL	BONUSES				
+	10	0.15				
+	11	0.24				
+	12	0.32					
+	13	0.39					
+	14	0.45					
+	15	0.5					
+	16	0.54					
+	17	0.57					
+	18	0.59					
+	19	0.6					
+
+
+SPELL_POISON_CLOUD	REQUIRED_LEVEL	DAMAGE_TYPE	DAMAGE	COOLDOWN	MANA_COST	RADIUS	SECONDS
+	15	16	60	5	35	110	10
+	16	16	70	5	36.9	110	10
+	17	16	80	5	38.8	110	10
+	18	16	90	5	40.7	110	10
+	19	16	100	5	42.6	110	10
+	20	16	110	5	44.5	110	10
+	21	16	120	5	46.4	110	10
+	22	16	130	5	48.3	110	10
+	23	16	140	5	50.2	110	10
+	24	16	150	5	52.1	110	10
+
+
+SPELL_NOVA	REQUIRED_LEVEL	DAMAGE_TYPE	DAMAGE	COOLDOWN	MANA_COST	RADIUS	SECONDS
+	20	16	200	2	45	100	1
+	21	16	210	1.9	47.2	100	1.1
+	22	16	220	1.8	49.4	100	1.2
+	23	16	230	1.7	51.6	100	1.3
+	24	16	240	1.6	53.8	100	1.4
+	25	16	250	1.5	56	100	1.5
+	26	16	260	1.4	58.2	100	1.6
+	27	16	270	1.3	60.4	100	1.7
+	28	16	280	1.2	62.6	100	1.8
+	29	16	300	1.1	64.8	100	2
+							
+							
+SPELL_DARK_RITUAL	REQUIRED_LEVEL	DAMAGE_TYPE	CHANCE	COOLDOWN	MANA_COST	RADIUS	
+	25	16	0.3	5.5	55	130	
+	26	16	0.4	4.6	57.5	130	
+	27	16	0.49	3.8	60	130	
+	28	16	0.57	3.1	62.5	130	
+	29	16	0.64	2.5	65	130	
+	30	16	0.7	2	67.5	130	
+	31	16	0.75	1.6	70	130	
+	32	16	0.79	1.3	72.5	130	
+	33	16	0.82	1.1	75	130	
+	34	16	0.9	1	77.5	130	
+
+
+
+	BASE_COST	PER_LEVEL_COST
+START_LEVEL_1_COST	5	1
+START_LEVEL_2_COST	15	1.3
+START_LEVEL_3_COST	25	1.6
+START_LEVEL_4_COST	35	1.9
+START_LEVEL_5_COST	45	2.2
+START_LEVEL_6_COST	55	2.5
+"Magic Missile (spell).";      "Slay enemies with self-guided magic missiles."; break;
+                               
+"Prayer (spell).";             "Sacrifice some blood to your God, get mana."; 
+"Mystic Fog (spell).";         "Slow monsters with mystic fog.";
+"Teleport (spell).";           "Instantly teleports to destination.";
+"Stone Enchanted (skill).";    "Stone curse anyone who ever touches you.";
+"Wrath Of God (spell).";       "Send upon monsters wrath of your God.";
+                               
+"Telekinesis (skill).";        "Take bonus items at a distance.";
+"Sacrifice (spell).";          "Sacrifice your blood to instantly kill anyone of your choice.";
+"Holy Light (spell).";         "Even the strongest demons will suffer from holy light.";
+"Ball Lightning (spell).";     "Shock your enemies with electrical power.";
+"Chain Lightning (spell).";    "Electircal killing spring. Stay far and away.";
+                               
+"Fireball (spell).";           "Burn monsters with fire.";
+"Firewalk (skill).";           "The ground burns under you, making monsters suffer.";
+"Heal (spell).";               "Heal your wounds and cure your dark soul.";
+"Meteor (spell).";             "Send cosmos wrath on evil.";
+"Armageddon (spell).";         "Kill monsters with rain of fire.";
+                               
+"Freezing Spear (spell).";     "Freeze monsters.";
+"Fortuna (skill).";            "Increase chance to find bonus items.";
+"Poison Cloud (spell).";       "Make monsters feel sick."; 
+"Nova (spell).";               "Freeze and damage monsters.";
+"Dark Ritual (spell).";        "Banish monsters from existence.";
+
+"required level:";
+"mana cost:";
+"damage:";
+"cooldown:";
+"missiles:";
+"radius:";
+"healing:";
+"meteor damage:";
+"duration:";
+"health cost:";
+"give mana:";
+"chance to stone:";
+"hold look:";
+"light rays:";
+"strike damage:";
+"strikes:";
+"freeze:";
+"spears:";
+"increase chance by:";
+"chance to banish:";
+"slow by:";UNIT_HERO
+  ANIMATION_WALK_LEGS	"Hero\WalkLegs"	 28 16 16
+  ANIMATION_WALK_TORS	"Hero\WalkTors"	 28 16 16
+  ANIMATION_ATTACK1	"Hero\Attack1"   32 16 16
+  ANIMATION_ATTACK2     "Hero\Attack2"   48 16 16
+  ANIMATION_DEATH1      "Hero\Death1"    64 16 16
+  ANIMATION_DEATH2      "Hero\Death1"    64 16 16
+  FROZEN                "Hero\Frozen"
+  STONED                "Hero\Stoned"
+
+
+UNIT_RIG
+  ANIMATION_WALK_LEGS	"Troll\WalkLegs"   13 16 16
+  ANIMATION_WALK_TORS	"Troll\WalkTors"   13 16 16
+  ANIMATION_ATTACK1	"Troll\Attack1"    32 16 16
+  ANIMATION_ATTACK2     "Troll\Attack2"    48 16 16
+  ANIMATION_DEATH1      "Troll\Death1"     64 16 16
+  ANIMATION_DEATH2      "Troll\Death2"     80 16 16
+  FROZEN                "Troll\Frozen"
+  STONED                "Troll\Stoned"
+
+UNIT_SPIDER
+  ANIMATION_WALK_LEGS	"Spider\WalkLegs"   0  16 16
+  ANIMATION_WALK_TORS	"Spider\WalkTors"   0  16 16
+  ANIMATION_ATTACK1	"Spider\Attack1"    48 16 16
+  ANIMATION_ATTACK2     "Spider\Attack1"    48 16 16
+  ANIMATION_DEATH1      "Spider\Death1"     64 16 16
+  ANIMATION_DEATH2      "Spider\Death2"     80 16 16
+  FROZEN                "Spider\Frozen"
+  STONED                "Spider\Stoned"
+
+UNIT_DEMON
+  ANIMATION_WALK_LEGS	"Demon\WalkLegs"  0  16 16
+  ANIMATION_WALK_TORS	"Demon\WalkTors"  16 16 16
+  ANIMATION_ATTACK1	"Demon\Attack1"   32 16 16
+  ANIMATION_ATTACK2     "Demon\Attack2"   48 16 16
+  ANIMATION_DEATH1      "Demon\Death1"    64 16 16
+  ANIMATION_DEATH2      "Demon\Death2"    64 16 16
+  FROZEN                "Demon\Frozen"
+  STONED                "Demon\Stoned"
+
+UNIT_BEAR 
+  ANIMATION_WALK_LEGS	"Bear\WalkLegs"	 0 16 16
+  ANIMATION_WALK_TORS	"Bear\WalkTors"	 16 16 16
+  ANIMATION_ATTACK1	"Bear\Attack1"   32 16 16
+  ANIMATION_ATTACK2     "Bear\Attack2"   48 16 16
+  ANIMATION_DEATH1      "Bear\Death1"    64 16 16
+  ANIMATION_DEATH2      "Bear\Death2"    80 16 16
+  FROZEN                "Bear\Frozen"
+  STONED                "Bear\Stoned"
+
+UNIT_ARCHER
+  ANIMATION_WALK_LEGS	"Mummy\WalkLegs"   21 16 16
+  ANIMATION_WALK_TORS	"Mummy\WalkTors"   21 16 16
+  ANIMATION_ATTACK1	"Mummy\Attack1"    0 16 16
+  ANIMATION_ATTACK2	"Mummy\Attack1"    0 16 16
+  ANIMATION_DEATH1      "Mummy\Death1"     64 16 16
+  ANIMATION_DEATH2      "Mummy\Death2"     80 16 16
+  FROZEN                "Mummy\Frozen"
+  STONED                "Mummy\Stoned"
+
+UNIT_REAPER
+  ANIMATION_WALK_LEGS	"Reaper\WalkLegs"   21 16 16
+  ANIMATION_WALK_TORS	"Reaper\WalkTors"   21 16 16
+  ANIMATION_ATTACK1	"Reaper\Attack1"    32 16 16
+  ANIMATION_ATTACK2     "Reaper\Attack1"    32 16 16
+  ANIMATION_DEATH1      "Reaper\Death1"     64 16 16
+  ANIMATION_DEATH2      "Reaper\Death2"     80 16 16
+  FROZEN                "Reaper\Frozen"
+  STONED                "Reaper\Stoned"
+
+UNIT_BOSS
+  ANIMATION_WALK_LEGS	"Diablo\WalkLegs"   21 16 16
+  ANIMATION_WALK_TORS	"Diablo\WalkTors"   21 16 16
+  ANIMATION_ATTACK1	"Diablo\Attack1"    0 16 16
+  ANIMATION_ATTACK2     "Diablo\Attack1"    0 16 16
+  ANIMATION_DEATH1      "Diablo\Death1"     64 16 16
+  ANIMATION_DEATH2      "Diablo\Death1"     64 16 16
+  FROZEN                "Diablo\Frozen"
+  STONED                "Diablo\Stoned"
+OggS...........y........	V...vorbis.....D........w........OggS...........y......!....J................vorbis....Xiph.Org libVorbis I 20020717........Sony Ogg Vorbis 1.0 Final..vorbis)BCV......1L(....U..... .6.k...Zk..vZk...Zk&..Zk...Zk...Zk...Zc 4d.....@(J..dRLJ)e G.r.9H.'.(G
+b.9.=.dkM...[MJ)%.Y.....@.!..RH!..RH!..b.!..b.)..r.). ..2. .L2....:....:.-..B....Sm5..s..(..RJ)..RJ)..1..BCV.. ...B..d.A.!..R.)..r.2....U.. .........I.....O.$..-Q.=.3E.4M.5mUwuUWu.Vu.Ve.5m.Ve.UuW.uW.u].u].u].u].u].u..m 4d.. ...#9..).b...:.......d.....	.!*.&j..i..y..y..y..y.................i..i..i..i..i..i..i.fY.eY.eY.eY.eY.eY.eY.eY.eY.eY.eY.eY.eY@h.*.@..@.q$GR$ER$.r,..Y.......@R,.R4.s<GtD.tLI.T..\..\.Y...........@.4.R,..,O35US=UT5.S=.TUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU...U.......f.j..3.Y 4d.........S..Y......H..$...RJ9...$...RJy..G5...RJ)..RJ)..RJ)...(...RJI...(.R.RJy..'5...RJ)..RJ)..RJY..'-...RJI...-...RJ.R.(9...RJ)..RJ)..RJ....B)..RJ...k=)..RJ....I)..RJ)..RJ)..R..BCV..@...q.(....|q.r.)H*.&to...9.....n.9..S....s...U.. ....RH!..RH!..R.!..r.)...
+*....*....2.,..2.,..2....:.)..B....k......5G)..RJ)...9.. 4d.....@ d.A..e.R.!..r.)...
+.Y..........%.1................O.%..,Q3=S4M.UeW.u..mW.u[.}..u..}....8..8..8..8..8.c.BCV.. ...B.!..RH!..b.1....B)...U.. ......Eq....I.$K.,..4M.4O.D..T..e..m..l..\O.TO.US5].U].u].UeUvm..m..m..m..m..e 4d.. ...#9.")."9.#9.......d.....(..8..X.%i.(..j.......................`..h..h..(..(..(..(..(..(..(..(..(..(..(..(..(..(...y..y..y@h.*.@..@Gr$.R,ER$.r,..Y........1.CR$..,K.4..<O.DQ.E.TM..Y...........@Q....I..O..Q.%..%Q.5Q.EQ.EQ.EQ.EQ.EQ.EQ.EQ.EQ.EQ.EQ.EQ.EQ..........C..]t....B-5X
+1....9...V...3.1"t.I'5..A....J).DJ..&7. .B..Q.<.BCV..Q...1.1..r.I..D.1	...9G...Q*-..3)!..c....I....K....c................@...b.R
+)..R.)..R.1..RJ9..S.9....9....)..S.)....A....A(.. ... .B(4dE..'..p$..4K.%K.E..]..MW.4..5QTU..M.TU..MU.%M.EM.TS.EU.U..MU.m.4e.TU..U..e.6~W.}.3MY.U..M..uW.}_.m].4.45QTUM.U.TU.6U..5QtUQUeYTUYv]Y.UW.uK.U.SM..M..UY.mU.u.TU]W]..UY.}[....}..U..MW.u..u_.ea.u.X&M3MM.UU.EU5UU.MU.uK.UUTMY.L..UY.uU.e].E..UU.EU.eUv._.]_.UU.UY.}Suu..ua.e].N..uU.}e.]a.}].n]7..4m.tU_.UU.m_.....aTU_We.7VY.~.....3FU.uSv.].e_..]9v.W.Y..a.u..u])......k..0..r...,...~eX..4m.TU]7U..e].~[..eTU_WeY.MW..]..e.}......./..l.......J...c.}..m]..C.N.^...[.....}aHX............@.!+..8..F)..S.*. t.R. .T1.!sNJ...PJJ!..*. T.I....Jh)..R...PJk...Rk1..Z. ..Ji-..Zj)..Z..c.2..d.A	...JI)sNJ....9*...JI.U.I....9(...S)..PJk...KJ1..Rm-..Ji-..Z)...Rm..Z+. d.I....JI)..Z....:*.s.JI...R....9'...JI...JK...JJ..RZk...Rk5..ZI..RJk-.ZSK5u.R
+...Ji-.Vkj-.PJk...K*...km...Ji-..[)...[...XSK5..bm...[M=..sJ)..R....[m..Z{. ..Ji-..Zj-..Z....J*..RZl...Z.9..Z)...Jl-.Z[l5..bl...R.5..sl...Z...ZSK5.Zs.5.T......@.	e.....@...a.R.II.r.9J	B.9'.r.B	-e.A.%..9	)..9.%..K*-.Vk))..k-...... ..M...
+Y	.D.. . ............c.*..sNJ..c.I..s.B).c.A().PJ*)..JI)....
+....l..X......@...`.b.1..sT2)..NJ'...R
+-u.Rk...Ri...@.)..2J...ZG...Z+........B(4d%....@...c.9g.b.9..3.1....*....B..c.9.!..9. ..B....B....B....A.!.RJ. ..B).t.B...R
+..*p....Qds...BCV..y...1J9...F). ..R..c.JI.r.B)-.V1....Z. ..Zk5v.JI...K*..Xc.%..Z.1..Zl...kJ-.Xk...........E6'.	*4d%..... ..c.9..R.1..CJ)..s.)..c.9..b.1..s.1..s.9..s.9..s.9..s.9..s.9..s.9..s.9..s.	..*p....Qds...BCV......!VZk........Zk.5.Zk...ZK...Zk...Zk...Zk...Zk...Zk...Zk...Zk...Zk...Zk...Zk...RJ)..RJ)..RJ)..RJ)..RJ)..RJ..@.
+.....VG8)..,4d%..........9...H)....B	.4J9...PJI%sNJJ...RJ.sRR*%..R....ZJ)..b.!..RJ...:....Rk-..A(%..Z...PJJ-.Xk...RRj...k.5..R.5.Xk.!..Z....k-)..c....sI...c.5.Z...np..H.q.......BCV..!...B.9..s.B.!R.1....B.!DJ1..s.A.!..1..s.B.!..1..s.B.!..2..s.B.!..B..s.A.!..B....B.!..B	.s.B.!..B.!..B.!..B.!..B.!..B(!..B.!..B.%..B.!..B....B.!..B	!.PB.!..B)..RJ	!..B....B(!..B(...J	.........#.$.."l4...Ph.J.....q.j.... ....Jd.rPj/.R.Ag1fH.....1..cTk..R.Q..sJ).,..J(...s..v.... ..0.!3.@.........).....1\....2
+.
+..s.i........X......b:.X\`..........2..].u . .!........nx.O..	:E.............. "".9........................$....f.....$Dd.....%.......................OggS...S.......y.........../0//....................))(..o...H.g.7/gP..........S.N}..-2..u%4.N.-..V.....?......... .^_:.dX.O....!.Gi.....e...!h...,....?~1}...'.7@~...{S..wH......M.s....;..|.....L............n......uo.A..,..-W.a.w.I..._.M.......^.........g..e\.>.!i`.r.~fv.
+.5.V....C.3,<.....s...Y...6.Br...}b.'w..`..$..v:1...VG.H.[.%..H...8b...].[94.$.r...wX.].l....?C.v.	......@{?5......ta...j.iy.V...(..1..hN.`.h...R.....}B5.....O..^....+.... Nk.^..>.=S.C.p.dEg...V.O.LS1....,).,_|....C...5k'.3..8_......^..j...........1..iD.d3r.t.'.I...~H..G......>g.........)5...9....G....^Bc......!.>.....W	.....l..V..p..(....^.....^1....=....^j..~W.^..4...E.,.l\j..i4.$..O).?K.z...........w.K.~..:.........3..6...t...D..........j..8.&......2;..?.E.....V..q..[?:$|.......gq....Q.B8&...F.R..y....cc....-#{.I8......d..}...=..H.C4...1oV.0`T8K..G}..3fv..E....%.-............8.o...a|~/..........s...R.:..v..Lr..Y..y...l..h.`.@...:.....V....k+$..d(...p.B#{.$........F........x..L.H..GU.m"...J..n.{'.^E.Y<>.st........m...&Ko..W. #c...
+"6... ..W}#...o...c...>..`.....L
+@....y............;_\N....KL.88hqd...N......f.z.ZCK....Z..C....>..}.t..@.......Q.1..0d..bMM..8'T.....@..a$i4.FF......Rm.V..D/..B:.e.........T.....<.L......B....y.N`...m.Q.....~....}.6$..._.(.v.1F!..4(.....i..c......w...,....LO+....6.....O..
+...tp..b2.X.F!.l.r.	...f.E9...?X.I...9A;..$.V..R....]..q.e....P..Gw..#^.....9e~lc.]oH.D.~%.=R.`v{_.......F..KK...
+6....1..J.i...H.^..c..."z...c.y`.33..*.0................>............<...b.j..y.'......~...K.6.b.y.9.\OMy<. ....Q.|.......Md"..(Oj.J.v..o.E......Q!...@......W.?Pc=.....^....t...I.z...7.i.I.z>...K.. .6..*.j... . b.X...1.~.\q..
+I...8.q2.|.zq..i.N.'....`r....`..cb..S.{[Om...;Nr................n.8......$..6.....T..5D(z...&...S/)%'.tg.f.H.-r..A.+.....q.z5"...9qm..~e.{...e....%.....8/x....<?.Z...E...-...|.^.`..:........~1......<.j>........j......).pw...Co.:H~aD.F}l.]..G	...`$.H+...!z...O.&^$c.....bf#z.Q.c."%....k.s:&7...^.....&..9.N...|..3i.P......F.....P....4w.9..........Qi...n*.b...m.....".9#.-)el.....E...D..ODvK.V.E)..[T....z...}.".\S.i.......O......V....9...\.h..<...6...gC#...........6E;.D..2....|.Y..e*50...%^.N....0s.....r....n...j.l...9..&.X....Uj'.D.......V.U.{U:."......:.,7gt.L..^4PFa........:[.P@..!......1...wc.?..........A.%..2.d..d........o..~}[%....l.........^..b#X3....@.l.sB.. ........e.....Hs..L....0.......vv2...&C.c......
+.1.....%...d.....~../p...d...u.k..~...#..|U.v.`..u.E{..8V.P~..c&z..#..ys..z.....s=oN.u..[_.h.8.>.....i.....B.G{..`.'...SA	.T..Ls.{w.K....0b.O.X>..z.v......f>.<=...)..OIJ.;O\..F.-....p..Z.
+...R..i...#y......I..K..........]N...|..#.!Q..!Q.9D.>.;....r.{...........+n.>y...W.3....N.E.B...`5..I
+.........z........;._....*...b*s7.......@HU...hn..5\.h...........B.%
+...".S*\...	....\cEo.^-)........Tr...................1.GJ.^..z.M..kn..a...@.......L..j`..;...............h........;..oa.W....>8...@d0T...w..Cy......7.d~.f.....!ej...YV..^.%%.:^AYF.:.~....'..T..'.D+{8.$6Fq.*1.....C.j...y.j.._e.m.Z/1.V..c.a.l...........6....Z....k......O=.q....7.!a..n\..m&.(rlxo.0y.6......
+]M....................r.7.|:.....0.@MI.@...p..Y...j...?.>.27Y.w.+.'.S.*....g.
+..c.:........X"...20'.2._.=xL..q..yx..(...P.......].C.`%........c.M.'..',Hpi.....).9.am[f._.y.%....A..X...?R...	7o	...........Me....../......_..]..f..d&~.y...O^....z..]wS."XZ...Si..*...Z..:...........*L..4...`.5.y..8..626.X.>N.......
+,...O.q.......6..oI='.g].>tS.../.{.V..C`/Lp3..GI.vE..Q..GNq....P....h.k.@..X....#.t.i...,..Nq{.a.G	..@.g.-..n..~my2g8~={...m....c..]\.Y.e9...L..2~yM.......r{-g.w.p.S.<....,...@.8.SJ...7.....n{i(@..y...y9...A......Kv=..~.E9._*.......^..O.	;...*!.....Zm.*..m....jU.........l..L..{..R.{.>X,..?...T.7....2t....Bx...............z.........{...a.|2..J.H#....e|.....rv.A~.d.}..H)...8...If.1.!...K...s.e.Z53.k...
+.RI0.....{.....@...Az.>,..L...jo}UAE^..&...w..q...Y..X)4*....l.j.,..{=...u
+.`....W.b...}(..;.y}..(.|..9..cL.(.z.3.._..,.........e..._?|....i...n...u...q..C..A...A.tm..+"....x..c[..i.-..C.'.nm......."%	...b
+%.;P_.x.Rw...K...@aL2*.q[........jxP.uU..N....4E.i....?~.......\R:....s0.....Y.....c.....o...G.....P
+......#...!.a..{.z...
+....."...y6.o.]....A.~7.X...7...........G........f.z.8.y.b ....i.L.[...7......f.|}.OggS..`n.......y........a..2.0'+))+(*..0()&(')0*............x|..+..S.`....h....;Hw8,v....r....7.p...Q...............Zj. .`.5>q.....\.ES^Mt.a...}o...	.)o..S~..T...... ..s.U.....OO.}..&..$.'..z.Bn....?...}..'.=A....20...^R..3..._'...}..a...._...B.9.=9..L.......... p....}.d.U!..R...o...%?..[.j...j.q.	.._....t..\<6d.{qQu........l...M(0F.d\...[....x&.g.....;WP......B....`.[...`d...A#>.F..N..ZX...|....-...o.?Ro.#<	........I.j.C..Ml...W..<rA?2..........8..... D\.k..A6...qW....p.h..........sI.....&....t...9......?/..N..S..H|.\.D...$.K.H..G.....T..h.......a..4..+%.......5..k....!.......N.y......`H....Z..?-.x4..C....n....N.l..%?....t}.z".-k.../.d...G.z4.s.4.j...6~..)o...e...n...a...,...L.v...24.Nj....s/$..!o.c.C.oq8.'.....U.<....9f[A.\...._.8.-?.............2.......R.JZ.A).(.<.3)C.....8........@...;M.l.}...}..d.nXs.oO{..	..............l:...3.Mi..1...r......D.n.....^...7.....0....N.7Y..Wo.>PAXN{..t.d.....Z...)o...%...CxOn..2.=ky]...a.}.L.......j../..v.&..y=,...K.B..Osv~.[...pp@.....YS2.....9...[.}3....?.n.....D2+....p:.B...N.j.......# ..:........E...YT..`..9.hlVy;.....C.^Gk...S
+.......	L..V.p..O...h^.A.f.......o....^....f.......W...5.5X.....-..Hf..4..8..0..r.<.D...../$.t.....8?.2..>+9.}...]......e/.#...(.RZ.E%KA[..\s.+....Z..>q..r..t3..J'.v.<.......\..z>j=..#.K.....&;gn&X.SXz.h..].$......`..`.J..<.
+..&ooaXb/.]v......(..M......X........$....?Lx;@\..S..........R......v>xhn..u{M...Y....j...!..]S...>.}xJ9........(........$/.`.....K........v!..>..*..IB^T.....u..yR...](..'N....E..B..e2..aQ.M6.
+N..\..X....A2.a!_..B#.).&.j.i..B.@........W..?..j..7.\...>.XA2.3.L.f.x{:.S..)q......?	!.Xrh.....{..J.O.X......eq.E....U.k....B.:.= p.&.........:X....7s67CJLD.k.."!U7\_)........@hp*..\.1V[.....2y$..O.3*.....+T.=9t..])..x.A...S.csyH......\...7..^.Dd6..
+x..F...+..A....TR...0|.......W.....g....Z.X...5.}..........>/s..?.wF.}M.r<.....,.......^WU....+Kw....+....:.O...0...s..! w...0..0E.~l...*....#...y..].7..l.m.Y.7>..>.B.......Y..L.d..@....Q~.........OggS...........N......tP.h...vorbis.....D........w........OggS...........N......Cd...J................vorbis....Xiph.Org libVorbis I 20020717........Sony Ogg Vorbis 1.0 Final..vorbis)BCV......1L(....U..... .6.k...Zk..vZk...Zk&..Zk...Zk...Zk...Zc 4d.....@(J..dRLJ)e G.r.9H.'.(G
+b.9.=.dkM...[MJ)%.Y.....@.!..RH!..RH!..b.!..b.)..r.). ..2. .L2....:....:.-..B....Sm5..s..(..RJ)..RJ)..1..BCV.. ...B..d.A.!..R.)..r.2....U.. .........I.....O.$..-Q.=.3E.4M.5mUwuUWu.Vu.Ve.5m.Ve.UuW.uW.u].u].u].u].u].u..m 4d.. ...#9..).b...:.......d.....	.!*.&j..i..y..y..y..y.................i..i..i..i..i..i..i.fY.eY.eY.eY.eY.eY.eY.eY.eY.eY.eY.eY.eY@h.*.@..@.q$GR$ER$.r,..Y.......@R,.R4.s<GtD.tLI.T..\..\.Y...........@.4.R,..,O35US=UT5.S=.TUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU...U.......f.j..3.Y 4d.........S..Y......H..$...RJ9...$...RJy..G5...RJ)..RJ)..RJ)...(...RJI...(.R.RJy..'5...RJ)..RJ)..RJY..'-...RJI...-...RJ.R.(9...RJ)..RJ)..RJ....B)..RJ...k=)..RJ....I)..RJ)..RJ)..R..BCV..@...q.(....|q.r.)H*.&to...9.....n.9..S....s...U.. ....RH!..RH!..R.!..r.)...
+*....*....2.,..2.,..2....:.)..B....k......5G)..RJ)...9.. 4d.....@ d.A..e.R.!..r.)...
+.Y..........%.1................O.%..,Q3=S4M.UeW.u..mW.u[.}..u..}....8..8..8..8..8.c.BCV.. ...B.!..RH!..b.1....B)...U.. ......Eq....I.$K.,..4M.4O.D..T..e..m..l..\O.TO.US5].U].u].UeUvm..m..m..m..m..e 4d.. ...#9.")."9.#9.......d.....(..8..X.%i.(..j.......................`..h..h..(..(..(..(..(..(..(..(..(..(..(..(..(..(...y..y..y@h.*.@..@Gr$.R,ER$.r,..Y........1.CR$..,K.4..<O.DQ.E.TM..Y...........@Q....I..O..Q.%..%Q.5Q.EQ.EQ.EQ.EQ.EQ.EQ.EQ.EQ.EQ.EQ.EQ.EQ..........C..]t....B-5X
+1....9...V...3.1"t.I'5..A....J).DJ..&7. .B..Q.<.BCV..Q...1.1..r.I..D.1	...9G...Q*-..3)!..c....I....K....c................@...b.R
+)..R.)..R.1..RJ9..S.9....9....)..S.)....A....A(.. ... .B(4dE..'..p$..4K.%K.E..]..MW.4..5QTU..M.TU..MU.%M.EM.TS.EU.U..MU.m.4e.TU..U..e.6~W.}.3MY.U..M..uW.}_.m].4.45QTUM.U.TU.6U..5QtUQUeYTUYv]Y.UW.uK.U.SM..M..UY.mU.u.TU]W]..UY.}[....}..U..MW.u..u_.ea.u.X&M3MM.UU.EU5UU.MU.uK.UUTMY.L..UY.uU.e].E..UU.EU.eUv._.]_.UU.UY.}Suu..ua.e].N..uU.}e.]a.}].n]7..4m.tU_.UU.m_.....aTU_We.7VY.~.....3FU.uSv.].e_..]9v.W.Y..a.u..u])......k..0..r...,...~eX..4m.TU]7U..e].~[..eTU_WeY.MW..]..e.}......./..l.......J...c.}..m]..C.N.^...[.....}aHX............@.!+..8..F)..S.*. t.R. .T1.!sNJ...PJJ!..*. T.I....Jh)..R...PJk...Rk1..Z. ..Ji-..Zj)..Z..c.2..d.A	...JI)sNJ....9*...JI.U.I....9(...S)..PJk...KJ1..Rm-..Ji-..Z)...Rm..Z+. d.I....JI)..Z....:*.s.JI...R....9'...JI...JK...JJ..RZk...Rk5..ZI..RJk-.ZSK5u.R
+...Ji-.Vkj-.PJk...K*...km...Ji-..[)...[...XSK5..bm...[M=..sJ)..R....[m..Z{. ..Ji-..Zj-..Z....J*..RZl...Z.9..Z)...Jl-.Z[l5..bl...R.5..sl...Z...ZSK5.Zs.5.T......@.	e.....@...a.R.II.r.9J	B.9'.r.B	-e.A.%..9	)..9.%..K*-.Vk))..k-...... ..M...
+Y	.D.. . ............c.*..sNJ..c.I..s.B).c.A().PJ*)..JI)....
+....l..X......@...`.b.1..sT2)..NJ'...R
+-u.Rk...Ri...@.)..2J...ZG...Z+........B(4d%....@...c.9g.b.9..3.1....*....B..c.9.!..9. ..B....B....B....A.!.RJ. ..B).t.B...R
+..*p....Qds...BCV..y...1J9...F). ..R..c.JI.r.B)-.V1....Z. ..Zk5v.JI...K*..Xc.%..Z.1..Zl...kJ-.Xk...........E6'.	*4d%..... ..c.9..R.1..CJ)..s.)..c.9..b.1..s.1..s.9..s.9..s.9..s.9..s.9..s.9..s.9..s.	..*p....Qds...BCV......!VZk........Zk.5.Zk...ZK...Zk...Zk...Zk...Zk...Zk...Zk...Zk...Zk...Zk...Zk...RJ)..RJ)..RJ)..RJ)..RJ)..RJ..@.
+.....VG8)..,4d%..........9...H)....B	.4J9...PJI%sNJJ...RJ.sRR*%..R....ZJ)..b.!..RJ...:....Rk-..A(%..Z...PJJ-.Xk...RRj...k.5..R.5.Xk.!..Z....k-)..c....sI...c.5.Z...np..H.q.......BCV..!...B.9..s.B.!R.1....B.!DJ1..s.A.!..1..s.B.!..1..s.B.!..2..s.B.!..B..s.A.!..B....B.!..B	.s.B.!..B.!..B.!..B.!..B.!..B(!..B.!..B.%..B.!..B....B.!..B	!.PB.!..B)..RJ	!..B....B(!..B(...J	.........#.$.."l4...Ph.J.....q.j.... ....Jd.rPj/.R.Ag1fH.....1..cTk..R.Q..sJ).,..J(...s..v.... ..0.!3.@.........).....1\....2
+.
+..s.i........X......b:.X\`..........2..].u . .!........nx.O..	:E.............. "".9........................$....f.....$Dd.....%.......................OggS...5.......N..........B231)*((-46.1636656.&152412').18...'01041*372.&'())'//433-.-4433325\f.}.k.....zH.....Y...@w..y..).x.....X.,..._v.`KL..~..].....y9b..h..k_.8..T.z:.e.hSWr.i......z.......dz.........|~.])..8.<'..r..p.DR..L....]..oN...&xUTv..r$...O|..C......1wvE.y...v.._...A.@.8D^...$q.&......
+....E..~.._1j.4ekI.U..Bz..,b..u\..#...E
+.qaxM..+.....2.A.n.z.-.s.3.R..y../7|.].X....... ...C..Z..XXL6..d..4F..^R[.a....-T4....g..."\......._f1.....K.c.,:....~._R.....-. ...rU..b...D....e6..e.@..nX...(...%......:Yq....r.....|8....97.2.....fiS....*...L.4j.>..w..?#....H..._....Ff.6F...L......g.bG..r.g.X~p.l..[
+.w..FR.......Ng.Gopuj.<..$.....V....(.....T'Z#.bof...%;.>..lf..^...4b.;......[.i.T..r...;b...k......r7..F.Y....f.h....w.....h...4S.9g...Q1CS[....h'.@..b1.....<....,*.W..>..W2/.4..f...2...>z\....}.k.0}aY~/......i.$*..?z../3s....@}...ioXcq.^.p.f.Vv...T......W	...DP...,>..^.O..m. .Z@...:.'-_..g......L.KRR......l..=....d6..'......Qj_..B.0..8W......_7.....n.0..Sl..a	..v?$z	tb..~..L...P0o.d.....^O..K.U...~.....n}y.s...%..N..5.\f.|.+.<?.:S.-.&K....?.c.i7.l.cs...=........-iU..{.h..f....)..r.y.B......R.Y.;O6..Wj........A..8.M.$...
+......F....5t..9.vb(~..e..a..$.....X*'".7`W....a#.I.!V...9...~?....>......TI..........I....L..9..B..".[...hnt..K...e.:....Ir8@......OGe..BU.<X.,.......*..H,&\	JA..$......(.hd6..Y....w.D..U.f..........C.......ZT`.	....00.@.$&.....h..*...+...*\._.o.ollQO.3.....R<:.\...>..o&..0~<Zt.....|bn..A.'....v.......T|...<N....t.).g5/..Y....e..~#..\.....'...x.Y....G	.~.P]..J......].+.y.A..a?f....E..Xj%.....%..+..u...3..$..V.....n7......D........sw....\.G...|..........tG.C.l~... ..#.3./.....S.n..x.^_.l..T.:.>..f	...C@..........6.Vi.y...<.\......	c......vV...s....5...&.d..z.>.lk...>w.`\x.b68a......oe2..w......tj..].}.....'....$....4..#.1L.....a>..k>LD^....1.rp|yy......?.w.9...	.......r.......I..Djo..O....d.}jP7E.3....?-Tz.ql.....1.P2..j..>..Y.tv.n.
+.y.....<...x..&9..........{.c2^.p.o..Q....T.|;.<..zH...3.t..~...3..s.1olv.7.d.@..n..t..%....s.L.:.....8G.....J;0..o.5{?!....+.q..FK.D...._.O/`....i.i....\WUQ......eUU....B.@...v./.jr...........|..32.......2.t.T.Y......D..7._..f.....z..k._....P3L1>^.
+]..i.o..W..n._d<.^y..}[......../Z..	6..C..D...O/>gzx.........O....-s.uJK.q........G.8o..4.c..Z.....vI.4.g...8}N..t^.S......-..u..cg...>C.r..O.31...\AA...]T...%...^<_.......9y
+].'x@..kUs.:l..$>G...P~..>.....&.eq...s...}....=.}...1`..dNF.R2......../.v...v..4....y.......-...g...F\J..3.u....M......7$...1n.).._.l...... ^^.t..9h.=..;.!*.,H]z.K..=..`R]..}%...Dh.K.....p.q...Qz^
+.x..NOu.W
+.=3.<.|.Y+m}s.x.lV.....:}..m.s....\b.w/..j........lbF.1......2.q..Y....L.4R...kZ.H>.>..\(........'..!...b.n.}}.7Dt......LB...S^..e^~..p....9..;S..w.S|...e.k'0'.e..m....	TR..?.>].s.2.......Dq6..s0j....iZ,(O1".}.....,]_.Zo~.	OS...K	..q......;...[z..i..\.y..@...Ib.......4no~X0..Zt._n.$..`.:.........h[..[...o.ESCT.@...<R.<.t?.+....JA...}......B..1X.....#[N.{t.DB.v..?y.......N8z..O6...._.pI.6Q................F.tV.6..g=....->>...4./..7.O'.w......I,9..l...V.9d....P..tr...`...o..6........!.w.N&....2...<.........]..<R..&.3r..>......d..=........[.).(.n.Y.m?..d........xG.s..N7..~(e..|.y..q..k.h.?.........	Y..+...O......\..D.B..L...g...Q9....:...D.d.^.`..E...p..s..2.....|/.f....:TS..*...f..v<1......Z{.y.G...40....W....Ft.r...q<..lF.>..]...F..ax>{.Z:N..;v..<i_M]n.ouQ.l:./.....o^........$.....i....{?.|]
+xY.,*.O.El.8..g.ph.........T_..v...A........>..{9.15.xQ.'..._.....b~Tz......S...r.8$>Ko~b.i........6.....Ye.)..R....z..U.^...>..]..h.O....Z.Y..)r^^.G.o...A...{2x{?<J...+qO!..NY...5..{S...:.3..u._.........E...%udf.>.5.]...o^nP......w...CA..x...O........{..;.Db......Wq.p:.MH........n.1.6.:.\.... ..P!.D....-...4J....!.....x..
+...k!H....._$%'S..9.....Fo.=..,..S.L>.O....p...9.........Y..I.q...vUaL. .... 7......N.T>........%5..'.....w$/.[.(.=..K.....o...\..,*......_.2.Tf.$.4<6l-m....F2......eX...T...A......{\.V.\4!...t.(F)Xo...6Ddl*..XLr.oK.....VT&.....<.....T.OhhU.F..e2......xG^....j..4.. .......LF.W....Q]..W.....o.....~[Ldwn...._.qt(N.._.%.C.v.t..b.WW..M.=.......~.......U.V?6......A/..d._.n....I..r./.....;.....9.).r...n?#.......i..P=....G9(.?...
+.r.o...}..=t.F.!(.U.c.L..U^.0$..C..c.......#H..../.|ZK.....q..{....V..I.z..........M...N...bq7i...w3.LF..^.T..S.LG^...x....5y..q^.....y.t.zu..*...d.....8+OggS...m.......N..........&6../11..,.11+'+*64...()-04.*(+'*14....DRK.^..S.....s.....j.Uh]9J~^..$...[_O...SK.FO]O....(..........g"?..._#..=.....`...a..........[d;.Y[.k&....~%..'..6...|....B........D..".s.y..%.R.f..~./Q..7x.......1...co.NY	C......	.....!.......ZsT.....L....z!...Hs.=.Cw.1"+........Q+@......M..qf....J-.....D. .........6........U}?.......&3..$3......a3}=..b......{.U..P."....F.3....a.^+P.n.I..J./B..a..W&.fp..9)...\.....I....3....(..&...
+R.q..'.K"..]r...C.4nb5.o.@...-.N..	9.-..&..l\...6.6..n..v*.5...E.<q^.x..U..h.D&...\.....U.....y.....S.....a..a.....].Y..V...<Fo~9`..^...2.........a.....h.P....!...n!......K.lJ.^...t...@h...._.1....a..V.x!.*...	.^y(6....tQ.z..>..........".......EA.iJ.P.w....Z17....Rg.....{.....<..O)...........6.td.....*..k.....{.......m...Pd.6.S.)..C..I....3.A.T...ko.(B.Q.x.\..g......zZ#0.H...)k0h......A.+.npwl..T.y..K..#p......:$....%<..^...i..v.X.nM....V(....'....m......?0.,.....,...}.L.Z.ly..~N3.....B.>.c..v....?.I...;s..%.4h^e.m....b..=.N....'..6.e.....v.,..B.?4.9..4.../.q.1.?.t.=6.....w.8..3.*.g..S3..~.A..C....n.....Xh]}....c>.V.....>..I<..g3.}sv.&...r...t....LN.>\...e..5..6...-..Uq)..w....x...X..7.Q...d^...>...c.Z.....V*..a._o....v.w.a..&Xe5..Lp"..^.^A...../;A..Le..Z.V.{......6&ZY....*u..We<|.b.b...z...%_6.u\`.43.O.}}Z.h?e..[	$........=.$.Z..tb......R....L	.8...#5.K.ep<....s.n.........f..
+|O....r...	..J......Qz..a...
+..!..D^.|.i.%.....	*.1...H.0r.0Gj.A..~.].i....'.t6...Y.....S..%......*mJ...,.....cv.z.....46...a.+.8..^..j2w.;.]P..dF......j^....	.qX.gq.....y..4ZK...r~...g:..I....k........$......3. T.....l....l.z..^.5f.h".T.K.....:[..xD6a?...P.b."b......W.;X.u..3[...K..'f.l[.....w.$....#o..R..V.\.n...9M.W..g5.<B5$..Y.-.`(~kT.L.1.QU..._....g.o.D..B...\sjDl`..J.......k.@}..^.`D..;-w8....L..>.R......s.zk.P.L.{.!.(4
+,.& .d....,....w....s.........H..0.......9R..0........jk..ct.^9....U?..lk......0jkP..+...*a.9.h.t.1..D.7.u......<.L..Ye.....0....<.K)..
+..S2'..3...E?....p.;..........;....$.ry.N.....G.@.R..'T1.#..0	.;74.m.1.....VV5.*.-.m...vf......^...'.w....>........F.JI...w[..{a...A4.......$1.S.\)a.%..u..u.$.m1...O..F..v. +..._......>..} L......p...4..)z..W'...C......1d...0.\LPa..>8J.F.6.f_.R...K.Z[.7r....F...!.............V[<e....F..(a........X.5:[S.@08...9%.+.M.....M....7..4....^]'...z.....CZp*.j.k...j...d.h.	....%.....K.Io.X...5....t.EI_b....<-...yK{.C....z7*.....s.^)...@5._..8y.<...6..........3..I..XL..<..)...=...z<.......1..*..f.ot.u2'..d.t@..C-.6.F.Q.s.....>]H......>;....4..8A~.b...Z..j@.1.:e.q}.....	.........w{.	...m#/@#iG.ub...J
+....o.....~4..5..;..p.....8%.1Q..~.PR2=yo.5.......~.L..;..ay.&B.....Tr".[.	..loBk.v.$......1o.. n,|.&.@....tN....../.N]......?N\..=..y.|^.7.SD	B...YG\b++.....1..v...].lcR........_2o.......}-..HY,.?...m......V.	.r..n.~X...&..~L..Z..M..........%N}...s.pdy..m.)	G.g.?.2CU._N.Zf.....M.......]{?b.DD......(...ff.1....OO...9.i~kg.t/....U9.....te.X.........0.yO8.....yj..@./.....fy..Z2B.....Gs._...Wi/J.{.w..z.N...^.y... b...4_@..t/.lZ....C#.U+Y..jb~..x...*..=8>.......+...rE~...+..x.K.~...>gT..8.h..K.c\......p...q6.VI....W..?lI.$...)W>.JN...m...c...K.3.f^?&....5..Q..84..1.....-._.........B.h.
+w..o...Jm_...........tv.U...!...E-.N.NAU..?3[A.."9.D.O.X....B.4..`..fU..*....>.YOs.A..E....e..|r.....v...#.G....af.H......!7.....e.......C..|M..|=......M.Z.GI+q.7..l.b.*.:A.F:2...\m.\7*.......\.[...5.)......j|..n:.....l3...,...v{0Pc....V..=.g...V.~R...q.A?.../...,}.d..H....a.
+>f...1.I..!P..............*....'..f}....km._.....U.*..j....J^...i...9.(...<.[.....}&5...R....N...Ui.......X..	...e.{}.j#n....k..w....{>..-#*%6$%...`....k..;...<...a...p......F`.fQ).........OggS..........Q}.......@.0...vorbis.....D........w........OggS..........Q}........5..J................vorbis....Xiph.Org libVorbis I 20020717........Sony Ogg Vorbis 1.0 Final..vorbis%BCV..@..$sZ2f.s.{..B....B.{..AL...B.k.!c....B.c....U..@..g...{....{F.g.{i...{....{....{....{....{%.g.{H...{..G.{....{e.W.{(...{....{....{..G.{....{..'.z....{..7.{....{...^{....{....{....{$.W.{(...{..W.{h...{....{....{ 4d.......(..(
+...
+.....@Q..q.........Y.........H..X..X.%Y.%Y.%I..y.............
+.H..PQ..p...Y..d....H..h.......
+............\CTL..\.5].u].u]UUUUUUUUUUUU..Y..@....i....0#..BCV........0....U..@....IN.(9)... YL.J9)..G1yT..A)..RJ)..RJ)... Y..J9)...(Y..*5)..G9yR..=)..RJ)..RJ)...)y...A)...(i..M=)..(E....I)..RJ)..RJ)...J. .RJ)...=...RJ)..1J	..RJ)..RJ)..RJ).. 4d.......g.r(:...g(g...BiB.&9J...J...&.s.9..O.9'.Y.....@.!..RH!..RH!..b.!..r
+*...J*....*.,..2.,..2.,..:....B()..Z....[..I[s..I)..RJ..s.	BCV.. ...B..d.QF!..b.)...J*....U.. ......Q2....Q.............$Q.-..5.3E.4]UveY.m.vuY.u..}[.m.......8..8..8..8..8. 4d...... ..BH!..RH)..s.:.!...Y.........P.Gq...$I.$..,M.4M.DO.LO.\Q.m..\..m..TO.TQ5U.5].u].U]UVe..m..m..m..m..m[.BCV.....:.#).")..8.#I@h.*.@..@....(..H.%Y.&..i..........@h.*....@.......h........(..(..(..(..(..(..(..(..(..(..(..(..(...y..y..y.......$..t$Gr,.R$ER,.r...U.........1$Er,..4M.<..DO.EQ4M.T...U.. .........E....$..$..%Q.-Q.5Q.EQ.EQ.EQ.EQ.EQ.EQ.EQ.EQ.EQ.EQ.EQ.EQ.E..Y	......RJ..X	h.r....dPb...."G=..)...."..R.s.(c.I....)&...:....K..R.j 4d......p.@.,@.4........4.<..<........$M.4..4.......................................................................4@.<@.<........<..D..D........,..<..<.......................................................................4@.<@.<........<..L..<........4..<Q.<S...............................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................`!..."....08.4..M.8.....A...e...y.E..........4..jBU.....`.PU.*............AU..PU..yPU.*T...........M...P].*@.E.*T..
+..........................p...0....."....p8.e....8.....#Y...X..i..`Y.......................................................................p...0..........0(.e...,`Y..,K.....<...D.....(p....ASbq.BCV..Q...E.,..<..i.'.4M.<O.i..y.i..<.4.y.h..<Q4M..(.*.EU...P....`..........B....cY..y.'....4M.<O.E.4MSUi..y.(..i....4M.<Q.E.TUU..y.(..i.....DQ.E.4U.u.y.(..h.....EQ4M.TU.u] ..i......DQ.MSU].u.(..i....20M.4UUu]Y...i....2@UU.u]W..........PUUu]..e.....,.............*......@.!+..(......S.0&!..".$..B%...J. .RR...RJ
+!..JI.T.J...
+B	%.R.........Ph.J. ...0F)..cL*..c.9..R.1....1..s.I..b.9....9..sRJ..s.9).s.9...RB..sNJ	.s.9'...9.....T....`....#A.....R....cY..y.h..$i....(..&I..y.h....<O.E.4U..y.(..i.*..E.4MUu].+..h....0M.TUUu]..(....2d.4U.ue..m......\Wu]..................VG8)..,4d%....@.c.B.!..B
+!..R.	...p...0.......H......B.!..1.!..B.!.
+B.!..B.!..B.!..B.!..B.!..B.!..B.!..B.!..B.!..B.!..B.!..B.!..B.!..B.!..B.!..B.!..B.!..B....U8..>..:.I.X`.!+..T........Rk.B.9'...+..s.BJ-..9....{..s.B)1..K....Z....9)).Vc...RZ.1..{	%..c....Sj-.\{....B....{....{.=..[K9.\..f...D..#..........	. .R.1..s.9.%c.1..s.B..d.1..s.B.!..1..s.B.!.RJ....B.!.PR..s.B.!..J).s.B.!..BI.s.B.!..B(...9.!..B().TB.!..B....J.!..B	..RR
+!..B(!.TJ*%.PJ...PJI%..B	!..J)%..J.!..B)%.RJ	...J(..TR*!..B(....8....A'.U.a.	...BCV..d.....J))F."....BG...s...NZ.-S.)&-..1...V:..RLR	%.N)G...J....{.).....A.........3.....s.t..G... Df.D.BpxP	..S.@b.B..TX\.]\@.......!.!.A,......p..ox.N.)*u ...........\.....adhlptx|.............|..$%@DD4s........ !"#$......... ................OggS..@:......Q}.........S.?..............................!.va.|......N.i.?..S..".....o.J..y..$k.2..P}S.=......._..d........e.....E..R\#.f.t....E..<..O....:.d...05..MM......Z}..........
+3.....]So...b...u.a..g.E..]L.fg....q.........!.&..{./.%....T=$9;..8.u.....O."..............)4.."2...U...R}.>8..1*...=..&..=..Zg.H.t......%.h...=z...)!......h....hu..P.7....d..\.>...N................<..j..&.ag}....	...D=.)5^jZ..1....?>d.o......C.......tZ.......".6.^...N+D1m....Or..&.Y0.<..V.=....yh..!cS.s.$...J..9N...)C.S.'I.Y.!.S8;E+.V.+.......w.d..........;a.$.{j.v.....d.Y....~V.[k.....w......e.ie...9(..1.........hC./.@'.^.M.....e.R..#.....c..k.|:.#....G....B-.2.c........m.<.M.E.[.....gbU...=d4Z.3...k.......^..l..\...CdI*...L6.1,i..$...6.>>w..Y..ZoI#0O...e.q....R.6K@Q..............Es.{^.9..6.v&....RW..g....X....2..^.?l...g3.&..5k..l..3D\,...e..B..JV..`0.........},c....&.I..|..K.....7....z..........1..H.\[...Z]...t.j..v.....w..b......f.w|f...b.......x9....f....1....X.Wx.F7...T....M....iK.0.Y..*F!.9@ S.1..r"..f.."W".DsJ...E.!U.
+H2....~..z.c..%.,k........ZJ.Z.M.....m	..#.p.ZK...|.^MI,6...Z.H..b0$....@...m..~.m.u...O(.U[.5.]Z..jY.K......R.J:-z...B.v....?x...UV...1...9.t.:91..[.....9j..e{1y..hl....N...G...>..^.......-.......YmJ..8.....R	.Q..JQ.]....IV...d8.....44.,.U.q.....9e..5.b.fr7.....7.js{...N.tZ....WG.bOIi..D(...S%~...z.....L.8.L.sF....9.*..^.mb......:..'pdV.....Q{	..Kx.#.a 0.a....5z.....h.......H.gi.lJ......:..Vnm...Qq-{\.g_....?.i.O...".......&=...%....:.ii3.N	+....*..g......Sc*G..?O...l.....wY6..YH!X4....E...(....Y{1... .U.e.F..!..qg.......-g.._'pH.\..[>Y^..GI...-.,8*...m.7.^....r..j..]pcS..G.].e5.9..aO,..ej......T!N....f.V.&F.o...6...?.....h{.<...\N..9.?......fx.....c^..nJ.Y.aS.\gO.:..J...w..8..N......iD.4Mv.GC.....k.{..ul.c.......0l..$$I.u..\.....dI.j..O-/M..b......S.fO...0.86C2..R.d1...@.........U..{........!......~l^X...&u.f........"..}M.;.........	........4:..	S.........[.d.~Ej.W0.#.Y.Z.\/..?..e?/.......u<-.[...dM..ID%.u....ujz.H.f_S.U]aJ....W.mk.`.....JF..U...e.4ZzC..N...{.5.....2.[.G.....0E...$.;.c.aN.)i...Bw.....	..$m3.c.1..W...x..,.0Z.....t.0.M...@..M....(..&N.~<.....h}...lY..7Qr..h...0j._..t.~....`.a.ZJ^....#L..(B#..v../.c.*.N.e..%.1....`MV....x.~..y....]f...9...k.M&..[.V..B.2:.....0:D...k..X..z..C..Xt.\.	...4i9..v.6..*....Y.:|"....!.U.Vg......+....lgm..[...S....../.	H......<f.Ij-.......HWz'<.UC.in;.C..8....'+..w......._.B[..[..1.o&.....|..ru.P#w.....H........]g.a.GA.......cX/$.....Q...s...#9..]..}y9....<...e.v.Y.h.5j....`...YRF....c6O.,.4.......	.....].7Lj.x......f.....F...J../.!H@...ZK...I#i:;.g...~..d=J..B....+}.R...D.....<$I.C..R..f....Hq...h..)...m;Nc.........e.....,...../..8......3)..g....a.......l...p.aII..
+.1.X......]..SW9.YA........y..<..3...Z..,;W........`?O....\g...]fQZ.3T.jO.M..s.....!.l.N.V.;..q.V.<D.CZz.......7Y..HB.0?'V..yImZc7..f.LDI..t...&.....#g].Y9.|K..?.....*.q.u..&.H...~..2oP\........(...;.........4..12.c....IVH............C{.....ui.........~H.....gS)=o....Rc:.K.!
+n.....;...N......_.2,..GO^b.J......g.....3...o;M...v.s......I.>.4....6j).l,.=.v5KZ...$f.3..............A.W..]._..G.P.y.:.0..5..b......=...{}'i#..6.0t..CJ.5g.`/...;. .tR.k.9M.1m..1...-....v....z..N&.....(.W.76W..\.7s..U.,.m.8...\^E........k,Y.wM.1.<Ao...^...n/N.M.]...%.&*It.A1.0N ..@v...3..("Z.vu...z...>.=..Aw....`.I..l............/L(....i4#{.N,.28K.:jiw.p.eF$.]. D.T..f|.$.4.x..V.".i....T..rtwBb.....b:..:
+
+...a..0.!S.q...Zega\vn.eh`....t..!k.k."...[.....X/.e.x0+..A..Wc.Dv.r.M..,..[....E....<..)...vq..v....
+.y.Hg......_..7...L..9......&..&Y...`...G.,.....y.]	vR:..W...392.W..8..t.~.6.G..rfuZ..W%..SG..5)M..YMG..V{....cw....I..,k.....&...ae<;.46.cD..;..$M..f.~..f..n.....S.Q[9.\....i.B..8V;.|..?...3g*.l3..kW..!_Nj.9.1q...K...}.i..nr...P<.....ej.Vg...'....L^........?..$..T....i.8.5.K..Y..5..2.H......P.....@...62......w..........e..~...........\:.......M>9......zl.9.....9	....... .........N..'KUQ.....N.a.V.;.....z..........vp....Ogg...j#t%Z.%...V}.Y../......!33.MR.qN;....w...(..s.0Y..n.f.Q...6....Df.e...S.....<^....C{
+...I..b..^.....y
+...5i.T..+.Z....u..KM.I)	#....b@..u.uy6[......Z.?..K:..h.}........G./..?..F..N..._.....1e8.Er...4.i.c..q".R#Yr`5M..k.R.....zJ..^.O.A.3....JS[8...0.....h...SX.Q..)......5...m;6.......Nz.._g.....L......]:....5.F.3}.....O.d...vr+..OggS..@z......Q}........V.................................Y..0.W..=.|..@2	...<..+../..0..O..
+..[......?.y..+.k.I.o.SG.5)%......1Pw....#w.yG.\...q...7L...-.^....6...q......r..t.....<y.l.s.uEBrL.....s......]=.!....%I1|..vy.x|9..	XB.pt./...~:$....N......`.&[A....N.F.....KXf.9..be... .^Z..........;..*..z......c(..$...=...q.'..].F..2....{....sJ<
+.~l.Xl........,.K...G`l..k..:o..O.R..-..,K..(%. a.	.!.z..#pp'.......Nm........>.>....'.....S........6m..]..hr......K....~T..dh.....Jy.G.y-..m...$J.].-.Gs..w.rw..uM{X.....KP.BOM.4Y..K.0...".WM..H...(3.bCY....y..........Fbm.........q./..*a|...#.....`...u.}...^...6 LUy]E..........M..........$.4(.<	_..o..~|..5....7aL)*iJ..*a.s.a...j..u...`Pk.E.j..uo|.O.4l...x<m..e....."zl..7ut..<..........m..Q.V..h;v.,sv(Nut.k}..........'.U.;>.."..G..o....stt....gLo...FR."T.L._..1.u......v.'/....L....3.....}.........e.,\.....'@.......... .k..G*......L=g....p4..l.D.......#k...cr....._z..Xc..+.,]j..Ng3.....q{..........o...L{g..g~....~}..{...+~.......X.....g{.bJ....O.v.........Z{..Q...YGz&.....b.guQh*jd2.Qm..Ct...>...pj.{....X...
+pVC.].MQhV..^.p...Z.....LXU.T.k.^v...ku. a~o.&#I3;[`(.Y1.>)m.H..2.b....\...0{.s...d.
+....,.El..7...o...X.......3...[]\.,=r.....iJ..D.2......u....`........Ju.l.+..x...E..^.~..tw...X."Z....Xe...9.4..Qc2..DZ.6..}.m.D@%.2o.yN6-...k^...C..a......hM+.g.f!.46..Z]....7.t.!M.q..........u.g.r..3p.-...5WK-.
+ .u..=....../te	tE.>...P5/....7}.S@...s._..V. ....<..+../....x.....=.V<..ryxU...KK.IMS.gs,&......_......_..n.g..wW5q<>..?.$..........z.s{s...o.\[....W.773..N.dF..C-......[m.s.@..z7..."......QH....>".:.....t...S....k..J900.:V....8..o..U./..fF{.....^<k;...+U.53.Z..7....a....R.2...y...@.T.....s.....	..~....x......~.P.,......\3......R@..........K.P.e	...A......G....."...^.......uqC?.....E.dm^.Ot.....t...[...4..|...&.....D.hZ.:.....g....:.....S.m.k...<2t[..0.<..$Y.e.....DG3........LCh.J..~.:.."j....o..........w....~~...Ug)k.....]...8.RU^X(w.......55....K.....|.Mm.uMyz.5.Pj.<.E...5...Q.$j.K.....D%.)..%.
+...E....6....&..q.].S>....{.].g.........../...l..C.+=......._~...FUQyls...bc;5..NG...M.	.......G(.tu6u.&..iy...c.sN.k..U..)T.l.t..&kI.L\;d.BBWIi.y.....m...	..>%........Y....UhH"C.y..p.EKH.k..&..s.},.D..1..>z...W.D".0]Y..&..l.D...o..c...>..l.e-..o.S?.ip|:.....uM.NIa.Y..........i.....l..q..[..f..X..X...~....:j...Zt.......]..z..Ua.....-..`;=...d..c.E.&..v..D....=....Q.......*.A.#.I.9.cB.....w.\=T$.d...o..}..C.|.	.l....ED.`1..!.......'..{.wNo........V.9z...r^i.z......8m.6AR$..>...o..o.C_^._6..7..=4....\.[m6.2..v.=..q{K.5I....q..,.P.h.........x~.....6.l.oF......uV.L...n.rr..p.`g..g.....J.......Y....y|.;...6V.I//.n6-...A....wI..D..6...^.Z8...%...,'.y.s..Y......{.'.....Y...q.....G......a...L....."+.]...3..tg.u.. ....s.....DK.%.g.....{..|..S....
+.>..4.../..5...+.. ........s.._..PSQ....M,)JI1.......d1..........u.(M=.....z.lxe..k....>x-..tY.X.2.S7..g..^.u.c..d....J.p.$.......!^/..*..Y6U..1.G....en...........q.	U..vA@...y6....].....Hm..L.z?..MuH..I..3.Nw..&.|....}....I.@V.O.V...]..e..)..e.........U.0o.{._.,......~..8...7..h....fX..=......C.#..K-xN....>...i".$...
+..Q4b.G..#..kv...07.....Wr..Sm_X	..7..k/...v.....t.6.'.......n.F...4.6eN.j..M{h.$y.5f.....L.5..H<_..G.V.Yi.9.<.5u..B....3....OmA.d$RN...9.aZ..{...R..3}".....d..q..M..@.=W
+^......:..V...r...{xt..%..S2.I.;92..X..>.u0....._..+...T...,....i...W>?.T...Cma	...+..(2.Ga..z..HX.......Ru.....D1..g....~..eg.ln#f+..q..R....@..2S....Qc[...4uL.-...s..H.%I...8.....V....!..j...L.
+i..c.b[D7....e.0...d...3...Y.mu.e..v..Y.,H..0..8M.:.XZ......K.u.Z...............Y.......a.8.W%....~,.....W..........._A.....qY...}..=.qCQ......&..t...0$."..`...3..r........N.....{?YP.....0.J...n'znW..[M\.X.q."s.....R..)...5k+=.=......FmA..#q...".Z..0$...B2.........*tM..:...twz.....-...............o..y...|.hC:..0.c...qL...P..{....q[.......?}.!w..m.K|.`.yJng...!i..X.$....^.........e.S.....`........~U.......r.KHaL]j..(*F..Nh.....r...V...........|..X.1.f..s....J..o...sj...........N7u..%m.......]}>.i.3$cD.YIe.r.nh....A.3.4.U....l.qH..3.P".....v.1?2..@l.j...z..%2.m.D.v..}....=.LJ;...@b.y...w:G.....:....5.r..s%.e..
+..g..MJ......7..../.*.^..8....,.r.?..Q:...an.._x.z.t.E.W........Sj.(.....C..1P..ao{w;..D....g...Zdz.g..X..]..n{.2..&.=c0...77.....6.f...J...S..ju..x^6...0...E...{..-R..B..-9...i.1....p..zBPI...=........~\..-Q&.l...-^....os..J.[)..k.%y..Y.c}^I}u...^..Pf......@..;j.t,..... $.b[.OggS..@.......Q}........B..
+..........
+...................... ....I.^.u.)...mu._u..b.W........,..%.TI..4MJ..%.1d.0.A:..............Q..g.....F.~.9.._...sv..j...U....;.|s........J...S..t.t.s.G[.e.J..@.g.... .<u.$D...vy.Z...Rm..	MhAX..9..l..._6..._.D!......m..d.C.Z...r.8M...G..."....8gL+..8.<..+.q.... .^..5.....<......[..t.......<..o../..~....k....X................H..D.0.....h..........e...9...............~|e^Yn~z......L....b.r.....upq.:..1&...X..T........>...4m..D.,.........m....$.....n..r}\.Ve..0..G.........>.....O.t...z.......nS..I....q...W.A.q4L...^..-..n.i..Q... !.$....8.+..^..]W.s....4`...~........i..40=n^...*.%...=........==...t.$S*i..$i	ac8..1@....O/..1...X".a...`.e..r.x...L..G.v......*.t+.[><.^...d...n.E.}/t.}....3....u..8......~..S.....m...C2.k.y...P&%M*.9...,...v.Z..K:.e.en6IY).Qx$..I..&mZ......o...^....2c.1...U.F......j>.e.....Y.E8.
+....^......!Rd..~.u Y.....|.S..r..p......E{.z..$..H....iF...q.c8.a.....e...uA.K...O....n..u{..^.<q............y.._7....].q=~.zRe..KK.S....V1.H.aF@f..F....GIT..G.r..	9VM.......qck...a:.7.y$.........2....-d..d.x.UM$.`.c...4..0.......i...........X.r..CI...m...8.C.........8^..8........+'.{....V.x.+.W..*..A.*..hL#.i...!
+..	.A.y.^_.[.....t.[.n.H]c.:z._.7.....i.~.....O.......IN?..O.<....,C.!.Rb-.R.2..#.:o.(f...is.	.:hCE..F..6%.m^..<..........5...}....Rq>0....@."#...*q.........U.b..@...dH2t.;w...\.R! .lq..O~6.....fp......eF..O..~..8........F.q...........W.'....!.@.Y...))....Q.0..Q,.c...~..7Z+'K..m....LM....W.e4.j........2._........KL[m=l.{.F.lb...!.&1..a^.....}....t...	)6..TZV.W..u?|b=esYK........E:..].....3.@..k..l.C.~......$i~...X}...F.h.s.......r.w~.....p.........0........:......a............5.....I..?~.........u...
+P....EU..V.ajRS.+.(.....D..w._......{]...Z.U'&..]c......3.. .1Z*........z.^...~...{6.s.T.h...28.J.!..1
+.D...Q.	..kQ.4.t.|$.y....k.dX........vM..s..xV)..U$)V....,VU3LC..../.+3oy.t....g..cb7....z...}.+.+...GK....o.H..4...-...s..q6....#>H."...,.....]/....N.}(..U.|..0..;...A.S..G.ST(..
+:.r8.!.cPc......o..H.C.N.......Q........g.....t..........^....o..u.>v.Dr<T..}Dc.P.2....6...i Z..1..M.5.8_....i.TC	...N....O.*..k.e..L..6.]^..af#j.....UU..=.6....>k...\.W....@Rr...+^..m..._..{.s..@...k....5............8........P..5.e1.b...W.g.7e..........!LQS..4..U...d......n..9ic...x....V%_Z.Q.}..9....&.m..........z..}..w..r......[Y..N....%.b.6..T....}(.r..aF....o..a|..Q7P.0.#$.....=..v.hcNG..Dr.....0g=.^.v...C3....K.H^K.{...-+...c.)M.tW.E.N..F..X@.|......j....Q.yo..Y.....
+....nB........_.7;..P6..4y.. =,..50....L.W.#).........?4].j.o^..r.....}?4............<...?..WL.5..l........|.....>lvW.Kz...)m.3...n>.t7g<..z.).r0....B..`..'.:.........z%..C...S...a.......f..~..Z..KUJm.q..v..aI.\}.C[...1'..........4.+...m~..*	.W..[....._.r....VJ @.....t..^.......h?...N.,Z.c1.Q....x...].e..J<VZ*.t...T....;.p2..N......|..o.v..n.<..g.........|3...S^..........y]w.v.......:..*.@........-i..!{.........].d.bEe.$....5.A.]...".4.H.\.......c.0;:?....N	.bSy..u.59.....\+........{...7....,....Uf....L..E.o.6(.
+.T.2......../..~JV.."....0........58..~...D}.._3....r.....e+.%.~..h...4:..1..............b...|85.8....[q.......O...=.{E.....*k.#.#[c.S..-[+....z...Mn..%..	eY..0.....c)"..I...G.vx....~%UM..C.s.cW?.N.w.Rh..g.UK..........d.....p.......|.z..%.|.....F.....b..?7.{..4.6......./k.o_S.{\l,{.[..~..0........q....d.W....W......;-j^S6.0.[.4.B..L8..3.....A1..
+....Zw. .#.-.	.[...o.[......._]~...r...s..CM..M .0..t4i...)..J..K.)q.	=...,U....N$.g....d..n..i/!..pd...0m..n....f.y:...L.i.Y.8.sT...&-...c..G.j....f.V..9.....A!..k.....l(.H.[....)...a...k..9H...^..v%....#P..........W.U...e.w..,.F..{.+..;......4i.....)5..kt.1...1.X...M1..{	h...M......s..;9....>.{qu..j7z...x............h+!.Hk.....r...9\{.eW.u&....=O.*[+.....5........'.T!....~..m7...O.g.7o...l%.........jX.8S.d.X3=...63^3........j.
+.....?1z.-m..c...8..,>D8...NM.r.........X..d...>.. ....t..?.,.....8.@....vI........!.%'`JM..4.p... ....7/...7......L..;...(.i...w(.].wV..Uk..Rg........0.w..
+.Q.[g...G.2.Kw^....NOZ.....u...	..$Eu.d.y...I.....he.	..`>..xd.H..W.n,...;...l..Qs.y...	.tG.)........zW*..OE..s.....,.........SgugF.e.UU1./,C...!}.rdc..gM.+...-...1...^.. .>.5e.._..C.....U.\.........9........t=....BS#i<...3...;....Qq..............Gk?'.....s.9..b.%U..e...z.......T.u.bx......}..=>...X'.[{{..h..D6....#E.j....o.w.....'..C.sM1wm^...Y:...W..X.....t).9.J...hq.'5....3O-....E.TM.z..J..E........x.....H(+e.......OggS..@.......Q}.......... ..	...
+..............
+............1...._..O..l,gP....8...	..|.d...18..k.+,....9....=- ....	$...`.ZW...Z.B.?.l..r....|.......u.<...sy...9.....c..e..a.....XZ...V.#dj....X_.o...4uZ...i.E.Zg... s..O..q....z...c..:`@(.m.........=>x:-E...}j.v*.*#:.z.\.F.,.IcU.~*s.u..G......x...G....;....'.H..F....b.`.W.`I|......T......L..L.....W......r.5{.M[....6............K%..t..=....~..q}.............`.y.3...-.......:.ccY.m"..k7.sxF.*....I..6.....k|..C.......O)......$.)J.....ln.yh..4...B..e...w..C..h......z....&..0..........d....rV.e.,....S........Z5.....;Z...^_*M.....o..! .a...W..z-+h....\.t.s.....40=..N.'6f.?.....\	.N.LM..D.I.....d........-....{.;...g.....e.e.:.L.M.n..b0.*..p|.N>....,..O... ...F...Ug.B....uW..)@...<....
+..*.B..[.....f..nu43:.V&!F.%$$..~|..N..........%.f.-......6...a.b........L.nj..m.....B...w..b.1s..M,p......EJ.r...%...jQ......
+..,.r....t..~Z......9.....W#g......H..LQ.-.NG.,Q.....6.A!8z.t^....."}w..Y5..'.............]E.\.......]......:.......G%.{.d........Hu..q.6.FS...Rk.j...$....R.	..IR!sqT.6.7l....Y..N7Z...:Y.Ikm.6f.".x%R.:......d.6......R4...W.5.....3..u...25m#.g.*s.k......DF.....j.M.n.*..,...U....N.....,....kt..j`sHHk..4..X....(...a`..|.m^4...8........y.VO.oO..Ue...\;X.O?.{f........zW.#.....U.9.tyZ.cbor..F.x|.P]B.Yb.t.0.......V.]Wg7Mw..s...$.~......o^<........i.zjm:^.....Th.:....2..~S-b~........	Y....=.0. ..c.a..K.K......{...V......K....Q......T=....LNb.8~.(..*..q.(8...Z.;...s.k......b.K.xu..h.!a.c....uM....g.sC..K..<?.......R..h...w.zo...o..J.h!...!O.........~...Y..W............Qh-.}..%..9....WN..........6........................$[9...lN7k.D.0..1.(h........E.y..v.0.M......|......8.....o...^keJ..Jj..y.s{.....*.$.F..............pJ.k.!....BI..p.Cz.....UG.D(AO..#..z65M3.t:Qq..<........o;...g......~ .m..YVkv\..\~../>......g.....%[...+.....J.]-.7$.....1..i..C....V%.A(..(@
+..2.....z:n.i..........>.M....l~.......jdwUK.I..yg"//2..qT3.M.i.....di...../y....p.....L.d#	...>H=_.P..X.kz.....4.5+..._..".~<vl.q..].`}=.+..\&'6e.kv.../..B8..:)..LM*..t:Q.....3.:..T........{...j...._..l..Q.b......~...1[...v.a.P.....".V9.$]2wl..j6...zw.j.....#..8.du...-.y..P..$b......J..~cu..^......}..s........1.......A{.{&.<.mB..e.sD.[.J!XLNe.^...._..-...h{...G\.. [:..........(Y....&........\ln...^,..,..7......K.b...Zq..9.........W..4j&.NG1...C...|....<..QG....n.9..[........L..}7{..O..G.FO...{........t..bu...i2T..s....0.j.6.A.gJN..u.n..J)).....d...{...2}.. G.f%lR...7.wGo.i..q.^.O......f9,+......k....t.'...3..i.............Z.......zAJ.l..}zE2y.HM..u...;F....o.....zM....,.l...i.....u#.X..%..k..&t.(aA.".zP.J05].H".L8.1|....5_....}G"...S.5^]f.G6...~....|.6r..n..]V?}|......c.........p.k...e>.....X&.l....=.J..H..-*H.9am.co......L..m.AA...qT...zf|.M.9H..k.WsU..:.,"%
+..o.....vK..7U.......IUS..O.=..mZ...^r....w.8.....y...e.O.b..6.....cz.8^<.r...0H.C|4.L.......}.."...mkg%........KX..9...&v....oT.j.O.-t......~......<.~.)Z..]D..W./..."[}../k...4.q].#...8GY.h.q.t.J...q.....8.:~X.....Og..i..4..t.E......nlm..n.........7i..
+.0[`E.9..RB..L.$..F.....FK..Lm.......g.k.f+8Lv.`..H.........^.A.m|J..Q....o.....^,.n...t...b.`(.......K..Z....v....5K..B)....;$9.....P..e..Y..\Fnq....ok=.l.......G.^_Yf....D\......p....l.oU..e..:sZcEe..U....td...xRJ.C.;.f...g..?.o.vG.e..(...=k...W....Nz...]}/:.e...17.D.Tc.F.\.....U+M..s.U..@....1...4.w....`.....@.G..9.6.. ...:S...L(pR.`..<.b.........G..H....+D.N.	E].....&R49#.'.....=}6tl.N6....?..}...~|............<..c..C...IG...N.E<...O.XNy..C....}...XL.y.C...Yk.#-Y=...H%..B.u.1..v.p....ln.F..1.P...c].m.\.p@..*9...y...=.".=G.m=.H.$...K....\......V8?nq.....h....I......!..................)....	..!.y..{&.-...E~1..@ ..,6........p....y...b.D.....K.R.4eZE..'1.N........i6?......oO]n...W.>....?.....":O.....Zl....08...........|?..</I.}=2ns....p......Q.j.i4Y....mm.......1.4.8.=....j...q.
+WL-....3rT.*X.Z.T...-.^.5S.!..T5.Y3.&.P.Zr.2.O...H..x6MN.5.....W.U.<.{.........<..|q..+$.{....Jp...H.\vz.w\sG.e..`.k..8......`J).B,.X.1<	1.bGt.........W.f..}..Y....T.d.R.x&.DNz.-/............~.X...g.{..4....+].%.5.kV.Mu..9......Z....euM..9v..lM.....N..!.z.b'g.N..md.l..g.utA.....3.O\..o.....&...MK.n.W^..5U..d...	.|..!.(.~...g.$..............Y....~t43].
+8..............e....p*...........j...k.a...z.6r?...}............3......_....*.q.ik...t|u.....W.g5.j....U[.Aj%.9..~9[j.V..!.7....c..$M.q..y...||>......I8.$...j......u..A.I.6..eyl..]..o..B.Ir....k!..O.7.t....\.-gVc|.?..T.31.ET..........`	.9..u...'......"...OggS..@:......Q}......-.....................................B
+L.7..G....a..`.H..;f.g...j.E......o........3..&5.".9.O..._..;../...O5..<.s......z......M......9.....?;...,Z.{..g..%MlN...w.>%G..c..-68...n......U..IO.l.Y'.D.tuX..O(_.n...m.+.....1..&.....Y..sX..y..5.QYYy.R.E..<Y..EzE..[..J......-..R.J.M.Q.5................)......L...S<>GB..{.......X...0.>,.8...l....B.......Zzn.Q(..xMM....,!.7....{.?...K....f.^....7.k4>...=..... ^........V.?...S~.^..s.qpxE..y.".K.......X$M@......}.Z.U..W....Y=...t}.Y.M.6&...y.....9..r...*..0.4Ov.~..UA.j*%..F.o{.._...^.j..N.+.*.P<.A.*j.(...z...^...T.... ..E....f]f.G.L,xg...g....'......	..
+...*....l.rO........5.r......{.T..IQ.y%..?...}........1...-..v......x..au..L..WO..V9....#..t\Y...I.}0...<...fm..L......).....I.........}._z...h,k......}Jh....C..|.Kjw..5*E.....K...k.-..Jf..7..s.....%r.1..........{...'..\7:...1CY..?.........O.B..V...$o.....e.G.o...g}.l...p .3...L.$..,.zL..&e.A..9.%+.A.?.b...)S....%?..,...gk..KU&.7R\N.>..&.........[.......iZ.~}.N..L.I..#5;'V.........K{..vdzl_g.}.......).|......,?[.Ze~.N	...SBz....W_Y.p.t.@...[..F.m.?..;n.o.....Z\.rg...C...sq....xAv....3.....QJ...dJ....../2.yc.Q...[.V...Z,.g....R......22o.z.Xj/?E#U.T.....h.. ....<v.O.....H_...V.._..m.H...m.[vc.5^J).!..c.e..j7^..../....T.7......3.>N..........s.O]$kwV.x...K{.|..x....[.i.8b3.....`.Xfm.a.[.v..w.#..... 0.u....q,....,'m...3=H.y...J~.....~....ur....1.......gxU.T.......3.......*.}g#.f..MK.Y+.1H.B.m.. ...!B....#\"..../.~..n)P..>Z....A6}......~.v.G.?amo)K.G...>..!\=~...$...k.KJM.R;.....Q>....n.:..1.L.....O....WQ.....j...&.'y..J..?.1...SV3s5..].....s..T/[.-..\...g~.yz>PHvl|.....@.@s..d....e....t.u....p.:g..6..>.p...?.~mSSe1s...?W./]V.fo.%i.}..V....\.y..e~?.~=l...r.......um.....x.0V+..$..	...c....!..k....+.tO.....~..b.e0...~...E.?.(...QA...W..........)q...&M-.sZlkJM..T:a..........}.U{..#..vx.......1..o.\~......m.s{".?.>.Z<{..../..<......3g.Q[6.u..u.$+	bo.lo.?{:.so8.$...y...6Yj....._...mri.....P.5Y...;.....|......V...X.S19..\.3...0.............}.....Tj...m........0..	`0.....V.[....Ri.....V./.J.....>..8G..M.>fNT..N.....o..5.....s."...	"/u...%,.	...Q/L..r.w..]\9.K.............e.........x.E....:...s./.?.s..c?8...6M"W..i.........vH..	.K..CsX--KZ;n....z....Y.S..;......#.yv...&..+.$V..1.Y[.F.wC4;.
+....s.._3<~.u..W?.....w...^...;{.,..Qx..{...Q...4..r.v.L;d0kI..?.,.M.jw.....L..../X:.)$*=.....7...;T....>8.eJQ....%4..<.....M.~.M.....m.~.h............|\.:...+...U9.....2W..{<../..E.C...o{...>..v{..;].
+.......Z.{.....AP.(..r.....r...^v}.g.!.Vt.7Q......!..-..IJI9.=....i.t....?...R3.Jfl..........<F...?......{...]..6t-.a.3...NB.....g........w..C.T".......\.f....;..D...Z..t.M@...=......x.r..X.h....F^E......o.}y...m/.......l..(..w....Q.,?..o9.......O..x:...p.,..}.%.^a.9o.<.\.L..y..E.H8B..H..\.........m.."...%.<......e}^..^}.kTb.\....:.,'.....e....j...5L~.........H..*..g..7..x..R....T&..@D.........A;.M.~.....=........].&..~,fzL.?.'..y.$.....0.BY...+..tM.,Q.R...{6.b.2.Y;...GFS#...G....o...`....+........S.. lG........q;.[>8..m.=.=...q.vGv...C%.....b..MR.........H.FLS....kS.3."iflV.I.y4....}>...rp.
+M2...=Z.X.Tr&.^.4....k.e.\{.<U..5id...?...!+s...r..S...z_23..:..1...PL..... ..)...{z....`)...1
+
+~,.b.......:.G..6.7.]..D....E)E$y..1.7.o./.9..5....y.a..Am....?}:...O.&=...N.....`.6_f......s.2......=..G.e8l..R*...@...q86+"@b...$.......|..	f.#.j.-A..h.jH"..........B.<$..U.{b}..=.b.y.R..XlW....k...........R...R.8..86Jn66....B..	....Q..O.mr^U.j1..p$..t.P..,.rJ.~L.E|2...c...y....VV.....(........+.w..2zYI'.V..._?.....c.......}..7...../..].^......U.....^.K......-.&..3..t.........J...51w..p4.9Z..L.3gi.~.)cm...Z7...jLb..Mj..w.df.`5%..2Y....7..l.]me.rq...]...&.;.\.....@.........t..c.....v@.hh.j5n..7..s.s........|..	.~,.........pvC|....R...^P#..$E.I...	..!..........fjY8.s...sof..-b.zt.......@\N.T..n.X.o~..O..j....e^..<..K.............kc.UkQ..z.;$...sK.wp.......f9;.v..$m...Q.s.l.0....Nm. N..#.W.....B%..{Y...D.0.....Z....=.Fr=..8.`P-._..S`}+2..{).
+.".x...;x.X........B..F@i=.^<...4.....e./..~................49.&lB0.p........Y...[c.k32g...:
+...v..rX.w.......~t^o.a...i........>.....N.). 2.R{..v.*..t.......V7.$...N#..6.D7m.f.i...|a....Y!'u...l.J....Izn@.HF%...,Dv:"...@.....$2..).*.....r..bq.!...{..f9........y
+`Xe.Jm!..\.@...P.OggS..@v......Q}........}.............................~..z...q	..yu	&......0.s~#.h...K$.>a.gq...O.4~........'.3>t.\.|..6W.....Wf..*]g.=..0.............$R.J....DH.f6gM.q_.MQ..,[...4"Jk....q..t.s...-..E......X.KQ.2vp...x....i(.Ar.........U....o. ......yUj...a..E......V.)5!.3j.....]..
+L)W...
+...J.|"..&........~+V..M.....i.M.......o,.....>.p....sY...t.)u..<...../.;.E.{..5#.......n.x...5...7.>.=....i<u..=...O...s....`7.!.........E...L.pv.....#.=.\...=M.i..kM.De%.A.,M*).B..Y..Y.19;.#..9.....|....|.j..2.;o......?....X.._."#I.+..)....b..sa..0..2	..b....{F{Y..^...,... ..<....5H.._\...5.5.~.....tM...v.i.$...Yx.........:.k.~S...../g.}hf..n5..&..+g...nnOFZ...4...._..=.....0.....::
+[.K.......#.....4H..W.-R.G.?"7d}Y=.v.v.e9.....[-.G..zr..%@...
+.........2>....[.....}RVW..Q......g..P.n.U...m:..3o:J.....-...".d..gs.7..O:U...~L........_|p..)e....#oH_t...j.i.5.]...g.b..._....X....W....&.<.....*.x....nrS..+.d.}ru..zhv...l....A..K.e..K.\...R9B#$.~..A.e..n......my.s..d.7|`Mr.Mv..c_s.T.rs.....!c.4.H@..=.9.I;....$...p^+.........S.'.9.........e.Z...h.....s@C..!..x..+..%1r..Z....#...%.....B.'.O..z....o..E../...p.I..]JQJ..pY...C,w.TJ_.'7{...z..{...'6.z.7........bY...E..!......N...H....=.f..N.-..z6e..lG..-..Pt...S...Azf.SM..T...[:.f....:H.#.t.D..d.4....ed....B..C...c.F..D#...	@~.......+..uZGk .b..J..*r*.s..+...A.@.g.1.j.......\%23o.X.^.@...^<ff....0.............. ....../\.]JMjBFXE..1.....s.G3...TK...|...)..Z......x.{......I...3..x...suy.:i....._.}y..:..}.oVsd.w`..mC..A.N...*...1...79.....{fj..M....T0.....I..q.
+..(.Y..a..|&""#3k..".v.....5{.v|\......4.d.+..j..O......E....".g7..8..f.........3......,f~...:....{..C....!.....0uQ..(....c....#wk...+.......n........X.W...W...O.|p.y}>..W?v=...Z6/..c7..P.d..nt...n.W.s..D......5G.O.;...9....=L.......E5.....f.4.2..!tyy....n.d...$.a.q.M..i.+.....(.3o..k..V->..........s!#K{..]H.v.Hs.....3..[,..v....M....l.....4..;&.......tc.`........>vMs..K).R2B.C.a.i..G....h{.:.....X^....C....{=.>...9{[S..>N......z<...c.w.>.9....>.mF...:b...(R...$..p..&.=.Z..C.P&L.B.6...[....Z3eh5...}.^{..4.j..7Ki.H.,.....i.y..\....@..4W....u...;.@`./su...).... .&,.Kh...b.......h.D.}2V.%z..{C.=.pp.^\fn..~@.C^.........>.H+....6..."].RF%...!..,....G...oo.GWV.k.......,mz......vr....x...G..V6#3.en....3k=.iG.a...3_.w},..<(r.}Ob<.W25].....]_;U7N-......tI..X...k..,.E..B.....}..y.p..Rut.8V@...g"Q..cv...M.....+.?..........K....,.....Qzv....@V..q.6..K4.@_.~...R........^<ft...a`~.............F..Z;T..jR....cO......}..D.yab..xC....>.r:....?.......W......$..1...R...?%...9,....c...RgjJ.i............d.Q	.CD.}N_.Uq.v.]..vh...P..CK.c..n..z8...../.o....2......lL	/...B+..5..1.1..8......./@..>D.....~....$..a.._..@2...-D........L.x	..m..]..-.....H_t....4MjRr${..........n.V|..s....F7......651......y>u1.w......=.9......6..|sg,^G.......!...f......d.f..%..QmC..n{.*......5.G.~......f8..Z....P(......3.>	.5.f.5....Qs.'.Ha....@......`....Yz.6".?3.*/f.....bq...B.-......D.._g.....X..+./...'.......`....~#..........7.i....qK.-.0..5I....c.9..5.,...r..~].."..~{.....-.vj....xz..y...k....a.y.?.Vo..~.7oS..vC..4.c...z..a.8.. .L"........QTz6..eN..M...p"..%MvZm.#.mG.,RQpwH..9.-Y/.ok..gfZ..t.c.t...E.u.....-.+..f.u...W...q...2..KK.j.....z^..8...
+..4..[.j..!.	..vx#..g......<vf...e...Bo..1......k.".b7u.I^.....c......v...4T8..9..y..6=..{v]+V......V._+.....w.........`O;..........c..q....m\......_do..F..Z.E..;.$~.....k...,..p.....+..R..&.r&z.17y.d..Xl..L..SNH.....\7...b.....XQ...R..!>2ox..|..-.{.......!...`.H......'W7..Jen....Ow......y.7..g....M.n
+~..e.	-.S\...N.Db..K.I.L.....o...g............,.w...g.....x.w...........h;pw.....Z..].VY....l.........f....o.Y..W....(.....0....uN......*...O......T.v=.sV..H.W.7.W...e..X.b..+g..	M9.9$...w.G...OO.|?H......4..Q...8...(....2.=2.P=eQ<P ...,.N. .8..5......^..o.^......L....A..........[..x....).&5..O. o...bZ.45....7z.Hyyf.....q..Tk.7[=.O......<.b}a.n......M,...H...$..-..O..%!..w:I.2.sd.....9..h"..#^.w..d....u.).?..|.vc.u..w.Qv{j.......X...x.....zg..=&....[V.....6.d.W..QCU..?oC.QQ2..I.
+Ab#QU...z..8.w.....`..,W.T....e....hf........X.B....~\.b.A.F.X1..59?........e....)r..~.d...@g\S............?....\..iw...>......f+F.}.....r...i..N.*:..4..e..~%..g.......a..t<..I..G.>...<%./[P=..M..i.......yK/:..&..?5.D.c...M.....:u.4.<k.yv+..T<iy.z...'U...5_G,g..m..H.r...8......w_.<.>........n............OggS..@.......Q}......)V\L$
+....03/3BF..210/DD.	...........
+.......^xb....<.r
+.(:M....M...O...1.<..&.I).9....v...Q......ci.5.....?L.C...-N.t:..!=..r.rq;.m...-.6..............\...O....,.K6a.\`.nt..!i...).Tv..9.Xr...$.".R:g..:,A.:.....XjY8E.......Tq..so`....D.......d.5.(Oa}k......+......cq..<j.U-@.*.....},.....,........_....F........,.@..@..v..r..k.6..w. .........'oy..d~q...5...~..i...K.R.Rr...x_Wk.s...9~.=.....7..g...o.....Q..|R..M...........E...xz=$/5.MV.Q.YGVm..i...h.se~.........P......V...Lc....>}...Y.w.m.	'...q.;MQ...vYfN.=Wv..*.HJ......4...XIB.!yrU.......r........)......\...e....8....Z.>(`p.n........B.....=.!C.L........e...3..._hED.5u.......K.t.p..aX..:...QY...kt...v]z.~$.}....E.e...n.S....`T..W...}.3.....Q....
+......|.8R;.zR.....m......\D.S..#{.`=...?..1A.#|....,|,....dU.r	X.V.%.u....N.t.l4j....W.....{.....|.I.k..K.....C..M......3..~t..~=.....S5=..v....Q....^.......E.9...l.....^T.......~yd..cGo..#..O..\..~.G..#[..]Oc..Y.R.?.)..i..Y.Wq..1m..r.fz)f|...f..2......d#......g...x...........&.qhA...IM.......^j.F.ne....\.1|...t.~.={..#.d.m....[w0zy9>..}z:.z....).HeG...];yt?...}.\z=1.S...W.r.z..x.<d..j..*...s..N.S......W........A..G.b.X...A.!	...A..[Om.@B.C.q..f%...b.jT~.J...(....)..-,.[_..g..p.........Jlg..me....2|.5...m..8.l.Y.9?./..u........7.............c%.u...\.W.o.....tg.\.m...H.?@....@a...Mn
+.....h*..mv..+.......D".\.}.G[.......z:o.......W.....Q.i."=n=.......|.).|.%.g...]........5......!F.....;D;.m.....8.=.C.l...od.......Q....4\.*q.2...@.}..k.>m..y....k.92..KY..V.S$.._..v...vt....,.}...&R.qZ...f..<..h....|.ji..7\......].E..O+..7.1NC$....6.....+.z....#..-...#.........g....#...W.<(v..xs5w..t..h.QJ
+.p.....8..rv.2U..........c..oK.XO.....4.....~..V..7....Sl..W...WU.d<...Kk...)'..<.e.YYvNi.B%."...z..qfO.L.-e.+..3V.Q...@:..a....Hn~.K=..y+..<b.......'.r]_..sK56..	q...l!.#..........N....... #..Vn.....>.......~.Nf...n..$.e...tR&q.~}.#,]
+HM. .?...w.....U....Jq...kW.=...?^.e...l....kC^,N...pq.q....kW...N~.0.....fss:4.b...a......)..d.0N..XY4.....GFI5...q,..7!M.Y=...&.h..Y,.......]...6+.....h(..9....".u..c).S....b........JO. B...............Bl).=...&..1.66.A...#V2....>.4.W......b	|..@..X.K0.t..6|.Y.].."%E. .....j.r+8.{]?......G....s;-fC..<....n9x...;O~....9.y...je...b.....z.{..e=.].dxM..n...U.,..l.R.........4.bw....G*.r...gz..$i.6.b8..ll.0c.+@....}......*Z.."#3....
+...oYz..2d..o.J.J..m(....dJ...&2.O.j.u..y......P...Y..O.p(..~..r	....	..M.$..Zn.z.*..Q.5..SI:G..ac.=.c........o...[sy......+.?}.........t....U..V.y..#.h=.9~..Ng....4.-...5boI.`C..7'..r[I..v..X[Y.Zehe....A\n.a,'...Nh..8..ms..	I.0..P9..iB..hW_.;....DI......zU...(...!...."...v.
+t`.Ce...Bj..R...c.].,DcR.^.....G.H..L.......$....,/...h..;Q.$...'5K.....l...1....+...q.?..N...Q..7......vl*..,.....#v...f?4...m...v\	p.fH....r<5..|.].	<;U...[w:.....-..5d` ..\....<DP.+./[....#IM...e......MB...T.;....y_k.....a..W._.F.h..\+......x..Ul..........w....WF...7^..^.-..#
+W.
+.".	 ..|...,.^-.".e.oI..t..A...,K.5QJ.p..p.....N....oN.F.].5....kG......Lz....2N..F..Zt....+........V....y.g.:....pukX.@f.j...9.>f\c...7.E..4.V....$..4f.[[.j.Z.A`...A.*:,5......cR.j	.A.t
+.d........9........].lQ..yS< .[S...';W...........BX.L.y.p...!..nh...@"..l....<h....c.....:#.Z MM
+Ht.e.....c.s....T.r.;x..:..=G........qys....k.N.;;....py................8:.......x..yq..T.h.........ka:...0..E.,/jm...yDl...l......p6..5.jZ8q.vh....T|.J.7z.u.....,..[.....'R..W.W.A....w.t............)......C./.z4....E....(pf..@.^,...qC+.B\.W.[..:E3.sm{..H.&..S$#...x>9u..............Q....~4&..]g.?...{.?~....M^.........g..X..sq......}=..d.Y...X"^6.a..d9.d.........#.....IM3e.....2,..c........t.f.Q.(.;..,.F...f...i....d.L....Q..%Z..s..H.._..{	.).x.a>...${..r_2$.G.#g.../9............1+...!.8.^,N....N..*c.bi.A?..
+......M.b....x..K..p.A{.=.....+oqr..../x.+............u..wu.U...\t/.H...=...=.....;.6qp....2'....=.S.....n...!.g..aX....NW...".b.W.!4u.RIz.r.LJ.<%r>.-...G...v3:N$F.y.^..Ml>..z..Q.r&..u..0/>.6./o.s....[..#	K.UE...x...A..'G.=_ ?X...>!..,.f........c.....P.G....$.'-Q."EJ.............}......{...y.V&.#....Y..Q....>...wV_..Ow...y<......q....h.:J.....r..%$.....a=..........m....1E.>.}..o.U".......v.A.R:....I.Z..X.k......y..,z.9q.U....$Q..J...c.1....Z....Z..M.c.h.W.[........`p_......^.@.@..~..z...6......H..Z
+..q.:.....yJ..&qx..~....=v8..~..8..V.o....O......}.Q........W...J.......egb.+.2..u.kg..jc.6..z.S=.Hm.i.>ldG.[..u..f7m.Fji...8...L..H.\'$.5.x.&.E...T.-.<..~.u.`:........].-E&>"2F.J. ..9..Q.1HL}._..^sq.{...B...|};qv.t.(..T....w.....D+...OggS..........Q}..	.....q.................:<@;B...^<..\ n...<.	6.....G.5.'..._...& E..9.8<.......3yn....VM....aj>}<..b...U.vt.q...._=;....gV..l....\.8.l.......Rc....a..V<_..8.:...B...1....]....L.%..p.g+...%..6...d...y...$....yX...J.&.~]...D...krOjf.....S!H.L......`...E.............p..<Z.....v....6.JB...?.vhZ"E	zny.xLY..UP@.R.H..c.!..........z..l..|h.x...{Z.m+[....S...O.
+..$....S.^..m....b|z%[ck..c....fI....,....d.D.t.8.p.QM..v.)..9C..y.$A...q{....[T..;2..(rn.s......w{...g.........^.......u......z..'.R=............ ....(..^...S...6.....|e.
+(...j..y`.B.0.4.D.".q.1.....PY.f.-...:.1........v.W:?....|f.&.k.}d...l.k....q.....59K.jn..n..:..A4...FH3v..tKf:..t5..vh...J..2.....IXBk.6.w.....R...X.Mh3..m.O..Z.D,.o]5}Y.zs.......U.7....R..$....Z..7...@....L..{...l...?L..+Y.....Z.o....7.Z........UI%:!.1....v.....Q].oR;...A.V...7Vd4..q;r.Y.*6.....3H...xt....K]2.i.1=...=.=#..c..|B.#..1.4r..p.."R.8...k...9c.......59.m.k....J.-.#{qV..W.ep.Y......S.....t1C.t...]...d... .`....,6.=.]....P.W.o.....6....}LISJ..e..!..l.x..;.#m../......q...x..].......A.*.]..E..._}..`...;...X.fm.l,...4..qx..v...k..!ZM4]...K..2p..hc...j..d......k(..i7...+.l..y^.&....Y..|QQ.u....%..+."...Z....T...(.5......'.K.\.. ...`......lv...eM.....`(..4[...x....R.4ZMN.C.1. ......\..k.pm....T._=p...x.7."G....9^.aY......0..Z.&.hl..*..	Y%....F3.b.u.b&.F..f.B...XD.U.N.p........	....H6.EX..+.Qa^RiSR...Jg>...F.._....E>&...O|....,.Pq.wLP.R.....8...L6.+d...w...M.g.....s...z....M..%@S.PJ.p.B.!.....].....~..y...~......z.dg.3z.9.m..L....=......Y.G.QH...k..8wg...[.!......i3T.. .....(......^2V....f8N...s.|.T......6.......x........P.K...........O.0.^..A..........`.....>...."O.......26oNv^.....+K`.45..E..!......\..?f0.S.\Zb./...rw....`......\..`.l..U.T..7v....:.M..u(.]....@.MI
+.........R..z..iN@..s.!m.j2...b(..4..1........{l.....6e.uj....`1.G..W..u........sU...-..7l......@.....>.u.;.l@..?.....|...&....Q....5.....UL@!e.1.....n..YvrI......o..u.r......eY=.^f..\..n.....:.0...2F..k.E.EJ...F.h...e.Q4..{..A.+Cc..[.;f[...a..-8...=9.`?.......Y.....T...I.t=o.......Z.....fi.ol...v...;h.R.../.......^,...... ~....;.S..1'...!qQ.Q..@. R."s..c....|.c+i....>>.[R,z,.Z...jj._?...ko/z.v..vYt..i.~.}d.A..jq....1.R..+..hr...."..:x.......*..A.VQ...h..........9..j4.......X:w.@[m....`
+..3.o+...#UW.[).P...V.I.P
+......p@.....m1.5..........4s
+..".}.Y..Qk"M.R.9.C..........N.?....qz`.I...i._.~_..c.p.u.p...a..9..fYT'ze.`...f..;7Rk%MOIF..T..h2.c..q......h~..nK"kd......@...,....j).f.......	.&U..i4i7.?..uQ&Gbm..o.ZW.T........Tl.	..............3:..	...&./....A....c.Z3.N.8QIf.c...`...a.m.k.s.7.c.K.`&..s.m.-...Vm...j.j.(..s.".....D;....7:.fk..kl......DFF'.CP. .K...pC.`..a..0;...<...'.dzKWWH...;2[..fl..
+yQ.Eg]..l.f..].hT?.o.VS[.6V......W..
+|I...@.~.E...]...-...B...gM... q..jjjXF.&i.$...B....O..../ow+;"......F...s..|....Q..u.V......QK.Q.....S.xr.....".L2K.D.%..K.Grr0-P...K...........I.-...P.qj.`..0.p..........k..mM.....\esZk.T_5.Z<.U.).B.......`b.h...z....v......8... .^.6.mAV&|...+F....Lx?........&....d..B......h.......ZV...+wmWo.+.}t#.j.+kU.....J.,:....Ai..-....c.I..4G..".....j{`D3V,..#....c.&...C..JO[8Q..Z(s4.'..vag.....Dy::=Z6{...	.._S...2..W.L.....;..:....9...T..X..
+b...6.&..WiKC..M.X.....|V.|>.......1....	(.G,3v.1.....#.@#,Y......mX.....(..Y*.Mt=.Wc2.....Wx..wY....;..]....{..<81....:J.H.YDb...Mp.....u.S.
+.h............}....mA...YO=..K&..u4:w.#.TBZ..0...g>S..q.K.[......;;..I.C.>..V.@.d......s...`...?....u.n......]... kz.;..i?....3:..<..fdT.	l.%../.n...=/
+~.%...+..'..1....v\;..v.w...E[I2...j.....2.#..l........../^..L...;.azC.;D:.;..A.`.Y.|....4FC.,....+...N.8...S.\.c.....+...1...?i.1..D;.|n.....Y'.qo5..8.Q...)..8.o5+..)..d...........&v;2L}..W*..r......<.:..1...H.q.y.8......wm.eI1.{.&.$.:...Z.....".j......
+8.H....l.a...2)DM.
+LT..$7.9...C 8.5....WX....G)n.f.N..?.........#6...j..9...[].+..Z]."k2..Q......e..h..8......dW:.d.v.2..%..c..V3h..PG.z[/SJ...&5W....h.v.... V9I...|.M.c1bE	a.!m27
+P
+x.O.FV......6..=....D.B.x........^_..*8,:f.......@..Lvi.....c r........R..{....a.......c.c.d..'Y....._.Xo..5..G.;.9..~../...4.&.....i........n.!;.6...b.8".A....fzX...I.1.K2(.V..tPZ.93......UV..fL..rd..................r..1db..C.M.6.....<.#a..o...I.\~.PjO#..[..R....dK\.m........4v.|..{.Q....OggS...:......Q}..
+...:..X*.......+++*++/:<8,--;27/.DB.........../.;A^......|.....e.........uB...@.R@#....Q..^.9.....S.^d.%.6IG)C.i.
+.^.h..k...}..n.Vb.)......t.i..d.K...f.....1]..!.....P..*....U..I.R..=.d..	`F...-m2Zi..."0h.K...........weLl.*.J..x.C.j....v..Y....;....(k.....;kb>....x.....{...#;.iYJQ.3.b.>.s....`...................%Y......:..fW.,S.L.,r...;..../.w.........y..l..c.by.j.Zs.....85........Mw:v?.PY...`T]+h*!.b....e......fBO...f[.4..X...........R...C.M.|c.Le.......$s..M.L4...i."..M..+.z.i....>Z._z..
+.yo...5R....s...0....T...z...RK/WW.)..E....\...>.5...} ......`../L7H...K9.k..05)%M...c.2.`..;F.......z...q... .q-.v....M....a....<{t...[Tu.8Y.K9w2.Rd.ISZ....x I..[#...[I.."m.......%."=[Q$..%".r.sZ.D"....b..D)!.Z...kbL..~t..........J-R.W.).Wk.$.T.{.2.#B..t.4.s15.8.B !*}".#..s.'QCp.4.....jF............L..H...R....M....ej.&......r.....y...l.@1.Dhx.P....}M.\=.....*..4.4.7T]7..s<...7.qn.y..1..e....`"..4...1l..:l..&^.."#.-'.$=.hS*..)P..B.)..r.Kg.;...J+,......I|......~/zvv].i..Al#b.{C...7._.:.......M'..R.1...D.4....r......Y.;\..!....>....k>..9jU..P?3..Y..[E.u...HRJ..96y...j.~....k3..}u.S*]..n...N...^_.>..j8......._sjm..I;c<.*.F..}...d0f\*....p...EK........V.q.z4m.
+#X.X.4.R.3.Q.'.-.G..P....(D..X'Hf..;....[u.d..j.R*`+..2&....AY.mY\a...z..SC|...]..Ct...KN...s..W9.9h.>....knF..F...D..s@..A../.....4I.....6..L...l..{.i.....\^....6X.sq..m..e1y4*.s.\.s.W.u..+.\	.....z}FE.1CqF.,...m.b...!....aw....ge.&i..fMW%`.......h....T..4qB..}$.]4.I4..a..e..L...T^o.$D.w. ..;!...5.%B"._...d....]	@....O..V..J:..'.@.*[...J.'.....;f..i.....k...........[..O.q....U?N..q-... I.I ...6......og..J......o..t....+.m7.`..E8...`N....mn............4.#...k..&*.]..^|...h6.....2
+M.c...A,.A	.B.1.$[iE..<...4...6....FH.].6/..:..4R..hs..j{..(.......%3.v.]...b7.3'...NPn...e@.g... g..........t.5Gm._x....)2@.Z...xa..).....pb.l....a.......j7>.W.|.^....2.....D......S.8..D.(.d...|.I.....7..@Q.....z..}0]..V...].[U.......S.|..Gj..`.....
+.<.p....V'.G.....B.."C..)...l.....|n_.ou.
+(..x%....5'..&.!...*.3..0K..d..g_.>..}..+@..&p,[..A.nKSM.....PocU.3E..(l.u..o......P.....l3P...v..r.....pb.uH.(_r.w..l...t;?.....G....T...Bz^.].a8.....t.l..9K.7..k....r....z1.d....m.....(#......$...,.xwl=9=...#s.c:v..{..=..u...X..=......U.pW~.........b.. `o*..,.Ky...i|l.L...;..zg...].].v9....[zw~.6u.?..)JY..|g!..S.A,....L...DV1q.%..t.3.yjx>..r..1.#......~}...!..q...{....~.Eg..t.....^..?....E.7...............a].99.G}).i!9t.EG...,?;..7..T.Mpx.C..aq|:..7.8l.......>-..c.....S.e...W.|..[... .....B......S'....uT...J.a.l.....'...+.7..|..G....(^.^tl...O\.p..G..!....^s6..9d.as.....bZ...r...d....].1..?@).......^5.w...'...7..(....&.....E.l.5......_..R..]..g.......F3.I...-.....h[....bL....[y..._..4..6._..&..E....{..{;f..v...W.....8.c......y.......Y...\.#s.....V.3~....)..;...l7...v.3.,..<.u...S..fL{].U-.......".q.T.Q:+..=.....K&......oT......K...5.....2.B.0....2C.r...y...cxj.<...w.7.]+T5.3^..u.....N...2..<.qg...O.c{...v'.!....N....9O.t.O...k.4][.hj.v.,.L[....v.q{....rS.:+M.V{..{vTaJ.G.e....$....O9........+	.].D....$.d)H.V.Y..M........d.S.....t.,...J.. ...(..AZ.XfM.$#.....%...+|.VH..........S.R^LeX..3F.T..J^l.2..k..!......y./.....E.w+.-.s..5.@#q{..L7{<.;WY{6..z4mG....../..Q.:..fP=..8....IFu........Cw9.l...9Mvu...u:...M...Z.C.l.....d.M.3..a.i2.'.B......@r.-....l!...3h...xG":....[?.o}S.$2.{e
+.....B^pz@....,;c.....a.yXO...9...8.B.~.f....P.....-..{... ....:..%MM.a..........x...N.~...J3..,g~.rw.7....>...IWW.[......QW......1}.........}.x6k..d..mOI...72..WN..>ZZ{...<..f|...."...IU...MY.....R{8J.....!;.NJ.l.j........r....
+.A..X..9..,.<......`.m....:A..9...,....oj..#...y....iW..&/...@.6...'..P..y.....~
+...^...|;.../[....X..j....
+S..(..D.~....?....tV+.UC..?....z.he.6..]..1z._s.+"..p...S.<5.....c]..ht.D...LTS6<S....S..+..(.9.].i........ad....BZ....J.....m.9.z.=P..A;.p...jbV....ZB.|SQ..w..v$g.,j.<h.DeL.el4.6..0..9.....0..R...+Go.].q...Lb......|.=../..lv?.VIO.,.s|m....qt..........H".w.Fa..l..{/......uN.{$]..t}..N]M....|....o.%X.g....|.....|....Y_d.R..n.[..'.:....1.y...2.....z.G.t.=.7..	.....26]...l..?z.X.....j.[;{.R\...).v.l..w....N~&....yR.PF.i.........$W.8..!...B.H.r*|.....|.z}N...dRA...'9.q..Qt...n.Mry.	!.g^...Qd....n.}..........kg.-...lt@......~...........d.3Lc......e.|............d.......v...v...tX....R&.,.{..q..8.s.aH..[m..w..+3.2OggS..@u......Q}......:....@.
+..............
+.........|.......#.....t}.....J......z...:.Wr|..z;6C....g....uU..m/...t..Z....)...I....F.k,.R.[.3c.rs......3g{...m.ajR..............6W.2........'O..pj.p.......^......./..c..U.#v...H....n.d..3......G...~.).Is<.kv).O.....I.aS..A..Q,......Q....i:..T..d.H$.#.R.__(.E.....V..Km]9..V.\D.).{O/z...{.......y...E.+.{yz.u'....k.3.....N...;..~.VH@...L.z~.P,.lM.....f....R.t...T...jX.-mqgl.N.Eg"....G....C....l....wW...voOV....7y^..D9d........Y...j..#..$....rL.........jS.....$ty.....s..$h6.^Yg&.Fr{vJNy}!..*C...\.W....33GB._............t.}.O.....^....^+........0.w......4.....;.7P^*.^..a..........i...0.......0.5~..M]J.J.'...XXk...e..y.F.......-O.>y2.^..q....ov.w..3+..,wv.w..2,.%.....}..J....{.pO.F;X*v..Y....:v....:.Fk4I9I..4.C.4i.z.m.JN.2t..lv...).S.QW%....Y...Wr.?...!.}.s.H.i.i..*.xc;...|..H.J.E......0.PCT..]...V..E...Py.s..o	.h	....{.Z...e.O ..	.<.~..?...Z8.......&". .L.".(...../.Ka.;.l.Z.........k.[..2..n..o]........j.y..v.x.rs6V.m....>.Yw....V&. 2.G......C... .3."U".jD.KJ.....:..X.5.tD.@.O.O.sH..3M......y..f.............Q..q.L";zX.......7z.&I......].z..\...........E.'.QFE.V....<..@......&.....iND...o!...".	..7jR!.N....v.r.;.Y.v.6..-...U._t*O.......?...bs.dt."'..............S.f<2.	.+.......X..7H....m......[.....e>vbyei{.:....9..r...k_"....j.w..H..,K.c....m..F.<..|.......ze-#.W....giIC..i.Q.......y.$`h.....p.q.]..i..%-H$0.7...Jl0^.q
+.....,..O....:H#..L...o,.......}6..5M.....$.b.W.gwY...[.L]..>.59....U..eW<b....{yp..'*.n?...l..0..rJ...U.z..}Z/7O.J.b.c.....<..\.t8z...].7N.&-:y.. ..r.$^`C&.. .6...f...d]..N.9g..e..Q..qw3..zY[W......./nJ....V,97.h.x..g..u)....A.X.V.<.@.....S........]......g..\..p.@...fnL....o..........M8.....&J)J:...p.C.a...-..w_o..8Pl'...9eRqd..k.....^.z.....Z-.r...F......e..s2..y=~...Z.:ZDZrn..n.4h...O...v..s......+.1.[.<..,......Cs..US.r"....H.......q..-..."B......_.y..........w..z...D.T...3/.3.<.F0s.pMB.....F~..7u.B....,.[.y..\...%].......)..$...|.F.H..T.V.q.....E)%......f.9.wWY.=..\O.'..t.....u...:L..b....qu..........9.GG.v.k3.LF.J*:..C..i.vU8U.P..A.-.!...t.......,...K,E.....J..'].2...6FKT%....P.......k.......%y..........P.oyu...}X.,.Ms......\........R.4C....?.R..'....8k..@.7k. ....i...(.)...z....h.9lY.......p.b..6..}M.........Un49;....oU..<....{.......'"...<c4........m.e...Aw.9..4g..YB...k....M.i..hm:fUI.....F....t!ewji.$iXc...f].M.[...d...{0.Av...2K....G...?T\...... ..!-....l)z..k..z*z..j....7Q..!....t........t......+..T...0.s..4>.&...o.....1..5....?J..[...R.y...=;........?...V.w.4.;......3./...UQ^....?.T...{eF..w...x.1..M...,g...\..{.n...Q..K.ICgk..A....4z+$..... tXhR*h..........r.{q<..r.{....l.......A..6..o.J...0.I...i....5=<[...k..y.8....+.Y.7.]..9PB......@.).z.z..^........,...7...>;.^..n...6...t(.,......0.L
+....4.kH"....s1.p4...W...q.rpj........... ....O.....w........G?l.e;l......c.t..]..d../z....R..:.-.........w.h..x..[...mF.....$.C..B...kg.$.s...1.?..k.8....6...,..l...f.4..T..W.v~s....._.H.. \...q.f$.	...E.....u.~....{....4......YW...u..>......b...U...70?....b.4?
+./S..V......tQ.R....1$...>........s....s.]..'.....d.Z.hG.<.P.b>.*..d....2......?....n...hE..9.!.....o.d.{.*='...LV...R.Z....B9..j..T....f........=i[\.N1..P(.:.EK.m.&."="9..S..I.H...s..+k..#./......Q|~......2.4..m.U...... ...k...Z..sh.`l.....~....co
+....3F.a$......q..,.L]...'...	..?..4.LG.3X5:..'F.]S..:...;Z....n.p.xQ..r........as<.M.o...[.F..f=.....FV!.!#.{..y...9.en...I.........1.i..l...Z2.......l.J..^.R..Iz.W..|..].Fv[.;.
+\....C.a..4R.j.y..d4Nc+..i...C.]8......V1}..w>.......?;.$p..t.
+	.....iG..2..E`..8.>........6.K$9L.5.k`....t..K%!Z."Kh..!.A....4.s....l...C......hg..l....=.Y.~.....yy....l.s.....9.s.}..?Zn....<kL....).....u]4.U.le...f...^.V.........6.d.K.Y.H.U_....)Y.S.M......sF[i........,...........S@.il.....f.....Y.b1k.c..+...@..y....:+v.2`....C.Z.MC..... .3)..}..^.F......y.....K...r{-s.2u)JQO.a....&.S...S.....Z4.jw.qm.........EV..........c.4...T=......m.._.'....>.T.(...2...1..Ts.0....q[8..-.i.De.A9..<ZQC..	...,5...m....ir.....{.....ze/.+?yu......."...)...}..
+eEa....L\...UoQSE..)....?C......1..yu..q....Y...,.~O..+.. /$..K....X..!..9$-S...E:J..	...nt....G..EOu....v..n4.f...\.......l....\..~om.OcN....$S.4!m.K...,..Rg...YTW.0<.ld..Q.:.l..9n...|......sS.9Ac......t..H.75.GZ....k.........C.j.4.V1Lc..H...#...[.t...0/...../y.=d..m.............G.@.SlP \5..w..J}2...OggS..@.......Q}.........K..................=.?.F...@.6.n...Lf~.oh..../$..^"....I^.}...F......:ZB.?.. .....c'..e#..f.R|g...Z.....V...r.e;.....>.#...+...y.....Y.....9M=..L.=.......:p......i.s...2....=.....$.........iPf.q..K&.]j.Nc].....]G._.V.......II.IS}...x..;.G......\#.yU..x.H.g.....-.dZ._}Y.K>r.....9K..a..... ........:.~.".....n...........Q.7....L.."RX..R..$..a..............E(.q|.....fqs...N........n....j..mk;...a.....XZKNp.'...GUdO.q..leI.Y.4.Z"...C...)...;...Uu.$...8.8....n....p:.v..1..b...(..y...l..w.r>X+.....[..f.....?...|q.&-.v.p.._...`..3T........t.....HM.lU.....~..f.....6}	%.._../X:.6.../].......:........{...>UuS......g....x..Y.<...J.........}.6=ty{=7...NC..q.=K.=...'%.l..tS...#......S.H-..D.*....D......A.M.....(3........Cz.dmk.....4.....IcP......OI.3.7...-cf^]T..+..g........9.p..=s...*xk..@ ..V%C
+..P.}...yG..D....L.~	.....%x..y	./.....R..&..&.(E1....F........q.-.s.2..............;.?u..._t.....rd...Z..G.n..*.....U....>..g.mi.....l.8wm...H%_.~.	k.....p$.<.j...6.$...s..tED.`..g.....=F.n...=.u(.'.:.t...6.......g.S.S.Q.......Kas^d^.....Ek.]}.../...l.|.H.T..~..U..9.d...4.s......s...@....q	...a..%..fq...4...W..k.J......#.'...X........>...rt7..r...N.....z...#nH.......x*.Y..{....rZ//.c}....).......\.^.J;..X..-..xJguP.4...v.........F.h.....A...,m.Y.I......}.X..8.h#.]...l..V...<j.K....$...i.>...3Z%z.=.W....fP19.4.|g?.9..L&.j..[!..8....o_}/}..n.^.m.....
+.(~,&.9.........wA....C.#..R..{...Q..
+........)......./..z.v.....GX......+..r..{;v w...a.....W......5).kI..S:(Z..6..$I...DFFN!.N..r$b.;..D.i..:Vv.t=.1..8.ND.8F.......jG........Y..g-..uN.H.v....J.....]k..2...u_k.;..W.P.h.7...M.f.....m...6.M.mb.....D..F.BP...&..........p..t{....7...|.Z.U.Z...Xt..d.?..kLG....wN.jc......u3._....X.....<...\....]..]..t......h..s.....Z.......h2..U....P...4..U%.i. .Ebi..e^..S..!Mz...!.gC..{.k...j......}..,......f..#.Zj..S.........QQOR.....U^c......)..
+..F^.....@........u.z........` .~.Fn...EZ...A^5.p.En...M....
+...M.d.R.RMGqu..i........|n,E&.....#.u.7...5>..I.I...TL..m/..[.&..6c.OM....z..v?.3nVb.Y.Cw[-f.]....L..6...z...Meh..S_.ce8.i..G...$.G.s>t.....L.+{...M....n....X_wg.J.\.......J...:.<4. .....ku:....k<@.m.yH.).........H...	..g....9.....LS.....R.._V.........._...%.....X#._..?....6..LM.R
+.......Z......?6............k.9{...D..h...[bb.D..O.:..#........{.?.77.......ZN.....f....y..5.|.......|..,....I.6..C..u/]..n..q8.{H.&....9.....}...:..F......sY.}..g..tt.....u..n=O...{.N.=`k@..{X.j...y'j...V..+.QQ.....d...0..`..mZ./.Wl#....A.m!(....^J>+_.........8..4....}.u,...[J..
+......_C.f'....M.._c.......s..7uQ.RG.!U8..2.qrjO.......V.....k...O..zwy....+...#.87.9nw.q`T6...u.O...^r..=...p<]>..V..k/.......k.....Y.^..^._...~.<..Wi[z.)...f....:l......W.e..~...m3=7..:...~n.cj..%..rL..=..xYo....\..4.....7es.......C.....:r.V........e......fh:O..4I.X4....Y-.YP.@ .|..??..AqZ..,SZc...S.1.k..#E....`......zI..@.m$.	.2Z....}.........u*...l.v....}=.~...._...&._.]n|..g..y....m.........~f.r>...E...<.W6....'.X........u....r...x.s.....v..4..:i.>.........O....Q...UsX].mWY...V....L*S...|.R..Li..zh.mG..+.a..O.a.........f........_..g...x..SC.....4c:.. ....}..=..e...m..c.....t%..+.....X.Q..P.$Nf..8K...`.k..d.Q.F:5m..Z.a.6~.x+....#.>=vq..m.N:-....._...t.......uI.Q..b..$3...j....x[....~....Fg.........93...{S...1...?..N.>...b....6.X..3.4.L..i?.v.....}N...^.K..g..a..!g..d}=[._.i....~t....~..u1/...5of[.r.]..v..{...\:......N.uz....\.......qm.......G6..8Rm..>..S.....tdW.:&.f..4S.a...?..[!...5.h....V......M....#nq...t..d.2\9".<.0/A..<.r......$...Q._...........&....z. LM.RSK......b..m..o....|.6......_............Eu....z..f......nn..6..e.6^O.....=.vO+...3s.:..cz:.V.F..U.r{`.}u.._;s.y9:/...C...>.w..K.m..c....V.}.=....&]Y..C.[.Ch,8-...>.V....O.V.+ZM.......1g?.G.;......*..{-Z<7......x>.l..JQ-.R-...0............bB!...s.<...0..rY.QT..J......-..t....(..,v~	._..A;..S._..x.+hw.....Z.`...i.$.(.pd..@..Y..._.<R.f........e....l.....v..RNZ4....=.q..p...N.....d..iy;..'.....O7...N._.X.~.....pu...g.e..n.Z5.......k..:..{..q.?..2..~......c.&....U.+....7.|9b....9.\Y~pZv.........>.AN......S..]W..{F..}HO....G......c.q.;.C.*..ah.T.B.8..r.+.Q/.Y....&...,*ET>).(2.oo.@...&....f.......v.i._.....E.6y..t.25Q......*..E..P..*.>j...M.x..;....Nv.....:..3l.[5.........G.l{...lg.g.....X...6.7.....9..V.MC6;.....2.q.\..{...!..as~.a............s.ol..P..~\...}O.$.&)..8..-....{.:cy........u.....1S.L.f..E@.C...+z..K{|.e.j...!Cc..*.g..an.Q.OggS..@.......Q}.......b..5.G.E.C...;.:...*.6...0.<.*.)....cx........Y^..".T../{.|.b......1I.v.....h..V...............k(.~..~.... ~.#....e..&...c..cH........{pq....pQ.Y;..x.y...6......\..wfv...^.bx.<......G.z.-...zy_.....z..p..R.........>%...]..jus~..M............}....Z.q2..r.K......i...3d.m...y......hfG'.6..x..}.....q..U.`.)o%;....T0=..lS-.!..2...r[.k....%....Q.Q)....2...QFDz
+.Q..W.G-VE....=....l......3l...T.H.t0...&.@.%.0V..8..^,.xO...v../.8..r..?..c.b.*.b...tQ..:!(.1.Y0...v^.o....=.4Z..Z{91iJ....m...w.....i...qo.j..x+.4.Gkm.......?....xz...M..a.<.yo......X.....q......r...4mS.z.G:..:.OO.y.>..:.....%.....C.WXsZ....y..-L5.k..}..pZ...Y.Vk.kC.km...-...pq|.l.u...4>N.f3Mso[m.z..v...qY.)......,..x.....Q...uY;..f....M...i.
+y.u....p@.:"#"..Y.e....s....)...6~.o.>..W._..t......kN.\..35Q....#
+B0..0....DGP.HS..29.....<p|{..y#vw..^5.i.]S.5^......>.O..{.l.tv7.ov.>.......au.w{.]....y......<W..p.9...>...zyt..t.^...<.....WWg.C......i\f..x..m.;..<g7o.O..)....\.M..l.G..E.b.....lgO../....+....{......^.I,..K?.s........"...V...m3.......To.b..7_...........>....r.@G.d..6..1+.O[.|......bO.?...m^....4..?.....".\V.C...5.F..,.p.b@..R[....=..T....r5.........L...g...On...D..y5{Z.{.V..v?\...%..$\l....>;p..#]..Y......4,w.......3....,...r.f....j.(g.L..$K...V...0..I{N...L9..../...p..U.Zv..*zn({E...2..t...m..._......>=.}.=..<`..>..._...	..Qq...5+.[o.......).Q.._..nz.o....|._...*...^..h.(...ef.......<.fR>.}.#.....y.....6!,].uM..c....(0..w.........O....3..rwv..}.....gm.e.*.gg0h....SS.7wF.=.Y..f.Z.ei?.K..V...u._n..ol_Y.@z.|...P.a.U.!....a........F]>......r....=...W/.v...K..C35..{.i.....S6g....{0;a.....w..u.L.B...W...<..."..%rYW.....)".".Cof..!...U...k.......}...-Y...........X.x.)..%\._..0....*...@..=6nK.?...I...N/).......Yj].L	...&E.]....(E....-.U.|.....Q5.U9o.-.Y...nO.?....v.>.....`.Y}?~X..:K.l.-........K&.}..7....}...s..X.sK.....f................L.@...ya.5..=........?...i.tY...e..J.g..M...:.s...~.xV.......5.R.....F+S.!f..}....6.....a.\z.(.|.("*......^.u.....7.\ew..!.V@i_6o.GN..o.
+._l.c:...q.M.......`........?4........2.'.o.}.q...Rj.DAX.(6`c.3.>p...{.#.],...h..?w{....}..../.7...t...\./.....{..v./..awyx..C....-...'...[..!N....4e.{;......e...s..}.p.a.d...:k......tO..i..0g[.......4...X....>..q.^_L.]S...S......jg..h....%.......C#.\./~.@.z..{.~.Z.W.....@a.Y{..S..@....<;.^.g.;..(.*{..3...i..h....."...>..r...p...6A..X.S....G^h.5*...k..::.0.....Bc..[.9_=.O.F.c.:.z....-....k9........-...;...].....2....!u8;..s..y}<...6.i......O]U..KN.G=..v.....r.wU.N...=.w,.}..K-I.[..i9;o...,Cf.S......fI%...*i.ga+.....l.W77.M*./1..."j.}.......W|..!L..........eDi.U.O.6#B......^.@.......~K......a.j....._\Gd......`....n.....C^s.,>{M.......W.D.-].u]Z..)....L.b.....x.........?Y..W....;........~.=......a..8..h=.r........q....p.)..{...0Zo.V9..K..N..[.9..9-.]e..0..7Kg........,..q..........q._.wk..n../....h...k........a..w.a.c....Y.'Z..\.rd.....!..........S.$.@%;...J...~zY.h.:...K..4P..;...J.@../`..0~....B..........W.o2.2.^.........m....<....?h...R....fY..k..-.0.$..H.x....U....R.......+:..{.O......evE..Z-.........Xv.1........1....g..:............Y...[..r...F...d.DO.U;v}...[a8^.e..98......._.d?..ao.}..`....,....2wz....Ug..l...GJl...*.U....Q....e.N.........97-j.\.E..9..V..|....*U.Q.f.....c..M.....l-..WZ.....z...iZ	.@......i..k......
+..+........i..k....	.0uM.j....#3B....m.b.?..:.g....O.......d.f._=......I.v.....3.s...L9...hw..Y..N;...u..&.I.#.!Ky....z<..\.T....r........}.v...8.......a.....>m;k3t[.^IO.y....}..u.~...n...e...0c<...A..R(....}@=.}..-z+j.IOA.g^Zi.12N._....w.se~....f.F....
+....@.aV......l..V/HP.J.......U.p...<.....8.....O.]:...p.#/\c...Ycj...:Z.2S.......g=r..v.-....'.:.....//z.Z.v{..R....Z.............MVVq\......................l..!........p.,W.Y....tzV.<.l.}..:d.q...=...S.Vq8...&	Yb........NS.^.....XV....i.x..4l.f5v..0.W..<Rb.+^l.9.k=.k.{g.E..d.8/2B..........m.T.ijl2.fm....j.
+-....\...7p...v.g......f...."7MK........~......p.....3X.#B\S.y..i..Kg=....R.jt.....	......vKL.L....z...=...w....Ozw.?....<.../Mt"c..=.X.....S.].....v...u..Xc....Y......98.1....a....i.3..m...i..q.b.~...Y.7.c.../9.f...2[v.6or......?......y..b.....].&...'.+.^.....Z)3..{.... QJ%M.....W.lOZ...e....VJ...sML.....h......j4........./..Zwg.,p@.........h...(.....a]..\.....l.."..15Q.4A...	......_<.....iF.....qDT..*....z...'Wn.....[w...=..r...ib.............q.H.........g...7..&....n..y.....ng'.}....z;....V...r8.....1e.......j..2n/.2.-{K.,.....R..z=d.yK-b.....}.:..?.P.m.......z	......u.U.....Z...=..OggS..@!......Q}.......^...:.,.C.9.8.(.<.7.<.B...,.).A...1H.1...c....83.z.....A...<J.-....;.q..>`.......V.}.S....~......
+...vM.8....!. q.....	........R.s	.9.0.F.z......J......w...Y..k..:{...p.q\..........p..h.5.6H..r.u.p".......9.......z)...........G........~;......w\-.............Y.Y..mV..[.d;....9.......h.JV.q~.%U.ag.7..N...=......a...S.W.#...w.`......:..[..=..k..e..7.g+.V....k8 ....~..Z.{..U@....gM}...<.......!...C"a).e1......o.j).k5};...R..2.(T....jz{>..]e....t..W.7.........h...Ws.pu..`.... .U..z.n.9(..j.........=..<...a...ae.....u.i.....p...x(...v.O9L..s..m..Z].s.>>...h...m.....L...s4.g.n....Yzm.m9e...........U..4..,G.....N......[...KU..M'.*D.".&..UD...q.:.IBF.G...<.F.S].dq..2.^....m..+pO.....f4..9[(s.......O....8@.........?..%...<6.....?.%....qaiR.R..1..XL.a..M....I.]......I.z.?...{pP.k=YV.S.T..".OZ..8..:0...l...O\.>..t.......=..{v1..m>..y...sz....>F..{..a.....f.....f...2.T..w..a..d.....i>.e:.z..S.o..m....aV.).K....G....s.N....h....t.|+.8J.........Z.+.9.C?.4cR.a^..V.k.......Vk....^Z......X	...j.[..iOC..._..`..L.-v..^-6.....f...k`.......\..... ._..p...R..cQk...L.L.b.;G.. .K..........Gr....}.....ak|KM...9..G......t.L......4;9T.W.].X+/...'2..s.?................e........i..j[d...j..!./]..VK....*..Z5..\.F.....o...wX....2......Q.....U...8=..j...R."Z......+m%SR..c.
+...:N.P..5.w.....W...F..Y..TF...
+............../.....K.W..JYe..G......L....?h...E..._#.5....m.E.e...(j....F..&.......Om.k<...uw.r~..........Y..tO.O..j\^v.=...\.7G....(..R...>ka...7.....Xno..h..l..i....d...>...aH..=d..Y..........U...C9[...j...P.b.e..}>fQ.Nm.mG.".&.Z~3.jKY.6.m......>.#>...../...._K.UhK.ON.f...e-...j.Z...?#H.k.F.`.
+....)....v.S.'...7W7.d.~.5.]..Q....r......h.lNT.^fNi.......M.t.}.K..FQ.%.d...c..............C-.........yt..bP;l.........N1,.......at..v....<t<..|........m.K;...m.n....r}Y.......t.....c;^q\...y...=...a.l.e9..r...};.U..)....T.G.=..Yg's..\V..e..u/.+.#.e.`..ZW.y..v........W.T..."%..f+..[}......[*t...\z...J#.z.$..q.....4.....RR...8W. ....X.W.%....8........h...M.. >.E.D.k.........&..)..&...h	!.=!....r....Cw......in9..>.B.......Sw&.,n.5...|.............EW..{..k..O......).1..s.......~...0..v.v...MO..".,W..^.A..^r....;.......]...KO..k.J..gm.....sa.....l.{..|N..M.\.eG..<.-..C......=.U#..9t]rE..o..u..:.3....*.....K.3.R....O@..^V.t...^q...
+O.vE...z...z.[.M..B0.Lf...?...i.K......|..........1E.0u*Q.,t....	a...3.....y..........E.?....d..........w......_.a.......C...eV=>=../1^....G-].._.I..W).......:.r=...sek?..=...].....G.]._e.z){..1v2.S..=5.zs8m]...ao.V.Y.=[j..'.8Q.C.A.......q.k.Y.+.Arv.....].......o.vB.lk.iA&b....*.*\
+...)m.+gtJ:.i..g.F..M.j.
+.....w....r...p...&..6.`....L..H..M.&y.th........ ..U.......J..%
+.	a..e. ...f.b......(.<._..w.....5....}..a...)..jo......g.....6g.e.}r........rXz...^ee..~.M....8n..a.\W[[..................h..................a.....m....y..9..3i..4.R..l./.un..U.w..OYk.ew.l..|../..d..,..y.<..,,.F....U......8..0%.(`...RrEK^.....sg(V.q...Q..
+Uf.m...w=.:.4....:..mG.Q..>m.fK...."..krK{T...?s.Rk..i::....... .....:..Gp^..y.:So../..w_.n8s?..!.nO.....p.....a.*.......\...^..tyN...9G.6.n.6MY.-8....r.....e.G..C...|tp.=.....>'..*.........>.\..?[-.Jb)..{.m.l....z([.9|.Y..f...{w9....di/JI.y.t..*..,.%.%,....>.-]J.7.m&....S..y.......O.g....z..i&j.b..'.Y.........4t..f-mV...@..L..H....A^hlZ..).nhw.W..\K=...R....	G..'.a.Ro......E.....nW.qj.9.G.zl.............h...b.:m.....y.z.....s5....ln.M.k.3uj......t....l.t.07.i..I2............V.N9.....-.{.l.D.1W.t.gc...f.........am..iX...X-......g].z.~%..N.H]-...+e......F.$..4..!E........~../..7.._.IB.8.`A......S..............#.Y3
+@...........&.'v.e.....C.....QK.....EMj:z.a.q......q...f?....Z.|}$........4.._.>..zTn...*.<f}.j.f.Zeoe.q.t...~..q...ay....}..h.GZ;.ryh.:.v...6..r.e.Z..f{....M...d.l.<l.$..YB.?.....u.mmVI..CH...........:^.[.d....O.K.i.).).a.-.....{...Wl....h....4...d...)...........d..b...|.*m.i...	Pnf....>N........~......b..i..lb1W.#......s...D.]..T;`i.(...N..q.a.H........+...We*..ECg.X.'..k.+....fw..h.z..tW.mZ.r..<......u....m....k.:g.....Uz|...0.r G....=.{./c.......]....^:m....mK:{.s..{.;].......tu...#...u...>l.r9<6l.}...........[.'.R.......G,L.a0.......(Ah. ....C.9...Hi3.C...0.q.....]V).hp.A..Z..7...e..1c.t.6..%...ug....@ ..>].......)...l&.wO....rq.+f1i....FQ.W....A.!.$.LO.:[.l.....<6..=..\...uq.....b\6..[...5..z...a.,h...}Z....~.<?.m....<.l..C\...qi..Z.................Y.........9O.U...q...z.Z.{...>69?.y...-.....6.Y.+....}]..cu......N......S.*....+X#................p,.=y.J.OggS..@]......Q}.......yuZ.0.-...).7.....#.*.......&.@.!a...h.M2F:.......>.L.'...'..A......2]qU..o..._...\N..2.:.4...o&......'...9..4..c...-].t..9F.c.1.....W..|g1~...z...\=l9..;.n....5...CG.\k....Z.CE.t.......c...N......z..fsY....`^... ...K......z..N....!..a.9.....z.u...j.|:.6....l..O.i..k;..f.3O..ua..i..._...r+..{.j...y.S.b.....;.....a.v%.....:]K..gmx.
+...Z...c....0.^.F....jL.H(..Td.,..w@...L....j..,......v...[.{....@.M^%......EM.:ZF..C.. Yn+^1Yx_Nb/.b..g/oi~....I.W.....:....\L..\.9l.....,_..f.....j._._..*.4.W..`...a...L.pLcl.:.....gY.v..O.Q.....=z...m.....nr..{jvg.).|L.....LG.L.%.3.g....c.....C.....3.tZ..E.(..."K../...*y...}.2..*1..%....b.......Mw..S...Q...#`..r7K.#.4`M...SC..........Q$.|l9..'[..^.I$\..t..J5Z.........z....e....7....2..Y..........%z..V...6L..E.W..nC..fe....^E....O.......a{.T...8...j.c...;..X.a.L.....}..1....&.....t..^.N.}...tJ...K.......q.:-.......05.V=.iv.2..=...2.r\t.^..v..xL. .]....d.[}zU.8..i....irf....gp	]Ij^.;........L.
+.R.tI...VIV...................C.......	...0....s.*e.......1..0.@................7...LD.r=.....G}.O.`8([........V....^]G.s.^...>.../O{.K.......q..f._...k./W.......\....z9................j.p..q...x..........k.....y.S[C.%.CV....<-.|.Q....g0>r.W.].{...'.1pr..S...=..,md.*.z5G...].#.{'%.....&..I........=U?/."z..?7...e...d.....b.rDH.Ym............[.u.....G.!D.?9@^.........kRG'...C..........'O#.....:qqmyz......[........l...Z.y...6..\C..C9.|z..,.....\:.:.....a.....}."...,..Z..v|.<./-...R.......#.,.....w..]...!.$.........l...v......?...a.7.........M.K.!.....eV.9...K..9D..*.%.Z{.>....H.Y[.E........w...+..............-....@.&..?-....C.....wY.$.(5]...Gf.1..D.....rL...>4..u..y...6......D............Y.h.....x......c......mI.4m6.3=.NiW...8.N.5,*c.u..$[6......Q..\....}....q.v....CO..I.Sd...mMr8.2...+....<...K...=&....!.I)...QT.....>XbBNuI.Y.5A:........".?..:....U.:L&..,..B{g.6].d.m.@.S.._....M.......m...hr....M.d.Z..uMT.s.d.c..0..'k3.e.uwn...|.d......|......o6.z.i.8.{Q...vm.8^....c8..9..<9me.j{.r8...g.....X.y...xds........w.,......r.w....m....C.........f['......}..i.l;..q..j.......f.?.>.{_)&:.......Vk...G.s...g.j.fS%j,r....><..M........,..4._...m/..b^....&...j0....cD...
+.@./.^.....F.<..MX\...7..........Q;`J.Eb...K5:.hY.....n?1y.=......B...z.....-.z..f..s7..P..f1.....P6........?X..^u<...~8....f...7..L.{f....`?o`.c.Y.w..q..L.6...2..........>[.X...9.Zb..s.U.....l..i....'..5lFl.qqu.....-.s.L....wJ...U.f].V...&....$....u-V..T......;..:6....y.buY#/...u..d....hPN...H.~......,......	..c.a'..f.m.....*Y...R......1......J...>..RRG7qeV..nu.~..{..i.B{.;.G..B..^.A...j.T.....crv]...jy...d....}.....j..au.j>..{..:..A..Y...{.........	.f..g..n.q....y..9l....<...yn.t...K.c..._...L.........^...`.V...G6....L.......b9g...].6"k.8.W.**.r..c..p....&A.F3P\...C..)7....-N.Sr...W...8...\h....=<.V.T..5]......!....9..pv>.._.cS...Qq6.........M....{..rX..V1._2.=v..........Z.u..?.V..=..f..{=l.gK.i..S.u...-...rx....O/....S..f..e.~.M..........a.r......ub.}A.... .k..x.x...u....b.=/.......;.n..E23..I.#W.\U. ..q].z=K.%..]..>......l./+..c.m.A#4N....K....v...@.&.>

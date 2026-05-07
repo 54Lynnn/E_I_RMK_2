@@ -1,0 +1,10 @@
+0;"user";"password";
+
+First line parameters are used when you press "On-Line Update" button.
+
+Set first parameter to 0 if you are using DIRECT internet connection (dial-up, vpn, others).
+
+Set first parameter to 1 if you are using PROXY server with authorization internet connection.
+The rest parameters are used only for proxy connection, set up them if neccessary.
+ - "user" is login name.
+ - "password" is password.
