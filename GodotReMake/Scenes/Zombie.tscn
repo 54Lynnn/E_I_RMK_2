@@ -1,0 +1,45 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://Scripts/monster.gd" id="1_monster"]
+[ext_resource type="Texture2D" path="res://Art/Placeholder/monster_spider.png" id="2_zombie"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_zombie"]
+size = Vector2(28, 28)
+
+[node name="Zombie" type="CharacterBody2D" groups=["monsters"]]
+collision_layer = 4
+collision_mask = 2
+script = ExtResource("1_monster")
+move_speed = 35.0
+health = 15.0
+max_health = 15.0
+damage = 3.0
+collision_damage = 1.0
+experience_reward = 10
+detection_range = 300.0
+attack_range = 30.0
+attack_cooldown = 3.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_zombie")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+modulate = Color(0.4, 0.7, 0.4, 1)
+texture = ExtResource("2_zombie")
+
+[node name="HealthBar" type="TextureProgressBar" parent="."]
+visible = false
+position = Vector2(-24, -32)
+size = Vector2(48, 4)
+z_index = 10
+fill_mode = 2
+value = 100.0
+texture_progress = ExtResource("2_zombie")
+tint_progress = Color(1, 0, 0, 1)
+tint_under = Color(0.3, 0, 0, 1)
+
+[node name="StateTimer" type="Timer" parent="."]
+one_shot = true
+
+[node name="AttackCooldown" type="Timer" parent="."]
+one_shot = true

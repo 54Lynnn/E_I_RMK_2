@@ -1,0 +1,35 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://Scripts/monster.gd" id="1"]
+[ext_resource type="Texture2D" path="res://Art/Placeholder/monster_spider.png" id="2"]
+
+[sub_resource type="RectangleShape2D" id="1"]
+size = Vector2(32, 32)
+
+[node name="Monster" type="CharacterBody2D" groups=["monsters"]]
+collision_layer = 4
+collision_mask = 2
+script = ExtResource("1")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("1")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2")
+
+[node name="HealthBar" type="TextureProgressBar" parent="."]
+visible = false
+position = Vector2(-24, -32)
+size = Vector2(48, 4)
+z_index = 10
+fill_mode = 2
+value = 100.0
+texture_progress = ExtResource("2")
+tint_progress = Color(1, 0, 0, 1)
+tint_under = Color(0.3, 0, 0, 1)
+
+[node name="StateTimer" type="Timer" parent="."]
+one_shot = true
+
+[node name="AttackCooldown" type="Timer" parent="."]
+one_shot = true

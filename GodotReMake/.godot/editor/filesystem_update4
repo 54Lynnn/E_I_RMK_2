@@ -1,0 +1,15 @@
+res://Scripts/hud.gd
+res://Scripts/global.gd
+res://Scripts/hero.gd
+res://Scripts/hero_panel.gd
+res://Scripts/skill_button.gd
+res://Scripts/projectile.gd
+res://Scenes/HUD.tscn
+res://Scripts/magic_missile.gd
+res://Scripts/fireball.gd
+res://Scenes/Fireball.tscn
+res://Scenes/MagicMissile.tscn
+res://Scripts/freezing_spear.gd
+res://Scripts/monster.gd
+res://Scenes/FreezingSpear.tscn
+res://Scripts/monster_spawner.gd

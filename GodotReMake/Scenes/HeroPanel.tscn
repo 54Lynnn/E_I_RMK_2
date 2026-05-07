@@ -1,0 +1,355 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://Scripts/hero_panel.gd" id="1"]
+
+[node name="HeroPanel" type="Control"]
+process_mode = 3
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -400.0
+offset_top = -300.0
+offset_right = 400.0
+offset_bottom = 300.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.85, 0.75, 0.6, 1.0)
+
+[node name="LeftPanel" type="Control" parent="Background"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = 20.0
+offset_right = -420.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TitleLabel" type="Label" parent="Background/LeftPanel"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 40.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 28
+text = "Hero"
+horizontal_alignment = 1
+
+[node name="LevelRow" type="HBoxContainer" parent="Background/LeftPanel"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 45.0
+offset_bottom = 75.0
+grow_horizontal = 2
+alignment = 1
+
+[node name="LevelLabel" type="Label" parent="Background/LeftPanel/LevelRow"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Level: 1"
+horizontal_alignment = 1
+
+[node name="ExpLabel" type="Label" parent="Background/LeftPanel/LevelRow"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Experience: 0"
+horizontal_alignment = 1
+
+[node name="StatsContainer" type="VBoxContainer" parent="Background/LeftPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 80.0
+offset_bottom = -40.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 8
+
+[node name="StrengthRow" type="HBoxContainer" parent="Background/LeftPanel/StatsContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Background/LeftPanel/StatsContainer/StrengthRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 18
+text = "Strength"
+
+[node name="ValueLabel" type="Label" parent="Background/LeftPanel/StatsContainer/StrengthRow"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "10"
+
+[node name="AddButton" type="Button" parent="Background/LeftPanel/StatsContainer/StrengthRow"]
+layout_mode = 2
+text = "+"
+
+[node name="DexterityRow" type="HBoxContainer" parent="Background/LeftPanel/StatsContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Background/LeftPanel/StatsContainer/DexterityRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 18
+text = "Dexterity"
+
+[node name="ValueLabel" type="Label" parent="Background/LeftPanel/StatsContainer/DexterityRow"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "10"
+
+[node name="AddButton" type="Button" parent="Background/LeftPanel/StatsContainer/DexterityRow"]
+layout_mode = 2
+text = "+"
+
+[node name="StaminaRow" type="HBoxContainer" parent="Background/LeftPanel/StatsContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Background/LeftPanel/StatsContainer/StaminaRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 18
+text = "Stamina"
+
+[node name="ValueLabel" type="Label" parent="Background/LeftPanel/StatsContainer/StaminaRow"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "10"
+
+[node name="AddButton" type="Button" parent="Background/LeftPanel/StatsContainer/StaminaRow"]
+layout_mode = 2
+text = "+"
+
+[node name="IntelligenceRow" type="HBoxContainer" parent="Background/LeftPanel/StatsContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Background/LeftPanel/StatsContainer/IntelligenceRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 18
+text = "Intelligence"
+
+[node name="ValueLabel" type="Label" parent="Background/LeftPanel/StatsContainer/IntelligenceRow"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "10"
+
+[node name="AddButton" type="Button" parent="Background/LeftPanel/StatsContainer/IntelligenceRow"]
+layout_mode = 2
+text = "+"
+
+[node name="WisdomRow" type="HBoxContainer" parent="Background/LeftPanel/StatsContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Background/LeftPanel/StatsContainer/WisdomRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 18
+text = "Wisdom"
+
+[node name="ValueLabel" type="Label" parent="Background/LeftPanel/StatsContainer/WisdomRow"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "10"
+
+[node name="AddButton" type="Button" parent="Background/LeftPanel/StatsContainer/WisdomRow"]
+layout_mode = 2
+text = "+"
+
+[node name="HealthRow" type="HBoxContainer" parent="Background/LeftPanel/StatsContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Background/LeftPanel/StatsContainer/HealthRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 18
+text = "health"
+
+[node name="ValueLabel" type="Label" parent="Background/LeftPanel/StatsContainer/HealthRow"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "100/100"
+
+[node name="HealthRegenRow" type="HBoxContainer" parent="Background/LeftPanel/StatsContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Background/LeftPanel/StatsContainer/HealthRegenRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 18
+text = "health regeneration"
+
+[node name="ValueLabel" type="Label" parent="Background/LeftPanel/StatsContainer/HealthRegenRow"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "extra slow"
+
+[node name="SpeedRow" type="HBoxContainer" parent="Background/LeftPanel/StatsContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Background/LeftPanel/StatsContainer/SpeedRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 18
+text = "movement speed"
+
+[node name="ValueLabel" type="Label" parent="Background/LeftPanel/StatsContainer/SpeedRow"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "extra slow"
+
+[node name="HitRecoveryRow" type="HBoxContainer" parent="Background/LeftPanel/StatsContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Background/LeftPanel/StatsContainer/HitRecoveryRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 18
+text = "hit recovery"
+
+[node name="ValueLabel" type="Label" parent="Background/LeftPanel/StatsContainer/HitRecoveryRow"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "extra slow"
+
+[node name="ChanceToBeHitRow" type="HBoxContainer" parent="Background/LeftPanel/StatsContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Background/LeftPanel/StatsContainer/ChanceToBeHitRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 18
+text = "chance to be hit"
+
+[node name="ValueLabel" type="Label" parent="Background/LeftPanel/StatsContainer/ChanceToBeHitRow"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "96%"
+
+[node name="ManaRow" type="HBoxContainer" parent="Background/LeftPanel/StatsContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Background/LeftPanel/StatsContainer/ManaRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 18
+text = "mana"
+
+[node name="ValueLabel" type="Label" parent="Background/LeftPanel/StatsContainer/ManaRow"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "80/80"
+
+[node name="ManaRegenRow" type="HBoxContainer" parent="Background/LeftPanel/StatsContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Background/LeftPanel/StatsContainer/ManaRegenRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 18
+text = "mana regeneration"
+
+[node name="ValueLabel" type="Label" parent="Background/LeftPanel/StatsContainer/ManaRegenRow"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "normal"
+
+[node name="AttrPointsRow" type="HBoxContainer" parent="Background/LeftPanel"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -35.0
+offset_bottom = -10.0
+grow_horizontal = 2
+grow_vertical = 0
+alignment = 1
+
+[node name="Label" type="Label" parent="Background/LeftPanel/AttrPointsRow"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Attribute Points"
+
+[node name="AttrPointsLabel" type="Label" parent="Background/LeftPanel/AttrPointsRow"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "0"
+
+[node name="RightPanel" type="Control" parent="Background"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 390.0
+offset_top = 20.0
+offset_right = -20.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TitleLabel" type="Label" parent="Background/RightPanel"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 40.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 28
+text = "Skills & Spells"
+horizontal_alignment = 1
+
+[node name="SkillPointsRow" type="HBoxContainer" parent="Background/RightPanel"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -35.0
+offset_bottom = -10.0
+grow_horizontal = 2
+grow_vertical = 0
+alignment = 1
+
+[node name="Label" type="Label" parent="Background/RightPanel/SkillPointsRow"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Skill Points"
+
+[node name="SkillPointsLabel" type="Label" parent="Background/RightPanel/SkillPointsRow"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "0"
+
+[node name="SkillsContainer" type="Control" parent="Background/RightPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 45.0
+offset_bottom = -40.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ConnectionLines" type="Control" parent="Background/RightPanel/SkillsContainer"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
