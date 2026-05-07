@@ -29,6 +29,7 @@ const MagicMissile = preload("res://Scripts/magic_missile.gd")
 const Fireball = preload("res://Scripts/fireball.gd")
 const FreezingSpear = preload("res://Scripts/freezing_spear.gd")
 const Prayer = preload("res://Scripts/prayer.gd")
+const Heal = preload("res://Scripts/heal.gd")
 
 # 基础移动速度（像素/秒）
 # 实际速度 = BASE_MOVE_SPEED + 敏捷×0.5 + 耐力×0.35
@@ -130,6 +131,8 @@ func _process(delta):
 		cast_freezing_spear()
 	if Input.is_action_pressed("spell_prayer"):
 		cast_prayer()
+	if Input.is_action_pressed("spell_heal"):
+		cast_heal()
 
 func get_move_speed() -> float:
 	# 计算实际移动速度
@@ -169,6 +172,8 @@ func _unhandled_input(event):
 		cast_freezing_spear()
 	if event.is_action_pressed("spell_prayer"):
 		cast_prayer()
+	if event.is_action_pressed("spell_heal"):
+		cast_heal()
 
 func cast_magic_missile():
 	MagicMissile.cast(self, mouse_pos, skill_cooldowns)
@@ -181,6 +186,9 @@ func cast_freezing_spear():
 
 func cast_prayer():
 	Prayer.cast(self, mouse_pos, skill_cooldowns)
+
+func cast_heal():
+	Heal.cast(self, mouse_pos, skill_cooldowns)
 
 func cast_teleport():
 	var level = Global.skill_levels.get("teleport", 0)
