@@ -1,4 +1,4 @@
-[gd_scene load_steps=2 format=3 uid="uid://d8yvxg3ulq3a3"]
+[gd_scene format=3 uid="uid://ek1de6l1j7jc"]
 
 [ext_resource type="Script" path="res://Scripts/heal.gd" id="1_heal"]
 
