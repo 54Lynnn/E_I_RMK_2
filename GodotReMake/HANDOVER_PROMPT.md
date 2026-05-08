@@ -15,11 +15,12 @@
 ## 1. 项目当前状态
 
 ### 已完成的核心工作
-- ✅ **全部21个技能已重构为独立场景/脚本**
+- ✅ **全部23个技能已重构为独立场景/脚本**（原版21个 + 新增Ball Lightning和Chain Lightning）
 - ✅ **第一批技能数值修正完成**（Fireball, Meteor, Armageddon, Poison Cloud, Nova, Fortuna, Telekinesis, Wrath of God, Magic Missile）
 - ✅ **Dark Ritual debuff系统实现**（水属性技能统一受水抗性影响）
 - ✅ **节点命名规范建立**（所有技能场景节点统一命名）
 - ✅ **Fire Walk节点层级修复**（火焰正确添加到场景根节点）
+- ✅ **新增Air系技能**：Ball Lightning（球状闪电，I键）和Chain Lightning（连锁闪电，O键）
 
 ### 当前技术栈
 - **引擎**: Godot 4.6.2-stable

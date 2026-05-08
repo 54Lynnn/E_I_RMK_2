@@ -6,6 +6,7 @@
 > **作者**: [Previous Agent]
 > **日期**: 2026-05-06
 > **最后更新**: 2026-05-08 (全部21个技能重构完成！)
+> **GitHub仓库**: https://github.com/54Lynnn/E_I_RMK_2
 
 ---
 
@@ -41,6 +42,10 @@
 - 开发模式（DevMode）用于测试
 - 怪物生成与AI（数据驱动，支持多种怪物）
 - 拾取物品系统
+- **✅ 技能数值修正**：第一批数值修正已完成（Fireball, Meteor, Armageddon, Poison Cloud, Nova, Fortuna, Telekinesis, Wrath of God, Magic Missile）
+- **✅ Dark Ritual debuff系统**：已实现debuff版本，水属性技能统一受水抗性影响
+- **✅ 节点命名规范**：所有技能场景节点统一命名（fire_walk_zone, magic_missile_proj等）
+- **✅ Fire Walk节点层级修复**：修复了火焰被添加到hero节点内部的问题
 
 ### 游戏操作
 | 按键 | 功能 |
@@ -453,17 +458,34 @@ func cast_xxx():
    - hero.gd 中所有技能调用已改为 `SkillName.cast()` 模式
    - 被动技能（StoneEnchanted、Fortuna）在 _ready() 中自动触发
 
-2. **技能视觉效果**
+2. **✅ 技能数值修正（第一批）**
+   - Fireball: 冷却0.3s, 伤害15+力量×2, 爆炸半径60
+   - Meteor: 冷却5s, 伤害250, 半径130
+   - Armageddon: 冷却20s, 伤害250
+   - Poison Cloud: 伤害60/秒, 持续6秒
+   - Nova: 伤害200, 半径80, 带冰冻效果
+   - Fortuna: 掉率加成降至15%
+   - Telekinesis: 无消耗, 冷却1.0s
+   - Wrath of God: 冷却2s, 伤害200
+   - Magic Missile: 伤害10+力量×1.5, 0.5s冷却
+
+3. **✅ Dark Ritual debuff系统**
+   - 已实现为debuff系统（非直接伤害）
+   - 怪物进入范围获得dark_ritual debuff
+   - debuff结束时进行秒杀判定（30%几率）
+   - 水属性技能统一受水抗性影响（Poison Cloud, Nova, Freezing Spear, Dark Ritual）
+
+4. **技能视觉效果**
    - ✅ 全部技能已有独立视觉效果（Sprite2D + CPUParticles2D）
    - ❌ 没有音效
    - **建议：** 添加技能施放音效和背景音乐
 
-3. **怪物种类单一**
+5. **怪物种类单一**
    - 目前只有一种怪物（Monster.tscn）
    - 原版有Archer, Bear, Boss, Demon, Reaper, Rig, Spider等多种
    - MonsterType枚举已定义但未使用
 
-4. **Freezing Spear 已知问题**
+6. **Freezing Spear 已知问题**
    - 偶尔出现技能不触发的情况（可能与输入法或按键检测有关）
    - 冰冻效果通过修改 `move_speed` 和 `can_attack` 实现，需要验证是否与其他减速效果冲突
 
@@ -496,6 +518,35 @@ func cast_xxx():
 
 11. **缺少设置菜单**
     - 无法调整音量、分辨率等
+
+### 6.4 设计决策记录
+
+#### 节点命名规范（2026-05-08新增）
+所有技能生成的场景节点必须遵循统一命名规范：
+
+| 节点类型 | 后缀 | 示例 |
+|---------|------|------|
+| 场地效果（zone） | `_zone` | `fire_walk_zone`, `poison_cloud_zone`, `dark_ritual_zone` |
+| 投射物（projectile） | `_proj` | `magic_missile_proj`, `fireball_proj`, `meteor_proj`, `holy_light_proj` |
+| 爆发效果（effect） | `_effect` | `nova_effect` |
+
+**规则**：
+- 使用技能ID（snake_case）+ 类型后缀
+- 节点名称必须在实例化后立即设置，在 `add_child()` 之前
+- 命名统一使用小写 + 下划线
+
+#### Dark Ritual debuff系统（2026-05-08新增）
+- Dark Ritual 从直接伤害改为 debuff 系统
+- 怪物进入范围获得 `dark_ritual` debuff
+- debuff 持续时间为技能的 `delay` 参数
+- debuff 结束时进行秒杀判定（30%几率）
+- 判定逻辑在 `monster.gd` 的 `_on_debuff_removed` 中处理
+- 水属性技能统一受水抗性影响（未来扩展）
+
+#### Fire Walk 节点层级修复（2026-05-08新增）
+- **问题**：火焰被添加到 `get_parent()`（即 hero 节点），导致火焰跟着玩家移动
+- **修复**：改为 `hero.get_parent().add_child(fire_area)`，将火焰添加到场景根节点
+- **教训**：使用 Remote 场景树检查节点层级，确保特效在世界坐标中
 
 12. **HeroPanel.tscn有冗余节点**
     - 场景文件中可能残留旧布局的节点

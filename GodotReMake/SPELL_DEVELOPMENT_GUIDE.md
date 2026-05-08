@@ -437,3 +437,4 @@ static func cast(hero: Node, mouse_pos: Vector2, skill_cooldowns: Dictionary) ->
 | 1.1 | 2026-05-08 | 更新：确认技能数据封装规范，hero.gd 不再管理技能数据 |
 | 1.2 | 2026-05-08 | 更新：新增 Prayer / Heal 技能规范，hero.gd 占位符模式说明 |
 | 1.3 | 2026-05-08 | 更新：全部21个技能重构完成，移除占位符模式说明，更新示例列表 |
+| 1.4 | 2026-05-08 | 更新：新增Ball Lightning和Chain Lightning技能，节点命名规范 |
