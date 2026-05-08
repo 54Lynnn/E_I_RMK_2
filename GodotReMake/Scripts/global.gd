@@ -131,6 +131,8 @@ var skill_levels := {
 	"fortuna": 1,             # 幸运
 	"dark_ritual": 1,         # 黑暗仪式
 	"nova": 1,                # 新星
+	"ball_lightning": 1,      # 球状闪电
+	"chain_lightning": 1,     # 连锁闪电
 }
 
 

@@ -366,7 +366,20 @@ func setup_skill_tree():
 			"prereq": "telekinesis",
 			"cell": Vector2(3, 1)
 		},
-
+		"ball_lightning": {
+			"name": "Ball Lightning",
+			"desc": "Orb attacks nearby enemies. Lv1: Mana 45, CD 2s, Dmg 200",
+			"texture": "res://Art/Placeholder/BallLightning.png",
+			"prereq": "holy_light",
+			"cell": Vector2(2, 0)
+		},
+		"chain_lightning": {
+			"name": "Chain Lightning",
+			"desc": "Lightning bounces between enemies. Lv1: Mana 55, CD 1s, Dmg 1000",
+			"texture": "res://Art/Placeholder/ChainLightning.png",
+			"prereq": "holy_light",
+			"cell": Vector2(3, 0)
+		},
 		"fire_ball": {
 			"name": "Fire Ball",
 			"desc": "Launch a fire ball that explodes on impact",

@@ -8,13 +8,13 @@ static var base_damage := 200.0
 static var damage_element := "earth"
 
 static func get_mana_cost(level: int) -> float:
-	return base_mana_cost + level * 2.5  # LV1=55, LV10=80 (原版数据)
+	return 55.0 + (level - 1) * 3.0
 
 static func get_damage(level: int) -> float:
-	return base_damage + level * 15.0  # LV1=200, LV10=275 (原版数据)
+	return 200.0 + (level - 1) * 15.0
 
 static func get_cooldown(level: int) -> float:
-	return max(base_cooldown - level * 0.1, 1.5)  # LV1=2s, LV10=1.5s (原版数据)
+	return max(2.0 - (level - 1) * 0.1, 1.1)
 
 static func cast(hero: Node, mouse_pos: Vector2, skill_cooldowns: Dictionary) -> bool:
 	var level = Global.skill_levels.get(skill_name, 0)

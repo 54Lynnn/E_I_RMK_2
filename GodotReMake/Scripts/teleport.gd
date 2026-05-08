@@ -7,10 +7,10 @@ static var base_cooldown := 20.0
 static var base_mana_cost := 35.0
 
 static func get_mana_cost(level: int) -> float:
-	return max(base_mana_cost - (level - 1) * 2.0, 25.0)
+	return max(35.0 - (level - 1) * 2.0, 17.0)
 
 static func get_cooldown(level: int) -> float:
-	return max(base_cooldown - (level - 1) * 1.0, 15.0)
+	return max(20.0 - (level - 1) * 1.0, 11.0)
 
 static func cast(hero: Node, mouse_pos: Vector2, skill_cooldowns: Dictionary) -> bool:
 	var level = Global.skill_levels.get(skill_name, 0)

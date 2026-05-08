@@ -9,13 +9,16 @@ static var damage_element := "fire"
 static var hit_count := 5
 
 static func get_mana_cost(level: int) -> float:
-	return base_mana_cost + level * 2.5  # LV1=55, LV10=80 (原版数据)
+	return 55.0 + (level - 1) * 3.0
 
 static func get_damage(level: int) -> float:
-	return base_damage + level * 10.0  # LV1=250, LV10=300 (原版数据)
+	return 250.0 + (level - 1) * 10.0
 
 static func get_hit_count(level: int) -> int:
-	return hit_count + int(level / 2)
+	return 5 + int(level / 2)
+
+static func get_cooldown(level: int) -> float:
+	return max(20.0 - (level - 1) * 1.0, 11.0)
 
 func _ready():
 	var tween = create_tween()
@@ -65,6 +68,6 @@ static func cast(hero: Node, mouse_pos: Vector2, skill_cooldowns: Dictionary) ->
 		effect.global_position = hero.global_position
 		hero.get_parent().add_child(effect)
 
-		skill_cooldowns[skill_name] = base_cooldown
+		skill_cooldowns[skill_name] = get_cooldown(level)
 		return true
 	return false

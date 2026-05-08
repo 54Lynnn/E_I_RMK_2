@@ -8,10 +8,10 @@ static var base_duration := 20.0
 static var base_slow_factor := 0.35
 
 static func get_mana_cost(level: int) -> float:
-	return base_mana_cost + (level - 1) * 1.6
+	return 25.0 + (level - 1) * 2.0
 
 static func get_slow_factor(level: int) -> float:
-	return min(base_slow_factor + (level - 1) * 0.07, 0.70)
+	return min(0.35 + (level - 1) * 0.05, 0.80)
 
 static func cast(hero: Node, mouse_pos: Vector2, skill_cooldowns: Dictionary) -> bool:
 	var level = Global.skill_levels.get(skill_name, 0)

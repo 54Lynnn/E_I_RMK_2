@@ -8,13 +8,16 @@ static var base_damage := 250.0
 static var damage_element := "fire"
 
 static func get_mana_cost(level: int) -> float:
-	return base_mana_cost + level * 2.2  # LV1=45, LV10=67 (原版数据)
+	return 45.0 + (level - 1) * 2.0
 
 static func get_damage(level: int) -> float:
-	return base_damage + level * 10.0  # LV1=250, LV10=300 (原版数据)
+	return 250.0 + (level - 1) * 10.0
 
-static func get_radius(level: int) -> float:
-	return 130.0  # 原版固定130
+static func get_cooldown(level: int) -> float:
+	return max(5.0 - (level - 1) * 0.2, 3.2)
+
+static func get_radius(_level: int) -> float:
+	return 130.0
 
 static func cast(hero: Node, mouse_pos: Vector2, skill_cooldowns: Dictionary) -> bool:
 	var level = Global.skill_levels.get(skill_name, 0)
@@ -38,7 +41,7 @@ static func cast(hero: Node, mouse_pos: Vector2, skill_cooldowns: Dictionary) ->
 		meteor.explosion_radius = get_radius(level)
 		hero.get_parent().add_child(meteor)
 
-		skill_cooldowns[skill_name] = base_cooldown
+		skill_cooldowns[skill_name] = get_cooldown(level)
 		return true
 	return false
 

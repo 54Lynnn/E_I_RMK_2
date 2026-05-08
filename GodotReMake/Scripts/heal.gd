@@ -38,16 +38,13 @@ var is_active: bool = false
 # 等级成长公式
 # ============================================
 static func get_mana_cost(level: int) -> float:
-	# LV1=35, LV10=53
-	return base_mana_cost + (level - 1) * mana_cost_increase_per_level
+	return 35.0 + (level - 1) * 2.0
 
 static func get_cooldown(level: int) -> float:
-	# LV1=15, LV10=24
-	return base_cooldown + (level - 1) * 1.0
+	return 15.0 + (level - 1) * 1.0
 
 static func get_health_restore_percent(level: int) -> float:
-	# LV1=5.5%, LV10=7.75%
-	return base_health_restore_percent + (level - 1) * health_restore_increase_per_level
+	return 0.055 + (level - 1) * 0.05
 
 # ============================================
 # 施法入口（静态方法，由 hero.gd 调用）

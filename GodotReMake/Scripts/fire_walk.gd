@@ -18,12 +18,10 @@ static var damage_element := "fire"         # 伤害元素类型（fire系技能
 # 伤害值配置
 # LV1=30, LV10=70（原版数据，每级+4）
 static func get_damage(level: int) -> float:
-	return base_damage + level * 4.0
+	return 30.0 + (level - 1) * 5.0
 
-# 魔法消耗配置
-# LV1=20, LV10=47（原版数据，每级+3）
 static func get_mana_cost(level: int) -> float:
-	return base_mana_cost + level * 3.0
+	return 20.0 + (level - 1) * 3.0
 
 # ============================================
 # 施法主函数（Toggle）

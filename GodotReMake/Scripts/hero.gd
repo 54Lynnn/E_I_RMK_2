@@ -44,6 +44,8 @@ const PoisonCloud = preload("res://Scripts/poison_cloud.gd")
 const Fortuna = preload("res://Scripts/fortuna.gd")
 const DarkRitual = preload("res://Scripts/dark_ritual.gd")
 const Nova = preload("res://Scripts/nova.gd")
+const BallLightning = preload("res://Scripts/ball_lightning.gd")
+const ChainLightning = preload("res://Scripts/chain_lightning.gd")
 
 # 基础移动速度（像素/秒）
 # 实际速度 = BASE_MOVE_SPEED + 敏捷×0.5 + 耐力×0.35
@@ -83,6 +85,8 @@ var skill_cooldowns := {
 	"fortuna": 0.0,
 	"dark_ritual": 0.0,
 	"nova": 0.0,
+	"ball_lightning": 0.0,
+	"chain_lightning": 0.0,
 }
 
 # 技能状态标记
@@ -156,6 +160,10 @@ func _process(delta):
 		cast_dark_ritual()
 	if Input.is_action_pressed("spell_nova"):
 		cast_nova()
+	if Input.is_action_pressed("spell_ball_lightning"):
+		cast_ball_lightning()
+	if Input.is_action_pressed("spell_chain_lightning"):
+		cast_chain_lightning()
 
 func get_move_speed() -> float:
 	# 计算实际移动速度
@@ -221,6 +229,10 @@ func _unhandled_input(event):
 		cast_dark_ritual()
 	if event.is_action_pressed("spell_nova"):
 		cast_nova()
+	if event.is_action_pressed("spell_ball_lightning"):
+		cast_ball_lightning()
+	if event.is_action_pressed("spell_chain_lightning"):
+		cast_chain_lightning()
 
 func cast_magic_missile():
 	MagicMissile.cast(self, mouse_pos, skill_cooldowns)
@@ -275,6 +287,12 @@ func cast_dark_ritual():
 
 func cast_nova():
 	Nova.cast(self, mouse_pos, skill_cooldowns)
+
+func cast_ball_lightning():
+	BallLightning.cast(self, mouse_pos, skill_cooldowns)
+
+func cast_chain_lightning():
+	ChainLightning.cast(self, mouse_pos, skill_cooldowns)
 
 
 func update_hud():

@@ -1,25 +1,22 @@
 extends Area2D
 
 static var skill_name := "dark_ritual"
-static var skill_type := "active"  # 技能类型: active, toggle, passive
 static var base_cooldown := 5.5
 static var base_mana_cost := 55.0
-static var base_damage := 0.0
 static var damage_element := "water"
 static var base_delay := 2.0
-static var base_duration := 5.0  # 视觉效果持续时间（比debuff长，确保所有debuff都能触发）
+static var base_duration := 5.0
 
 static func get_mana_cost(level: int) -> float:
-	return base_mana_cost + level * 2.5
+	return 55.0 + (level - 1) * 2.5
 
 static func get_instant_kill_chance(level: int) -> float:
-	return 0.30 + level * 0.08
+	return min(0.30 + (level - 1) * 0.067, 0.90)
 
-static func get_delay(level: int) -> float:
-	return max(base_delay - level * 0.1, 0.5)
+static func get_cooldown(level: int) -> float:
+	return max(5.5 - (level - 1) * 0.5, 1.0)
 
 static func get_duration(level: int) -> float:
-	# 视觉效果持续时间：确保比debuff时间长，让所有进入的敌人都能被判定
 	return base_duration + level * 0.5
 
 static func cast(hero: Node, mouse_pos: Vector2, skill_cooldowns: Dictionary) -> bool:
@@ -45,7 +42,7 @@ static func cast(hero: Node, mouse_pos: Vector2, skill_cooldowns: Dictionary) ->
 		ritual.radius = 130.0
 		hero.get_parent().add_child(ritual)
 
-		skill_cooldowns[skill_name] = base_cooldown
+		skill_cooldowns[skill_name] = get_cooldown(level)
 		return true
 	return false
 

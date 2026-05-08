@@ -9,23 +9,22 @@ extends Node2D
 # 注意：这是 air 系技能，对没有 air aura 的敌人造成 99999 伤害（秒杀）
 # 范围限制：只搜索光标 50 范围内的敌人
 
-static var skill_name := "sacrifice"       # 技能唯一标识
-static var skill_type := "active"           # 技能类型: active, toggle, passive
-static var base_cooldown := 10.0            # 基础冷却时间（秒）
-static var base_mana_cost := 0.0            # 基础魔法消耗（此技能消耗生命）
-static var base_damage := 50.0              # 基础伤害值（有抗性时使用）
-static var damage_element := "air"          # 伤害元素类型（air系技能）
-static var health_cost_percent := 0.15      # 生命值消耗比例（15%）
+static var skill_name := "sacrifice"
+static var skill_type := "active"
+static var base_cooldown := 3.0
+static var base_mana_cost := 0.0
+static var base_damage := 50.0
+static var damage_element := "air"
+static var health_cost_percent := 0.55
 
-# 伤害值配置（有 air aura 抗性时使用）
-# LV1=50, LV10=250（原版数据，每级+20）
 static func get_damage(level: int) -> float:
 	return base_damage + level * 20.0
 
-# 生命值消耗比例配置
-# LV1=15%, LV10=10%（原版数据，每级降低0.5%，最低5%）
 static func get_health_cost_percent(level: int) -> float:
-	return max(health_cost_percent - level * 0.005, 0.05)
+	return max(0.55 - (level - 1) * 0.05, 0.10)
+
+static func get_cooldown(level: int) -> float:
+	return max(3.0 - (level - 1) * 0.2, 1.2)
 
 # ============================================
 # 施法主函数
@@ -94,7 +93,7 @@ static func cast(hero: Node, mouse_pos: Vector2, skill_cooldowns: Dictionary) ->
 		print("Sacrifice: no target found in range")
 
 	# 设置技能冷却（无论是否找到目标都进入冷却）
-	skill_cooldowns[skill_name] = base_cooldown
+	skill_cooldowns[skill_name] = get_cooldown(level)
 	print("Sacrifice cooldown set")
 	return true
 
