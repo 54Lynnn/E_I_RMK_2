@@ -37,7 +37,7 @@ static func cast(hero: Node, mouse_pos: Vector2, skill_cooldowns: Dictionary) ->
 		ritual.name = "dark_ritual_zone"
 		ritual.global_position = mouse_pos
 		ritual.instant_kill_chance = get_instant_kill_chance(level)
-		ritual.delay = get_delay(level)
+		ritual.delay = 2.0
 		ritual.duration = get_duration(level)
 		ritual.radius = 130.0
 		hero.get_parent().add_child(ritual)
