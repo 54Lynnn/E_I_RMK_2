@@ -1,0 +1,39 @@
+extends Node2D
+
+@export var damage := 250.0
+@export var explosion_radius := 56.0
+@export var damage_element := "fire"
+@export var map_size := Vector2(2560, 2560)
+@export var drop_interval := 0.2
+@export var meteors_per_drop := 12
+@export var duration := 2.0
+
+var life_time := 0.0
+var drop_timer := 0.0
+
+func _process(delta):
+	life_time += delta
+	drop_timer += delta
+
+	if drop_timer >= drop_interval:
+		drop_timer = 0.0
+		for i in range(meteors_per_drop):
+			_spawn_meteor()
+
+	if life_time >= duration:
+		queue_free()
+
+func _spawn_meteor():
+	var random_pos = Vector2(
+		randf() * map_size.x - map_size.x * 0.5,
+		randf() * map_size.y - map_size.y * 0.5
+	)
+
+	var meteor = preload("res://Scenes/MeteorSingle.tscn").instantiate()
+	meteor.name = "armageddon_proj"
+	meteor.global_position = random_pos + Vector2(0, -400)
+	meteor.target_position = random_pos
+	meteor.damage = damage
+	meteor.explosion_radius = explosion_radius
+	meteor.damage_element = damage_element
+	get_parent().add_child(meteor)

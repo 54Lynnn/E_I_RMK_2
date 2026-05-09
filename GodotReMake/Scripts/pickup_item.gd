@@ -21,19 +21,72 @@ enum ItemType {
 const TEXTURE_PATH := "res://Art/Placeholder/Bonus%s.png"
 
 @onready var sprite := $Sprite2D
+@onready var progress_bar := $ProgressBar
+
+var hover_time := 0.0
+var is_hovered := false
 
 func _ready():
 	body_entered.connect(_on_body_entered)
 
-	# 掉落物层级：
-	# Ground: 0, PickupItem: 3, 地面效果: 5, Hero/Monster: 10
 	z_index = 3
 
 	load_texture()
+	_setup_progress_bar()
 
 	var tween = create_tween()
 	tween.tween_property(self, "modulate:a", 0.0, 1.0).set_delay(lifetime - 1.0)
 	tween.tween_callback(queue_free)
+
+func _setup_progress_bar():
+	progress_bar.visible = false
+	progress_bar.max_value = 100.0
+	progress_bar.value = 0.0
+
+func _process(delta):
+	_check_mouse_hover(delta)
+
+func _check_mouse_hover(delta):
+	var telekinesis_level = Global.skill_levels.get("telekinesis", 0)
+	if telekinesis_level <= 0:
+		return
+
+	var mouse_pos = get_global_mouse_position()
+	var dist = global_position.distance_to(mouse_pos)
+	var pickup_radius = max(sprite.texture.get_size().x * sprite.scale.x, sprite.texture.get_size().y * sprite.scale.y) * 0.5
+
+	if dist <= pickup_radius:
+		if not is_hovered:
+			is_hovered = true
+			hover_time = 0.0
+			progress_bar.visible = true
+		else:
+			var required_time = _get_cast_time(telekinesis_level)
+			hover_time += delta
+			var progress = (hover_time / required_time) * 100.0
+			progress_bar.value = min(progress, 100.0)
+			if hover_time >= required_time:
+				apply_effect()
+				queue_free()
+	else:
+		is_hovered = false
+		hover_time = 0.0
+		progress_bar.visible = false
+		progress_bar.value = 0.0
+
+func _get_cast_time(level: int) -> float:
+	match level:
+		1: return 1.0
+		2: return 0.91
+		3: return 0.83
+		4: return 0.76
+		5: return 0.70
+		6: return 0.65
+		7: return 0.61
+		8: return 0.58
+		9: return 0.56
+		10: return 0.55
+		_: return 1.0
 
 func get_item_name() -> String:
 	match item_type:

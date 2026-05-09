@@ -1,6 +1,7 @@
 extends Node2D
 
 static var skill_name := "chain_lightning"
+static var skill_type := "active"
 static var base_cooldown := 1.0
 static var base_mana_cost := 55.0
 static var base_damage := 1000.0
@@ -11,6 +12,9 @@ static func get_mana_cost(level: int) -> float:
 
 static func get_damage(level: int) -> float:
 	return 1000.0 + (level - 1) * 50.0
+
+static func get_cooldown(level: int) -> float:
+	return max(1.0 - (level - 1) * 0.05, 0.5)
 
 static func cast(hero: Node, mouse_pos: Vector2, skill_cooldowns: Dictionary) -> bool:
 	var level = Global.skill_levels.get(skill_name, 0)
@@ -28,42 +32,19 @@ static func cast(hero: Node, mouse_pos: Vector2, skill_cooldowns: Dictionary) ->
 		Global.mana_changed.emit(Global.mana, Global.max_mana)
 
 	var damage = get_damage(level)
-	var monsters = hero.get_tree().get_nodes_in_group("monsters")
-	var alive = []
-	for m in monsters:
-		if is_instance_valid(m):
-			alive.append(m)
+	var muzzle = hero.get_node("Sprite2D/Muzzle")
+	var start_pos = muzzle.global_position
+	var direction = hero.global_position.direction_to(mouse_pos)
 
-	var bounce_count = 5
-	var current_target = null
-	var last_pos = mouse_pos
+	# 创建闪电投射物
+	var lightning = preload("res://Scenes/ChainLightningProj.tscn").instantiate()
+	lightning.name = "chain_lightning_proj"
+	lightning.global_position = start_pos
+	lightning.direction = direction
+	lightning.damage = damage
+	lightning.max_bounces = 10
+	lightning.bounce_range = 300.0
+	hero.get_parent().add_child(lightning)
 
-	for i in range(bounce_count):
-		var closest = null
-		var closest_dist = 400.0
-		for m in alive:
-			if not is_instance_valid(m):
-				continue
-			var dist = last_pos.distance_to(m.global_position)
-			if dist < closest_dist:
-				closest_dist = dist
-				closest = m
-
-		if closest == null:
-			break
-
-		closest.take_damage(damage, damage_element)
-		last_pos = closest.global_position
-		alive.erase(closest)
-
-		var bolt = Sprite2D.new()
-		bolt.modulate = Color(1.0, 0.9, 0.3, 0.8)
-		bolt.scale = Vector2(0.5, 0.5)
-		bolt.global_position = last_pos
-		hero.get_parent().add_child(bolt)
-		var btween = bolt.create_tween()
-		btween.tween_property(bolt, "modulate:a", 0.0, 0.2)
-		btween.tween_callback(bolt.queue_free)
-
-	skill_cooldowns[skill_name] = base_cooldown
+	skill_cooldowns[skill_name] = get_cooldown(level)
 	return true

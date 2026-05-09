@@ -15,12 +15,15 @@
 ## 1. 项目当前状态
 
 ### 已完成的核心工作
-- ✅ **全部23个技能已重构为独立场景/脚本**（原版21个 + 新增Ball Lightning和Chain Lightning）
-- ✅ **第一批技能数值修正完成**（Fireball, Meteor, Armageddon, Poison Cloud, Nova, Fortuna, Telekinesis, Wrath of God, Magic Missile）
+- ✅ **全部21个技能已重构为独立场景/脚本**（原版21个，包括Ball Lightning和Chain Lightning）
+- ✅ **全部技能数值修正完成**（所有技能数值已对照 `E:\EvilInvasion\evil_invasion_spell.xlsx` 修正）
+- ✅ **全部21个技能测试通过**（2026-05-09完成测试）
 - ✅ **Dark Ritual debuff系统实现**（水属性技能统一受水抗性影响）
 - ✅ **节点命名规范建立**（所有技能场景节点统一命名）
 - ✅ **Fire Walk节点层级修复**（火焰正确添加到场景根节点）
-- ✅ **新增Air系技能**：Ball Lightning（球状闪电，I键）和Chain Lightning（连锁闪电，O键）
+- ✅ **掉落物系统完善**（图标大小1.5倍、碰撞体积增大、Telekinesis读条效果）
+- ✅ **Fortuna被动技能修复**（正确实现乘法加成，监听技能等级变化）
+- ✅ **Air系技能**：Ball Lightning（球状闪电，U键）和Chain Lightning（连锁闪电，R键）
 
 ### 当前技术栈
 - **引擎**: Godot 4.6.2-stable
@@ -65,18 +68,28 @@
 - 判定逻辑在 `monster.gd` 的 `_on_debuff_removed` 中处理
 - **水属性技能统一受水抗性影响**（Poison Cloud, Nova, Freezing Spear, Dark Ritual）
 
-### 3.3 技能数值修正（第一批）
+### 3.3 技能数值修正
 
-已完成修正的技能：
-- Fireball: 冷却0.3s, 伤害15+力量×2, 爆炸半径60
+> ⚠️ **重要**：所有技能的准确数值请以 `E:\EvilInvasion\evil_invasion_spell.xlsx` 为准。
+> `extracted.md` 中的技能数值存在等级偏移错误，**请勿使用**。
+
+已完成修正的技能（等级1参考值）：
+- Fireball: 冷却0.5s, 伤害50, 爆炸半径56
 - Meteor: 冷却5s, 伤害250, 半径130
 - Armageddon: 冷却20s, 伤害250
-- Poison Cloud: 伤害60/秒, 持续6秒
-- Nova: 伤害200, 半径80, 带冰冻效果
-- Fortuna: 掉率加成降至15%
-- Telekinesis: 无消耗, 冷却1.0s
+- Poison Cloud: 伤害60/秒, 持续10秒
+- Nova: 伤害200, 半径100, 带冰冻效果
+- Fortuna: 掉率加成15%（乘法加成：10% × 1.15 = 11.5%）
+- Telekinesis: 被动技能, 悬停1.0秒拾取（带进度条显示）
 - Wrath of God: 冷却2s, 伤害200
-- Magic Missile: 伤害10+力量×1.5, 0.5s冷却
+- Magic Missile: 伤害10, 1s冷却
+
+**掉落物系统（2026-05-09更新）：**
+- 基础掉落率10%，受Fortuna技能影响（乘法加成）
+- 5种稀有度：Common(40%), Uncommon(30%), Unique(15%), Rare(10%), Exceptional(5%)
+- 12种物品类型，包括药水、护盾、增益、属性点、技能点等
+- 掉落物图标大小1.5倍，碰撞体积半径24
+- Telekinesis被动：鼠标悬停自动拾取（带进度条）
 
 ---
 
@@ -88,6 +101,7 @@
 - 继续按原版参数修正剩余技能数值
 - 添加更多技能视觉效果
 - 实现技能音效
+- **新增技能**：Ball Lightning和Chain Lightning已实现，但可能需要平衡性调整
 
 ### 4.2 怪物系统扩展
 - 添加更多怪物种类（Archer, Bear, Boss等）

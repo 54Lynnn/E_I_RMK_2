@@ -1,25 +1,25 @@
 extends Area2D
 
 static var skill_name := "nova"
-static var skill_type := "active"  # 技能类型: active, toggle, passive
+static var skill_type := "active"
 static var base_cooldown := 2.0
 static var base_mana_cost := 45.0
 static var base_damage := 200.0
 static var damage_element := "water"
 
 static func get_mana_cost(level: int) -> float:
-	return base_mana_cost + level * 2.2  # LV1=45, LV10=67 (原版数据)
+	return base_mana_cost + level * 2.2
 
 static func get_damage(level: int) -> float:
-	return base_damage + level * 10.0  # LV1=200, LV10=250 (原版数据)
+	return base_damage + level * 10.0
 
-static func get_radius(level: int) -> float:
-	return 100.0  # 原版固定100
+static func get_radius(_level: int) -> float:
+	return 100.0
 
 static func get_freeze_duration(level: int) -> float:
-	return 1.0 + level * 0.1  # LV1=1s, LV10=1.5s (原版数据)
+	return 1.0 + level * 0.1
 
-static func cast(hero: Node, _mouse_pos: Vector2, skill_cooldowns: Dictionary) -> bool:
+static func cast(hero: Node, mouse_pos: Vector2, skill_cooldowns: Dictionary) -> bool:
 	var level = Global.skill_levels.get(skill_name, 0)
 	if level <= 0:
 		return false
@@ -33,41 +33,16 @@ static func cast(hero: Node, _mouse_pos: Vector2, skill_cooldowns: Dictionary) -
 			Global.mana -= mana_cost
 			Global.mana_changed.emit(Global.mana, Global.max_mana)
 
-		var nova = preload("res://Scenes/Nova.tscn").instantiate()
-		nova.name = "nova_effect"
-		nova.global_position = hero.global_position
-		nova.damage = get_damage(level)
-		nova.radius = get_radius(level)
-		hero.get_parent().add_child(nova)
+		var muzzle = hero.get_node("Sprite2D/Muzzle")
+		var proj = preload("res://Scenes/NovaProj.tscn").instantiate()
+		proj.name = "nova_proj"
+		proj.global_position = muzzle.global_position
+		proj.direction = hero.global_position.direction_to(mouse_pos)
+		proj.damage = get_damage(level)
+		proj.explosion_radius = get_radius(level)
+		proj.freeze_duration = get_freeze_duration(level)
+		hero.get_parent().add_child(proj)
 
 		skill_cooldowns[skill_name] = base_cooldown
 		return true
 	return false
-
-@export var damage := 20.0
-@export var radius := 80.0
-
-func _ready():
-	$CollisionShape2D.shape = CircleShape2D.new()
-	$CollisionShape2D.shape.radius = radius
-	$Sprite2D.scale = Vector2(radius / 40.0, radius / 40.0)
-	$Sprite2D.modulate = Color(0.5, 0.8, 1.0, 0.8)
-
-	var monsters = get_tree().get_nodes_in_group("monsters")
-	for m in monsters:
-		if not is_instance_valid(m):
-			continue
-		var dist = global_position.distance_to(m.global_position)
-		if dist <= radius and m.has_method("take_damage"):
-			var damage_factor = 1.0 - (dist / radius) * 0.3
-			m.take_damage(damage * damage_factor, damage_element)
-
-	var explosion = preload("res://Scenes/Explosion.tscn").instantiate()
-	explosion.global_position = global_position
-	explosion.scale = Vector2(radius / 30.0, radius / 30.0)
-	get_parent().add_child(explosion)
-
-	var tween = create_tween()
-	tween.tween_property($Sprite2D, "scale", Vector2(radius / 40.0 * 1.5, radius / 40.0 * 1.5), 0.2)
-	tween.parallel().tween_property($Sprite2D, "modulate:a", 0.0, 0.5)
-	tween.tween_callback(queue_free)

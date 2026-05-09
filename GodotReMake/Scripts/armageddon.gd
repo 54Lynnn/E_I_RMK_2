@@ -1,12 +1,11 @@
 extends Node2D
 
 static var skill_name := "armageddon"
-static var skill_type := "active"  # 技能类型: active, toggle, passive
+static var skill_type := "active"
 static var base_cooldown := 20.0
 static var base_mana_cost := 55.0
 static var base_damage := 250.0
 static var damage_element := "fire"
-static var hit_count := 5
 
 static func get_mana_cost(level: int) -> float:
 	return 55.0 + (level - 1) * 3.0
@@ -14,11 +13,11 @@ static func get_mana_cost(level: int) -> float:
 static func get_damage(level: int) -> float:
 	return 250.0 + (level - 1) * 10.0
 
-static func get_hit_count(level: int) -> int:
-	return 5 + int(level / 2)
-
 static func get_cooldown(level: int) -> float:
 	return max(20.0 - (level - 1) * 1.0, 11.0)
+
+static func get_explosion_radius(_level: int) -> float:
+	return 56.0
 
 func _ready():
 	var tween = create_tween()
@@ -40,33 +39,25 @@ static func cast(hero: Node, mouse_pos: Vector2, skill_cooldowns: Dictionary) ->
 			Global.mana_changed.emit(Global.mana, Global.max_mana)
 
 		var damage = get_damage(level)
-		var hits = get_hit_count(level)
-		var monsters = hero.get_tree().get_nodes_in_group("monsters")
-		var alive_monsters = []
-		for m in monsters:
-			if is_instance_valid(m):
-				alive_monsters.append(m)
+		var explosion_radius = get_explosion_radius(level)
+		var parent = hero.get_parent()
+		var viewport = hero.get_viewport()
+		var camera = viewport.get_camera_2d()
+		var screen_center = camera.global_position
+		var screen_size = viewport.get_visible_rect().size * camera.zoom
+		var spawn_range = screen_size * 1.5
 
-		for i in range(hits):
-			if alive_monsters.is_empty():
-				break
-			var target = alive_monsters[randi() % alive_monsters.size()]
-			if is_instance_valid(target):
-				target.take_damage(damage, damage_element)
-				var flash = Sprite2D.new()
-				flash.global_position = target.global_position
-				flash.texture = preload("res://Art/Placeholder/Armageddon.png") if ResourceLoader.exists("res://Art/Placeholder/Armageddon.png") else null
-				flash.modulate = Color(1.0, 0.8, 0.0, 0.8)
-				flash.scale = Vector2(1.5, 1.5)
-				hero.get_parent().add_child(flash)
-				var ftween = flash.create_tween()
-				ftween.tween_property(flash, "modulate:a", 0.0, 0.3)
-				ftween.tween_callback(flash.queue_free)
-			alive_monsters.erase(target)
+		var armageddon_zone = preload("res://Scenes/ArmageddonZone.tscn").instantiate()
+		armageddon_zone.name = "armageddon_zone"
+		armageddon_zone.global_position = hero.global_position
+		armageddon_zone.damage = damage
+		armageddon_zone.explosion_radius = explosion_radius
+		armageddon_zone.damage_element = damage_element
+		parent.add_child(armageddon_zone)
 
 		var effect = preload("res://Scenes/Armageddon.tscn").instantiate()
 		effect.global_position = hero.global_position
-		hero.get_parent().add_child(effect)
+		parent.add_child(effect)
 
 		skill_cooldowns[skill_name] = get_cooldown(level)
 		return true

@@ -1,7 +1,7 @@
 extends Node2D
 
-@export var spawn_interval := 2.0
-@export var max_monsters := 6
+@export var spawn_interval := 1.0
+@export var max_monsters := 12
 @export var spawn_radius := 400.0
 
 var active_monsters := 0

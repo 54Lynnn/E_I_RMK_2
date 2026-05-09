@@ -11,7 +11,7 @@
 1. **`DEVELOPER_HANDOVER.md`** — 详细的开发者交接文档（文件结构、核心系统、技术债务、下一步建议）
 2. **`ROADMAP.md`** — 完整开发路线图和原版游戏参数参考
 3. **`SPELL_DEVELOPMENT_GUIDE.md`** — 技能开发规范（必须遵守）
-4. **`extracted.md`** — 原版游戏反编译数据（技能数值、怪物参数等）
+4. **`extracted.md`** — 原版游戏反编译数据（⚠️ 技能数值部分已删除，存在等级偏移错误。技能数值请以 `E:\EvilInvasion\evil_invasion_spell.xlsx` 为准）
 
 ---
 
@@ -46,9 +46,14 @@
    - ✅ Telekinesis — 隔空取物
    - ✅ Sacrifice — 消耗生命秒杀
 
-5. **被动技能类（2个）**：
+5. **被动技能类（3个）**：
    - ✅ StoneEnchanted — 被击石化反击
+   - ✅ Telekinesis — 鼠标悬停自动拾取
    - ✅ Fortuna — 增加掉落率
+
+6. **其他类（2个）**：
+   - ✅ BallLightning — 银球自动攻击附近敌人
+   - ✅ ChainLightning — 闪电矛弹跳3次
 
 6. **架构改进**：
    - hero.gd 完全重构：所有技能调用改为 `SkillName.cast()` 模式
@@ -231,7 +236,7 @@ fire:   fireball, fire_walk, meteor, armageddon
 water:  freezing_spear, poison_cloud, dark_ritual, nova
 ```
 
-> **注意**：ball_lightning 和 chain_lightning 是 LLM 幻觉技能，已移除。
+> **注意**：ball_lightning 和 chain_lightning 是原版Air系技能，已实现。
 
 ### 3. 当前按键绑定（全部21个技能）
 - 鼠标左键：Magic Missile
@@ -249,9 +254,11 @@ water:  freezing_spear, poison_cloud, dark_ritual, nova
 - F：Meteor
 - G：Armageddon
 - H：Poison Cloud
-- V：Fortuna
+- V：Fortuna（被动，无需按键）
 - B：Dark Ritual
 - N：Nova
+- I：Ball Lightning
+- O：Chain Lightning
 
 ### 4. 伤害系统
 - 技能伤害是**固定值**，不包含英雄属性加成

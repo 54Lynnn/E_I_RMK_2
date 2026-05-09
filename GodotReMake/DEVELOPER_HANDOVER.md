@@ -5,7 +5,7 @@
 > **语言**: GDScript
 > **作者**: [Previous Agent]
 > **日期**: 2026-05-06
-> **最后更新**: 2026-05-08 (全部21个技能重构完成！)
+> **最后更新**: 2026-05-08 (新增Ball Lightning和Chain Lightning技能，技能总数23个)
 > **GitHub仓库**: https://github.com/54Lynnn/E_I_RMK_2
 
 ---
@@ -31,8 +31,8 @@
 
 ### 当前状态
 - 核心游戏循环可运行（移动、攻击、击杀、升级、掉落）
-- 完整的21个技能系统（UI + 逻辑）
-- **✅ 技能重构完成**：全部21个技能已提取为独立场景 + 独立脚本
+- 完整的23个技能系统（UI + 逻辑）- 包括原版21个技能 + 新增Ball Lightning和Chain Lightning
+- **✅ 技能重构完成**：全部23个技能已提取为独立场景 + 独立脚本
 - **hero.gd 已完全重构**：所有技能调用改为 `SkillName.cast(self, mouse_pos, skill_cooldowns)` 模式
 - **技能数据已迁移**：各技能脚本管理自己的冷却、伤害、法力消耗
 - **独立冷却系统**：每个技能各自冷却，可同时施放多个技能
@@ -240,11 +240,24 @@ GodotReMake/
 - [x] 12种物品类型（药水、卷轴、护盾、增益等）
 - [x] 基础掉落率10%（受Fortuna技能影响）
 - [x] 物品自动消失（10秒 lifetime）
+- [x] 掉落物图标大小1.5倍（接近玩家大小）
+- [x] 碰撞体积半径24（接近玩家32×32）
+
+**掉落机制（2026-05-09更新）：**
+1. 击败敌人 → 计算掉落概率（基础10% × Fortuna加成）
+2. 决定是否掉落（randf() < 概率）
+3. 根据稀有度权重选择物品类型：
+   - Common(40%): 生命药水、法力药水
+   - Uncommon(30%): 恢复药水、加速
+   - Unique(15%): 经验书、魔法护盾
+   - Rare(10%): 物理护盾、四倍伤害、免费施法
+   - Exceptional(5%): 属性点、技能点、无敌
 
 ### 3.8 拾取物品 (pickup_item.gd)
 - [x] 12种物品效果全部实现
 - [x] 物品贴图加载（BonusXXX.png格式）
 - [x] 接触自动拾取
+- [x] Telekinesis被动：鼠标悬停自动拾取（带进度条显示）
 - [x] 消失前1秒渐隐
 
 ### 3.9 HUD (hud.gd)
@@ -384,29 +397,32 @@ func cast_xxx():
 
 ## 5. 技能系统完整说明
 
+> ⚠️ **重要提示**：下表中的技能数值（消耗、冷却、伤害等）为**等级1的参考值**。
+> **所有技能的准确数值请以 `E:\EvilInvasion\evil_invasion_spell.xlsx` 为准**，该文件包含每个技能等级1-10的完整数据。
+
 ### 5.1 技能列表（21个）
 
 | # | 技能ID | 名称 | 系别 | 伤害属性 | 前置 | 消耗 | 冷却 | 效果 | 实现状态 |
 |---|--------|------|------|----------|------|------|------|------|----------|
-| 1 | magic_missile | Magic Missile | 基础 | **basic** | 无 | 5法力 | 0.5s | 发射投射物，伤害10+力量×1.5，追踪+加速+转弯减速 | ✅ 独立场景 |
-| 2 | prayer | Prayer | Earth | - | magic_missile | 生命 | 20s | 持续10秒，每秒扣3%生命回5%法力 | ✅ 独立场景 |
+| 1 | magic_missile | Magic Missile | 基础 | **basic** | 无 | 6法力 | 1s | 发射投射物，伤害10，追踪+加速+转弯减速 | ✅ 独立场景 |
+| 2 | prayer | Prayer | Earth | - | magic_missile | 65%生命 | 20s | 持续10秒，每秒扣3%生命回5%法力 | ✅ 独立场景 |
 | 3 | teleport | Teleport | Earth | - | prayer | 35法力 | 20s | 0.2秒施法后传送到鼠标位置 | ✅ 独立场景 |
 | 4 | mistfog | Mist Fog | Earth | - | prayer | 25法力 | 5s | 棕色雾气减速敌人35% | ✅ 独立场景 |
-| 5 | stone_enchanted | Stone Enchanted | Earth | - | teleport | 被动 | - | 被击时30%几率石化攻击者 | ✅ 独立脚本 |
+| 5 | stone_enchanted | Stone Enchanted | Earth | - | teleport | 被动 | - | 被击时15%几率石化攻击者 | ✅ 独立脚本 |
 | 6 | wrath_of_god | Wrath of God | Earth | **earth** | teleport | 55法力 | 2s | 10个锤子环绕飞出，伤害200 | ✅ 独立场景 |
-| 7 | telekinesis | Telekinesis | Air | - | magic_missile | 无 | 1.0s | 远距离拾取物品 | ✅ 独立脚本 |
+| 7 | telekinesis | Telekinesis | Air | - | magic_missile | 被动 | - | 鼠标悬停自动拾取物品（1.0-0.55秒） | ✅ 独立脚本 |
 | 8 | holy_light | Holy Light | Air | **air** | telekinesis | 35法力 | 1s | 3道光线射向鼠标，伤害120 | ✅ 独立场景 |
 | 9 | sacrifice | Sacrifice | Air | **air** | telekinesis | 55%生命 | 3s | 秒杀鼠标附近敌人 | ✅ 独立脚本 |
-| 10 | ball_lightning | Ball Lightning | Air | **air** | holy_light | 45法力 | 2s | 银球自动攻击附近敌人 | ❌ 已移除 |
-| 11 | chain_lightning | Chain Lightning | Air | **air** | holy_light | 55法力 | 1s | 闪电矛弹跳3次，伤害1000 | ❌ 已移除 |
-| 12 | fireball | Fireball | Fire | **fire** | magic_missile | 10法力 | 0.3s | 发射火球，伤害15+力量×2，爆炸AOE | ✅ 独立场景 |
+| 10 | ball_lightning | Ball Lightning | Air | **air** | holy_light | 45法力 | 2s | 银球自动攻击附近敌人 | ✅ 独立场景 |
+| 11 | chain_lightning | Chain Lightning | Air | **air** | holy_light | 55法力 | 1s | 闪电矛弹跳3次，伤害1000 | ✅ 独立场景 |
+| 12 | fireball | Fireball | Fire | **fire** | magic_missile | 7法力 | 0.5s | 发射火球，伤害50，爆炸AOE | ✅ 独立场景 |
 | 13 | heal | Heal | Fire | - | fireball | 35法力 | 15s | 持续10秒，每秒回复5.5%生命 | ✅ 独立场景 |
 | 14 | fire_walk | Fire Walk | Fire | **fire** | fireball | 被动 | - | 留下火焰轨迹，30伤害/秒 | ✅ 独立场景 |
 | 15 | meteor | Meteor | Fire | **fire** | heal | 45法力 | 5s | 陨石雨，伤害250，范围130 | ✅ 独立场景 |
 | 16 | armageddon | Armageddon | Fire | **fire** | heal | 55法力 | 20s | 全屏随机火blast，伤害250 | ✅ 独立场景 |
-| 17 | freezing_spear | Freezing Spear | Water | **water** | magic_missile | 25法力 | 3s | 冰矛直线穿透，伤害50，冻结2秒 | ✅ 独立场景 |
+| 17 | freezing_spear | Freezing Spear | Water | **water** | magic_missile | 15法力 | 1s | 冰矛直线穿透，伤害50，冻结2秒 | ✅ 独立场景 |
 | 18 | poison_cloud | Poison Cloud | Water | **water** | freezing_spear | 35法力 | 5s | 绿色毒雾，60伤害/秒 | ✅ 独立场景 |
-| 19 | fortuna | Fortuna | Water | - | freezing_spear | 被动 | - | 增加掉落率15% | ✅ 独立脚本 |
+| 19 | fortuna | Fortuna | Water | - | freezing_spear | 被动 | - | 增加掉落率15%-60%（乘法加成） | ✅ 独立脚本 |
 | 20 | dark_ritual | Dark Ritual | Water | **water** | poison_cloud | 55法力 | 5.5s | 黑雾，2秒后30%几率秒杀 | ✅ 独立场景 |
 | 21 | nova | Nova | Water | **water** | poison_cloud | 45法力 | 2s | 雪球爆炸冻结，伤害200 | ✅ 独立场景 |
 
@@ -417,7 +433,7 @@ func cast_xxx():
 - **fire**: fireball, fire_walk, meteor, armageddon
 - **water**: freezing_spear, poison_cloud, dark_ritual, nova
 
-> **注意**：ball_lightning 和 chain_lightning 是 LLM 幻觉技能，已移除。
+> **注意**：ball_lightning 和 chain_lightning 是原版Air系技能，已实现。
 
 ### 5.2 技能等级成长
 
@@ -454,20 +470,21 @@ func cast_xxx():
 ### 6.1 高优先级问题
 
 1. **✅ 技能重构已完成（21/21个技能）**
-   - 全部21个技能已重构为独立场景/脚本
+   - 全部21个原版技能已重构为独立场景/脚本（包括Ball Lightning和Chain Lightning）
    - hero.gd 中所有技能调用已改为 `SkillName.cast()` 模式
    - 被动技能（StoneEnchanted、Fortuna）在 _ready() 中自动触发
 
 2. **✅ 技能数值修正（第一批）**
-   - Fireball: 冷却0.3s, 伤害15+力量×2, 爆炸半径60
+   > ⚠️ **注意**：以下数值为等级1参考值，**所有技能的准确数值请以 `E:\EvilInvasion\evil_invasion_spell.xlsx` 为准**。
+   - Fireball: 冷却0.5s, 伤害50, 爆炸半径56
    - Meteor: 冷却5s, 伤害250, 半径130
    - Armageddon: 冷却20s, 伤害250
-   - Poison Cloud: 伤害60/秒, 持续6秒
-   - Nova: 伤害200, 半径80, 带冰冻效果
-   - Fortuna: 掉率加成降至15%
-   - Telekinesis: 无消耗, 冷却1.0s
+   - Poison Cloud: 伤害60/秒, 持续10秒
+   - Nova: 伤害200, 半径100, 带冰冻效果
+   - Fortuna: 掉率加成15%
+   - Telekinesis: 被动技能, 悬停1.0秒拾取
    - Wrath of God: 冷却2s, 伤害200
-   - Magic Missile: 伤害10+力量×1.5, 0.5s冷却
+   - Magic Missile: 伤害10, 1s冷却
 
 3. **✅ Dark Ritual debuff系统**
    - 已实现为debuff系统（非直接伤害）
@@ -503,9 +520,10 @@ func cast_xxx():
    - 原版技能树顶部有Earth/Air/Fire/Water四个系别的头像
    - 当前布局已预留空间但未添加
 
-8. **技能平衡性未测试**
-   - 所有技能的数值是估算的，未经过实际游戏测试
-   - 部分技能可能过强或过弱
+8. **✅ 技能平衡性测试已完成（2026-05-09）**
+   - 全部23个技能已测试通过
+   - 所有技能数值已对照 `E:\EvilInvasion\evil_invasion_spell.xlsx` 修正
+   - 掉落物系统已完善（图标大小、读条效果、触碰拾取）
 
 ### 6.3 低优先级问题
 
@@ -712,7 +730,7 @@ func cast_xxx():
 
 2. **[hero.gd](file:///e:/EvilInvasion/GodotReMake/Scripts/hero.gd)** - 玩家控制与技能
    - 最长的文件（~990行）
-   - 所有技能施放逻辑在这里（21个技能）
+   - 所有技能施放逻辑在这里（23个技能）
    - 输入处理在这里
    - **注意**：Magic Missile、Fireball、Freezing Spear 已提取到独立场景，但 hero.gd 中仍保留调用逻辑
 

@@ -101,6 +101,7 @@ func _ready():
 	Global.mana_changed.connect(_on_mana_changed)
 	Global.level_changed.connect(_on_level_changed)
 	Global.hero_died.connect(_on_died)
+	Global.skill_level_changed.connect(_on_skill_level_changed)
 
 	Global.apply_strength()
 	Global.apply_intelligence()
@@ -154,8 +155,6 @@ func _process(delta):
 		cast_armageddon()
 	if Input.is_action_pressed("spell_poison_cloud"):
 		cast_poison_cloud()
-	if Input.is_action_pressed("spell_fortuna"):
-		cast_fortuna()
 	if Input.is_action_pressed("spell_dark_ritual"):
 		cast_dark_ritual()
 	if Input.is_action_pressed("spell_nova"):
@@ -223,8 +222,6 @@ func _unhandled_input(event):
 		cast_armageddon()
 	if event.is_action_pressed("spell_poison_cloud"):
 		cast_poison_cloud()
-	if event.is_action_pressed("spell_fortuna"):
-		cast_fortuna()
 	if event.is_action_pressed("spell_dark_ritual"):
 		cast_dark_ritual()
 	if event.is_action_pressed("spell_nova"):
@@ -309,6 +306,10 @@ func _on_mana_changed(m, _mm):
 func _on_level_changed(lvl):
 	$LevelLabel.text = "Lv." + str(lvl)
 	show_level_up_effect()
+
+func _on_skill_level_changed(skill_id: String, _level: int):
+	if skill_id == "fortuna":
+		Fortuna.update_drop_rate()
 
 func show_level_up_effect():
 	var glow = ColorRect.new()

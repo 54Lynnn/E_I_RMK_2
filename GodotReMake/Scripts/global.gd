@@ -14,6 +14,8 @@ extends Node
 # 5. 信号系统（通知UI更新）
 # ============================================
 
+const Fortuna = preload("res://Scripts/fortuna.gd")
+
 # 开发者模式开关 - 开启后按T键可获得大量属性点和技能点
 var dev_mode := false
 
@@ -463,3 +465,7 @@ func reset():
 	magic_resist = 0.0
 	free_spells = false
 	invulnerable = false
+	drop_rate_multiplier = 1.0
+	
+	# 重新应用被动技能效果
+	Fortuna.update_drop_rate()
