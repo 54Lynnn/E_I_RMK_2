@@ -64,6 +64,18 @@ enum GameMode { QUEST, SURVIVAL }
 | 9 | 33~37 | 全部 7 种 |
 | 10 | 37~41 | 全部 7 种 |
 
+### 1.5 怪物解锁等级（全局）
+
+| 怪物 | 解锁等级 | 类型 |
+|:-----|:--------:|:----|
+| Troll | 1 | 近战 |
+| Mummy | 3 | 远程 |
+| Spider | 6 | 近战 |
+| Demon | 14 | 近战 |
+| Bear | 18 | 近战 |
+| Reaper | 26 | 远程 |
+| Diablo | 35 | Boss/召唤 |
+
 ---
 
 ## 2. 难度系统
@@ -160,24 +172,24 @@ enum Difficulty { NORMAL, NIGHTMARE, HARDCORE }
 | Magic Missile | 鼠标左键 | 投射物 | basic | 追踪弹，自动追击最近敌人 |
 | Fireball | 鼠标右键 | 投射物 | fire | 火球，命中后爆炸 AOE |
 | Freezing Spear | Z | 投射物 | water | 直线穿透，冰冻效果 |
-| Prayer | X | 持续效果 | — | 持续扣血回蓝 |
-| Heal | C | 持续效果 | — | 持续回血 |
-| Teleport | 2 | 位移 | — | 闪现到鼠标位置 |
-| Mist Fog | 3 | 场地 | air | 区域减速敌人 |
-| Wrath of God | 4 | 全屏 AOE | — | 全屏伤害 |
-| Telekinesis | Q | 被动 | — | 隔空取物，鼠标悬停拾取 |
-| Sacrifice | R | 秒杀 | — | 消耗生命直接秒杀怪物 |
-| Holy Light | E | 射线 | water | 射线伤害 |
+| Prayer | X | 持续效果 | earth | 持续扣血回蓝 |
+| Heal | C | 持续效果 | fire | 持续回血 |
+| Teleport | 2 | 位移 | earth | 闪现到鼠标位置 |
+| Mist Fog | 3 | 场地 | earth | 区域减速敌人 |
+| Wrath of God | 4 | 全屏 AOE | earth | 全屏伤害 |
+| Telekinesis | Q | 被动 | air | 隔空取物，鼠标悬停拾取 |
+| Sacrifice | R | 秒杀 | air | 消耗生命直接秒杀怪物 |
+| Holy Light | E | 射线 | air | 射线伤害 |
 | Fire Walk | U | 场地 | fire | 火焰轨迹持续伤害 |
 | Meteor | F | 延迟 AOE | fire | 延迟后陨石坠落 |
 | Armageddon | G | 全屏随机 | fire | 全屏随机落石 |
-| Poison Cloud | H | 场地 | — | 区域持续毒伤害 |
-| Fortuna | V | 被动 | — | 增加掉落率 |
-| Dark Ritual | B | 延迟秒杀 | — | 延迟后秒杀范围内怪物 |
+| Poison Cloud | H | 场地 | water | 区域持续毒伤害 |
+| Fortuna | V | 被动 | water | 增加掉落率 |
+| Dark Ritual | B | 延迟秒杀 | water | 延迟后秒杀范围内怪物 |
 | Nova | N | 爆发 AOE | water | 自身圆形冰冻爆发 |
 | Stone Enchanted | 被动 | 被动 | earth | 被攻击时概率石化敌人 |
-| Ball Lightning | 未绑定 | 投射物 | air | 球状闪电，范围电击 |
-| Chain Lightning | 未绑定 | 投射物 | air | 连锁闪电，弹跳攻击 |
+| Ball Lightning | I | 召唤 | air | 银球自动攻击附近敌人 |
+| Chain Lightning | O | 投射物 | air | 连锁闪电，弹跳攻击 |
 
 ### 4.2 技能数据来源
 
@@ -355,7 +367,7 @@ damage = damage_base + damage_per_level * level
 3. **追击**: 向玩家移动，`rotation_speed` 控制转向灵活度
 4. **攻击**: 进入 `attack_range` (40px) → 发动近战攻击
 5. **保持距离**: 小于 `min_distance` (40px) 时停止移动避免穿模
-6. **丢失目标**: 玩家离开检测范围 → 停止追击
+6. **丢失目标**: 玩家离开检测范围 → 恢复游荡状态
 
 #### 远程行为（Mummy, Reaper）
 1. **游荡**: 从地图边缘生成，向直线方向游荡
@@ -369,7 +381,7 @@ damage = damage_base + damage_per_level * level
 #### Diablo 特殊行为
 1. **不直接攻击**: 不执行近战/远程攻击
 2. **保持距离**: 玩家小于 200px 时后退，300px 左右停留
-3. **召唤**: 每 5 秒召唤 4 只怪物（上下左右各 100px）
+3. **召唤**: 每 15 秒召唤 4 只怪物（上下左右各 100px）
 4. **召唤概率**: Reaper 5%, Demon 10%, Bear 15%, Mummy 20%, Spider 25%, Troll 25%
 
 ### 5.6 怪物转向速度
@@ -501,9 +513,9 @@ const MONSTER_WEIGHTS := {
 
 1. **生成时获得**一个游荡方向（向量）
 2. **直线行走**：沿该方向以 `move_speed` 速度前进
-3. **碰墙转身**：碰到地图边界（50px 检测范围）时，**随机选一个新方向**
+3. **碰墙反弹**：碰到地图边界时，像光线反射一样反弹（X/Y轴速度分别取反）
 4. **索敌中断**：玩家进入 `detection_range` → 切换为追击状态
-5. **丢失目标**：玩家离开检测范围 → 恢复游荡（但不会再切换回游荡，当前设计为待机）
+5. **丢失目标**：玩家离开检测范围 → 恢复游荡状态
 
 ---
 
