@@ -46,6 +46,15 @@ extends CanvasLayer
 # 技能栏节点
 @onready var skill_bar_container := $BottomBar/SkillSection/SkillBarContainer
 
+# Buff/Debuff 显示区域
+@onready var buff_container := $BottomBar/BuffContainer
+
+# Buff 图标场景
+const BuffIconScene = preload("res://Scenes/BuffIcon.tscn")
+
+# 当前显示的 buff 图标
+var buff_icons := {}
+
 # ============================================
 # 技能栏配置
 # ============================================
@@ -113,6 +122,10 @@ func _ready():
 	
 	# 初始化所有显示
 	update_all()
+
+func _process(_delta):
+	# 每帧更新 buff 显示
+	_update_buff_display()
 
 # ============================================
 # 技能栏设置
@@ -349,6 +362,37 @@ func update_all():
 	# 初始化时更新所有显示
 	_on_health_changed(Global.health, Global.max_health)
 	_on_mana_changed(Global.mana, Global.max_mana)
-	_on_experience_changed(Global.hero_experience, Global.hero_level * 100)
+	_on_experience_changed(Global.hero_experience, Global.hero_level * 200)
 	_on_level_changed(Global.hero_level)
 	update_skill_bar_display()
+
+# ============================================
+# Buff/Debuff 显示更新
+# ============================================
+
+func _update_buff_display():
+	# 同步 Global.hero_buffs 和 UI 显示
+	
+	# 1. 移除已经不存在的 buff 图标
+	var to_remove := []
+	for buff_id in buff_icons.keys():
+		if not Global.hero_buffs.has(buff_id):
+			to_remove.append(buff_id)
+	
+	for buff_id in to_remove:
+		var icon = buff_icons[buff_id]
+		icon.queue_free()
+		buff_icons.erase(buff_id)
+	
+	# 2. 添加新出现的 buff 图标
+	for buff_id in Global.hero_buffs.keys():
+		if not buff_icons.has(buff_id):
+			var icon = BuffIconScene.instantiate()
+			buff_container.add_child(icon)
+			icon.setup(buff_id, Global.hero_buffs[buff_id])
+			buff_icons[buff_id] = icon
+	
+	# 3. 更新现有 buff 数据
+	for buff_id in buff_icons.keys():
+		if Global.hero_buffs.has(buff_id):
+			buff_icons[buff_id].buff_data = Global.hero_buffs[buff_id]

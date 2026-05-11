@@ -1,0 +1,81 @@
+WIDGET_PICTURE
+  0.0; 0.0; 384.0; 384.0;
+  "Dialog";
+
+WIDGET_BUTTON
+  18.0; 86.0; 162.0; 32.0;
+  "System"; "COLOR_YELLOW"; "1. Snowy Mountains"; 5; 0;
+  "ButtonEnabled"; "ButtonDisabled"; "ButtonPressed"; "ButtonLight";
+  "MenuButtonClick";
+
+WIDGET_BUTTON
+  18.0; 126.0; 162.0; 32.0;
+  "System"; "COLOR_YELLOW"; "2. Endless Dunes"; 5; 0;
+  "ButtonEnabled"; "ButtonDisabled"; "ButtonPressed"; "ButtonLight";
+  "MenuButtonClick";
+
+WIDGET_BUTTON         
+  18.0; 166.0; 162.0; 32.0;
+  "System"; "COLOR_YELLOW"; "3. Poisoned Swamp"; 5; 0;
+  "ButtonEnabled"; "ButtonDisabled"; "ButtonPressed"; "ButtonLight";
+  "MenuButtonClick";
+
+WIDGET_BUTTON
+  18.0; 206.0; 162.0; 32.0;
+  "System"; "COLOR_YELLOW"; "4. Hidden Pass"; 5; 0;
+  "ButtonEnabled"; "ButtonDisabled"; "ButtonPressed"; "ButtonLight";
+  "MenuButtonClick";
+
+WIDGET_BUTTON
+  18.0; 246.0; 162.0; 32.0;
+  "System"; "COLOR_YELLOW"; "5. Diablo Cave"; 5; 0;
+  "ButtonEnabled"; "ButtonDisabled"; "ButtonPressed"; "ButtonLight";
+  "MenuButtonClick";
+
+WIDGET_BUTTON
+  196.0; 86.0; 162.0; 32.0;
+  "System"; "COLOR_YELLOW"; "6. Die In Piece"; 5; 0;
+  "ButtonEnabled"; "ButtonDisabled"; "ButtonPressed"; "ButtonLight";
+  "MenuButtonClick";
+
+WIDGET_BUTTON
+  196.0; 126.0; 162.0; 32.0;
+  "System"; "COLOR_YELLOW"; "7. Banishing"; 5; 0;
+  "ButtonEnabled"; "ButtonDisabled"; "ButtonPressed"; "ButtonLight";
+  "MenuButtonClick";
+
+WIDGET_BUTTON
+  196.0; 166.0; 162.0; 32.0;
+  "System"; "COLOR_YELLOW"; "8. Horrible Wind"; 5; 0;
+  "ButtonEnabled"; "ButtonDisabled"; "ButtonPressed"; "ButtonLight";
+  "MenuButtonClick";
+
+WIDGET_BUTTON
+  196.0; 206.0; 162.0; 32.0;
+  "System"; "COLOR_YELLOW"; "9. Evil Wrath"; 5; 0;
+  "ButtonEnabled"; "ButtonDisabled"; "ButtonPressed"; "ButtonLight";
+  "MenuButtonClick";
+
+WIDGET_BUTTON
+  196.0; 246.0; 162.0; 32.0;
+  "System"; "COLOR_YELLOW"; "10. The Final"; 5; 0;
+  "ButtonEnabled"; "ButtonDisabled"; "ButtonPressed"; "ButtonLight";
+  "MenuButtonClick";
+
+WIDGET_BUTTON
+  111.0; 336.0; 162.0; 32.0;
+  "System"; "COLOR_YELLOW"; "Back"; 5; 0;
+  "ButtonEnabled"; "ButtonDisabled"; "ButtonPressed"; "ButtonLight";
+  "MenuButtonClick";
+
+WIDGET_PICTURE
+  111.0; 24.0; 162.0; 32.0;
+  "EditFrame";
+
+WIDGET_LABEL
+  192.0; 27.0; 10.0; 10.0;
+  "System"; "COLOR_BROWN"; 1; "Hero Description";
+
+WIDGET_LABEL
+  192.0; 54.0; 114.0; 26.0;
+  "System_2"; "COLOR_BROWN"; 1; "info";

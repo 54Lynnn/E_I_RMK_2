@@ -81,4 +81,5 @@ func spawn_item(item_type: int, position: Vector2, parent: Node):
 	var item = preload("res://Scenes/PickupItem.tscn").instantiate()
 	item.item_type = item_type
 	item.global_position = position
-	parent.add_child(item)
+	# 使用 call_deferred 避免在物理回调中直接修改场景树
+	parent.call_deferred("add_child", item)

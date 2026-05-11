@@ -1,8 +1,8 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene format=3 uid="uid://1vcgqed1acia"]
 
-[ext_resource type="Script" path="res://Scripts/hero_panel.gd" id="1"]
+[ext_resource type="Script" uid="uid://csiju1q270hlg" path="res://Scripts/hero_panel.gd" id="1"]
 
-[node name="HeroPanel" type="Control"]
+[node name="HeroPanel" type="Control" unique_id=695132929]
 process_mode = 3
 layout_mode = 3
 anchors_preset = 15
@@ -12,7 +12,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1")
 
-[node name="Background" type="ColorRect" parent="."]
+[node name="Background" type="ColorRect" parent="." unique_id=1885231539]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -25,9 +25,9 @@ offset_right = 400.0
 offset_bottom = 300.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.85, 0.75, 0.6, 1.0)
+color = Color(0.85, 0.75, 0.6, 1)
 
-[node name="LeftPanel" type="Control" parent="Background"]
+[node name="LeftPanel" type="Control" parent="Background" unique_id=935544362]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -39,7 +39,7 @@ offset_bottom = -20.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="TitleLabel" type="Label" parent="Background/LeftPanel"]
+[node name="TitleLabel" type="Label" parent="Background/LeftPanel" unique_id=1829411127]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
@@ -49,7 +49,7 @@ theme_override_font_sizes/font_size = 28
 text = "Hero"
 horizontal_alignment = 1
 
-[node name="LevelRow" type="HBoxContainer" parent="Background/LeftPanel"]
+[node name="LevelRow" type="HBoxContainer" parent="Background/LeftPanel" unique_id=1295268564]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
@@ -58,19 +58,19 @@ offset_bottom = 75.0
 grow_horizontal = 2
 alignment = 1
 
-[node name="LevelLabel" type="Label" parent="Background/LeftPanel/LevelRow"]
+[node name="LevelLabel" type="Label" parent="Background/LeftPanel/LevelRow" unique_id=144032316]
 layout_mode = 2
 theme_override_font_sizes/font_size = 18
 text = "Level: 1"
 horizontal_alignment = 1
 
-[node name="ExpLabel" type="Label" parent="Background/LeftPanel/LevelRow"]
+[node name="ExpLabel" type="Label" parent="Background/LeftPanel/LevelRow" unique_id=116574635]
 layout_mode = 2
 theme_override_font_sizes/font_size = 18
 text = "Experience: 0"
 horizontal_alignment = 1
 
-[node name="StatsContainer" type="VBoxContainer" parent="Background/LeftPanel"]
+[node name="StatsContainer" type="VBoxContainer" parent="Background/LeftPanel" unique_id=968858306]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -81,195 +81,195 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 8
 
-[node name="StrengthRow" type="HBoxContainer" parent="Background/LeftPanel/StatsContainer"]
+[node name="StrengthRow" type="HBoxContainer" parent="Background/LeftPanel/StatsContainer" unique_id=1243389341]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Background/LeftPanel/StatsContainer/StrengthRow"]
+[node name="Label" type="Label" parent="Background/LeftPanel/StatsContainer/StrengthRow" unique_id=988405917]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 18
 text = "Strength"
 
-[node name="ValueLabel" type="Label" parent="Background/LeftPanel/StatsContainer/StrengthRow"]
+[node name="ValueLabel" type="Label" parent="Background/LeftPanel/StatsContainer/StrengthRow" unique_id=1735792039]
 layout_mode = 2
 theme_override_font_sizes/font_size = 18
 text = "10"
 
-[node name="AddButton" type="Button" parent="Background/LeftPanel/StatsContainer/StrengthRow"]
+[node name="AddButton" type="Button" parent="Background/LeftPanel/StatsContainer/StrengthRow" unique_id=1690451562]
 layout_mode = 2
 text = "+"
 
-[node name="DexterityRow" type="HBoxContainer" parent="Background/LeftPanel/StatsContainer"]
+[node name="DexterityRow" type="HBoxContainer" parent="Background/LeftPanel/StatsContainer" unique_id=1601597886]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Background/LeftPanel/StatsContainer/DexterityRow"]
+[node name="Label" type="Label" parent="Background/LeftPanel/StatsContainer/DexterityRow" unique_id=388850823]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 18
 text = "Dexterity"
 
-[node name="ValueLabel" type="Label" parent="Background/LeftPanel/StatsContainer/DexterityRow"]
+[node name="ValueLabel" type="Label" parent="Background/LeftPanel/StatsContainer/DexterityRow" unique_id=281781138]
 layout_mode = 2
 theme_override_font_sizes/font_size = 18
 text = "10"
 
-[node name="AddButton" type="Button" parent="Background/LeftPanel/StatsContainer/DexterityRow"]
+[node name="AddButton" type="Button" parent="Background/LeftPanel/StatsContainer/DexterityRow" unique_id=66404393]
 layout_mode = 2
 text = "+"
 
-[node name="StaminaRow" type="HBoxContainer" parent="Background/LeftPanel/StatsContainer"]
+[node name="StaminaRow" type="HBoxContainer" parent="Background/LeftPanel/StatsContainer" unique_id=1754904103]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Background/LeftPanel/StatsContainer/StaminaRow"]
+[node name="Label" type="Label" parent="Background/LeftPanel/StatsContainer/StaminaRow" unique_id=27626197]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 18
 text = "Stamina"
 
-[node name="ValueLabel" type="Label" parent="Background/LeftPanel/StatsContainer/StaminaRow"]
+[node name="ValueLabel" type="Label" parent="Background/LeftPanel/StatsContainer/StaminaRow" unique_id=1481157469]
 layout_mode = 2
 theme_override_font_sizes/font_size = 18
 text = "10"
 
-[node name="AddButton" type="Button" parent="Background/LeftPanel/StatsContainer/StaminaRow"]
+[node name="AddButton" type="Button" parent="Background/LeftPanel/StatsContainer/StaminaRow" unique_id=587133488]
 layout_mode = 2
 text = "+"
 
-[node name="IntelligenceRow" type="HBoxContainer" parent="Background/LeftPanel/StatsContainer"]
+[node name="IntelligenceRow" type="HBoxContainer" parent="Background/LeftPanel/StatsContainer" unique_id=1791864012]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Background/LeftPanel/StatsContainer/IntelligenceRow"]
+[node name="Label" type="Label" parent="Background/LeftPanel/StatsContainer/IntelligenceRow" unique_id=1254214227]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 18
 text = "Intelligence"
 
-[node name="ValueLabel" type="Label" parent="Background/LeftPanel/StatsContainer/IntelligenceRow"]
+[node name="ValueLabel" type="Label" parent="Background/LeftPanel/StatsContainer/IntelligenceRow" unique_id=1959335450]
 layout_mode = 2
 theme_override_font_sizes/font_size = 18
 text = "10"
 
-[node name="AddButton" type="Button" parent="Background/LeftPanel/StatsContainer/IntelligenceRow"]
+[node name="AddButton" type="Button" parent="Background/LeftPanel/StatsContainer/IntelligenceRow" unique_id=1543210968]
 layout_mode = 2
 text = "+"
 
-[node name="WisdomRow" type="HBoxContainer" parent="Background/LeftPanel/StatsContainer"]
+[node name="WisdomRow" type="HBoxContainer" parent="Background/LeftPanel/StatsContainer" unique_id=1458537507]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Background/LeftPanel/StatsContainer/WisdomRow"]
+[node name="Label" type="Label" parent="Background/LeftPanel/StatsContainer/WisdomRow" unique_id=1612130822]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 18
 text = "Wisdom"
 
-[node name="ValueLabel" type="Label" parent="Background/LeftPanel/StatsContainer/WisdomRow"]
+[node name="ValueLabel" type="Label" parent="Background/LeftPanel/StatsContainer/WisdomRow" unique_id=709172599]
 layout_mode = 2
 theme_override_font_sizes/font_size = 18
 text = "10"
 
-[node name="AddButton" type="Button" parent="Background/LeftPanel/StatsContainer/WisdomRow"]
+[node name="AddButton" type="Button" parent="Background/LeftPanel/StatsContainer/WisdomRow" unique_id=1381471034]
 layout_mode = 2
 text = "+"
 
-[node name="HealthRow" type="HBoxContainer" parent="Background/LeftPanel/StatsContainer"]
+[node name="HealthRow" type="HBoxContainer" parent="Background/LeftPanel/StatsContainer" unique_id=1900318521]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Background/LeftPanel/StatsContainer/HealthRow"]
+[node name="Label" type="Label" parent="Background/LeftPanel/StatsContainer/HealthRow" unique_id=2142105746]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 18
 text = "health"
 
-[node name="ValueLabel" type="Label" parent="Background/LeftPanel/StatsContainer/HealthRow"]
+[node name="ValueLabel" type="Label" parent="Background/LeftPanel/StatsContainer/HealthRow" unique_id=961588617]
 layout_mode = 2
 theme_override_font_sizes/font_size = 18
 text = "100/100"
 
-[node name="HealthRegenRow" type="HBoxContainer" parent="Background/LeftPanel/StatsContainer"]
+[node name="HealthRegenRow" type="HBoxContainer" parent="Background/LeftPanel/StatsContainer" unique_id=1461005311]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Background/LeftPanel/StatsContainer/HealthRegenRow"]
+[node name="Label" type="Label" parent="Background/LeftPanel/StatsContainer/HealthRegenRow" unique_id=698314315]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 18
 text = "health regeneration"
 
-[node name="ValueLabel" type="Label" parent="Background/LeftPanel/StatsContainer/HealthRegenRow"]
+[node name="ValueLabel" type="Label" parent="Background/LeftPanel/StatsContainer/HealthRegenRow" unique_id=615725565]
 layout_mode = 2
 theme_override_font_sizes/font_size = 18
 text = "extra slow"
 
-[node name="SpeedRow" type="HBoxContainer" parent="Background/LeftPanel/StatsContainer"]
+[node name="SpeedRow" type="HBoxContainer" parent="Background/LeftPanel/StatsContainer" unique_id=1093903738]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Background/LeftPanel/StatsContainer/SpeedRow"]
+[node name="Label" type="Label" parent="Background/LeftPanel/StatsContainer/SpeedRow" unique_id=1248572790]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 18
 text = "movement speed"
 
-[node name="ValueLabel" type="Label" parent="Background/LeftPanel/StatsContainer/SpeedRow"]
+[node name="ValueLabel" type="Label" parent="Background/LeftPanel/StatsContainer/SpeedRow" unique_id=1107645735]
 layout_mode = 2
 theme_override_font_sizes/font_size = 18
 text = "extra slow"
 
-[node name="HitRecoveryRow" type="HBoxContainer" parent="Background/LeftPanel/StatsContainer"]
+[node name="HitRecoveryRow" type="HBoxContainer" parent="Background/LeftPanel/StatsContainer" unique_id=1829365477]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Background/LeftPanel/StatsContainer/HitRecoveryRow"]
+[node name="Label" type="Label" parent="Background/LeftPanel/StatsContainer/HitRecoveryRow" unique_id=2103174201]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 18
 text = "hit recovery"
 
-[node name="ValueLabel" type="Label" parent="Background/LeftPanel/StatsContainer/HitRecoveryRow"]
+[node name="ValueLabel" type="Label" parent="Background/LeftPanel/StatsContainer/HitRecoveryRow" unique_id=1306789475]
 layout_mode = 2
 theme_override_font_sizes/font_size = 18
 text = "extra slow"
 
-[node name="ChanceToBeHitRow" type="HBoxContainer" parent="Background/LeftPanel/StatsContainer"]
+[node name="ChanceToBeHitRow" type="HBoxContainer" parent="Background/LeftPanel/StatsContainer" unique_id=1958917953]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Background/LeftPanel/StatsContainer/ChanceToBeHitRow"]
+[node name="Label" type="Label" parent="Background/LeftPanel/StatsContainer/ChanceToBeHitRow" unique_id=948077558]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 18
 text = "chance to be hit"
 
-[node name="ValueLabel" type="Label" parent="Background/LeftPanel/StatsContainer/ChanceToBeHitRow"]
+[node name="ValueLabel" type="Label" parent="Background/LeftPanel/StatsContainer/ChanceToBeHitRow" unique_id=1838273103]
 layout_mode = 2
 theme_override_font_sizes/font_size = 18
 text = "96%"
 
-[node name="ManaRow" type="HBoxContainer" parent="Background/LeftPanel/StatsContainer"]
+[node name="ManaRow" type="HBoxContainer" parent="Background/LeftPanel/StatsContainer" unique_id=668446981]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Background/LeftPanel/StatsContainer/ManaRow"]
+[node name="Label" type="Label" parent="Background/LeftPanel/StatsContainer/ManaRow" unique_id=274422703]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 18
 text = "mana"
 
-[node name="ValueLabel" type="Label" parent="Background/LeftPanel/StatsContainer/ManaRow"]
+[node name="ValueLabel" type="Label" parent="Background/LeftPanel/StatsContainer/ManaRow" unique_id=1062975269]
 layout_mode = 2
 theme_override_font_sizes/font_size = 18
 text = "80/80"
 
-[node name="ManaRegenRow" type="HBoxContainer" parent="Background/LeftPanel/StatsContainer"]
+[node name="ManaRegenRow" type="HBoxContainer" parent="Background/LeftPanel/StatsContainer" unique_id=1200360085]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Background/LeftPanel/StatsContainer/ManaRegenRow"]
+[node name="Label" type="Label" parent="Background/LeftPanel/StatsContainer/ManaRegenRow" unique_id=54686381]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 18
 text = "mana regeneration"
 
-[node name="ValueLabel" type="Label" parent="Background/LeftPanel/StatsContainer/ManaRegenRow"]
+[node name="ValueLabel" type="Label" parent="Background/LeftPanel/StatsContainer/ManaRegenRow" unique_id=1227766762]
 layout_mode = 2
 theme_override_font_sizes/font_size = 18
 text = "normal"
 
-[node name="AttrPointsRow" type="HBoxContainer" parent="Background/LeftPanel"]
+[node name="AttrPointsRow" type="HBoxContainer" parent="Background/LeftPanel" unique_id=1183273275]
 layout_mode = 1
 anchors_preset = 12
 anchor_top = 1.0
@@ -281,17 +281,17 @@ grow_horizontal = 2
 grow_vertical = 0
 alignment = 1
 
-[node name="Label" type="Label" parent="Background/LeftPanel/AttrPointsRow"]
+[node name="Label" type="Label" parent="Background/LeftPanel/AttrPointsRow" unique_id=518540670]
 layout_mode = 2
 theme_override_font_sizes/font_size = 18
 text = "Attribute Points"
 
-[node name="AttrPointsLabel" type="Label" parent="Background/LeftPanel/AttrPointsRow"]
+[node name="AttrPointsLabel" type="Label" parent="Background/LeftPanel/AttrPointsRow" unique_id=520863149]
 layout_mode = 2
 theme_override_font_sizes/font_size = 18
 text = "0"
 
-[node name="RightPanel" type="Control" parent="Background"]
+[node name="RightPanel" type="Control" parent="Background" unique_id=1075388523]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -303,7 +303,7 @@ offset_bottom = -20.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="TitleLabel" type="Label" parent="Background/RightPanel"]
+[node name="TitleLabel" type="Label" parent="Background/RightPanel" unique_id=828215520]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
@@ -313,7 +313,7 @@ theme_override_font_sizes/font_size = 28
 text = "Skills & Spells"
 horizontal_alignment = 1
 
-[node name="SkillPointsRow" type="HBoxContainer" parent="Background/RightPanel"]
+[node name="SkillPointsRow" type="HBoxContainer" parent="Background/RightPanel" unique_id=634508638]
 layout_mode = 1
 anchors_preset = 12
 anchor_top = 1.0
@@ -325,17 +325,17 @@ grow_horizontal = 2
 grow_vertical = 0
 alignment = 1
 
-[node name="Label" type="Label" parent="Background/RightPanel/SkillPointsRow"]
+[node name="Label" type="Label" parent="Background/RightPanel/SkillPointsRow" unique_id=1490166636]
 layout_mode = 2
 theme_override_font_sizes/font_size = 18
 text = "Skill Points"
 
-[node name="SkillPointsLabel" type="Label" parent="Background/RightPanel/SkillPointsRow"]
+[node name="SkillPointsLabel" type="Label" parent="Background/RightPanel/SkillPointsRow" unique_id=804878116]
 layout_mode = 2
 theme_override_font_sizes/font_size = 18
 text = "0"
 
-[node name="SkillsContainer" type="Control" parent="Background/RightPanel"]
+[node name="SkillsContainer" type="Control" parent="Background/RightPanel" unique_id=893999454]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -345,7 +345,7 @@ offset_bottom = -40.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="ConnectionLines" type="Control" parent="Background/RightPanel/SkillsContainer"]
+[node name="ConnectionLines" type="Control" parent="Background/RightPanel/SkillsContainer" unique_id=802716745]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0

@@ -114,7 +114,7 @@ func update_ui():
 	
 	# 更新等级和经验显示
 	level_label.text = str(Global.hero_level)
-	exp_label.text = str(Global.hero_experience) + " / " + str(Global.hero_level * 100)
+	exp_label.text = str(Global.hero_experience) + " / " + str(Global.hero_level * 200)
 	
 	# 更新可用点数显示
 	attr_points_label.text = str(Global.attribute_points)

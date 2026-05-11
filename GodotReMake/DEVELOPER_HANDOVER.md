@@ -5,7 +5,7 @@
 > **语言**: GDScript
 > **作者**: [Previous Agent]
 > **日期**: 2026-05-06
-> **最后更新**: 2026-05-08 (新增Ball Lightning和Chain Lightning技能，技能总数23个)
+> **最后更新**: 2026-05-11 (经验值公式简化、怪物AI行为更新、统一生成与游荡行为、文档校正)
 > **GitHub仓库**: https://github.com/54Lynnn/E_I_RMK_2
 
 ---
@@ -31,8 +31,8 @@
 
 ### 当前状态
 - 核心游戏循环可运行（移动、攻击、击杀、升级、掉落）
-- 完整的23个技能系统（UI + 逻辑）- 包括原版21个技能 + 新增Ball Lightning和Chain Lightning
-- **✅ 技能重构完成**：全部23个技能已提取为独立场景 + 独立脚本
+- 完整的21个技能系统（UI + 逻辑）- 原版21个技能（含Ball Lightning和Chain Lightning）
+- **✅ 技能重构完成**：全部21个技能已提取为独立场景 + 独立脚本
 - **hero.gd 已完全重构**：所有技能调用改为 `SkillName.cast(self, mouse_pos, skill_cooldowns)` 模式
 - **技能数据已迁移**：各技能脚本管理自己的冷却、伤害、法力消耗
 - **独立冷却系统**：每个技能各自冷却，可同时施放多个技能
@@ -42,10 +42,12 @@
 - 开发模式（DevMode）用于测试
 - 怪物生成与AI（数据驱动，支持多种怪物）
 - 拾取物品系统
-- **✅ 技能数值修正**：第一批数值修正已完成（Fireball, Meteor, Armageddon, Poison Cloud, Nova, Fortuna, Telekinesis, Wrath of God, Magic Missile）
-- **✅ Dark Ritual debuff系统**：已实现debuff版本，水属性技能统一受水抗性影响
-- **✅ 节点命名规范**：所有技能场景节点统一命名（fire_walk_zone, magic_missile_proj等）
-- **✅ Fire Walk节点层级修复**：修复了火焰被添加到hero节点内部的问题
+- **✅ 经验值公式简化**：从原版复杂公式简化为 `exp = level * 200`
+- **✅ 怪物AI行为更新**：每个怪物有独特的行为模式（详见下方）
+- **✅ 统一怪物生成**：所有模式（Quest/Survival）怪物均从地图边缘生成
+- **✅ 统一怪物游荡**：所有怪物生成后随机游荡，发现玩家后追击
+- **✅ 墙壁反弹游荡**：怪物碰到墙壁像光线反射一样反弹
+- **✅ 统一英雄出生点**：Survival和Quest模式英雄均出生在地图中心 (1280, 1280)
 
 ### 游戏操作
 | 按键 | 功能 |
@@ -69,6 +71,8 @@
 | V | Fortuna |
 | B | Dark Ritual |
 | N | Nova |
+| I | Ball Lightning |
+| O | Chain Lightning |
 | T | 打开/关闭英雄面板（技能树 + 属性分配） |
 | F2 | 切换开发模式（DevMode） |
 
@@ -82,24 +86,31 @@ GodotReMake/
 ├── Scenes/
 │   ├── Main.tscn              # 主场景（游戏入口）
 │   ├── Hero.tscn              # 玩家英雄场景
-│   ├── Monster.tscn           # 蜘蛛场景（共享 monster.gd）
-│   ├── Zombie.tscn            # 僵尸场景（共享 monster.gd）✅
+│   ├── Monster.tscn           # 蜘蛛场景
+│   ├── Zombie.tscn            # 僵尸场景
+│   ├── Bear.tscn              # 熊场景
+│   ├── Mummy.tscn             # 木乃伊/弓手场景
+│   ├── Reaper.tscn            # 死神场景
+│   ├── Demon.tscn             # 恶魔场景
+│   ├── Boss.tscn              # Boss场景
 │   ├── Projectile.tscn        # 旧版通用投射物（逐步弃用）
-│   ├── MagicMissile.tscn      # Magic Missile 独立场景 ✅
-│   ├── Fireball.tscn          # Fireball 独立场景 ✅
-│   ├── FreezingSpear.tscn     # Freezing Spear 独立场景 ✅
-│   ├── Prayer.tscn            # Prayer 独立场景 ✅
-│   ├── Heal.tscn              # Heal 独立场景 ✅
-│   ├── Teleport.tscn          # Teleport 独立场景 ✅
-│   ├── MistFog.tscn           # Mist Fog 独立场景 ✅
-│   ├── WrathOfGod.tscn        # Wrath of God 独立场景 ✅
-│   ├── HolyLight.tscn         # Holy Light 独立场景 ✅
-│   ├── FireWalk.tscn          # Fire Walk 独立场景 ✅
-│   ├── Meteor.tscn            # Meteor 独立场景 ✅
-│   ├── Armageddon.tscn        # Armageddon 独立场景 ✅
-│   ├── PoisonCloud.tscn       # Poison Cloud 独立场景 ✅
-│   ├── Nova.tscn              # Nova 独立场景 ✅
-│   ├── DarkRitual.tscn        # Dark Ritual 独立场景 ✅
+│   ├── MagicMissile.tscn      # Magic Missile 独立场景
+│   ├── Fireball.tscn          # Fireball 独立场景
+│   ├── FreezingSpear.tscn     # Freezing Spear 独立场景
+│   ├── Prayer.tscn            # Prayer 独立场景
+│   ├── Heal.tscn              # Heal 独立场景
+│   ├── Teleport.tscn          # Teleport 独立场景
+│   ├── MistFog.tscn           # Mist Fog 独立场景
+│   ├── WrathOfGod.tscn        # Wrath of God 独立场景
+│   ├── HolyLight.tscn         # Holy Light 独立场景
+│   ├── FireWalk.tscn          # Fire Walk 独立场景
+│   ├── Meteor.tscn            # Meteor 独立场景
+│   ├── Armageddon.tscn        # Armageddon 独立场景
+│   ├── PoisonCloud.tscn       # Poison Cloud 独立场景
+│   ├── Nova.tscn              # Nova 独立场景
+│   ├── DarkRitual.tscn        # Dark Ritual 独立场景
+│   ├── BallLightning.tscn     # Ball Lightning 独立场景
+│   ├── ChainLightningProj.tscn # Chain Lightning 投射物场景
 │   ├── Explosion.tscn         # 爆炸特效
 │   ├── PickupItem.tscn        # 拾取物品
 │   ├── HUD.tscn               # 游戏内HUD（血条/蓝条/经验条）
@@ -108,28 +119,43 @@ GodotReMake/
 ├── Scripts/
 │   ├── global.gd              # 全局单例（自动加载）
 │   ├── hero.gd                # 英雄逻辑（移动、技能施放）
-│   ├── monster.gd             # 怪物AI与行为
 │   ├── monster_spawner.gd     # 怪物生成器
 │   ├── projectile.gd          # 旧版通用投射物逻辑（逐步弃用）
-│   ├── magic_missile.gd       # Magic Missile 独立脚本 ✅
-│   ├── fireball.gd            # Fireball 独立脚本 ✅
-│   ├── freezing_spear.gd      # Freezing Spear 独立脚本 ✅
-│   ├── prayer.gd              # Prayer 独立脚本 ✅
-│   ├── heal.gd                # Heal 独立脚本 ✅
-│   ├── teleport.gd            # Teleport 独立脚本 ✅
-│   ├── mistfog.gd             # Mist Fog 独立脚本 ✅
-│   ├── wrath_of_god.gd        # Wrath of God 独立脚本 ✅
-│   ├── telekinesis.gd         # Telekinesis 独立脚本 ✅
-│   ├── sacrifice.gd           # Sacrifice 独立脚本 ✅
-│   ├── holy_light.gd          # Holy Light 独立脚本 ✅
-│   ├── stone_enchanted.gd     # Stone Enchanted 独立脚本 ✅
-│   ├── fire_walk.gd           # Fire Walk 独立脚本 ✅
-│   ├── meteor.gd              # Meteor 独立脚本 ✅
-│   ├── armageddon.gd          # Armageddon 独立脚本 ✅
-│   ├── poison_cloud.gd        # Poison Cloud 独立脚本 ✅
-│   ├── fortuna.gd             # Fortuna 独立脚本 ✅
-│   ├── dark_ritual.gd         # Dark Ritual 独立脚本 ✅
-│   ├── nova.gd                # Nova 独立脚本 ✅
+│   ├── Spells/                # 技能脚本目录
+│   │   ├── magic_missile.gd
+│   │   ├── fireball.gd
+│   │   ├── freezing_spear.gd
+│   │   ├── prayer.gd
+│   │   ├── heal.gd
+│   │   ├── teleport.gd
+│   │   ├── mistfog.gd
+│   │   ├── wrath_of_god.gd
+│   │   ├── telekinesis.gd
+│   │   ├── sacrifice.gd
+│   │   ├── holy_light.gd
+│   │   ├── stone_enchanted.gd
+│   │   ├── fire_walk.gd
+│   │   ├── meteor.gd
+│   │   ├── armageddon.gd
+│   │   ├── poison_cloud.gd
+│   │   ├── fortuna.gd
+│   │   ├── dark_ritual.gd
+│   │   ├── nova.gd
+│   │   ├── ball_lightning.gd
+│   │   └── chain_lightning.gd
+│   ├── Monsters/              # 怪物脚本目录
+│   │   ├── monster_base.gd
+│   │   ├── monster_melee.gd
+│   │   ├── monster_ranged.gd
+│   │   ├── monster_spider.gd
+│   │   ├── monster_zombie.gd
+│   │   ├── monster_bear.gd
+│   │   ├── monster_mummy.gd (Archer)
+│   │   ├── monster_reaper.gd
+│   │   ├── monster_demon.gd
+│   │   ├── monster_diablo.gd (Boss)
+│   │   ├── monster_troll.gd
+│   │   └── monster_arrow.gd
 │   ├── explosion.gd           # 爆炸特效逻辑
 │   ├── pickup_item.gd         # 拾取物品逻辑
 │   ├── loot_manager.gd        # 掉落管理器（自动加载）
@@ -165,7 +191,13 @@ GodotReMake/
 - [x] 属性点分配UI（每级+5点）
 - [x] 派生属性显示（生命回复、法力回复、速度、受击恢复、被击中几率）
 
-### 3.3 技能系统
+### 3.3 经验值系统 (global.gd)
+- [x] **简化公式**：`exp_to_next = hero_level * 200`
+- [x] 每级固定增加200经验值
+- [x] 升级时自动回满血和蓝
+- [x] 每级获得5属性点 + 1技能点
+
+### 3.4 技能系统
 - [x] 21个技能全部实现施放逻辑
 - [x] 技能树UI（8列×4行绝对定位布局）
 - [x] 技能前置条件检查
@@ -194,11 +226,13 @@ GodotReMake/
 - [x] **Fortuna 重构**：独立脚本 + 被动增加掉率 + V键绑定
 - [x] **DarkRitual 重构**：独立场景 + 延迟秒杀 + B键绑定
 - [x] **Nova 重构**：独立场景 + 自身圆形AOE + N键绑定
+- [x] **BallLightning 重构**：独立场景 + 银球自动攻击 + I键绑定
+- [x] **ChainLightning 重构**：独立场景 + 闪电链弹跳 + O键绑定
 - [x] **技能数据迁移**：冷却、伤害、法力消耗已移至各技能脚本
 - [x] **hero.gd 完全重构**：所有21个技能调用改为独立脚本模式
-- [x] **✅ 技能重构全部完成**：21/21个技能已重构为独立场景/脚本
+- [x] **技能重构全部完成**：21/21个技能已重构为独立场景/脚本
 
-### 3.4 技能树布局（最终版）
+### 3.5 技能树布局（最终版）
 
 **第0行（顶层）：**
 | 列0 | 列1 | 列2 | 列3 | 列4 | 列5 | 列6 | 列7 |
@@ -206,12 +240,18 @@ GodotReMake/
 | StoneEnchanted | WrathOfGod | BallLightning | ChainLightning | Meteor | Armageddon | DarkRitual | Nova |
 
 **第1行：**
+| 列0 | 列1 | 列2 | 列3 | 列4 | 列5 | 列6 | 列7 |
+|-----|-----|-----|-----|-----|-----|-----|-----|
 | Teleport | MistFog | HolyLight | Sacrifice | Heal | FireWalk | PoisonCloud | Fortuna |
 
 **第2行：**
+| 列0 | 列1 | 列2 | 列3 | 列4 | 列5 | 列6 | 列7 |
+|-----|-----|-----|-----|-----|-----|-----|-----|
 | Prayer | (空) | Telekinesis | (空) | FireBall | (空) | FreezingSpear | (空) |
 
 **第3行（底层）：**
+| 列0 | 列1 | 列2 | 列3 | 列4 | 列5 | 列6 | 列7 |
+|-----|-----|-----|-----|-----|-----|-----|-----|
 | (空) | (空) | (空) | **MagicMissile** | (空) | (空) | (空) | (空) |
 
 **主枝/旁支结构：**
@@ -220,22 +260,58 @@ GodotReMake/
 - Fire系: FireBall → Heal(主) / FireWalk(旁) → Meteor(主) / Armageddon(旁)
 - Water系: FreezingSpear → PoisonCloud(主) / Fortuna(旁) → DarkRitual(主) / Nova(旁)
 
-### 3.5 怪物系统 (monster.gd)
+### 3.6 怪物系统 (monster_base.gd + 独立脚本)
 - [x] 状态机（IDLE, CHASE, ATTACK, HURT, DEATH）
-- [x] 追踪玩家（检测范围400px）
-- [x] 近战攻击（攻击范围40px，冷却2秒）
+- [x] 追踪玩家（检测范围按怪物类型配置）
+- [x] 近战攻击（攻击范围按怪物类型配置，冷却按怪物类型配置）
 - [x] 受击闪烁（红色闪烁）
-- [x] 死亡动画（淡出）
+- [x] 死亡动画（0.25秒渐隐）
 - [x] 经验值掉落
 - [x] **数据驱动**：通过场景属性配置怪物参数（血量、速度、伤害、颜色等）
-- [x] **多怪物支持**：Spider、Zombie 使用共享 monster.gd 脚本
+- [x] **独立脚本架构**：每个怪物有独立脚本
+- [x] **AI行为更新**：每个怪物有独特的行为模式
 
-### 3.6 怪物生成 (monster_spawner.gd)
-- [x] 定时生成（间隔2秒）
-- [x] 最大数量限制（6只）
-- [x] 在玩家周围圆形区域生成（半径400px）
+**怪物配置（数据驱动，来自 monster_database.gd）：**
+| 怪物 | 类型 | 基础血量 | 基础速度 | 基础伤害 | 检测范围 | 攻击范围 | min_distance | 攻击间隔 | 特殊行为 |
+|------|------|---------|---------|---------|----------|----------|-------------|----------|----------|
+| Troll | 近战 | 7/级 | 60 | 5 | **400** | **40** | 40 | 2.0s | 弱近战 |
+| Spider | 近战 | 10/级 | 60 | 6 | **400** | **40** | 40 | 2.0s | 坚韧昆虫 |
+| Demon | 近战 | 8/级 | 60 | 8 | **400** | **40** | 40 | 2.0s | 追击时速度+40% |
+| Bear | 近战 | 9/级 | 65 | 10 | **400** | **40** | 40 | 2.0s | 强近战 |
+| Mummy | 远程 | 4/级 | 65 | 4 | **500** | 150-300 | 150 | 2.0s | 射箭保持距离 |
+| Reaper | 远程 | 10/级 | 60 | 4 | **500** | 150-340 | 150 | 5.0s | 3火焰魔法攻击 |
+| Diablo | 远程 | 25/级 | 55 | 0 | **500** | 150-380 | 150 | 15.0s | 召唤其他怪物 |
 
-### 3.7 掉落系统 (loot_manager.gd)
+**注意**：
+- 近战怪物攻击范围 = min_distance = 40px（贴身才攻击）
+- 远程怪物攻击范围 = 150-380px（保持距离射击）
+- 检测范围：近战统一400px，远程统一500px
+- 所有数值随等级和难度动态缩放
+
+**怪物脚本架构：**
+```
+monster_base.gd (核心功能：移动、受击、死亡)
+  ├── monster_melee.gd (近战行为：追击→攻击)
+  │     ├── monster_spider.gd
+  │     ├── monster_zombie.gd
+  │     ├── monster_bear.gd
+  │     ├── monster_demon.gd
+  │     ├── monster_reaper.gd
+  │     ├── monster_troll.gd
+  │     └── monster_diablo.gd (Boss)
+  └── monster_ranged.gd (远程行为：保持距离、射箭、逃跑转身)
+        └── monster_mummy.gd (Archer，使用Mummy贴图)
+```
+
+### 3.7 怪物生成 (monster_spawner.gd / quest_monster_spawner.gd)
+- [x] **统一边缘生成**：所有模式（Quest/Survival）怪物均从地图边缘生成
+- [x] 安全边界（spawn_margin=80px），避免卡在墙里
+- [x] 随机选择四边（上/右/下/左）生成
+- [x] Survival：定时生成（间隔1秒），最大15只，含Boss生成逻辑
+- [x] Quest：按波次生成（4/6/9只一组），所有波次完成后停止
+- [x] 数据驱动：根据玩家等级和难度动态选择怪物类型和数值
+
+### 3.8 掉落系统 (loot_manager.gd)
 - [x] 5种稀有度（Common, Uncommon, Unique, Rare, Exceptional）
 - [x] 12种物品类型（药水、卷轴、护盾、增益等）
 - [x] 基础掉落率10%（受Fortuna技能影响）
@@ -243,7 +319,7 @@ GodotReMake/
 - [x] 掉落物图标大小1.5倍（接近玩家大小）
 - [x] 碰撞体积半径24（接近玩家32×32）
 
-**掉落机制（2026-05-09更新）：**
+**掉落机制：**
 1. 击败敌人 → 计算掉落概率（基础10% × Fortuna加成）
 2. 决定是否掉落（randf() < 概率）
 3. 根据稀有度权重选择物品类型：
@@ -253,24 +329,25 @@ GodotReMake/
    - Rare(10%): 物理护盾、四倍伤害、免费施法
    - Exceptional(5%): 属性点、技能点、无敌
 
-### 3.8 拾取物品 (pickup_item.gd)
+### 3.9 拾取物品 (pickup_item.gd)
 - [x] 12种物品效果全部实现
 - [x] 物品贴图加载（BonusXXX.png格式）
 - [x] 接触自动拾取
 - [x] Telekinesis被动：鼠标悬停自动拾取（带进度条显示）
 - [x] 消失前1秒渐隐
 
-### 3.9 HUD (hud.gd)
+### 3.10 HUD (hud.gd)
 - [x] 生命值条（底部）
 - [x] 法力值条
 - [x] 经验值条
 - [x] 等级显示
+- [x] **Buff/Debuff 图标显示**（底部栏上方居中，带扇形冷却效果）
 
-### 3.10 摄像机 (camera.gd)
+### 3.11 摄像机 (camera.gd)
 - [x] 平滑跟随玩家
 - [x] 缩放0.5（视野翻倍）
 
-### 3.11 开发模式 (DevMode)
+### 3.12 开发模式 (DevMode)
 - [x] F2切换
 - [x] 自动+100属性点、+100技能点
 - [x] 游戏暂停
@@ -288,7 +365,7 @@ GodotReMake/
 ```gdscript
 var dev_mode := false                    # 开发模式开关
 var hero_level := 1                      # 英雄等级
-var hero_experience := 0                 # 当前经验
+var hero_experience := 0                 # 当前经验（升级需要 hero_level * 200）
 var attribute_points := 0                # 可用属性点
 var skill_points := 0                    # 可用技能点
 var skill_levels := {}                   # 各技能等级字典
@@ -302,516 +379,241 @@ var drop_rate_multiplier := 1.0          # 掉落率倍率（Fortuna）
 ```
 
 **重要方法：**
-- `gain_experience(amount)` - 获得经验，自动处理升级
+- `gain_experience(amount)` - 获得经验，自动处理升级（公式：hero_level * 200）
 - `take_damage(amount, is_magic)` - 受到伤害（计算抗性）
 - `heal(amount)` / `heal_over_time(amount, duration)` - 治疗
 - `apply_strength/intelligence/etc()` - 属性变更后更新派生属性
 - `activate_xxx(duration)` - 各种临时增益效果
 
-### 4.2 英雄输入处理 (hero.gd)
+### 4.2 经验值系统
 
-所有技能通过 `_unhandled_input()` 处理，使用 `InputEventAction` 判断。
-
-**当前输入映射（全部21个技能已绑定）：**
-```
-spell_magic_missile  → 鼠标左键
-spell_fireball       → 鼠标右键
-spell_freezing_spear → 键盘 Z
-spell_prayer         → 键盘 X
-spell_heal           → 键盘 C
-spell_teleport       → 键盘 2
-spell_mistfog        → 键盘 3
-spell_wrath_of_god   → 键盘 4
-spell_telekinesis    → 键盘 Q
-spell_sacrifice      → 键盘 R
-spell_holy_light     → 键盘 E
-spell_fire_walk      → 键盘 U
-spell_meteor         → 键盘 F
-spell_armageddon     → 键盘 G
-spell_poison_cloud   → 键盘 H
-spell_fortuna        → 键盘 V
-spell_dark_ritual    → 键盘 B
-spell_nova           → 键盘 N
-```
-
-**注意：** 全部21个技能已重构并绑定按键。被动技能（StoneEnchanted、Fortuna）在 _ready() 中自动触发。
-
-### 4.3 技能施放通用模式
-
-每个技能遵循以下模式：
+**简化公式（2026-05-11更新）：**
 ```gdscript
-func cast_xxx():
-    var level = Global.skill_levels.get("xxx", 0)
-    if level <= 0:
-        return  # 未学习该技能
-    var mana_cost = xxx - (level - 1) * yyy  # 等级降低消耗
-    var cd = max(xxx - (level - 1) * yyy, min_cd)  # 等级降低冷却
-    if Global.free_spells or Global.mana >= mana_cost:
-        if not Global.free_spells:
-            Global.mana -= mana_cost
-        can_cast = false
-        cast_cooldown.start(cd)
-        # 执行技能效果...
+# 升级所需经验 = 当前等级 × 200
+var exp_to_next = hero_level * 200
 ```
 
-### 4.4 技能效果实现方式
+**升级表：**
+| 等级 | 需要经验 | 累积经验 |
+|------|----------|----------|
+| 1→2 | 200 | 200 |
+| 2→3 | 400 | 600 |
+| 3→4 | 600 | 1,200 |
+| 4→5 | 800 | 2,000 |
+| 5→6 | 1,000 | 3,000 |
+| 10→11 | 2,000 | 11,000 |
+| 20→21 | 4,000 | 42,000 |
+| 50→51 | 10,000 | 255,000 |
+| 100→101 | 20,000 | 1,010,000 |
 
-**架构（已完成）**：全部21个技能已重构为独立场景/脚本模式：
-- 每个技能有独立的 `.tscn` 场景文件 + `.gd` 脚本文件（被动技能可能无场景）
-- 场景包含：Area2D（根节点）+ CollisionShape2D + Sprite2D + CPUParticles2D
-- 脚本继承自 Area2D，包含完整的移动、碰撞、伤害、特效逻辑
-- hero.gd 中通过 `preload("res://Scenes/XXX.tscn").instantiate()` 创建实例
-
-**全部已重构技能**：
-
-投射物类：
-- Magic Missile (`Scripts/magic_missile.gd` + `Scenes/MagicMissile.tscn`)
-- Fireball (`Scripts/fireball.gd` + `Scenes/Fireball.tscn`)
-- Freezing Spear (`Scripts/freezing_spear.gd` + `Scenes/FreezingSpear.tscn`)
-
-持续效果类：
-- Prayer (`Scripts/prayer.gd` + `Scenes/Prayer.tscn`)
-- Heal (`Scripts/heal.gd` + `Scenes/Heal.tscn`)
-
-位移/区域类：
-- Teleport (`Scripts/teleport.gd` + `Scenes/Teleport.tscn`)
-- MistFog (`Scripts/mistfog.gd` + `Scenes/MistFog.tscn`)
-- HolyLight (`Scripts/holy_light.gd` + `Scenes/HolyLight.tscn`)
-- FireWalk (`Scripts/fire_walk.gd` + `Scenes/FireWalk.tscn`)
-- Meteor (`Scripts/meteor.gd` + `Scenes/Meteor.tscn`)
-- Armageddon (`Scripts/armageddon.gd` + `Scenes/Armageddon.tscn`)
-- PoisonCloud (`Scripts/poison_cloud.gd` + `Scenes/PoisonCloud.tscn`)
-- Nova (`Scripts/nova.gd` + `Scenes/Nova.tscn`)
-- DarkRitual (`Scripts/dark_ritual.gd` + `Scenes/DarkRitual.tscn`)
-
-即时效果类：
-- WrathOfGod (`Scripts/wrath_of_god.gd` + `Scenes/WrathOfGod.tscn`)
-- Telekinesis (`Scripts/telekinesis.gd`)
-- Sacrifice (`Scripts/sacrifice.gd`)
-
-被动技能类（无场景，脚本直接生效）：
-- StoneEnchanted (`Scripts/stone_enchanted.gd`)
-- Fortuna (`Scripts/fortuna.gd`)
+**设计理由：**
+- 原版公式前3级不规则（150, 450, 600），之后每级+200
+- 简化后每级固定+200，更易理解和预测
+- 与原版从第4级开始完全一致
 
 ---
 
-## 5. 技能系统完整说明
+## 5. Quest模式系统详解
 
-> ⚠️ **重要提示**：下表中的技能数值（消耗、冷却、伤害等）为**等级1的参考值**。
-> **所有技能的准确数值请以 `E:\EvilInvasion\evil_invasion_spell.xlsx` 为准**，该文件包含每个技能等级1-10的完整数据。
+### 5.1 概述
+Quest模式是原版游戏的核心单人模式，玩家需要依次通过10个关卡。与Survival模式不同，Quest模式有明确的目标和终点。
 
-### 5.1 技能列表（21个）
+### 5.2 Quest模式规则
 
-| # | 技能ID | 名称 | 系别 | 伤害属性 | 前置 | 消耗 | 冷却 | 效果 | 实现状态 |
-|---|--------|------|------|----------|------|------|------|------|----------|
-| 1 | magic_missile | Magic Missile | 基础 | **basic** | 无 | 6法力 | 1s | 发射投射物，伤害10，追踪+加速+转弯减速 | ✅ 独立场景 |
-| 2 | prayer | Prayer | Earth | - | magic_missile | 65%生命 | 20s | 持续10秒，每秒扣3%生命回5%法力 | ✅ 独立场景 |
-| 3 | teleport | Teleport | Earth | - | prayer | 35法力 | 20s | 0.2秒施法后传送到鼠标位置 | ✅ 独立场景 |
-| 4 | mistfog | Mist Fog | Earth | - | prayer | 25法力 | 5s | 棕色雾气减速敌人35% | ✅ 独立场景 |
-| 5 | stone_enchanted | Stone Enchanted | Earth | - | teleport | 被动 | - | 被击时15%几率石化攻击者 | ✅ 独立脚本 |
-| 6 | wrath_of_god | Wrath of God | Earth | **earth** | teleport | 55法力 | 2s | 10个锤子环绕飞出，伤害200 | ✅ 独立场景 |
-| 7 | telekinesis | Telekinesis | Air | - | magic_missile | 被动 | - | 鼠标悬停自动拾取物品（1.0-0.55秒） | ✅ 独立脚本 |
-| 8 | holy_light | Holy Light | Air | **air** | telekinesis | 35法力 | 1s | 3道光线射向鼠标，伤害120 | ✅ 独立场景 |
-| 9 | sacrifice | Sacrifice | Air | **air** | telekinesis | 55%生命 | 3s | 秒杀鼠标附近敌人 | ✅ 独立脚本 |
-| 10 | ball_lightning | Ball Lightning | Air | **air** | holy_light | 45法力 | 2s | 银球自动攻击附近敌人 | ✅ 独立场景 |
-| 11 | chain_lightning | Chain Lightning | Air | **air** | holy_light | 55法力 | 1s | 闪电矛弹跳3次，伤害1000 | ✅ 独立场景 |
-| 12 | fireball | Fireball | Fire | **fire** | magic_missile | 7法力 | 0.5s | 发射火球，伤害50，爆炸AOE | ✅ 独立场景 |
-| 13 | heal | Heal | Fire | - | fireball | 35法力 | 15s | 持续10秒，每秒回复5.5%生命 | ✅ 独立场景 |
-| 14 | fire_walk | Fire Walk | Fire | **fire** | fireball | 被动 | - | 留下火焰轨迹，30伤害/秒 | ✅ 独立场景 |
-| 15 | meteor | Meteor | Fire | **fire** | heal | 45法力 | 5s | 陨石雨，伤害250，范围130 | ✅ 独立场景 |
-| 16 | armageddon | Armageddon | Fire | **fire** | heal | 55法力 | 20s | 全屏随机火blast，伤害250 | ✅ 独立场景 |
-| 17 | freezing_spear | Freezing Spear | Water | **water** | magic_missile | 15法力 | 1s | 冰矛直线穿透，伤害50，冻结2秒 | ✅ 独立场景 |
-| 18 | poison_cloud | Poison Cloud | Water | **water** | freezing_spear | 35法力 | 5s | 绿色毒雾，60伤害/秒 | ✅ 独立场景 |
-| 19 | fortuna | Fortuna | Water | - | freezing_spear | 被动 | - | 增加掉落率15%-60%（乘法加成） | ✅ 独立脚本 |
-| 20 | dark_ritual | Dark Ritual | Water | **water** | poison_cloud | 55法力 | 5.5s | 黑雾，2秒后30%几率秒杀 | ✅ 独立场景 |
-| 21 | nova | Nova | Water | **water** | poison_cloud | 45法力 | 2s | 雪球爆炸冻结，伤害200 | ✅ 独立场景 |
+| 特性 | Quest模式 | Survival模式 |
+|------|-----------|--------------|
+| 经验值 | 50%（减半） | 100% |
+| 等级上限 | 每关最多升4级 | 无上限 |
+| 通关条件 | 清除所有怪物 | 无（直到死亡） |
+| 怪物生成 | 地图边缘，波次生成 | 地图边缘，持续生成 |
+| 怪物行为 | 随机游荡 + 发现玩家后追击 | 随机游荡 + 发现玩家后追击 |
+| 关卡数 | 10关线性推进 | 1张地图 |
 
-**伤害属性分类**：
-- **basic**: magic_missile
-- **earth**: stone_enchanted, wrath_of_god
-- **air**: holy_light, sacrifice
-- **fire**: fireball, fire_walk, meteor, armageddon
-- **water**: freezing_spear, poison_cloud, dark_ritual, nova
+### 5.3 关卡配置（10关）
 
-> **注意**：ball_lightning 和 chain_lightning 是原版Air系技能，已实现。
+| 关卡 | 名称 | 怪物总数 | 波次 | 怪物类型 |
+|------|------|---------|------|---------|
+| 1 | Ancient Way | 20 | [4,4,4,4,4] | spider, troll |
+| 2 | Burned Land | 30 | [6,6,6,6,6] | spider, troll, bear |
+| 3 | Desert Battle | 40 | [6×6,4] | spider, bear, mummy |
+| 4 | Forgotten Dunes | 50 | [6×8,2] | bear, mummy, demon |
+| 5 | Dark Swamp | 60 | [9×6,6] | mummy, demon, reaper |
+| 6 | Skull Coast | 70 | [9×7,7] | demon, reaper, troll |
+| 7 | Snowy Pass | 80 | [9×9,7] | reaper, troll, diablo |
+| 8 | Hell Eye | 90 | [9×11] | troll, diablo |
+| 9 | Inferno | 100 | [9×12,4] | demon, reaper, troll, diablo |
+| 10 | Diablo's Lair | 120 | [9×15] | diablo, troll, reaper |
 
-### 5.2 技能等级成长
+### 5.4 核心脚本
 
-所有技能都有10个等级，每升1级：
-- 法力消耗降低（通常每级-1或-2）
-- 冷却时间降低（通常每级-0.1s或-0.2s，有最小值）
-- 伤害/效果增强（每级固定增量）
+1. **`Scripts/Quest/quest_level_manager.gd`** — 关卡管理器
+   - 管理10关的配置和进度
+   - 处理等级上限检查（每关4级）
+   - 检测通关条件（清除所有怪物）
+   - 玩家死亡后返回主菜单
 
-**例外：**
-- Stone Enchanted / Fire Walk / Fortuna 是被动技能，没有主动消耗和冷却
+2. **`Scripts/Quest/quest_monster_spawner.gd`** — 怪物生成器
+   - 从地图边缘生成怪物（安全边界100px）
+   - 按波次生成（4/6/9只一组）
+   - 所有波次完成后停止生成
 
-### 5.3 技能树UI实现 (hero_panel.gd)
+3. **`Scripts/Quest/quest_hud_manager.gd`** — Quest专用HUD
+   - 显示当前关卡名称和编号
+   - 显示剩余怪物数量
+   - 显示等级上限警告
+   - 显示关卡完成/全部完成提示
 
-**布局系统：**
-- 使用绝对定位（Control节点的position属性）
-- 8列×4行网格，CELL_SIZE = 56px
-- 技能按钮大小40×40px
-- 自动居中计算offset
+4. **`Scripts/Monsters/monster_base.gd`** — 怪物基类（统一行为）
+   - `wander_mode` 变量控制游荡行为（默认true，所有模式启用）
+   - 墙壁反弹逻辑：碰到墙壁像光线反射一样反弹
+   - 游荡速度 = 正常移动速度（非50%减速）
+   - 未发现玩家时随机游荡，发现后追击
 
-**连线系统：**
-- 使用Line2D绘制连接线
-- 主枝（同列）：直线连接
-- 旁支（跨列）：折线连接（先垂直再水平）
+### 5.5 场景文件
 
-**技能按钮状态：**
-- 未学习前置技能：灰色（modulate = Color(0.3, 0.3, 0.3)）+ disabled
-- 已学习前置技能：正常颜色 + 可点击
-- 满级（10级）：灰色 + disabled
+- **`Scenes/QuestMain.tscn`** — Quest模式主场景
+  - 地图大小：2560×2560
+  - 玩家出生点：地图中心 **(1280, 1280)**
+  - 包含 QuestLevelManager、QuestMonsterSpawner、QuestHUDManager
+
+- **`Scenes/Main.tscn`** — Survival模式主场景
+  - 地图大小：2560×2560
+  - 玩家出生点：地图中心 **(1280, 1280)**（已统一）
+  - 包含 MonsterSpawner、HUD
+
+### 5.6 已知问题
+
+1. **关卡解锁未持久化**：目前没有存档系统，每次游戏都从第1关开始
+2. **地图背景单一**：10关使用相同的地面贴图
+3. **Boss战未特殊设计**：Diablo关卡没有特殊的Boss机制
+4. **通关奖励未实现**：通关后没有奖励结算画面
+
+---
+
+## 6. 技能系统完整说明
+
+### 5.1 技能架构
+
+每个技能独立 `.gd` 文件，包含：
+- 静态配置: skill_name, base_cooldown, base_mana_cost, base_damage, damage_element
+- 等级成长公式: get_mana_cost(level), get_damage(level), get_xxx(level)
+- 施法入口: static func cast(hero, mouse_pos, skill_cooldowns) → bool
+
+### 5.2 技能列表（21个）
+
+| 技能 | 按键 | 元素 | 类型 | 说明 |
+|------|------|------|------|------|
+| Magic Missile | 鼠标左键 | basic | 投射物 | 追踪+加速+转弯减速 |
+| Fireball | 鼠标右键 | fire | 投射物 | 直线飞行+爆炸AOE |
+| Freezing Spear | Z | water | 投射物 | 直线穿透+冰冻效果 |
+| Prayer | X | earth | 持续 | 扣血回蓝+蓝色粒子 |
+| Heal | C | fire | 持续 | 持续回血+红色+号粒子 |
+| Teleport | 2 | earth | 位移 | 位移到鼠标位置 |
+| Mist Fog | 3 | earth | 区域 | 区域减速 |
+| Wrath of God | 4 | earth | 全屏 | 全屏AOE |
+| Telekinesis | Q | air | 被动 | 隔空取物（悬停拾取） |
+| Sacrifice | R | air | 即时 | 消耗生命秒杀 |
+| Holy Light | E | air | 射线 | 射线伤害 |
+| Fire Walk | U | fire | 召唤 | 火焰轨迹 |
+| Meteor | F | fire | 延迟AOE | 延迟AOE |
+| Armageddon | G | fire | 全屏 | 全屏随机伤害 |
+| Poison Cloud | H | water | 区域 | 区域持续伤害 |
+| Nova | N | water | 自身AOE | 圆形AOE+冰冻 |
+| Dark Ritual | B | water | 延迟 | 30%几率秒杀 |
+| Stone Enchanted | 被动 | earth | 被动 | 被击石化反击 |
+| Fortuna | V | water | 被动 | 增加掉落率 |
+| Ball Lightning | I | air | 召唤 | 银球自动攻击附近敌人 |
+| Chain Lightning | O | air | 投射物 | 闪电链弹跳3次 |
 
 ---
 
 ## 6. 已知问题与技术债务
 
-### 6.1 高优先级问题
+### 6.1 当前问题
+1. **高等级技能测试**：仅Magic Missile和Freezing Spear测试了高等级形态，其他21个技能高等级未充分测试
+2. **怪物攻击冷却**：使用 `await` 可能导致协程问题
+3. **没有音效**：所有技能目前没有音效（用户打算最后做）
+4. **存档系统**：尚未实现
+5. **地图系统**：原版有多张地图，目前只有一张测试地图
+6. **Quest模式关卡解锁未持久化**：没有存档系统，每次从第1关开始
+7. **Quest模式Boss战未特殊设计**：Diablo关卡没有特殊Boss机制
+8. **Quest模式通关奖励未实现**：通关后没有奖励结算画面
 
-1. **✅ 技能重构已完成（21/21个技能）**
-   - 全部21个原版技能已重构为独立场景/脚本（包括Ball Lightning和Chain Lightning）
-   - hero.gd 中所有技能调用已改为 `SkillName.cast()` 模式
-   - 被动技能（StoneEnchanted、Fortuna）在 _ready() 中自动触发
-
-2. **✅ 技能数值修正（第一批）**
-   > ⚠️ **注意**：以下数值为等级1参考值，**所有技能的准确数值请以 `E:\EvilInvasion\evil_invasion_spell.xlsx` 为准**。
-   - Fireball: 冷却0.5s, 伤害50, 爆炸半径56
-   - Meteor: 冷却5s, 伤害250, 半径130
-   - Armageddon: 冷却20s, 伤害250
-   - Poison Cloud: 伤害60/秒, 持续10秒
-   - Nova: 伤害200, 半径100, 带冰冻效果
-   - Fortuna: 掉率加成15%
-   - Telekinesis: 被动技能, 悬停1.0秒拾取
-   - Wrath of God: 冷却2s, 伤害200
-   - Magic Missile: 伤害10, 1s冷却
-
-3. **✅ Dark Ritual debuff系统**
-   - 已实现为debuff系统（非直接伤害）
-   - 怪物进入范围获得dark_ritual debuff
-   - debuff结束时进行秒杀判定（30%几率）
-   - 水属性技能统一受水抗性影响（Poison Cloud, Nova, Freezing Spear, Dark Ritual）
-
-4. **技能视觉效果**
-   - ✅ 全部技能已有独立视觉效果（Sprite2D + CPUParticles2D）
-   - ❌ 没有音效
-   - **建议：** 添加技能施放音效和背景音乐
-
-5. **怪物种类单一**
-   - 目前只有一种怪物（Monster.tscn）
-   - 原版有Archer, Bear, Boss, Demon, Reaper, Rig, Spider等多种
-   - MonsterType枚举已定义但未使用
-
-6. **Freezing Spear 已知问题**
-   - 偶尔出现技能不触发的情况（可能与输入法或按键检测有关）
-   - 冰冻效果通过修改 `move_speed` 和 `can_attack` 实现，需要验证是否与其他减速效果冲突
-
-### 6.2 中优先级问题
-
-5. **没有存档系统**
-   - 游戏退出后所有进度丢失
-   - **建议：** 使用FileAccess实现JSON存档
-
-6. **没有地图/关卡系统**
-   - 目前只有一张空地图
-   - 原版有多张地图和关卡进度
-
-7. **UI缺少系别头像**
-   - 原版技能树顶部有Earth/Air/Fire/Water四个系别的头像
-   - 当前布局已预留空间但未添加
-
-8. **✅ 技能平衡性测试已完成（2026-05-09）**
-   - 全部23个技能已测试通过
-   - 所有技能数值已对照 `E:\EvilInvasion\evil_invasion_spell.xlsx` 修正
-   - 掉落物系统已完善（图标大小、读条效果、触碰拾取）
-
-### 6.3 低优先级问题
-
-9. **代码重复**
-   - 很多技能效果创建模式重复（Area2D + CollisionShape2D + ColorRect）
-   - 可以提取为通用工具函数
-
-10. **缺少音效和音乐**
-    - 没有任何音频
-
-11. **缺少设置菜单**
-    - 无法调整音量、分辨率等
-
-### 6.4 设计决策记录
-
-#### 节点命名规范（2026-05-08新增）
-所有技能生成的场景节点必须遵循统一命名规范：
-
-| 节点类型 | 后缀 | 示例 |
-|---------|------|------|
-| 场地效果（zone） | `_zone` | `fire_walk_zone`, `poison_cloud_zone`, `dark_ritual_zone` |
-| 投射物（projectile） | `_proj` | `magic_missile_proj`, `fireball_proj`, `meteor_proj`, `holy_light_proj` |
-| 爆发效果（effect） | `_effect` | `nova_effect` |
-
-**规则**：
-- 使用技能ID（snake_case）+ 类型后缀
-- 节点名称必须在实例化后立即设置，在 `add_child()` 之前
-- 命名统一使用小写 + 下划线
-
-#### Dark Ritual debuff系统（2026-05-08新增）
-- Dark Ritual 从直接伤害改为 debuff 系统
-- 怪物进入范围获得 `dark_ritual` debuff
-- debuff 持续时间为技能的 `delay` 参数
-- debuff 结束时进行秒杀判定（30%几率）
-- 判定逻辑在 `monster.gd` 的 `_on_debuff_removed` 中处理
-- 水属性技能统一受水抗性影响（未来扩展）
-
-#### Fire Walk 节点层级修复（2026-05-08新增）
-- **问题**：火焰被添加到 `get_parent()`（即 hero 节点），导致火焰跟着玩家移动
-- **修复**：改为 `hero.get_parent().add_child(fire_area)`，将火焰添加到场景根节点
-- **教训**：使用 Remote 场景树检查节点层级，确保特效在世界坐标中
-
-12. **HeroPanel.tscn有冗余节点**
-    - 场景文件中可能残留旧布局的节点
-
-### 6.4 技术债务
-
-- `global.gd` 中同时存在 `skill_levels` 字典和 `magic_missile_level` 单独变量，应该统一
-- `pickup_item.gd` 和 `global.gd` 中都有ItemType枚举，应该统一
-- `hero.gd` 中技能函数过长，可以考虑拆分为单独的Skill类或资源
-- 很多魔法数字硬编码（如伤害公式、范围等），应该提取为常量或配置
+### 6.2 技术债务
+1. **projectile.gd**：旧版通用投射物逻辑，逐步弃用
+2. **Monster.tscn**：旧版怪物场景，逐步被独立怪物场景替代
+3. **技能数值平衡**：需要参考Excel文件进行详细调整
 
 ---
 
 ## 7. 开发路线图
 
-### Phase 1: 完善核心体验（建议优先）
+### 已完成 ✅
+- 核心战斗系统
+- 21个技能独立重构
+- 属性分配系统
+- 8种怪物实现
+- 掉落系统
+- 开发模式
+- 经验值公式简化
+- **Quest模式基础系统** - 10关线性推进、波次生成、等级上限、边缘生成、游荡AI
 
-- [x] **重构 Magic Missile 为独立场景** ✅
-  - 创建 MagicMissile.tscn + magic_missile.gd
-  - 实现追踪、加速、转弯减速、10秒生命周期
-  - 使用 basic 伤害属性
-
-- [x] **重构 Fireball 为独立场景** ✅
-  - 创建 Fireball.tscn + fireball.gd
-  - 实现爆炸AOE、fire属性伤害
-
-- [x] **重构 Freezing Spear 为独立场景** ✅
-  - 创建 FreezingSpear.tscn + freezing_spear.gd
-  - 实现直线穿透、冰冻效果、water属性伤害
-  - 绑定 Z 键（Armageddon 改为 X 键）
-
-- [x] **更新伤害类型系统** ✅
-  - 实现五种元素属性：basic, earth, air, fire, water
-  - 所有技能按系别分配对应属性
-
-- [ ] **继续重构剩余18个技能为独立场景**
-  - 参考 magic_missile.gd / fireball.gd / freezing_spear.gd 的代码结构
-  - 按系别分批重构：Earth → Air → Fire → Water
-  - 每个技能创建独立的 `.tscn` + `.gd` 文件
-
-- [ ] **添加系别头像到技能树顶部**
-  - 在HeroPanel.tscn的SkillsContainer上方添加4个TextureRect
-  - 对应Earth/Air/Fire/Water四系
-
-- [ ] **为所有技能分配键盘快捷键**
-  - 目前绑定：左键(Magic Missile)、右键(Fireball)、Z(Freezing Spear)
-  - 其余18个技能需要绑定
-
-- [ ] **添加音效系统**
-  - 创建AudioManager自动加载脚本
-  - 为技能施放、受击、拾取等添加音效占位
-
-### Phase 2: 内容丰富
-
-- [ ] **实现多种怪物**
-  - 基于Monster.tscn创建变体场景
-  - 实现不同AI（远程Archer、快速Spider、高血Bear等）
-  - 使用MonsterType枚举区分
-
-- [ ] **添加Boss战**
-  - 创建Boss场景（更大、更强、有特殊技能）
-  - 添加Boss血条UI
-
-- [ ] **实现地图系统**
-  - 创建TileMap场景
-  - 设计多张地图（草地、地牢、雪地等）
-  - 添加地图切换逻辑
-
-- [ ] **添加任务/波次系统**
-  - 原版是波次防御模式
-  - 实现波次生成逻辑和UI显示
-
-### Phase 3: 系统完善
-
-- [ ] **存档系统**
-  - 保存：等级、经验、属性、技能等级、物品
-  - 使用JSON格式存储到user://
-
-- [ ] **设置菜单**
-  - 音量控制
-  - 分辨率/全屏
-  - 按键绑定（可自定义）
-
-- [ ] **技能视觉效果升级**
-  - 为每个技能创建专门的GPUParticles2D或CPUParticles2D
-  - 添加屏幕震动、闪光等反馈
-
-- [ ] **平衡性调整**
-  - 通过DevMode测试所有技能
-  - 调整伤害、消耗、冷却数值
-
-### Phase 4:  polish
-
-- [ ] **开场菜单**
-  - 开始游戏、继续、设置、退出
-
-- [ ] **游戏结束画面**
-  - 死亡统计、重新开始
-
-- [ ] **成就系统**（可选）
-
-- [ ] **多语言支持**（可选）
+### 待完成 🔧
+1. **音效系统** - 为所有技能和事件添加音效
+2. **存档系统** - 使用 FileAccess + JSON
+3. **Quest模式完善** - 不同地图背景、更多关卡配置、Boss战设计、关卡解锁持久化
+4. **UI完善** - 添加系别头像、更好的技能提示框等
+5. **技能平衡** - 测试并调整技能数值
+6. **性能优化** - 对象池、内存管理
 
 ---
 
 ## 8. 下一个Agent的工作建议
 
-### 如果你是接手的Agent，请按以下顺序工作：
-
-#### 第一步：熟悉项目（30分钟）
-1. 运行游戏（F5），测试基本功能
-2. 按F2进入DevMode，测试技能树
-3. 按T打开英雄面板，测试属性分配
-4. 阅读本文档的"已完成功能"和"核心系统详解"
-
-#### 第二步：修复高优先级问题（1-2小时）
-1. **添加技能键盘绑定**
-   - 询问用户想要的按键方案
-   - 修改project.godot和hero.gd
-   
-2. **添加系别头像**
-   - 询问用户是否有头像资源
-   - 修改HeroPanel.tscn和hero_panel.gd
-
-3. **创建Magic Missile独立投射物**
-   - 复制并修改Projectile.tscn
-   - 更新hero.gd中的引用
-
-#### 第三步：根据用户反馈迭代
-- 用户通常会有具体的视觉或功能需求
-- 先理解需求，再实现
-- 保持与现有代码风格一致
-
-#### 第四步：测试与验证
-- 每次修改后运行游戏测试
-- 使用DevMode测试技能是否正常
-- 检查是否有运行时错误
-
-### 代码风格指南
-- 使用snake_case命名变量和函数
-- 使用PascalCase命名类名和节点名
-- 常量使用UPPER_SNAKE_CASE
-- 缩进使用Tab（Godot默认）
-- 信号使用过去式命名（如skill_upgraded）
-- 优先使用类型注解（-> void, -> float等）
-
-### 常见陷阱
-1. **project.godot是二进制格式** - 直接文本编辑可能导致格式错误，建议使用Godot编辑器修改输入映射
-2. **场景文件(.tscn)格式敏感** - 修改时保持缩进和格式一致
-3. **自动加载脚本** - global.gd和loot_manager.gd是自动加载的，修改后无需手动实例化
-4. **get_tree().paused** - 暂停会影响所有_process和_physics_process，但_unhandled_input仍然有效
+1. **先运行游戏**，按 F2 进入 DevMode，测试现有功能
+2. **保持代码风格一致**：
+   - snake_case 命名变量和函数
+   - PascalCase 命名类名和节点名
+   - UPPER_SNAKE_CASE 命名常量
+3. **技能数值参考**：`E:\EvilInvasion\evil_invasion_spell.xlsx`
+4. **节点命名规范**：参考 `NAMING_CONVENTIONS.md`
 
 ---
 
 ## 9. 关键代码文件索引
 
-### 必须理解的文件（按优先级排序）
+### 核心系统
+1. `Scripts/global.gd` — 游戏全局状态（含经验值公式、Quest模式经验处理）
+2. `Scripts/hero.gd` — 玩家控制与技能
+3. `Scripts/game_mode_select.gd` — 游戏模式选择（Quest/Survival切换）
 
-1. **[global.gd](file:///e:/EvilInvasion/GodotReMake/Scripts/global.gd)** - 游戏全局状态
-   - 所有游戏数据的中心
-   - 修改前务必理解变量含义
-   - **新增**：`damage_multiplier` 用于全局伤害倍率
+### 怪物系统
+4. `Scripts/Monsters/monster_base.gd` — 怪物基类（含Quest模式游荡行为）
+5. `Scripts/Monsters/monster_melee.gd` — 近战行为
+6. `Scripts/Monsters/monster_ranged.gd` — 远程行为
+7. `Scripts/Monsters/monster_database.gd` — 怪物数值数据库
+8. `Scripts/loot_manager.gd` — 掉落管理器
 
-2. **[hero.gd](file:///e:/EvilInvasion/GodotReMake/Scripts/hero.gd)** - 玩家控制与技能
-   - 最长的文件（~990行）
-   - 所有技能施放逻辑在这里（23个技能）
-   - 输入处理在这里
-   - **注意**：Magic Missile、Fireball、Freezing Spear 已提取到独立场景，但 hero.gd 中仍保留调用逻辑
+### Quest模式系统
+9. `Scripts/Quest/quest_level_manager.gd` — Quest关卡管理器（10关配置、等级上限）
+10. `Scripts/Quest/quest_monster_spawner.gd` — Quest怪物生成器（边缘生成、波次）
+11. `Scripts/Quest/quest_hud_manager.gd` — Quest专用HUD
+12. `Scenes/QuestMain.tscn` — Quest模式主场景
 
-3. **[hero_panel.gd](file:///e:/EvilInvasion/GodotReMake/Scripts/hero_panel.gd)** - 技能树UI
-   - 技能树布局和数据定义
-   - 技能按钮创建和更新
-   - 连线绘制
-
-4. **[skill_button.gd](file:///e:/EvilInvasion/GodotReMake/Scripts/skill_button.gd)** - 技能按钮组件
-   - 按钮点击处理（升级技能）
-   - 提示框显示
-
-5. **[monster.gd](file:///e:/EvilInvasion/GodotReMake/Scripts/monster.gd)** - 怪物AI
-   - 状态机实现
-   - 受击和死亡逻辑
-
-6. **[project.godot](file:///e:/EvilInvasion/GodotReMake/project.godot)** - 项目配置
-   - 输入映射
-   - 自动加载脚本设置
-   - 渲染和窗口设置
-
-### 次要文件
-
-7. **[loot_manager.gd](file:///e:/EvilInvasion/GodotReMake/Scripts/loot_manager.gd)** - 掉落系统
-8. **[pickup_item.gd](file:///e:/EvilInvasion/GodotReMake/Scripts/pickup_item.gd)** - 拾取物品
-9. **[projectile.gd](file:///e:/EvilInvasion/GodotReMake/Scripts/projectile.gd)** - 旧版通用投射物（逐步弃用）
-10. **[magic_missile.gd](file:///e:/EvilInvasion/GodotReMake/Scripts/magic_missile.gd)** - Magic Missile 独立脚本 ✅
-11. **[fireball.gd](file:///e:/EvilInvasion/GodotReMake/Scripts/fireball.gd)** - Fireball 独立脚本 ✅
-12. **[freezing_spear.gd](file:///e:/EvilInvasion/GodotReMake/Scripts/freezing_spear.gd)** - Freezing Spear 独立脚本 ✅
-13. **[hud.gd](file:///e:/EvilInvasion/GodotReMake/Scripts/hud.gd)** - HUD更新
-14. **[monster_spawner.gd](file:///e:/EvilInvasion/GodotReMake/Scripts/monster_spawner.gd)** - 怪物生成
-15. **[camera.gd](file:///e:/EvilInvasion/GodotReMake/Scripts/camera.gd)** - 摄像机
-16. **[explosion.gd](file:///e:/EvilInvasion/GodotReMake/Scripts/explosion.gd)** - 爆炸特效
+### 技能系统
+13. `Scripts/Spells/magic_missile.gd` — Magic Missile 技能（参考模板）
 
 ---
 
 ## 10. 用户偏好与注意事项
 
-### 用户沟通风格
 - 用户使用中文交流
-- 用户会提供原版游戏的截图作为参考
-- 用户有时会手绘思维导图/草图说明需求
-- 用户重视视觉还原度（"参考原版设计"）
-
-### 已实现的设计决策
-1. **技能树布局** - 用户明确要求8列×4行的绝对定位布局，主枝/旁支结构
-2. **Magic Missile作为默认左键技能** - 用户最新要求
-3. **DevMode** - 用户要求用于开发和测试，F2触发
-4. **技能图标** - 使用占位资源（Art/Placeholder/XXX.png）
-
-### 待确认的设计决策
-1. **技能快捷键方案** - 需要询问用户偏好
-2. **系别头像资源** - 需要询问用户是否有资源
-3. **游戏模式** - 原版是波次防御还是自由探索？
-4. **美术风格** - 是否完全复刻原版像素风？
-
-### 技术限制
-- Godot 4.6.2-stable
-- Windows平台
-- 使用GDScript（非C#）
-- 占位美术资源在Art/Placeholder/目录
-
----
-
-## 附录：快速参考
-
-### 运行项目
-```powershell
-# 在PowerShell中
-cd e:\EvilInvasion\GodotReMake
-& "e:\EvilInvasion\Godot_v4.6.2-stable_win64_console.exe" --path .
-```
-
-### 检查语法
-```powershell
-& "e:\EvilInvasion\Godot_v4.6.2-stable_win64_console.exe" --headless --check-only --quit "e:\EvilInvasion\GodotReMake\project.godot"
-```
-
-### 项目路径
-- 项目根目录：`e:\EvilInvasion\GodotReMake`
-- Godot可执行文件：`e:\EvilInvasion\Godot_v4.6.2-stable_win64_console.exe`
+- 用户会提供原版游戏截图作为参考
+- 用户重视视觉还原度
+- 用户要求"一个技能一个场景"的架构
+- 用户喜欢做"tiny tweak"（微调），代码中应保留详细注释方便调整
+- **经验值公式已简化为 `level * 200`**
+- **Ball Lightning 和 Chain Lightning 是原版Air系技能，已实现**
 
 ---
 

@@ -120,27 +120,40 @@ func _on_body_entered(body: Node2D):
 func apply_effect():
 	match item_type:
 		ItemType.HEALTH_POTION:
-			Global.heal_over_time(Global.max_health * 0.5, 5.0)
+			# 生命药水：每秒恢复10%生命值，持续5秒
+			Global.apply_buff("health_regen", 5.0, {"percent_per_second": 0.1})
 		ItemType.MANA_POTION:
-			Global.restore_mana_over_time(Global.max_mana * 0.5, 5.0)
+			# 法力药水：每秒恢复10%法力值，持续5秒
+			Global.apply_buff("mana_regen", 5.0, {"percent_per_second": 0.1})
 		ItemType.REJUVENATION:
+			# 恢复药水：立即恢复50%生命和法力
 			Global.heal(Global.max_health * 0.5)
 			Global.restore_mana(Global.max_mana * 0.5)
 		ItemType.HASTE:
-			Global.activate_speed_boost(1.4, 15.0)
+			# 加速药水：速度+40%，持续15秒
+			Global.apply_buff("speed_boost", 15.0, {"multiplier": 1.4})
 		ItemType.TOME_OF_EXPERIENCE:
-			Global.gain_experience(int(Global.hero_level * 100 * 0.2))
+			# 经验之书：获得下一级所需经验的20%
+			var exp_to_next = Global.hero_level * 200
+			Global.gain_experience(int(exp_to_next * 0.2))
 		ItemType.MAGIC_SHIELD:
-			Global.activate_magic_shield(0.8, 15.0)
+			# 魔法护盾：80%魔法减伤，持续15秒
+			Global.apply_buff("magic_shield", 15.0, {"resist": 0.8})
 		ItemType.PHYSIC_SHIELD:
-			Global.activate_physic_shield(0.8, 15.0)
+			# 物理护盾：80%物理减伤，持续15秒
+			Global.apply_buff("physic_shield", 15.0, {"resist": 0.8})
 		ItemType.QUAD_DAMAGE:
-			Global.activate_damage_boost(4.0, 15.0)
+			# 四倍伤害：伤害×4，持续15秒
+			Global.apply_buff("damage_boost", 15.0, {"multiplier": 4.0})
 		ItemType.FREE_SPELLS:
-			Global.activate_free_spells(15.0)
+			# 免费施法：不消耗法力，持续15秒
+			Global.apply_buff("free_spells", 15.0)
 		ItemType.ATTRIBUTE_POINT:
+			# 属性点药水：+5属性点
 			Global.attribute_points += 5
 		ItemType.SKILL_POINT:
+			# 技能点药水：+1技能点
 			Global.skill_points += 1
 		ItemType.INVULNERABILITY:
-			Global.activate_invulnerability(15.0)
+			# 无敌药水：无敌15秒
+			Global.apply_buff("invulnerability", 15.0)

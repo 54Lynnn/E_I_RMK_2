@@ -1,0 +1,116 @@
+	COEFF	START_VALUE
+STRENGTH_ON_HEALTH	10	0
+STRENGTH_ON_HIT_RECOVERY	-0.004	0.5
+		
+DEXTERITY_ON_SPEED	0.5	65
+DEXTERITY_ON_CHANCE_TO_BE_HIT	-0.004	1
+		
+STAMINA_ON_HEALTH_REGENERATION	0.1	0
+STAMINA_ON_SPEED	0.35	0
+
+INTELLIGENCE_ON_MANA	6	0
+INTELLIGENCE_ON_MANA_REGENERATION	0.06	0
+
+WISDOM_ON_MANA	2	0
+WISDOM_ON_MANA_REGENERATION	0.18	0
+
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+
+
+		
+		
+
+		
+					
+					
+					
+					
+
+
+
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+
+
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+
+
+					
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+
+
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+
+
+						
+						
+						
+						
+						
+						
+						
+				
+				
+				
+				

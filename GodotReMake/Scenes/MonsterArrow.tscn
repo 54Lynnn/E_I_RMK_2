@@ -1,0 +1,18 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://Scripts/Monsters/monster_arrow.gd" id="1_arrow"]
+[ext_resource type="Texture2D" path="res://Art/Placeholder/monster_arrow.png" id="2_arrow_tex"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_arrow"]
+size = Vector2(16, 4)
+
+[node name="MonsterArrow" type="Area2D"]
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("1_arrow")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_arrow")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_arrow_tex")

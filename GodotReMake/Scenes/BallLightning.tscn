@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3]
 
-[ext_resource type="Script" path="res://Scripts/ball_lightning.gd" id="1"]
+[ext_resource type="Script" path="res://Scripts/Spells/ball_lightning.gd" id="1"]
 [ext_resource type="Texture2D" path="res://Art/Placeholder/BallLightning.png" id="2"]
 
 [node name="BallLightning" type="Area2D"]

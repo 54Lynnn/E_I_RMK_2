@@ -25,30 +25,32 @@ extends CharacterBody2D
 # ============================================
 
 # 导入已重构的技能脚本
-const MagicMissile = preload("res://Scripts/magic_missile.gd")
-const Fireball = preload("res://Scripts/fireball.gd")
-const FreezingSpear = preload("res://Scripts/freezing_spear.gd")
-const Prayer = preload("res://Scripts/prayer.gd")
-const Heal = preload("res://Scripts/heal.gd")
-const Teleport = preload("res://Scripts/teleport.gd")
-const MistFog = preload("res://Scripts/mistfog.gd")
-const StoneEnchanted = preload("res://Scripts/stone_enchanted.gd")
-const WrathOfGod = preload("res://Scripts/wrath_of_god.gd")
-const Telekinesis = preload("res://Scripts/telekinesis.gd")
-const Sacrifice = preload("res://Scripts/sacrifice.gd")
-const HolyLight = preload("res://Scripts/holy_light.gd")
-const FireWalk = preload("res://Scripts/fire_walk.gd")
-const Meteor = preload("res://Scripts/meteor.gd")
-const Armageddon = preload("res://Scripts/armageddon.gd")
-const PoisonCloud = preload("res://Scripts/poison_cloud.gd")
-const Fortuna = preload("res://Scripts/fortuna.gd")
-const DarkRitual = preload("res://Scripts/dark_ritual.gd")
-const Nova = preload("res://Scripts/nova.gd")
-const BallLightning = preload("res://Scripts/ball_lightning.gd")
-const ChainLightning = preload("res://Scripts/chain_lightning.gd")
+const MagicMissile = preload("res://Scripts/Spells/magic_missile.gd")
+const Fireball = preload("res://Scripts/Spells/fireball.gd")
+const FreezingSpear = preload("res://Scripts/Spells/freezing_spear.gd")
+const Prayer = preload("res://Scripts/Spells/prayer.gd")
+const Heal = preload("res://Scripts/Spells/heal.gd")
+const Teleport = preload("res://Scripts/Spells/teleport.gd")
+const MistFog = preload("res://Scripts/Spells/mistfog.gd")
+const StoneEnchanted = preload("res://Scripts/Spells/stone_enchanted.gd")
+const WrathOfGod = preload("res://Scripts/Spells/wrath_of_god.gd")
+const Telekinesis = preload("res://Scripts/Spells/telekinesis.gd")
+const Sacrifice = preload("res://Scripts/Spells/sacrifice.gd")
+const HolyLight = preload("res://Scripts/Spells/holy_light.gd")
+const FireWalk = preload("res://Scripts/Spells/fire_walk.gd")
+const Meteor = preload("res://Scripts/Spells/meteor.gd")
+const Armageddon = preload("res://Scripts/Spells/armageddon.gd")
+const PoisonCloud = preload("res://Scripts/Spells/poison_cloud.gd")
+const Fortuna = preload("res://Scripts/Spells/fortuna.gd")
+const DarkRitual = preload("res://Scripts/Spells/dark_ritual.gd")
+const Nova = preload("res://Scripts/Spells/nova.gd")
+const BallLightning = preload("res://Scripts/Spells/ball_lightning.gd")
+const ChainLightning = preload("res://Scripts/Spells/chain_lightning.gd")
 
 # 基础移动速度（像素/秒）
-# 实际速度 = BASE_MOVE_SPEED + 敏捷×0.5 + 耐力×0.35
+# 原版公式：DEXTERITY_ON_SPEED = 0.5, START_VALUE = 65
+# 原版公式：STAMINA_ON_SPEED = 0.35, START_VALUE = 0
+# 实际速度 = 65 + 敏捷×0.5 + 耐力×0.35
 const BASE_MOVE_SPEED := 65.0
 
 # 加速度和摩擦力（用于平滑移动）
@@ -92,6 +94,10 @@ var skill_cooldowns := {
 # 技能状态标记
 var prayer_active := false      # 祈祷技能是否激活
 
+# 注意：受击减速现在通过 Global 的 buff 系统管理
+# debuff ID: "hit_slow"
+# 原版：被怪物攻击后减速20%，持续0.5秒
+
 # ============================================
 # 生命周期函数
 # ============================================
@@ -102,6 +108,7 @@ func _ready():
 	Global.level_changed.connect(_on_level_changed)
 	Global.hero_died.connect(_on_died)
 	Global.skill_level_changed.connect(_on_skill_level_changed)
+	Global.hero_took_damage.connect(_on_hero_took_damage)
 
 	Global.apply_strength()
 	Global.apply_intelligence()
@@ -163,11 +170,40 @@ func _process(delta):
 		cast_ball_lightning()
 	if Input.is_action_pressed("spell_chain_lightning"):
 		cast_chain_lightning()
+	
+	# 存档快捷键 (F5)
+	if Input.is_action_just_pressed("save_game"):
+		_save_game()
+	
+	# 读档快捷键 (F10)
+	if Input.is_action_just_pressed("load_game"):
+		_load_game()
+
+func _save_game():
+	var success = SaveManager.save_game(1)
+	if success:
+		print("游戏已保存! 按F9读取")
+	else:
+		print("保存失败!")
+
+func _load_game():
+	var success = SaveManager.load_game(1)
+	if success:
+		print("游戏已加载!")
+	else:
+		print("没有存档或加载失败!")
 
 func get_move_speed() -> float:
 	# 计算实际移动速度
+	# 原版公式：DEXTERITY_ON_SPEED = 0.5, START_VALUE = 65
+	# 原版公式：STAMINA_ON_SPEED = 0.35, START_VALUE = 0
 	# 受基础速度、敏捷、耐力和全局速度倍率影响
-	return BASE_MOVE_SPEED + Global.hero_dexterity * 0.5 + Global.hero_stamina * 0.35
+	var base_speed = BASE_MOVE_SPEED + Global.hero_dexterity * 0.5 + Global.hero_stamina * 0.35
+	
+	# 应用全局速度倍率（包括buff/debuff）
+	base_speed *= Global.speed_multiplier
+	
+	return base_speed
 
 func _physics_process(delta):
 	# 物理帧执行：处理移动和碰撞
@@ -310,6 +346,12 @@ func _on_level_changed(lvl):
 func _on_skill_level_changed(skill_id: String, _level: int):
 	if skill_id == "fortuna":
 		Fortuna.update_drop_rate()
+
+func _on_hero_took_damage(_amount: float, _is_magic: bool, attacker: Node):
+	# 当英雄受到怪物伤害时，触发减速 debuff
+	# 原版：被怪物攻击后减速20%，持续0.5秒
+	if attacker != null and attacker.is_in_group("monsters"):
+		Global.apply_buff("hit_slow", 0.5, {"multiplier": 0.8})
 
 func show_level_up_effect():
 	var glow = ColorRect.new()
