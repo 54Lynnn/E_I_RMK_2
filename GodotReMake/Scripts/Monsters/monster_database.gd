@@ -310,25 +310,69 @@ static func get_diablo_summon_table() -> Dictionary:
 # 根据关卡获取适合的怪物
 # ============================================
 static func get_monsters_for_level(level: int) -> Array:
+	var level_requirements := {
+		"troll": 1,
+		"mummy": 3,
+		"spider": 6,
+		"demon": 14,
+		"bear": 18,
+		"reaper": 26,
+		"diablo": 35,
+	}
+	
 	var suitable = []
 	for id in MONSTER_DATA.keys():
-		if id == "diablo":
-			continue
-		
-		var data = MONSTER_DATA[id]
-		var min_level = 1
-		
-		# 根据怪物威胁值决定出现的最小关卡
-		var threat = data.health_per_level * data.damage_base
-		if threat > 50:
-			min_level = 5
-		elif threat > 30:
-			min_level = 3
-		
+		var min_level = level_requirements.get(id, 99)
 		if level >= min_level:
 			suitable.append(id)
 	
 	return suitable
+
+# ============================================
+# 怪物出现权重（越高出现越频繁）
+# ============================================
+const MONSTER_WEIGHTS := {
+	"troll": 25,
+	"mummy": 22,
+	"spider": 18,
+	"demon": 15,
+	"bear": 10,
+	"reaper": 5,
+	"diablo": 2,
+}
+
+# ============================================
+# 按权重随机选择一种怪物（可排除指定种类）
+# ============================================
+static func pick_monster_for_level(level: int, exclude: Array = []) -> String:
+	var suitable = get_monsters_for_level(level)
+	if suitable.is_empty():
+		return "troll"
+	
+	# 移除被排除的怪物
+	if not exclude.is_empty():
+		var filtered = []
+		for id in suitable:
+			if not id in exclude:
+				filtered.append(id)
+		if filtered.is_empty():
+			filtered = suitable  # 全被排除则用原列表
+		suitable = filtered
+	
+	# 计算可用怪物的总权重
+	var total_weight := 0
+	for id in suitable:
+		total_weight += MONSTER_WEIGHTS.get(id, 10)
+	
+	# 按权重随机选择
+	var roll = randi() % total_weight
+	var cumulative := 0
+	for id in suitable:
+		cumulative += MONSTER_WEIGHTS.get(id, 10)
+		if roll < cumulative:
+			return id
+	
+	return suitable[-1]
 
 # ============================================
 # 计算怪物威胁值（用于平衡）

@@ -90,9 +90,8 @@ func _process_behavior(delta):
 		var flee_dir = -dir_to_target  # 反向方向
 		velocity = flee_dir * move_speed
 		
-		# 【转身效果】逃跑时背对玩家（转身逃跑）
-		# 这样视觉上看起来是"转身→后退→到达安全距离后转回来"
-		sprite.rotation = atan2(flee_dir.y, flee_dir.x)
+		# 【转身效果】逃跑时平滑转向背对玩家
+		rotate_towards(flee_dir, delta)
 		
 		# 如果正在攻击中，取消攻击（被打断）
 		_cancel_attack()
@@ -101,8 +100,8 @@ func _process_behavior(delta):
 		# 【状态3：攻击区】在 optimal_range 内 → 停止移动，开始攻击
 		velocity = Vector2.ZERO
 		current_state = State.ATTACK
-		# 攻击时面向玩家（瞄准）
-		sprite.rotation = atan2(dir_to_target.y, dir_to_target.x)
+		# 攻击时平滑转向面向玩家（瞄准）
+		rotate_towards(dir_to_target, delta)
 		
 		# 如果冷却完毕，开始新的攻击周期
 		if can_attack:
@@ -112,8 +111,8 @@ func _process_behavior(delta):
 		# 【状态4：追击区】在 optimal_range 和 detection_range 之间 → 追击
 		current_state = State.CHASE
 		velocity = dir_to_target * move_speed
-		# 追击时面向玩家
-		sprite.rotation = atan2(dir_to_target.y, dir_to_target.x)
+		# 追击时平滑转向面向玩家
+		rotate_towards(dir_to_target, delta)
 
 # ============================================
 # 处理攻击周期

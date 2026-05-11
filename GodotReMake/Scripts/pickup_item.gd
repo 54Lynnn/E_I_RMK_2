@@ -27,6 +27,7 @@ var hover_time := 0.0
 var is_hovered := false
 
 func _ready():
+	add_to_group("pickup_items")
 	body_entered.connect(_on_body_entered)
 
 	z_index = 3

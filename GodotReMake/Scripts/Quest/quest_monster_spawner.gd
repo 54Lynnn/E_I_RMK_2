@@ -44,6 +44,7 @@ var wave_timer := 0.0
 @onready var level_manager: Node = get_parent()
 
 func _ready():
+	add_to_group("monster_spawners")
 	# 检查场景是否存在
 	var to_remove := []
 	for id in monster_scenes.keys():
@@ -52,6 +53,15 @@ func _ready():
 			to_remove.append(id)
 	for id in to_remove:
 		monster_scenes.erase(id)
+
+func reset_spawner():
+	"""读档时重置生成器状态"""
+	current_wave = 0
+	waves = []
+	allowed_monsters = []
+	all_waves_spawned = false
+	is_spawning = false
+	wave_timer = 0.0
 
 func _process(delta):
 	if not is_spawning or all_waves_spawned:

@@ -53,6 +53,7 @@ const MonsterDatabase = preload("res://Scripts/Monsters/monster_database.gd")
 @export var attack_range: float      # 攻击范围（像素）：怪物可以发动攻击的距离
 @export var min_distance := 40.0     # 最小距离（像素）：避免怪物贴脸穿模
 @export var attack_cooldown := 2.0   # 攻击间隔（秒）：两次攻击之间的等待时间
+@export var rotation_speed := 1.0    # 转向速度：越大转向越快，0.4=笨重，1.5=灵活
 
 # ============================================
 # 元素光环（Aura）系统
@@ -195,6 +196,7 @@ func apply_database_data(data: Dictionary):
 	attack_range = data.get("attack_range", attack_range)
 	min_distance = data.get("min_distance", min_distance)
 	attack_cooldown = data.get("attack_cooldown", attack_cooldown)
+	rotation_speed = data.get("rotation_speed", rotation_speed)
 	
 	# 更新血条（如果已初始化）
 	if health_bar:
@@ -211,8 +213,13 @@ func set_quest_mode(enabled: bool):
 	"""设置游荡模式：怪物会随机游荡，直到发现玩家"""
 	wander_mode = enabled
 	if enabled:
-		# 随机初始游荡方向
 		wander_direction = Vector2(randf_range(-1, 1), randf_range(-1, 1)).normalized()
+
+func set_wander_direction(dir: Vector2):
+	"""设置游荡方向（由生成器调用，如整排横扫的方向）"""
+	if dir.length() > 0:
+		wander_direction = dir.normalized()
+		wander_mode = true
 
 # ============================================
 # _physics_process(): 每帧物理更新
@@ -242,6 +249,20 @@ func _physics_process(delta):
 	move_and_slide()
 
 # ============================================
+# 平滑转向（让怪物转头更自然）
+# ============================================
+func rotate_towards(direction: Vector2, delta: float):
+	if not sprite or direction.length() <= 0.001:
+		return
+	var target_angle = atan2(direction.y, direction.x)
+	var angle_diff = wrapf(target_angle - sprite.rotation, -PI, PI)
+	var step = rotation_speed * 4.0 * delta  # 转换为实际角速度
+	if abs(angle_diff) < step:
+		sprite.rotation = target_angle
+	else:
+		sprite.rotation += sign(angle_diff) * step
+
+# ============================================
 # 游荡逻辑（带墙壁反弹）
 # ============================================
 func _process_wandering(delta):
@@ -255,44 +276,42 @@ func _process_wandering(delta):
 	velocity = wander_direction * move_speed
 	current_state = State.IDLE
 	
-	# 让怪物面向移动方向
-	if sprite and wander_direction.length() > 0:
-		sprite.rotation = atan2(wander_direction.y, wander_direction.x)
+	# 平滑转向移动方向
+	rotate_towards(wander_direction, delta)
 
 func _check_wall_bounce():
-	"""检查是否碰到墙壁，如果碰到则像光线一样反弹"""
-	var margin := 50.0  # 距离墙壁多近时开始反弹
-	var bounced := false
+	"""检查是否碰到墙壁，碰到后随机选一个新方向"""
+	var margin := 50.0
+	var hit_wall := false
+	var wall_normal := Vector2.ZERO  # 墙壁的法线方向
 	
-	# 检查左右墙壁（X轴反弹）
+	# 检查左右墙壁
 	if global_position.x <= map_bounds.position.x + margin:
-		# 碰到左墙，X方向取反（如果向左走）
 		if wander_direction.x < 0:
-			wander_direction.x = abs(wander_direction.x)
-			bounced = true
+			hit_wall = true
+			wall_normal = Vector2.RIGHT
 	elif global_position.x >= map_bounds.position.x + map_bounds.size.x - margin:
-		# 碰到右墙，X方向取反（如果向右走）
 		if wander_direction.x > 0:
-			wander_direction.x = -abs(wander_direction.x)
-			bounced = true
+			hit_wall = true
+			wall_normal = Vector2.LEFT
 	
-	# 检查上下墙壁（Y轴反弹）
-	if global_position.y <= map_bounds.position.y + margin:
-		# 碰到上墙，Y方向取反（如果向上走）
-		if wander_direction.y < 0:
-			wander_direction.y = abs(wander_direction.y)
-			bounced = true
-	elif global_position.y >= map_bounds.position.y + map_bounds.size.y - margin:
-		# 碰到下墙，Y方向取反（如果向下走）
-		if wander_direction.y > 0:
-			wander_direction.y = -abs(wander_direction.y)
-			bounced = true
+	# 检查上下墙壁
+	if not hit_wall:
+		if global_position.y <= map_bounds.position.y + margin:
+			if wander_direction.y < 0:
+				hit_wall = true
+				wall_normal = Vector2.DOWN
+		elif global_position.y >= map_bounds.position.y + map_bounds.size.y - margin:
+			if wander_direction.y > 0:
+				hit_wall = true
+				wall_normal = Vector2.UP
 	
-	# 如果反弹了，重新归一化方向向量
-	if bounced:
-		wander_direction = wander_direction.normalized()
-		# 稍微随机化一点，避免完全直线反弹太机械
-		wander_direction = wander_direction.rotated(randf_range(-0.3, 0.3))
+	if hit_wall:
+		# 随机选一个新方向（偏向于远离墙壁的方向）
+		wander_direction = Vector2(randf_range(-1, 1), randf_range(-1, 1)).normalized()
+		# 如果新方向指向墙壁，反转它（防止卡墙）
+		if wander_direction.dot(wall_normal) < 0:
+			wander_direction = -wander_direction
 
 # ============================================
 # _process_behavior(): 怪物行为逻辑

@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://questmainscene01"]
+[gd_scene format=3 uid="uid://dot6ufo40344g"]
 
 [ext_resource type="Script" uid="uid://bq5vcis2gqn0m" path="res://Scripts/camera.gd" id="1"]
 [ext_resource type="Script" uid="uid://questlevelmanager" path="res://Scripts/Quest/quest_level_manager.gd" id="2"]

@@ -98,6 +98,10 @@ var prayer_active := false      # 祈祷技能是否激活
 # debuff ID: "hit_slow"
 # 原版：被怪物攻击后减速20%，持续0.5秒
 
+# 受击恢复系统（hit recovery）
+# 原版：被攻击后一段时间内不能施法，移动速度降低
+var hit_recovery_timer := 0.0   # 受击恢复剩余时间
+
 # ============================================
 # 生命周期函数
 # ============================================
@@ -109,6 +113,7 @@ func _ready():
 	Global.hero_died.connect(_on_died)
 	Global.skill_level_changed.connect(_on_skill_level_changed)
 	Global.hero_took_damage.connect(_on_hero_took_damage)
+	Global.load_game_started.connect(_on_load_game_started)
 
 	Global.apply_strength()
 	Global.apply_intelligence()
@@ -126,50 +131,59 @@ func _process(delta):
 
 	update_hud()
 
+	# 处理受击恢复计时器
+	if hit_recovery_timer > 0:
+		hit_recovery_timer -= delta
+		if hit_recovery_timer <= 0:
+			hit_recovery_timer = 0
+			Global.is_in_hit_recovery = false
+
 	for skill in skill_cooldowns.keys():
 		if skill_cooldowns[skill] > 0:
 			skill_cooldowns[skill] -= delta
 			if skill_cooldowns[skill] < 0:
 				skill_cooldowns[skill] = 0
 
-	if Input.is_action_pressed("spell_magic_missile"):
-		cast_magic_missile()
-	if Input.is_action_pressed("spell_fireball"):
-		cast_fireball()
-	if Input.is_action_pressed("spell_freezing_spear"):
-		cast_freezing_spear()
-	if Input.is_action_pressed("spell_prayer"):
-		cast_prayer()
-	if Input.is_action_pressed("spell_heal"):
-		cast_heal()
-	if Input.is_action_pressed("spell_teleport"):
-		cast_teleport()
-	if Input.is_action_pressed("spell_mistfog"):
-		cast_mistfog()
-	if Input.is_action_pressed("spell_wrath_of_god"):
-		cast_wrath_of_god()
-	if Input.is_action_pressed("spell_telekinesis"):
-		cast_telekinesis()
-	if Input.is_action_pressed("spell_sacrifice"):
-		cast_sacrifice()
-	if Input.is_action_pressed("spell_holy_light"):
-		cast_holy_light()
-	if Input.is_action_pressed("spell_fire_walk"):
-		cast_fire_walk()
-	if Input.is_action_pressed("spell_meteor"):
-		cast_meteor()
-	if Input.is_action_pressed("spell_armageddon"):
-		cast_armageddon()
-	if Input.is_action_pressed("spell_poison_cloud"):
-		cast_poison_cloud()
-	if Input.is_action_pressed("spell_dark_ritual"):
-		cast_dark_ritual()
-	if Input.is_action_pressed("spell_nova"):
-		cast_nova()
-	if Input.is_action_pressed("spell_ball_lightning"):
-		cast_ball_lightning()
-	if Input.is_action_pressed("spell_chain_lightning"):
-		cast_chain_lightning()
+	# 如果处于受击恢复状态，不能施法
+	if not Global.is_in_hit_recovery:
+		if Input.is_action_pressed("spell_magic_missile"):
+			cast_magic_missile()
+		if Input.is_action_pressed("spell_fireball"):
+			cast_fireball()
+		if Input.is_action_pressed("spell_freezing_spear"):
+			cast_freezing_spear()
+		if Input.is_action_pressed("spell_prayer"):
+			cast_prayer()
+		if Input.is_action_pressed("spell_heal"):
+			cast_heal()
+		if Input.is_action_pressed("spell_teleport"):
+			cast_teleport()
+		if Input.is_action_pressed("spell_mistfog"):
+			cast_mistfog()
+		if Input.is_action_pressed("spell_wrath_of_god"):
+			cast_wrath_of_god()
+		if Input.is_action_pressed("spell_telekinesis"):
+			cast_telekinesis()
+		if Input.is_action_pressed("spell_sacrifice"):
+			cast_sacrifice()
+		if Input.is_action_pressed("spell_holy_light"):
+			cast_holy_light()
+		if Input.is_action_pressed("spell_fire_walk"):
+			cast_fire_walk()
+		if Input.is_action_pressed("spell_meteor"):
+			cast_meteor()
+		if Input.is_action_pressed("spell_armageddon"):
+			cast_armageddon()
+		if Input.is_action_pressed("spell_poison_cloud"):
+			cast_poison_cloud()
+		if Input.is_action_pressed("spell_dark_ritual"):
+			cast_dark_ritual()
+		if Input.is_action_pressed("spell_nova"):
+			cast_nova()
+		if Input.is_action_pressed("spell_ball_lightning"):
+			cast_ball_lightning()
+		if Input.is_action_pressed("spell_chain_lightning"):
+			cast_chain_lightning()
 	
 	# 存档快捷键 (F5)
 	if Input.is_action_just_pressed("save_game"):
@@ -180,18 +194,46 @@ func _process(delta):
 		_load_game()
 
 func _save_game():
+	Global.hero_save_position = global_position
 	var success = SaveManager.save_game(1)
 	if success:
-		print("游戏已保存! 按F9读取")
+		_show_save_notification("游戏已保存", Color.GREEN)
 	else:
-		print("保存失败!")
+		_show_save_notification("保存失败!", Color.RED)
 
 func _load_game():
 	var success = SaveManager.load_game(1)
 	if success:
-		print("游戏已加载!")
+		_show_save_notification("游戏已读取", Color.CYAN)
+		_restore_hero_state()
 	else:
-		print("没有存档或加载失败!")
+		_show_save_notification("没有存档或加载失败!", Color.RED)
+
+func _restore_hero_state():
+	global_position = Global.hero_save_position
+	for skill in skill_cooldowns.keys():
+		skill_cooldowns[skill] = 0.0
+	update_hud()
+
+func _on_load_game_started():
+	for skill in skill_cooldowns.keys():
+		skill_cooldowns[skill] = 0.0
+
+func _show_save_notification(text: String, color: Color):
+	var label = Label.new()
+	label.text = text
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.add_theme_color_override("font_color", color)
+	label.add_theme_font_size_override("font_size", 36)
+	label.add_theme_color_override("font_outline_color", Color.BLACK)
+	label.add_theme_constant_override("outline_size", 4)
+	get_parent().add_child(label)
+	label.global_position = global_position - Vector2(100, 100)
+	var tween = create_tween()
+	tween.tween_property(label, "position:y", label.position.y - 60, 1.5)
+	tween.parallel().tween_property(label, "modulate:a", 0.0, 1.5)
+	tween.tween_callback(label.queue_free)
 
 func get_move_speed() -> float:
 	# 计算实际移动速度
@@ -228,6 +270,10 @@ func _physics_process(delta):
 			pass  # 碰撞处理（预留）
 
 func _unhandled_input(event):
+	# 如果处于受击恢复状态，不能施法
+	if Global.is_in_hit_recovery:
+		return
+	
 	if event.is_action_pressed("spell_magic_missile"):
 		cast_magic_missile()
 	if event.is_action_pressed("spell_fireball"):
@@ -348,10 +394,16 @@ func _on_skill_level_changed(skill_id: String, _level: int):
 		Fortuna.update_drop_rate()
 
 func _on_hero_took_damage(_amount: float, _is_magic: bool, attacker: Node):
-	# 当英雄受到怪物伤害时，触发减速 debuff
+	# 当英雄受到怪物伤害时，触发受击恢复和减速 debuff
 	# 原版：被怪物攻击后减速20%，持续0.5秒
 	if attacker != null and attacker.is_in_group("monsters"):
 		Global.apply_buff("hit_slow", 0.5, {"multiplier": 0.8})
+		
+		# 受击恢复系统：被攻击后一段时间内不能施法
+		# 原版公式：hit_recovery = max(0.1, 0.5 - strength * 0.004)
+		# 每次受击刷新恢复时间
+		Global.is_in_hit_recovery = true
+		hit_recovery_timer = Global.hit_recovery_time
 
 func show_level_up_effect():
 	var glow = ColorRect.new()
@@ -383,6 +435,9 @@ func _on_died():
 
 func respawn():
 	Global.reset()
+	# 重置受击恢复状态
+	hit_recovery_timer = 0.0
+	Global.is_in_hit_recovery = false
 	visible = true
 	set_process(true)
 	set_physics_process(true)

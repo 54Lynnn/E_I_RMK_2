@@ -66,8 +66,8 @@ func _process_behavior(delta):
 			# 设置速度
 			velocity = dir * move_speed
 			
-			# 让怪物面向玩家（旋转贴图）
-			sprite.rotation = atan2(dir.y, dir.x)
+			# 平滑转向面向玩家
+			rotate_towards(dir, delta)
 		
 		# 【攻击判断】如果玩家在攻击范围内且冷却完毕
 		if can_attack and dist <= attack_range:

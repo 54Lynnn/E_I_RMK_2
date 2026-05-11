@@ -6,7 +6,7 @@ var target: Node2D = null
 
 func _ready():
 	make_current()
-	zoom = Vector2(0.5, 0.5)  # 视野翻倍
+	zoom = Vector2(0.5, 0.5)
 
 func _process(delta):
 	if not target:

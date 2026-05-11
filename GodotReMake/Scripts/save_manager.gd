@@ -73,6 +73,7 @@ static func save_game(slot: int) -> bool:
 # 构建存档数据字典
 # ============================================
 static func _build_save_data() -> Dictionary:
+	var hero_pos := Global.hero_save_position if "hero_save_position" in Global else Vector2(1280, 1280)
 	var data := {
 		"version": CURRENT_VERSION,
 		"timestamp": Time.get_unix_time_from_system(),
@@ -85,6 +86,8 @@ static func _build_save_data() -> Dictionary:
 			"experience": Global.hero_experience,
 			"health": Global.health,
 			"mana": Global.mana,
+			"position_x": hero_pos.x,
+			"position_y": hero_pos.y,
 		},
 		"attributes": {
 			"strength": Global.hero_strength,
@@ -96,6 +99,14 @@ static func _build_save_data() -> Dictionary:
 			"skill_points": Global.skill_points,
 		},
 		"skills": Global.skill_levels.duplicate(),
+		"buffs": {
+			"damage_multiplier": Global.damage_multiplier,
+			"speed_multiplier": Global.speed_multiplier,
+			"physic_resist": Global.physic_resist,
+			"magic_resist": Global.magic_resist,
+			"free_spells": Global.free_spells,
+			"invulnerable": Global.invulnerable,
+		},
 	}
 	return data
 
@@ -141,9 +152,41 @@ static func load_game(slot: int) -> bool:
 	return true
 
 # ============================================
+# 清理当前游戏状态（读档前调用）
+# ============================================
+static func _clear_game_state():
+	var tree = Engine.get_main_loop()
+	if not tree:
+		return
+	
+	# 1. 移除所有怪物
+	var monsters = tree.get_nodes_in_group("monsters")
+	for m in monsters:
+		if is_instance_valid(m):
+			m.queue_free()
+	
+	# 2. 重置刷怪计数器
+	var spawners = tree.get_nodes_in_group("monster_spawners")
+	for s in spawners:
+		if is_instance_valid(s) and s.has_method("reset_spawner"):
+			s.reset_spawner()
+	
+	# 3. 清理掉落物
+	var pickups = tree.get_nodes_in_group("pickup_items")
+	for p in pickups:
+		if is_instance_valid(p):
+			p.queue_free()
+	
+	# 4. 重置英雄冷却（通过 Global 信号通知 hero）
+	Global.load_game_started.emit()
+
+# ============================================
 # 应用存档数据到游戏
 # ============================================
 static func _apply_save_data(data: Dictionary):
+	# 清理当前游戏状态（怪物、投射物等）
+	_clear_game_state()
+	
 	# 游戏设置
 	if data.has("game"):
 		var game_data: Dictionary = data.game
@@ -163,6 +206,8 @@ static func _apply_save_data(data: Dictionary):
 			Global.health = hero_data.health
 		if hero_data.has("mana"):
 			Global.mana = hero_data.mana
+		if hero_data.has("position_x") and hero_data.has("position_y"):
+			Global.hero_save_position = Vector2(hero_data.position_x, hero_data.position_y)
 	
 	# 属性
 	if data.has("attributes"):
@@ -188,6 +233,22 @@ static func _apply_save_data(data: Dictionary):
 		for skill_id in skills_data.keys():
 			if Global.skill_levels.has(skill_id):
 				Global.skill_levels[skill_id] = skills_data[skill_id]
+	
+	# Buff/倍率状态恢复
+	if data.has("buffs"):
+		var buffs_data: Dictionary = data.buffs
+		if buffs_data.has("damage_multiplier"):
+			Global.damage_multiplier = buffs_data.damage_multiplier
+		if buffs_data.has("speed_multiplier"):
+			Global.speed_multiplier = buffs_data.speed_multiplier
+		if buffs_data.has("physic_resist"):
+			Global.physic_resist = buffs_data.physic_resist
+		if buffs_data.has("magic_resist"):
+			Global.magic_resist = buffs_data.magic_resist
+		if buffs_data.has("free_spells"):
+			Global.free_spells = buffs_data.free_spells
+		if buffs_data.has("invulnerable"):
+			Global.invulnerable = buffs_data.invulnerable
 	
 	# 重新计算衍生属性
 	Global.apply_strength()

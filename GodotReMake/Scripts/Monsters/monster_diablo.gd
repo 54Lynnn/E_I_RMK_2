@@ -84,13 +84,13 @@ func _process_behavior(delta):
 			# 远离玩家的方向
 			var flee_dir = -dir_to_target
 			velocity = flee_dir * move_speed
-			sprite.rotation = atan2(flee_dir.y, flee_dir.x)
+			rotate_towards(flee_dir, delta)
 		
 		# 【行为3】理想距离 - 停止移动，尝试召唤
 		else:
 			velocity = Vector2.ZERO
 			current_state = State.IDLE
-			sprite.rotation = atan2(dir_to_target.y, dir_to_target.x)
+			rotate_towards(dir_to_target, delta)
 			
 			# 尝试召唤怪物
 			if can_summon:

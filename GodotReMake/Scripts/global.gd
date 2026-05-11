@@ -98,6 +98,7 @@ signal mana_changed(mana, max_mana)             # 法力值变化时发射
 signal hero_died                                # 英雄死亡时发射
 signal skill_level_changed(skill_id, level)     # 技能等级变化时发射
 signal hero_took_damage(amount, is_magic, attacker)  # 英雄受到伤害时发射（用于被动技能）
+signal load_game_started                        # 读档开始时发射（用于清理英雄状态）
 
 # ============================================
 # 基础属性 - 玩家等级和经验
@@ -216,6 +217,8 @@ var is_in_hit_recovery := false   # 是否处于受击恢复状态
 # 每点敏捷减少0.4%被命中率
 
 var chance_to_be_hit := 1.0       # 被近战怪物命中的几率（1.0 = 100%）
+
+var hero_save_position := Vector2(1280, 1280)  # 存档用的英雄位置
 
 # ============================================
 # Buff持续时间常量（原版数据）
@@ -709,6 +712,9 @@ func reset():
 	free_spells = false
 	invulnerable = false
 	drop_rate_multiplier = 1.0
+	
+	# 重置受击恢复状态
+	is_in_hit_recovery = false
 	
 	# 重新应用被动技能效果
 	Fortuna.update_drop_rate()
