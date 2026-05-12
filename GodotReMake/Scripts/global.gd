@@ -253,6 +253,15 @@ var show_monster_info := false
 # Survival 模式本轮累积获得的经验值（用于死亡统计）
 var survival_total_exp_gained := 0
 
+# 快捷技能槽位（空字符串 = 使用默认技能）
+var quick_slot_lmb := ""   # 左键快捷槽位，默认 magic_missile
+var quick_slot_rmb := ""   # 右键快捷槽位，默认 fireball
+var quick_slot_shift := "" # Shift键快捷槽位
+var quick_slot_space := "" # 空格键快捷槽位
+
+# 鼠标是否悬停在 HUD 上（防止点击 HUD 时触发施法）
+var is_mouse_over_hud := false
+
 # ============================================
 # Buff持续时间常量（原版数据）
 # ============================================

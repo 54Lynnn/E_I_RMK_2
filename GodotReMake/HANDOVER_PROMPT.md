@@ -4,6 +4,7 @@
 > **日期**: 2026-05-13
 > **项目位置**: `D:\project\E_I_RMK_2\GodotReMake\`（公司） / `e:\EvilInvasion\GodotReMake\`（家）
 > **GitHub仓库**: https://github.com/54Lynnn/E_I_RMK_2
+> **最新更新**: 快捷槽位系统（4槽位 2×2 网格 + 悬浮分配快捷键）
 
 ---
 
@@ -40,6 +41,7 @@
 - [x] **技能栏冷却显示**：灰色扇形遮罩覆盖在技能图标上，显示冷却进度
 - [x] **怪物信息显示（Alt键切换）**：按左Alt显示/隐藏怪物血条和伤害数字
 - [x] **受击红晕（血量相关）**：血量低于50%时画面边缘出现径向红晕，血量越低越深
+- [x] **快捷槽位系统（4槽位）**：LMB/RMB/Shift/Space 四个快捷槽位，2×2网格布局，悬浮技能图标+按Shift/Space分配，存档持久化
 
 **技能系统（21个，全部独立场景+独立脚本）**：
 - [x] **数值来源**：用户亲自在原版游戏中采集的 xlsx 数据（`evil_invasion_spell.xlsx`），所有技能 1-10 级完整数值
@@ -135,10 +137,17 @@ VictoryScreen 是独立场景，由 LevelCompleteScreen 在最后一关时跳转
   - 血量 > 50%：intensity = 0（完全透明）
   - 血量 ≤ 50%：intensity 从 0 → 1.0 线性增加
 
-### 6. HUD 布局（2026-05-13 重构）
+### 6. HUD 布局（2026-05-13 重构 + 快捷槽位）
+
 - **瘦底栏设计**：整体底栏高度 86px（比旧版更矮）
 - **左侧信息区**：等级标签 + HP条 + MP条（垂直排列，不再包含经验条）
 - **右侧技能栏**：8个技能图标（34×34px，间距2px），与左侧信息区上边缘平齐
+- **快捷槽位（2×2网格）**：位于技能栏右侧，4个槽位（46×30px面板）
+  - 上排：LMB（左键）、RMB（右键）
+  - 下排：Shift、Space
+  - 每个槽位右下角有半透明快捷键小字提示
+  - 图标 42×26px 居中显示，无技能名称文字
+  - 底部缩进 offset_bottom=-14，与 ExpBar 保持 2px 间距
 - **底部通栏经验条**：全宽 ProgressBar，居中显示 "LEVEL X" 文字
 - **Buff/Debuff 图标**：位于底栏上方
 - 节点结构：
@@ -152,6 +161,11 @@ VictoryScreen 是独立场景，由 LevelCompleteScreen 在最后一关时跳转
       │   ├── HPBar
       │   └── MPBar
       ├── SkillBar (HBoxContainer) — 8个技能按钮
+      ├── QuickSlots (Control) — 2×2快捷槽位网格
+      │   ├── SlotLMB (Panel) + SlotLMBIcon + SlotLMBLabel("LMB")
+      │   ├── SlotRMB (Panel) + SlotRMBIcon + SlotRMBLabel("RMB")
+      │   ├── SlotShift (Panel) + SlotShiftIcon + SlotShiftLabel("Shift")
+      │   └── SlotSpace (Panel) + SlotSpaceIcon + SlotSpaceLabel("Space")
       ├── ExpBar (ProgressBar) — 通栏经验条
       └── ExpLabel (Label) — "LEVEL X" 居中文字
   ```
@@ -203,9 +217,11 @@ water:  freezing_spear, poison_cloud, dark_ritual, nova, fortuna
 ```
 
 ### 14. 按钮绑定
+
 | 按键 | 技能 | 按键 | 技能 |
 |:----:|:----|:----:|:----|
-| LMB | Magic Missile | RMB | Fireball |
+| LMB | 快捷槽位LMB（默认Magic Missile） | RMB | 快捷槽位RMB（默认Fireball） |
+| Shift | 快捷槽位Shift | Space | 快捷槽位Space |
 | Z | Freezing Spear | X | Prayer |
 | C | Heal | 2 | Teleport |
 | 3 | Mist Fog | 4 | Wrath of God |
@@ -215,6 +231,14 @@ water:  freezing_spear, poison_cloud, dark_ritual, nova, fortuna
 | H | Poison Cloud | V | Fortuna |
 | B | Dark Ritual | N | Nova |
 | **I** | **Ball Lightning** | **O** | **Chain Lightning** |
+
+**快捷槽位说明**：
+- LMB/RMB/Shift/Space 不再是固定技能，而是可自定义的快捷槽位
+- **分配方式**：
+  - LMB/RMB：在技能栏图标上**点击鼠标左键/右键**即可分配
+  - Shift/Space：**鼠标悬浮**在技能图标上，按 Shift 或 Space 键分配
+- 分配后图标显示在对应槽位中，右下角有快捷键小字提示
+- 快捷槽位配置会随存档保存/读取
 
 ---
 

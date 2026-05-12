@@ -69,3 +69,7 @@ res://Scripts/Spells/stone_enchanted.gd
 res://Scripts/Spells/telekinesis.gd
 res://Scripts/Spells/teleport.gd
 res://Scripts/Spells/wrath_of_god.gd
+res://Scripts/level_select.gd
+res://Scripts/Quest/test_quest.gd
+res://Scenes/HUD.tscn
+res://Scenes/HeroPanel.tscn

@@ -43,10 +43,20 @@ extends CanvasLayer
 @onready var exp_label := $BottomBar/ExpLabel
 @onready var level_label := $BottomBar/LeftInfo/LevelLabel # 等级标签
 @onready var health_label := $BottomBar/LeftInfo/HPLabel   # 血量文字
+@onready var health_percent_label := $BottomBar/LeftInfo/HPPercentLabel  # 血量百分比
 @onready var mana_label := $BottomBar/LeftInfo/MPLabel     # 法力文字
+@onready var mana_percent_label := $BottomBar/LeftInfo/MPPercentLabel  # 法力百分比
 
 # 技能栏节点
 @onready var skill_bar_container := $BottomBar/SkillSection/SkillBarContainer
+
+# 快捷槽位节点
+@onready var quick_slot_lmb_icon := $BottomBar/QuickSlots/SlotLMBIcon
+@onready var quick_slot_rmb_icon := $BottomBar/QuickSlots/SlotRMBIcon
+@onready var quick_slot_shift_icon := $BottomBar/QuickSlots/SlotShiftIcon
+@onready var quick_slot_space_icon := $BottomBar/QuickSlots/SlotSpaceIcon
+
+var hovered_skill_id := ""
 
 # Buff/Debuff 显示区域
 @onready var buff_container := $BottomBar/BuffContainer
@@ -66,7 +76,7 @@ var buff_icons := {}
 
 # 技能图标尺寸（像素）
 # 修改此值可改变技能图标大小
-const SKILL_ICON_SIZE := 34
+const SKILL_ICON_SIZE := 28
 
 # 技能数据字典
 # 每个技能包含：
@@ -83,7 +93,7 @@ const SKILL_BAR_SKILL_DATA := {
 	"telekinesis": {"name": "Telekinesis", "texture": "res://Art/Placeholder/Telekinesis.png", "input": "Q"},
 	"sacrifice": {"name": "Sacrifice", "texture": "res://Art/Placeholder/Sacrifice.png", "input": "R"},
 	"holy_light": {"name": "Holy Light", "texture": "res://Art/Placeholder/HolyLight.png", "input": "E"},
-	"fire_ball": {"name": "Fire Ball", "texture": "res://Art/Placeholder/FireBall.png", "input": "RMB"},
+	"fireball": {"name": "Fire Ball", "texture": "res://Art/Placeholder/FireBall.png", "input": "RMB"},
 	"ball_lightning": {"name": "Ball Lightning", "texture": "res://Art/Placeholder/BallLightning.png", "input": "I"},
 	"chain_lightning": {"name": "Chain Lightning", "texture": "res://Art/Placeholder/ChainLightning.png", "input": "O"},
 	"heal": {"name": "Heal", "texture": "res://Art/Placeholder/Heal.png", "input": "C"},
@@ -117,7 +127,7 @@ const SKILL_COOLDOWN_KEY_MAP := {
 	"telekinesis": "telekinesis",
 	"sacrifice": "sacrifice",
 	"holy_light": "holy_light",
-	"fire_ball": "fireball",
+	"fireball": "fireball",
 	"ball_lightning": "ball_lightning",
 	"chain_lightning": "chain_lightning",
 	"heal": "heal",
@@ -156,6 +166,10 @@ func _ready():
 	# 当技能等级变化时，更新技能栏显示（学习新技能后变彩色）
 	Global.skill_level_changed.connect(_on_skill_level_changed)
 	
+	# 鼠标进入/离开 HUD 底部栏时设置标记，防止点击 HUD 触发施法
+	$BottomBar.mouse_entered.connect(func(): Global.is_mouse_over_hud = true)
+	$BottomBar.mouse_exited.connect(func(): Global.is_mouse_over_hud = false)
+	
 	# 创建技能栏按钮
 	setup_skill_bar()
 	
@@ -164,6 +178,8 @@ func _ready():
 	
 	# 初始化所有显示
 	update_all()
+	# 初始化快捷槽位显示
+	_update_quick_slot_display()
 
 func _process(delta):
 	# 每帧更新 buff 显示
@@ -176,10 +192,21 @@ func _process(delta):
 	_check_alt_toggle()
 
 func _input(event):
-	# Alt键切换怪物信息显示（血条+伤害数字）
 	if event.is_action_pressed("toggle_monster_health"):
 		_toggle_monster_info()
 		get_viewport().set_input_as_handled()
+	
+	if not hovered_skill_id.is_empty():
+		var level = Global.skill_levels.get(hovered_skill_id, 0)
+		if level > 0 and event is InputEventKey and event.pressed and not event.echo:
+			if event.physical_keycode == KEY_SHIFT:
+				Global.quick_slot_shift = hovered_skill_id
+				_update_quick_slot_display()
+				get_viewport().set_input_as_handled()
+			elif event.physical_keycode == KEY_SPACE:
+				Global.quick_slot_space = hovered_skill_id
+				_update_quick_slot_display()
+				get_viewport().set_input_as_handled()
 
 func _check_alt_toggle():
 	var alt_down = Input.is_key_pressed(KEY_ALT)
@@ -216,7 +243,7 @@ func setup_skill_bar():
 	var skill_ids := [
 		"magic_missile", "prayer", "teleport", "mistfog",
 		"stone_enchanted", "wrath_of_god", "telekinesis", "sacrifice",
-		"holy_light", "ball_lightning", "chain_lightning", "fire_ball",
+		"holy_light", "ball_lightning", "chain_lightning", "fireball",
 		"heal", "fire_walk", "meteor", "armageddon",
 		"freezing_spear", "poison_cloud", "fortuna", "dark_ritual", "nova"
 	]
@@ -233,7 +260,17 @@ func setup_skill_bar():
 		btn.custom_minimum_size = Vector2(SKILL_ICON_SIZE, SKILL_ICON_SIZE)
 		btn.size = Vector2(SKILL_ICON_SIZE, SKILL_ICON_SIZE)
 		btn.tooltip_text = data.name  # 鼠标悬停时显示技能名
-		btn.mouse_filter = Control.MOUSE_FILTER_PASS  # 允许鼠标事件穿透
+		btn.mouse_filter = Control.MOUSE_FILTER_STOP  # 阻止点击穿透到游戏世界
+		btn.size_flags_vertical = Control.SIZE_SHRINK_CENTER  # 防止被容器纵向拉伸
+
+		# 去掉按钮默认的灰色背景，改成透明
+		var transparent_bg = StyleBoxFlat.new()
+		transparent_bg.bg_color = Color(0, 0, 0, 0)
+		btn.add_theme_stylebox_override("normal", transparent_bg)
+		btn.add_theme_stylebox_override("hover", transparent_bg)
+		btn.add_theme_stylebox_override("pressed", transparent_bg)
+		btn.add_theme_stylebox_override("focus", transparent_bg)
+		btn.add_theme_stylebox_override("disabled", transparent_bg)
 
 		# 创建图标（TextureRect）
 		var icon = TextureRect.new()
@@ -250,7 +287,16 @@ func setup_skill_bar():
 		# 将图标添加为按钮的子节点
 		btn.add_child(icon)
 
-		# 添加快捷键提示标签（右下角）
+		# 创建冷却扇形遮罩（Control-based）—— 在快捷键标签下层
+		var overlay = preload("res://Scripts/cooldown_overlay.gd").new()
+		overlay.name = "CooldownOverlay"
+		overlay.mouse_filter = Control.MOUSE_FILTER_PASS
+		overlay.size = Vector2(SKILL_ICON_SIZE, SKILL_ICON_SIZE)
+		overlay.set_progress(0.0)
+		btn.add_child(overlay)
+		skill_cooldown_overlays[skill_id] = overlay
+
+		# 添加快捷键提示标签（右下角）—— 在最上层
 		var input_text = data.get("input", "")
 		if not input_text.is_empty():
 			var key_label = Label.new()
@@ -260,29 +306,19 @@ func setup_skill_bar():
 			key_label.position = Vector2(SKILL_ICON_SIZE - 28, SKILL_ICON_SIZE - 18)
 			key_label.size = Vector2(26, 16)
 			key_label.add_theme_font_size_override("font_size", 11)
-			# 添加黑色描边效果（使用背景面板）
-			var bg = Panel.new()
-			bg.position = Vector2(SKILL_ICON_SIZE - 30, SKILL_ICON_SIZE - 20)
-			bg.size = Vector2(28, 18)
-			bg.modulate = Color(0.0, 0.0, 0.0, 0.7)
-			btn.add_child(bg)
+			# 用文字描边代替背景面板，不遮挡图标
+			key_label.add_theme_color_override("font_outline_color", Color(0, 0, 0, 1))
+			key_label.add_theme_constant_override("outline_size", 2)
 			btn.add_child(key_label)
-
-		# 创建冷却扇形遮罩（Control-based）
-		var overlay = preload("res://Scripts/cooldown_overlay.gd").new()
-		overlay.name = "CooldownOverlay"
-		overlay.mouse_filter = Control.MOUSE_FILTER_PASS
-		overlay.size = Vector2(SKILL_ICON_SIZE, SKILL_ICON_SIZE)
-		overlay.set_progress(0.0)
-		btn.add_child(overlay)
-		skill_cooldown_overlays[skill_id] = overlay
 
 		# 存储元数据（用于后续访问）
 		btn.set_meta("skill_id", skill_id)
 		btn.set_meta("icon_node", icon)
 
-		# 连接点击信号
-		btn.pressed.connect(_on_skill_bar_pressed.bind(skill_id))
+		# 连接点击信号（gui_input 可区分左键/右键）
+		btn.gui_input.connect(_on_skill_button_gui_input.bind(skill_id))
+		btn.mouse_entered.connect(_on_skill_button_hovered.bind(skill_id))
+		btn.mouse_exited.connect(_on_skill_button_unhovered.bind(skill_id))
 
 		# 添加到容器和字典
 		skill_bar_container.add_child(btn)
@@ -318,82 +354,46 @@ func update_skill_bar_display():
 # 技能栏点击处理
 # ============================================
 
-func _on_skill_bar_pressed(skill_id: String):
-	# 当点击技能栏按钮时调用
+func _on_skill_button_hovered(skill_id: String):
+	hovered_skill_id = skill_id
+
+func _on_skill_button_unhovered(_skill_id: String):
+	if hovered_skill_id == _skill_id:
+		hovered_skill_id = ""
+
+func _on_skill_button_gui_input(event: InputEvent, skill_id: String):
+	if not event is InputEventMouseButton or not event.pressed:
+		return
 	
-	# 检查技能是否已学习
 	var level = Global.skill_levels.get(skill_id, 0)
 	if level <= 0:
 		return
+	
+	if event.button_index == MOUSE_BUTTON_LEFT:
+		Global.quick_slot_lmb = skill_id
+		_update_quick_slot_display()
+		get_viewport().set_input_as_handled()
+	elif event.button_index == MOUSE_BUTTON_RIGHT:
+		Global.quick_slot_rmb = skill_id
+		_update_quick_slot_display()
+		get_viewport().set_input_as_handled()
 
-	# 获取英雄节点
-	var hero = get_tree().get_first_node_in_group("hero")
-	if not hero:
-		return
+func _update_quick_slot_display():
+	_update_single_slot(Global.quick_slot_lmb, quick_slot_lmb_icon)
+	_update_single_slot(Global.quick_slot_rmb, quick_slot_rmb_icon)
+	_update_single_slot(Global.quick_slot_shift, quick_slot_shift_icon)
+	_update_single_slot(Global.quick_slot_space, quick_slot_space_icon)
 
-	# 根据技能ID调用对应的施法函数
-	# 所有技能都检查 can_cast（冷却状态）
-	match skill_id:
-		"magic_missile":
-			if hero.can_cast:
-				hero.cast_magic_missile()
-		"fire_ball":
-			if hero.can_cast:
-				hero.cast_fireball()
-		"prayer":
-			if hero.can_cast:
-				hero.cast_prayer()
-		"teleport":
-			if hero.can_cast:
-				hero.cast_teleport()
-		"mistfog":
-			if hero.can_cast:
-				hero.cast_mistfog()
-		"wrath_of_god":
-			if hero.can_cast:
-				hero.cast_wrath_of_god()
-		"telekinesis":
-			if hero.can_cast:
-				hero.cast_telekinesis()
-		"sacrifice":
-			if hero.can_cast:
-				hero.cast_sacrifice()
-		"holy_light":
-			if hero.can_cast:
-				hero.cast_holy_light()
-		"ball_lightning":
-			if hero.can_cast:
-				hero.cast_ball_lightning()
-		"chain_lightning":
-			if hero.can_cast:
-				hero.cast_chain_lightning()
-		"heal":
-			if hero.can_cast:
-				hero.cast_heal()
-		"fire_walk":
-			if hero.can_cast:
-				hero.cast_fire_walk()
-		"meteor":
-			if hero.can_cast:
-				hero.cast_meteor()
-		"armageddon":
-			if hero.can_cast:
-				hero.cast_armageddon()
-		"freezing_spear":
-			if hero.can_cast:
-				hero.cast_freezing_spear()
-		"poison_cloud":
-			if hero.can_cast:
-				hero.cast_poison_cloud()
-		"fortuna":
-			if hero.can_cast:
-				hero.cast_fortuna()
-		"dark_ritual":
-			if hero.can_cast:
-				hero.cast_dark_ritual()
-		"nova":
-			if hero.can_cast:
-				hero.cast_nova()
+func _update_single_slot(skill_id: String, icon_node: TextureRect):
+	if skill_id.is_empty():
+		icon_node.texture = null
+	else:
+		var data = SKILL_BAR_SKILL_DATA.get(skill_id, {})
+		var texture_path = data.get("texture", "")
+		if not texture_path.is_empty() and ResourceLoader.exists(texture_path):
+			icon_node.texture = load(texture_path)
+		else:
+			icon_node.texture = null
 
 func _on_skill_level_changed(skill_id: String, _level: int):
 	# 当技能等级变化时，更新技能栏显示
@@ -411,14 +411,16 @@ func _on_health_changed(h, mh):
 	hp_bar.value = h / mh * 100.0
 	
 	# 更新文字显示（如 "100 / 100"）
-	health_label.text = str(int(h)) + " / " + str(int(mh))
+	health_label.text = str(int(h)) + "/" + str(int(mh))
+	health_percent_label.text = "(" + str(int(h / mh * 100)) + "%)"
 
 func _on_mana_changed(m, mm):
 	# 法力值变化时更新蓝条
 	# m: 当前法力, mm: 最大法力
 	
 	mp_bar.value = m / mm * 100.0
-	mana_label.text = str(int(m)) + " / " + str(int(mm))
+	mana_label.text = str(int(m)) + "/" + str(int(mm))
+	mana_percent_label.text = "(" + str(int(m / mm * 100)) + "%)"
 
 func _on_experience_changed(exp, exp_to_next):
 	# 经验值变化时更新经验条

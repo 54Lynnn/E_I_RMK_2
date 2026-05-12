@@ -109,6 +109,12 @@ static func _build_save_data() -> Dictionary:
 		},
 		"quest_progress": Global.quest_progress.duplicate(),
 		"quest_max_unlocked_level": Global.quest_max_unlocked_level,
+		"quick_slots": {
+			"lmb": Global.quick_slot_lmb,
+			"rmb": Global.quick_slot_rmb,
+			"shift": Global.quick_slot_shift,
+			"space": Global.quick_slot_space,
+		},
 	}
 	return data
 
@@ -264,6 +270,13 @@ static func _apply_save_data(data: Dictionary):
 	# 关卡解锁进度恢复
 	if data.has("quest_max_unlocked_level"):
 		Global.quest_max_unlocked_level = data.quest_max_unlocked_level
+	
+	# 快捷槽位恢复
+	if data.has("quick_slots"):
+		Global.quick_slot_lmb = data.quick_slots.get("lmb", "")
+		Global.quick_slot_rmb = data.quick_slots.get("rmb", "")
+		Global.quick_slot_shift = data.quick_slots.get("shift", "")
+		Global.quick_slot_space = data.quick_slots.get("space", "")
 	
 	# 重新计算衍生属性
 	Global.apply_strength()

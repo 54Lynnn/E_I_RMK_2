@@ -725,6 +725,7 @@ var time_stop_active := false    # 时间停止
 | 英雄状态 | 等级、经验值、生命值、法力值、位置 |
 | 属性 | 力量、敏捷、耐力、智力、智慧、属性点、技能点 |
 | 技能 | 21 个技能的等级 |
+| 快捷槽位 | LMB/RMB/Shift/Space 四个槽位的技能ID |
 | Buff 状态 | 伤害倍率、速度倍率、物理抗性、魔法抗性、免费施法、无敌 |
 
 ### 10.4 读档流程
@@ -761,7 +762,8 @@ var time_stop_active := false    # 时间停止
 │ ┌──────────────────────────────────┐ │
 │ │ Lv.10 ████████████░░ HP 280/280 │ │
 │ │       ██████░░░░░░░░ MP 150/150 │ │
-│ │ [技能栏: 图标1 图标2 ... 图标8]    │ │
+│ │ [技能栏: 图标1..8] [LMB][RMB]    │ │
+│ │                   [Shf][Spc]    │ │
 │ ├──────────────────────────────────┤ │
 │ │████████████████████████████████░░│ │
 │ │          LEVEL 10                │ │
@@ -780,6 +782,7 @@ HUD (Control)
     │   ├── HPBar — 血条
     │   └── MPBar — 蓝条
     ├── SkillBar (HBoxContainer) — 8个技能按钮（34×34px，间距2px）
+    ├── QuickSlots (Control) — 2×2快捷槽位网格（46×30px面板）
     ├── ExpBar (ProgressBar) — 通栏经验条（全宽）
     └── ExpLabel (Label) — "LEVEL X" 居中文字
 ```
@@ -867,3 +870,45 @@ HUD (Control)
 - **累加**: 每次获得经验时在 hero.gd 中累加
 - **重置**: 新一局 Survival 开始时重置为0
 - **显示**: 死亡时 GameOverScreen 显示 "EXPERIENCE GAINED: X"
+
+### 11.10 快捷槽位系统（Quick Slots）
+
+- **槽位数量**: 4个（LMB、RMB、Shift、Space）
+- **布局**: 2×2 网格，位于技能栏右侧
+  - 上排：LMB（左键）、RMB（右键）
+  - 下排：Shift、Space
+- **面板尺寸**: 46×30px，图标 42×26px 居中
+- **快捷键提示**: 每个槽位右下角有半透明小字（LMB/RMB/Shift/Space）
+- **位置**: QuickSlots 底部缩进 offset_bottom=-14，与 ExpBar 保持 2px 间距
+
+**分配方式**：
+| 槽位 | 分配方式 | 说明 |
+|:-----|:---------|:-----|
+| LMB | 点击技能图标（鼠标左键） | 在技能栏图标上点击左键 |
+| RMB | 点击技能图标（鼠标右键） | 在技能栏图标上点击右键 |
+| Shift | 悬浮 + 按 Shift 键 | 鼠标悬浮在技能图标上，按 Shift |
+| Space | 悬浮 + 按 Space 键 | 鼠标悬浮在技能图标上，按 Space |
+
+**技术实现**：
+- `Global.gd`：`quick_slot_lmb/rmb/shift/space` 四个字符串变量存储技能ID
+- `hud.gd`：`hovered_skill_id` 追踪鼠标悬浮的技能，`_input()` 处理 Shift/Space 分配
+- `hero.gd`：`_get_quick_slot_skill()` 根据槽位名获取技能ID，`_cast_skill_by_id()` 统一施法
+- `save_manager.gd`：快捷槽位配置随存档保存/读取
+- `project.godot`：`spell_shift` 和 `spell_space` 输入映射（物理键码 KEY_SHIFT / KEY_SPACE）
+
+**节点结构**：
+```
+QuickSlots (Control, offset_bottom=-14)
+├── SlotLMB (Panel, 46×30)
+│   ├── SlotLMBIcon (TextureRect, 42×26)
+│   └── SlotLMBLabel ("LMB", 右下角7px小字)
+├── SlotRMB (Panel, 46×30)
+│   ├── SlotRMBIcon (TextureRect, 42×26)
+│   └── SlotRMBLabel ("RMB")
+├── SlotShift (Panel, 46×30)
+│   ├── SlotShiftIcon (TextureRect, 42×26)
+│   └── SlotShiftLabel ("Shift")
+└── SlotSpace (Panel, 46×30)
+    ├── SlotSpaceIcon (TextureRect, 42×26)
+    └── SlotSpaceLabel ("Space")
+```

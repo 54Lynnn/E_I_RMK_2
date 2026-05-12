@@ -145,11 +145,18 @@ func _process(delta):
 				skill_cooldowns[skill] = 0
 
 	# 如果处于受击恢复状态，不能施法
-	if not Global.is_in_hit_recovery:
+	# 如果鼠标在底部 HUD 区域，不施法（防止点击技能图标时误触发）
+	var mouse_y = get_viewport().get_mouse_position().y
+	var hud_top = get_viewport().get_visible_rect().size.y - 100
+	if not Global.is_in_hit_recovery and mouse_y < hud_top:
 		if Input.is_action_pressed("spell_magic_missile"):
-			cast_magic_missile()
+			_cast_skill_by_id(_get_quick_slot_skill("lmb"))
 		if Input.is_action_pressed("spell_fireball"):
-			cast_fireball()
+			_cast_skill_by_id(_get_quick_slot_skill("rmb"))
+		if Input.is_action_pressed("spell_shift"):
+			_cast_skill_by_id(_get_quick_slot_skill("shift"))
+		if Input.is_action_pressed("spell_space"):
+			_cast_skill_by_id(_get_quick_slot_skill("space"))
 		if Input.is_action_pressed("spell_freezing_spear"):
 			cast_freezing_spear()
 		if Input.is_action_pressed("spell_prayer"):
@@ -274,10 +281,20 @@ func _unhandled_input(event):
 	if Global.is_in_hit_recovery:
 		return
 	
+	# 如果鼠标在底部 HUD 区域，不施法
+	var mouse_y = get_viewport().get_mouse_position().y
+	var hud_top = get_viewport().get_visible_rect().size.y - 100
+	if mouse_y >= hud_top:
+		return
+	
 	if event.is_action_pressed("spell_magic_missile"):
-		cast_magic_missile()
+		_cast_skill_by_id(_get_quick_slot_skill("lmb"))
 	if event.is_action_pressed("spell_fireball"):
-		cast_fireball()
+		_cast_skill_by_id(_get_quick_slot_skill("rmb"))
+	if event.is_action_pressed("spell_shift"):
+		_cast_skill_by_id(_get_quick_slot_skill("shift"))
+	if event.is_action_pressed("spell_space"):
+		_cast_skill_by_id(_get_quick_slot_skill("space"))
 	if event.is_action_pressed("spell_freezing_spear"):
 		cast_freezing_spear()
 	if event.is_action_pressed("spell_prayer"):
@@ -372,6 +389,45 @@ func cast_ball_lightning():
 
 func cast_chain_lightning():
 	ChainLightning.cast(self, mouse_pos, skill_cooldowns)
+
+func _cast_skill_by_id(skill_id: String):
+	# 根据技能ID调用对应的施法函数
+	match skill_id:
+		"magic_missile": cast_magic_missile()
+		"fireball": cast_fireball()
+		"freezing_spear": cast_freezing_spear()
+		"prayer": cast_prayer()
+		"heal": cast_heal()
+		"teleport": cast_teleport()
+		"mistfog": cast_mistfog()
+		"wrath_of_god": cast_wrath_of_god()
+		"telekinesis": cast_telekinesis()
+		"sacrifice": cast_sacrifice()
+		"holy_light": cast_holy_light()
+		"fire_walk": cast_fire_walk()
+		"meteor": cast_meteor()
+		"armageddon": cast_armageddon()
+		"poison_cloud": cast_poison_cloud()
+		"fortuna": cast_fortuna()
+		"dark_ritual": cast_dark_ritual()
+		"nova": cast_nova()
+		"ball_lightning": cast_ball_lightning()
+		"chain_lightning": cast_chain_lightning()
+
+func _get_quick_slot_skill(slot: String) -> String:
+	match slot:
+		"lmb":
+			var s = Global.quick_slot_lmb
+			return s if not s.is_empty() else "magic_missile"
+		"rmb":
+			var s = Global.quick_slot_rmb
+			return s if not s.is_empty() else "fireball"
+		"shift":
+			var s = Global.quick_slot_shift
+			return s if not s.is_empty() else "freezing_spear"
+		_:
+			var s = Global.quick_slot_space
+			return s if not s.is_empty() else "heal"
 
 
 func update_hud():
