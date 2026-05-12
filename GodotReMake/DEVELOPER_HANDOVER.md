@@ -5,7 +5,7 @@
 > **语言**: GDScript
 > **作者**: [Previous Agent]
 > **日期**: 2026-05-06
-> **最后更新**: 2026-05-12 (Quest模式重构：经验上限系统、关卡选择器、存档系统、受击恢复系统、四种怪物生成模式)
+> **最后更新**: 2026-05-07 (v2 Agent: Ball Lightning 重写、Dark Ritual 修复、所有文档更新交接)
 > **GitHub仓库**: https://github.com/54Lynnn/E_I_RMK_2
 
 ---

@@ -1,131 +1,93 @@
 # Evil Invasion Remake — 新 Agent 交接提示词
 
 > **发送给下一个 coding agent 的提示词**
-> **日期**: 2026-05-11
-> **项目位置**: `e:\EvilInvasion\GodotReMake\`
-> **上一个Agent最后工作**: 
-> - 统一怪物生成与游荡行为（边缘生成+墙壁反弹）
-> - 统一英雄出生点（Survival/Quest均为1280,1280）
-> - 修正近战怪物攻击范围为40px（贴身才攻击）
-> - 统一检测范围（近战400px/远程500px）
-> - 更新所有交接文档
+> **日期**: 2026-05-07
+> **项目位置**: `D:\project\E_I_RMK_2\GodotReMake\`（公司）/ `e:\EvilInvasion\GodotReMake\`（家）
+> **GitHub**: https://github.com/54Lynnn/E_I_RMK_2
 
 ---
 
 ## 📋 必读文档（按顺序）
 
-1. **`DEVELOPER_HANDOVER.md`** — 详细的开发者交接文档（文件结构、核心系统、技术债务、下一步建议）
-2. **`ROADMAP.md`** — 完整开发路线图和原版游戏参数参考
+1. **`HANDOVER_PROMPT.md`** ← **从这里开始**（最精简、最准确的项目状态概览）
+2. **`DEVELOPER_HANDOVER.md`** — 项目全貌、核心系统详解
 3. **`SPELL_DEVELOPMENT_GUIDE.md`** — 技能开发规范（必须遵守）
-4. **`extracted.md`** — 原版游戏反编译数据（⚠️ 技能数值部分已删除，存在等级偏移错误。技能数值请以 `E:\EvilInvasion\evil_invasion_spell.xlsx` 为准）
-5. **`NAMING_CONVENTIONS.md`** — 命名规范（文件、节点、代码）
+4. **`NAMING_CONVENTIONS.md`** — 命名规范
+5. **`evil_invasion_spell.xlsx`** — 技能数值参考（唯一可信来源）
 
 ---
 
-## 🎯 当前项目状态（2026-05-11更新）
+## 🎯 你现在的任务
 
-### ✅ 已完成
+与开发者合作，继续完善 Evil Invasion 重制版。当前项目已经具备完整的可运行基础，包括：
+- 21个技能全部实现并绑定按键
+- 8种怪物各有独特AI
+- Survival和Quest两种游戏模式
+- 存档、掉落、属性等核心系统
 
-**技能系统**：
-- 全部 21 个技能已实现并测试通过（一级形态）
-- 技能重构为独立场景 + 独立脚本模式
-- 伤害属性系统：basic, earth, air, fire, water
-- **Ball Lightning 和 Chain Lightning 是原版Air系技能，已实现**（按键I和O）
+### 建议优先处理
 
-**怪物系统**：
-- 8 种怪物已实现：Zombie, Bear, Archer(Mummy), Reaper, Demon, Boss(Diablo), Spider, Troll
-- **数据驱动**：所有怪物数值来自 `monster_database.gd`，随等级和难度动态缩放
-- **统一生成**：所有模式（Quest/Survival）怪物均从地图边缘生成（安全边界80px）
-- **统一游荡**：所有怪物生成后随机游荡，碰到墙壁像光线反射一样反弹
-- **统一检测范围**：近战400px，远程500px
-- **统一攻击范围**：近战40px（贴身），远程150-380px
-
-**Quest模式**：
-- 10关线性推进系统（Ancient Way → Diablo's Lair）
-- 波次生成（4/6/9只一组）
-- 等级上限（每关最多升4级）
-- 通关检测（清除所有怪物）
-
-**经验值系统**：
-- **简化公式**：`exp_to_next = hero_level * 200`
-- 每级固定增加200经验值
-
-**其他**：
-- 属性分配系统
-- 掉落系统
-- 开发模式（F2）
-- 统一英雄出生点：Survival和Quest均为地图中心 (1280, 1280)
-
-### ⚠️ 待完成/待测试
-
-1. **高等级技能测试**：仅 Magic Missile 和 Freezing Spear 测试了高等级，其他21个技能高等级未充分测试
-2. **添加音效**：用户打算最后做
-3. **实现存档系统**：使用 FileAccess + JSON
-4. **添加地图/关卡系统**：原版有多张地图
-5. **完善UI**：添加系别头像、更好的技能提示框等
-6. **技能平衡**：测试并调整技能数值（参考Excel文件）
-7. **Quest模式完善**：关卡解锁持久化、Boss战特殊设计、通关奖励
+1. **测试并修复技能**：逐个测试21个技能的LV1效果是否符合预期
+2. **听取用户反馈**：用户会逐个指出不对的技能，你逐个改
+3. **完善怪物系统**：用户可能想加新怪物或调整AI
+4. **地图系统**：用户准备好了8张地图的数据
 
 ---
 
-## 🔧 关键代码规范
+## ⚡ 关键技术要点
 
-### 1. 经验值公式（已简化）
+### 技能脚本路径
 ```gdscript
-# 升级所需经验 = 当前等级 × 200
-var exp_to_next = hero_level * 200
+# 所有技能脚本在 Scripts/Spells/ 下
+const BallLightning = preload("res://Scripts/Spells/ball_lightning.gd")
 ```
-- 修改位置：`Scripts/global.gd`（3处）、`Scripts/hud.gd`（1处）、`Scripts/pickup_item.gd`（1处）、`Scripts/hero_panel.gd`（1处）
 
-### 2. 怪物数据（数据驱动）
+### 技能数值来源
+```python
+# 唯一可信来源: evil_invasion_spell.xlsx
+# ❌ 不要用 extracted.md 的数据（有等级偏移错误）
+```
+
+### Cast 方法标准模式
 ```gdscript
-# 所有怪物数值来自 monster_database.gd
-# 近战：攻击范围=40px，检测范围=400px
-# 远程：攻击范围=150-380px，检测范围=500px
+static func cast(hero: Node, mouse_pos: Vector2, skill_cooldowns: Dictionary) -> bool:
+    var level = Global.skill_levels.get(skill_name, 0)
+    if level <= 0: return false
+    if skill_cooldowns.get(skill_name, 0.0) > 0: return false
+    # ... 法力检查、扣蓝、创建效果、设置冷却 ...
 ```
 
-### 3. 技能属性分配（必须遵守）
-```
-basic:  magic_missile
-earth:  stone_enchanted, wrath_of_god, prayer, teleport, mistfog
-air:    holy_light, sacrifice, ball_lightning, chain_lightning, telekinesis
-fire:   fireball, fire_walk, meteor, armageddon, heal
-water:  freezing_spear, poison_cloud, dark_ritual, nova, fortuna
+### 怪物配置
+```gdscript
+# monster_database.gd 驱动所有怪物数值
+# 近战: 检测400px, 攻击40px
+# 远程: 检测500px, 攻击150-380px
 ```
 
-### 4. 技能按键绑定
-- I: Ball Lightning（air系，银球自动攻击）
-- O: Chain Lightning（air系，闪电链弹跳）
+### 系统文件位置
+| 功能 | 文件 |
+|------|------|
+| 技能脚本 | `Scripts/Spells/*.gd` |
+| 怪物脚本 | `Scripts/Monsters/*.gd` |
+| Quest脚本 | `Scripts/Quest/*.gd` |
+| 全局状态 | `Scripts/global.gd` (Autoload) |
+| 英雄控制 | `Scripts/hero.gd` |
+| HUD | `Scripts/hud.gd` |
+| 技能面板 | `Scripts/hero_panel.gd` |
+| 存档 | `Scripts/save_manager.gd` |
+| 掉落 | `Scripts/loot_manager.gd` (Autoload) |
 
 ---
 
-## ⚠️ 重要注意事项
+## ⚠️ 常见陷阱
 
-### 1. 怪物脚本架构
-```
-monster_base.gd (核心：移动、受击、死亡、游荡)
-  ├── monster_melee.gd (近战：追击→攻击)
-  │     ├── monster_spider.gd
-  │     ├── monster_zombie.gd
-  │     ├── monster_bear.gd
-  │     ├── monster_demon.gd (追击加速+40%)
-  │     ├── monster_reaper.gd
-  │     ├── monster_troll.gd
-  │     └── monster_diablo.gd (Boss)
-  └── monster_ranged.gd (远程：保持距离、射箭、逃跑转身)
-        └── monster_mummy.gd (Archer，使用Mummy贴图)
-```
+1. **`get_tree()` 在 static 方法中不能用** → 用 `hero.get_tree()`
+2. **Prayer 是一次性扣血**（Lv1=65%），不是逐秒扣
+3. **Ball Lightning 在鼠标位置生成**，不是英雄位置
+4. **Stone Enchanted 是被动**，敌人攻击主角时概率石化
+5. **MistFog 持续20秒**，敌人进出区域时自动添加/移除减速效果
+6. **Chain Lightning 用户没确认最终效果**，可能需要改
 
-### 2. 统一怪物行为（所有模式）
-- **生成**：从地图四边随机位置生成（边缘但不在墙里）
-- **游荡**：生成后向随机方向游荡，碰到墙壁像光线反射一样反弹（X/Y轴分别取反）
-- **发现玩家**：当玩家进入检测范围时，开始追击
-- **攻击**：靠近玩家后发动攻击（近战40px，远程150-380px）
-- **丢失目标**：玩家离开检测范围后，恢复游荡
+---
 
-### 3. 常见陷阱
-- **技能图标路径**：`res://Art/Placeholder/SkillName.png`，注意大小写
-- **节点引用**：修改场景后确保脚本中的 `@onready` 引用正确
-- **法力/生命修改后**：必须发射信号（如 `Global.mana_changed.emit()`）
-- **坐标系**：异步发射技能使用 `hero.get_global_mouse_position()` 获取世界坐标
-- **怪物生成位置**：所有模式均从边缘生成，不再从玩家周围生成
+**祝开发顺利！有问题随时问用户，他们很友好。**
