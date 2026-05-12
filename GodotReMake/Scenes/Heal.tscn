@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://ek1de6l1j7jc"]
+
+[ext_resource type="Script" path="res://Scripts/Spells/heal.gd" id="1_heal"]
+
+[node name="Heal" type="Node2D"]
+script = ExtResource("1_heal")
+
+[node name="PlusTimer" type="Timer" parent="."]
+wait_time = 0.25
+one_shot = false
+
+[node name="DurationTimer" type="Timer" parent="."]
+wait_time = 10.0
+one_shot = true

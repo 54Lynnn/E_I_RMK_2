@@ -1,0 +1,26 @@
+WIDGET_PICTURE
+  0.0; 0.0; 384.0; 384.0;
+  "Dialog";
+
+WIDGET_BUTTON
+  344.0; 344.0; 24.0; 24.0;
+  "System"; "COLOR_YELLOW"; "X"; 5; 0;
+  "SmallButtonEnabled"; "SmallButtonDisabled"; "SmallButtonPressed"; "SmallButtonLight";
+  "MenuButtonClick";
+
+WIDGET_LABEL
+  26.0; 16.0; 10.0; 10.0;
+  "System"; "COLOR_BROWN"; 0; "Unregisterd version allows\nto play only on 3 first levels!";
+
+WIDGET_LABEL
+  158.0; 250.0; 10.0; 10.0;
+  "System"; "COLOR_BROWN"; 0; "\nPlease, register the game \nto have access to all levels\nand unlock Survival!";
+
+WIDGET_PICTURE
+  20.0; 76.0; 146.0; 288.0;
+  "Death";
+
+WIDGET_PICTURE
+  218.0; 20.0; 146.0; 240.0;
+  "HeroStatue";
+

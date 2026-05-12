@@ -1,0 +1,67 @@
+[gd_scene format=3 uid="uid://dot6ufo40344g"]
+
+[ext_resource type="Script" uid="uid://bq5vcis2gqn0m" path="res://Scripts/camera.gd" id="1"]
+[ext_resource type="Script" uid="uid://questlevelmanager" path="res://Scripts/Quest/quest_level_manager.gd" id="2"]
+[ext_resource type="Script" uid="uid://questmonsterspawner" path="res://Scripts/Quest/quest_monster_spawner.gd" id="3"]
+[ext_resource type="PackedScene" path="res://Scenes/Hero.tscn" id="4"]
+[ext_resource type="PackedScene" path="res://Scenes/HUD.tscn" id="5"]
+[ext_resource type="Texture2D" uid="uid://chjoxpptbiphl" path="res://Art/Placeholder/ground.png" id="6"]
+[ext_resource type="PackedScene" path="res://Scenes/HeroPanel.tscn" id="7"]
+[ext_resource type="Script" uid="uid://questhudmanager" path="res://Scripts/Quest/quest_hud_manager.gd" id="8"]
+
+[sub_resource type="RectangleShape2D" id="1"]
+size = Vector2(32, 2560)
+
+[sub_resource type="RectangleShape2D" id="2"]
+size = Vector2(2560, 32)
+
+[node name="QuestMain" type="Node2D" groups=["quest_main"]]
+
+[node name="Ground" type="Sprite2D" parent="."]
+scale = Vector2(20, 20)
+texture = ExtResource("6")
+centered = false
+
+[node name="WorldBounds" type="StaticBody2D" parent="."]
+
+[node name="WallLeft" type="CollisionShape2D" parent="WorldBounds"]
+position = Vector2(-16, 1280)
+shape = SubResource("1")
+
+[node name="WallRight" type="CollisionShape2D" parent="WorldBounds"]
+position = Vector2(2576, 1280)
+shape = SubResource("1")
+
+[node name="WallTop" type="CollisionShape2D" parent="WorldBounds"]
+position = Vector2(1280, -16)
+shape = SubResource("2")
+
+[node name="WallBottom" type="CollisionShape2D" parent="WorldBounds"]
+position = Vector2(1280, 2576)
+shape = SubResource("2")
+
+[node name="HeroUnit" parent="." instance=ExtResource("4")]
+position = Vector2(1280, 1280)
+
+[node name="QuestLevelManager" type="Node" parent="." groups=["quest_level_manager"]]
+script = ExtResource("2")
+
+[node name="QuestMonsterSpawner" type="Node2D" parent="QuestLevelManager"]
+script = ExtResource("3")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+script = ExtResource("1")
+
+[node name="HUD" parent="." instance=ExtResource("5")]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+process_mode = 3
+
+[node name="HeroPanel" parent="CanvasLayer" instance=ExtResource("7")]
+
+[node name="QuestHUDManager" type="Control" parent="CanvasLayer"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("8")

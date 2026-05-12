@@ -1,0 +1,138 @@
+5;0.167969;0.734375;
+0;0;0;0;
+	COEFF	START_VALUE
+STRENGTH_ON_HEALTH	10	0
+STRENGTH_ON_HIT_RECOVERY	-0.004	0.5
+		
+DEXTERITY_ON_SPEED	0.5	65
+DEXTERITY_ON_CHANCE_TO_BE_HIT	-0.004	1
+		
+STAMINA_ON_HEALTH_REGENERATION	0.1	0
+STAMINA_ON_SPEED	0.35	0
+
+INTELLIGENCE_ON_MANA	6	0
+INTELLIGENCE_ON_MANA_REGENERATION	0.06	0
+
+WISDOM_ON_MANA	2	0
+WISDOM_ON_MANA_REGENERATION	0.18	0
+
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+
+
+		
+		
+
+		
+					
+					
+					
+					
+
+
+
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+
+
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+
+
+					
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+
+
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+
+
+						
+						
+						
+						
+						
+						
+						
+				
+				
+				
+				
+"Hero Name";  "";                   
+"Level"; "";
+"Experience"; "";
+"Strength"; "";
+"Dexterity"; "";
+"Stamina"; "";
+"Health"; "1 strength point increases by 10 health points.";
+"Health regeneration"; "1 stamina point increases by 0.1 health point regeneration per second.";
+"Movement speed";   "1 dexterity point increases by 0.5 hero speed.\n1 stamina point increases by 0.35 hero speed.";
+"Hit recovery"; "1 strength points decreases by 0.004 seconds hit recovery time.\nBase hit recovery time is 0.5 seconds.";
+"Chance to be hit";"1 dexterity point decreases by 0.4% chance to be hit.";
+"Intelligence"; "";
+"Wisdom"; "";
+"Mana";   "1 intelligence point increases by 6 hero mana capacity.\n1 wisdom point increases by 2 hero mana capacity.";
+"Mana regeneration"; "1 intelligence point increases by 0.06 mana point regeneration per second.\n1 wisdom point increases by 0.18 mana point regeneration per second.";
+"Attribute Points"; "";
+"Skill Points"; "";
+
+"extra slow";
+"very slow";

@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://Scripts/Spells/holy_light.gd" id="1"]
+[ext_resource type="Texture2D" path="res://Art/Placeholder/HolyLight.png" id="2"]
+
+[node name="HolyLight" type="Area2D"]
+collision_layer = 0
+collision_mask = 0
+monitoring = false
+monitorable = false
+script = ExtResource("1")
+
+[node name="RayVisual" type="Sprite2D" parent="."]
+texture = ExtResource("2")
+centered = false
+modulate = Color(1.0, 0.9, 0.6, 0.8)
+
+[node name="Hitbox" type="CollisionShape2D" parent="."]
+disabled = true

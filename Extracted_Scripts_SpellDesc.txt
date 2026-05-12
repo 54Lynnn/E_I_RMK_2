@@ -1,0 +1,47 @@
+"Magic Missile (spell).";      "Slay enemies with self-guided magic missiles."; break;
+                               
+"Prayer (spell).";             "Sacrifice some blood to your God, get mana."; 
+"Mystic Fog (spell).";         "Slow monsters with mystic fog.";
+"Teleport (spell).";           "Instantly teleports to destination.";
+"Stone Enchanted (skill).";    "Stone curse anyone who ever touches you.";
+"Wrath Of God (spell).";       "Send upon monsters wrath of your God.";
+                               
+"Telekinesis (skill).";        "Take bonus items at a distance.";
+"Sacrifice (spell).";          "Sacrifice your blood to instantly kill anyone of your choice.";
+"Holy Light (spell).";         "Even the strongest demons will suffer from holy light.";
+"Ball Lightning (spell).";     "Shock your enemies with electrical power.";
+"Chain Lightning (spell).";    "Electircal killing spring. Stay far and away.";
+                               
+"Fireball (spell).";           "Burn monsters with fire.";
+"Firewalk (skill).";           "The ground burns under you, making monsters suffer.";
+"Heal (spell).";               "Heal your wounds and cure your dark soul.";
+"Meteor (spell).";             "Send cosmos wrath on evil.";
+"Armageddon (spell).";         "Kill monsters with rain of fire.";
+                               
+"Freezing Spear (spell).";     "Freeze monsters.";
+"Fortuna (skill).";            "Increase chance to find bonus items.";
+"Poison Cloud (spell).";       "Make monsters feel sick."; 
+"Nova (spell).";               "Freeze and damage monsters.";
+"Dark Ritual (spell).";        "Banish monsters from existence.";
+
+"required level:";
+"mana cost:";
+"damage:";
+"cooldown:";
+"missiles:";
+"radius:";
+"healing:";
+"meteor damage:";
+"duration:";
+"health cost:";
+"give mana:";
+"chance to stone:";
+"hold look:";
+"light rays:";
+"strike damage:";
+"strikes:";
+"freeze:";
+"spears:";
+"increase chance by:";
+"chance to banish:";
+"slow by:";

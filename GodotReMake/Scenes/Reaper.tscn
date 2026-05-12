@@ -1,0 +1,46 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://Scripts/Monsters/monster_reaper.gd" id="1_reaper"]
+[ext_resource type="Texture2D" path="res://Art/Placeholder/monster_reaper.png" id="2_reaper"]
+[ext_resource type="PackedScene" path="res://Scenes/MonsterArrow.tscn" id="3_flame"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_reaper"]
+size = Vector2(32, 32)
+
+[node name="Reaper" type="CharacterBody2D" groups=["monsters"]]
+collision_layer = 4
+collision_mask = 2
+script = ExtResource("1_reaper")
+move_speed = 75.0
+health = 35.0
+max_health = 35.0
+damage = 6.0
+collision_damage = 2.0
+experience_reward = 70
+detection_range = 450.0
+attack_range = 40.0
+attack_cooldown = 1.8
+flame_scene = ExtResource("3_flame")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_reaper")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_reaper")
+
+[node name="HealthBar" type="ProgressBar" parent="."]
+visible = false
+offset_left = -16.0
+offset_top = -32.0
+offset_right = 16.0
+offset_bottom = -24.0
+z_index = 10
+value = 100.0
+show_percentage = false
+self_modulate = Color(1, 0.2, 0.2, 1)
+
+[node name="StateTimer" type="Timer" parent="."]
+one_shot = true
+
+[node name="AttackCooldown" type="Timer" parent="."]
+one_shot = true
