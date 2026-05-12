@@ -40,7 +40,7 @@ func _ready():
 
 func _setup_ui():
 	"""初始化UI元素"""
-	# 创建关卡信息面板
+	# 创建关卡信息面板（顶部中央）
 	var level_info = Control.new()
 	level_info.name = "LevelInfo"
 	level_info.anchor_left = 0.5
@@ -69,18 +69,26 @@ func _setup_ui():
 	level_info.add_child(monster_label_node)
 	monster_label = monster_label_node
 	
-	# 等级上限警告
+	# 等级上限警告（屏幕中央，使用独立的 Control 确保可见）
 	var warning_label = Label.new()
 	warning_label.name = "LevelUpWarning"
-	warning_label.position = Vector2(0, 55)
+	warning_label.anchor_left = 0.5
+	warning_label.anchor_top = 0.3
+	warning_label.anchor_right = 0.5
+	warning_label.anchor_bottom = 0.3
+	warning_label.offset_left = -200
+	warning_label.offset_top = -30
+	warning_label.offset_right = 200
+	warning_label.offset_bottom = 30
 	warning_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	warning_label.add_theme_font_size_override("font_size", 14)
+	warning_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	warning_label.add_theme_font_size_override("font_size", 18)
 	warning_label.add_theme_color_override("font_color", Color.RED)
 	warning_label.visible = false
-	level_info.add_child(warning_label)
+	add_child(warning_label)
 	level_up_warning = warning_label
 	
-	# 关卡完成面板
+	# 关卡完成面板（屏幕中央）
 	var complete_panel = Panel.new()
 	complete_panel.name = "LevelCompletePanel"
 	complete_panel.anchor_left = 0.5
@@ -96,7 +104,7 @@ func _setup_ui():
 	level_complete_panel = complete_panel
 	
 	var complete_label = Label.new()
-	complete_label.text = "Level Complete!"
+	complete_label.text = "Quest Complete!"
 	complete_label.anchor_left = 0.5
 	complete_label.anchor_top = 0.5
 	complete_label.anchor_right = 0.5
@@ -167,5 +175,5 @@ func _on_all_levels_completed():
 
 func _on_level_up_limited(max_level: int):
 	"""达到等级上限"""
-	level_up_warning.text = "Level Cap Reached! (Max: %d)" % max_level
+	level_up_warning.text = "Level Cap Reached! (Max: %d)\nClear remaining monsters!" % max_level
 	level_up_warning.visible = true

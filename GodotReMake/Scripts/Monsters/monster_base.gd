@@ -215,6 +215,14 @@ func set_quest_mode(enabled: bool):
 	if enabled:
 		wander_direction = Vector2(randf_range(-1, 1), randf_range(-1, 1)).normalized()
 
+func set_experience_reward(value: int):
+	"""设置经验奖励（用于Quest模式达到上限时）"""
+	experience_reward = value
+
+func get_current_health() -> float:
+	"""获取当前血量（用于Quest模式检查怪物是否存活）"""
+	return health
+
 func set_wander_direction(dir: Vector2):
 	"""设置游荡方向（由生成器调用，如整排横扫的方向）"""
 	if dir.length() > 0:

@@ -5,9 +5,9 @@ extends Node2D
 # ============================================
 # 特点：
 # 1. 怪物从地图边缘生成（而非玩家周围）
-# 2. 按波次生成（4/6/9只一组）
+# 2. 持续生成，直到达到总怪物数或等级上限
 # 3. 生成后怪物在地图上随机游荡
-# 4. 所有波次生成完毕后不再生成新怪物
+# 4. 达到等级上限后停止生成
 # ============================================
 
 const MonsterDatabase = preload("res://Scripts/Monsters/monster_database.gd")
@@ -20,7 +20,6 @@ var monster_scenes := {
 	"demon": preload("res://Scenes/Demon.tscn"),
 	"bear": preload("res://Scenes/Bear.tscn"),
 	"reaper": preload("res://Scenes/Reaper.tscn"),
-	"troll": preload("res://Scenes/Troll.tscn"),
 	"diablo": preload("res://Scenes/Diablo.tscn")
 }
 
@@ -30,15 +29,13 @@ var monster_scenes := {
 @export var spawn_margin := 100.0  # 边缘留出的空白区域
 
 # 生成状态
-var current_wave := 0
-var waves := []
 var allowed_monsters := []
-var all_waves_spawned := false
 var is_spawning := false
+var spawned_count := 0   # 已生成怪物数
 
-# 波次间隔
-@export var wave_interval := 3.0  # 波次之间的间隔（秒）
-var wave_timer := 0.0
+# 生成间隔
+@export var spawn_interval := 2.0  # 生成间隔（秒）
+var spawn_timer := 0.0
 
 # 引用
 @onready var level_manager: Node = get_parent()
@@ -56,60 +53,49 @@ func _ready():
 
 func reset_spawner():
 	"""读档时重置生成器状态"""
-	current_wave = 0
-	waves = []
 	allowed_monsters = []
-	all_waves_spawned = false
 	is_spawning = false
-	wave_timer = 0.0
+	spawned_count = 0
+	spawn_timer = 0.0
 
 func _process(delta):
-	if not is_spawning or all_waves_spawned:
+	if not is_spawning:
 		return
 	
-	wave_timer += delta
-	if wave_timer >= wave_interval:
-		wave_timer = 0.0
-		spawn_next_wave()
+	# Quest模式：不再检查总怪物数，只检查是否被手动停止
+	# 生成器会持续生成，直到达到经验上限时被 stop_spawning() 停止
+	
+	spawn_timer += delta
+	if spawn_timer >= spawn_interval:
+		spawn_timer = 0.0
+		spawn_monster_at_edge()
 
 # ============================================
 # 关卡控制
 # ============================================
 
-func start_level(config: Dictionary):
-	"""开始新关卡，设置波次"""
-	current_wave = 0
-	waves = config["waves"].duplicate()
-	allowed_monsters = config["allowed_monsters"]
-	all_waves_spawned = false
-	is_spawning = true
-	wave_timer = wave_interval  # 第一波立即生成
+func start_level(config: Dictionary, skip_spawned: int = 0):
+	"""开始新关卡
 	
-	print("QuestSpawner: 开始生成，共 %d 波" % waves.size())
+	参数:
+		config: 关卡配置字典
+		skip_spawned: 已生成的怪物数量（用于Resume Game）
+	"""
+	allowed_monsters = config["allowed_monsters"]
+	spawned_count = skip_spawned
+	is_spawning = true
+	spawn_timer = spawn_interval  # 第一只立即生成
+	
+	print("QuestSpawner: 开始生成，允许怪物: %s" % str(allowed_monsters))
 
 func stop_spawning():
-	"""停止生成"""
+	"""停止生成（达到等级上限时调用）"""
 	is_spawning = false
+	print("QuestSpawner: 停止刷怪")
 
-func spawn_next_wave():
-	"""生成下一波怪物"""
-	if current_wave >= waves.size():
-		all_waves_spawned = true
-		is_spawning = false
-		print("QuestSpawner: 所有波次已生成完毕")
-		# 通知关卡管理器检查通关
-		if level_manager:
-			level_manager.check_level_complete()
-		return
-	
-	var wave_size = waves[current_wave]
-	print("QuestSpawner: 生成第 %d 波，%d 只怪物" % [current_wave + 1, wave_size])
-	
-	# 生成一波怪物
-	for i in range(wave_size):
-		spawn_monster_at_edge()
-	
-	current_wave += 1
+func get_remaining_monsters() -> int:
+	"""获取剩余需要生成的怪物数（Quest模式：返回-1表示无限）"""
+	return -1  # 无限生成
 
 # ============================================
 # 怪物生成
@@ -158,6 +144,9 @@ func spawn_monster_at_edge():
 	else:
 		get_parent().add_child(monster)
 	
+	# 增加生成计数
+	spawned_count += 1
+	
 	# 通知关卡管理器
 	if level_manager:
 		level_manager.on_monster_spawned()
@@ -193,6 +182,6 @@ func get_random_edge_position() -> Vector2:
 	return pos
 
 func _on_monster_died():
-	"""怪物死亡回调"""
+	"""怪物死亡时调用"""
 	if level_manager:
 		level_manager.on_monster_killed()

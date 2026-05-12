@@ -43,38 +43,65 @@ enum GameMode { QUEST, SURVIVAL }
 ### 1.3 Quest 模式
 
 - **经验值**: 减半获得（`amount * 0.5`）
-- **等级上限**: 每关有等级上限，达到后不再获得经验
+- **经验上限**: 每关有固定的经验上限，达到后不再获得经验，怪物停止生成
 - **关卡数量**: 10 关
-- **怪物生成**: 使用 `QuestMonsterSpawner`，按波次生成
-- **升级限制**: 每关最多让玩家升 4 级
+- **怪物生成**: 使用 `QuestMonsterSpawner`，从边缘持续生成，达到经验上限后停止
+- **通关条件**: 达到经验上限 + 清除地图上所有存活怪物
 - **目标**: 通关所有关卡
 
-### 1.4 Quest 关卡等级区间
+### 1.4 Quest 关卡配置
 
-| 关卡 | 玩家等级区间 | 解锁的怪物 |
-|:---:|:-----------:|:----------|
-| 1 | 1~5 | troll, mummy |
-| 2 | 5~9 | + spider |
-| 3 | 9~13 | — |
-| 4 | 13~17 | + demon |
-| 5 | 17~21 | + bear |
-| 6 | 21~25 | — |
-| 7 | 25~29 | + reaper |
-| 8 | 29~33 | + diablo |
-| 9 | 33~37 | 全部 7 种 |
-| 10 | 37~41 | 全部 7 种 |
+| 关卡 | 名称 | 经验上限 | 允许怪物 |
+|:---:|:-----------:|:--------:|:----------|
+| 1 | Ancient Way | 2000 | troll, mummy |
+| 2 | Burned Land | 5200 | troll, mummy, spider |
+| 3 | Desert Battle | 8400 | troll, mummy, spider |
+| 4 | Forgotten Dunes | 11600 | troll, mummy, spider, bear |
+| 5 | Dark Swamp | 14800 | troll, mummy, spider, bear, demon |
+| 6 | Skull Coast | 18000 | troll, mummy, spider, bear, demon |
+| 7 | Snowy Pass | 21200 | troll, mummy, spider, bear, demon, reaper |
+| 8 | Hell Eye | 24400 | troll, mummy, spider, bear, demon, reaper, diablo |
+| 9 | Inferno | 27600 | troll, mummy, spider, bear, demon, reaper, diablo |
+| 10 | Diablo's Lair | 30800 | troll, mummy, spider, bear, demon, reaper, diablo |
 
-### 1.5 怪物解锁等级（全局）
+**经验上限计算**: 每关4级，每级需要 `level * 200` 经验，累计求和。
+- 第1关：200+400+600+800 = 2000
+- 第2关：1000+1200+1400+1600 = 5200
+- ...
 
-| 怪物 | 解锁等级 | 类型 |
-|:-----|:--------:|:----|
-| Troll | 1 | 近战 |
-| Mummy | 3 | 远程 |
-| Spider | 6 | 近战 |
-| Demon | 14 | 近战 |
-| Bear | 18 | 近战 |
-| Reaper | 26 | 远程 |
-| Diablo | 35 | Boss/召唤 |
+**怪物解锁设计**: 逐渐引入新怪物，第8关开始遇到所有种类。
+
+### 1.5 关卡选择器
+
+- **场景**: `Scenes/LevelSelect.tscn`
+- **脚本**: `Scripts/level_select.gd`
+- **功能**:
+  - 显示10个关卡按钮（5列×2行）
+  - 根据 `Global.quest_max_unlocked_level` 显示解锁状态
+  - 已解锁：可点击，正常颜色
+  - 已完成：显示"[已完成]"
+  - 当前：显示"[当前]"
+  - 未解锁：灰色，显示"[锁定]"
+  - 点击关卡进入 QuestMain 场景
+
+### 1.6 存档系统（Quest模式）
+
+**自动存档时机**: 只在通关时存档
+
+**保存内容**:
+- `quest_progress.current_level`: 下一关索引
+- `quest_progress.monsters_killed`: 0（从开头开始）
+- `quest_progress.monsters_spawned`: 0
+- `quest_progress.level_start_level`: 当前玩家等级（保留）
+- `quest_progress.has_progress`: true
+- `quest_max_unlocked_level`: 最大解锁关卡（解锁下一关）
+- 玩家属性、技能等级（通过 Global 保存）
+
+**Resume Game 行为**:
+- 从关卡选择器开始
+- 已解锁的关卡可点击
+- 选择关卡后从该关开头开始
+- 保留玩家等级、属性点、技能等级
 
 ---
 

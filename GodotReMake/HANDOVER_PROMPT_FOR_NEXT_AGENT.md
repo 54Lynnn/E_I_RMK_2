@@ -2,11 +2,9 @@
 
 > **发送给下一个 coding agent 的提示词**
 > **日期**: 2026-05-12
-> **项目位置**: `d:\project\E_I_RMK_2\GodotReMake\`
+> **项目位置**: `e:\EvilInvasion\GodotReMake\`
 > **上一个Agent最后工作**: 
-> - 实现存档系统（F5保存/F10读取，JSON格式）
-> - 实现受击恢复系统（不能施法+减速20%，力量减少恢复时间）
-> - 实现四种怪物生成模式（单个/整排/编组/全边界）
+> - Quest模式重构：经验上限系统、关卡选择器、存档持久化
 > - 更新所有文档
 
 ---
@@ -30,163 +28,124 @@
 - 全部 21 个技能已实现并测试通过（一级形态）
 - 技能重构为独立场景 + 独立脚本模式
 - 伤害属性系统：basic, earth, air, fire, water
-- **Ball Lightning 和 Chain Lightning 是原版Air系技能，已实现**（按键I和O）
 
 **怪物系统**：
 - 8 种怪物已实现：Zombie, Bear, Archer(Mummy), Reaper, Demon, Boss(Diablo), Spider, Troll
-- **数据驱动**：所有怪物数值来自 `monster_database.gd`，随等级和难度动态缩放
-- **统一生成**：所有模式（Quest/Survival）怪物均从地图边缘生成（安全边界80px）
-- **统一游荡**：所有怪物生成后随机游荡，碰到墙壁像光线反射一样反弹
-- **统一检测范围**：近战400px，远程500px
-- **统一攻击范围**：近战40px（贴身），远程150-380px
-- **四种生成模式**：
-  - 单个生成（1~3秒间隔）
-  - 整排生成（18~22秒间隔，20只）
-  - 编组生成（8~12秒间隔，4/6/9只）
-  - 全边界生成（38~42秒间隔，60只，需9级解锁）
+- 数据驱动：所有怪物数值来自 `monster_database.gd`
+- 统一生成：所有模式边缘生成 + 墙壁反弹游荡
+- 四种生成模式：单个/整排/编组/全边界
 
-**Quest模式**：
-- 10关线性推进系统（Ancient Way → Diablo's Lair）
-- 波次生成（4/6/9只一组）
-- 等级上限（每关最多升4级）
-- 通关检测（清除所有怪物）
-
-**存档系统**：
-- F5保存/F10读取
-- JSON格式存储
-- 保存英雄状态、属性、技能、位置
-- 读档时清理怪物和掉落物
-
-**受击恢复系统**：
-- 被攻击后不能施法
-- 移动速度降低20%
-- 恢复时间：`max(0.1, 0.5 - strength * 0.004)`
-- 每次受击刷新恢复时间
-
-**经验值系统**：
-- **简化公式**：`exp_to_next = hero_level * 200`
-- 每级固定增加200经验值
+**Quest模式（本次更新）**：
+- ✅ **经验上限系统**：每关有固定经验上限，达到后停止经验获取和怪物生成
+- ✅ **关卡选择器**：`Scenes/LevelSelect.tscn`，显示10关解锁状态
+- ✅ **存档持久化**：通关时自动保存，解锁下一关
+- ✅ **Resume Game**：从关卡选择器开始，保留玩家等级和属性
+- ✅ **怪物种类限制**：每关使用 `allowed_monsters` 限制出现的怪物种类
 
 **其他**：
+- 存档系统（F5保存/F10读取）
+- 受击恢复系统
 - 属性分配系统
 - 掉落系统
 - 开发模式（F2）
-- HUD 血/蓝/经验条
-- Buff/Debuff 图标显示
-- 相机跟随
-- 伤害类型系统（5种元素）
 
 ### ⚠️ 待完成/待测试
 
-1. **高等级技能测试**：仅 Magic Missile 和 Freezing Spear 测试了高等级，其他21个技能高等级未充分测试
-2. **添加音效**：用户打算最后做
-3. **地图/关卡系统**：原版有多张地图
-4. **完善UI**：添加系别头像、更好的技能提示框等
-5. **技能平衡**：测试并调整技能数值（参考Excel文件）
-6. **Quest模式完善**：关卡解锁持久化、Boss战特殊设计、通关奖励
+1. **Quest模式通关奖励**：通关后显示奖励结算画面（时间、击杀数）
+2. **Quest模式Boss战**：Diablo关卡特殊机制
+3. **关卡选择器UI美化**：当前只是基础按钮，需要更好的视觉效果
+4. **高等级技能测试**：仅 Magic Missile 和 Freezing Spear 测试了高等级
+5. **音效系统**：用户打算最后做
+6. **地图系统**：原版有多张地图
 
 ---
 
-## 🔧 关键代码规范
+## 🔧 Quest模式关键代码规范（本次更新）
 
-### 1. 经验值公式（已简化）
+### 1. 经验上限系统
 ```gdscript
-# 升级所需经验 = 当前等级 × 200
-var exp_to_next = hero_level * 200
-```
-- 修改位置：`Scripts/global.gd`（3处）、`Scripts/hud.gd`（1处）、`Scripts/pickup_item.gd`（1处）、`Scripts/hero_panel.gd`（1处）
+# quest_level_manager.gd
+# 每关经验上限（Level 1: 2000, Level 2: 5200, ...）
+var level_experience_caps := [2000, 5200, 8400, 11600, 14800, 18000, 21200, 24400, 27600, 30800]
 
-### 2. 怪物数据（数据驱动）
+# 检测是否还能获得经验
+func can_gain_experience(amount: int) -> bool:
+    return level_experience_gained + amount <= level_experience_caps[current_level]
+
+# 达到上限时
+# 1. 停止怪物生成（quest_monster_spawner.stop_spawning()）
+# 2. 将所有存活怪物的经验设为0（防止继续获得经验）
+# 3. 清除所有怪物后通关
+```
+
+### 2. 关卡选择器
 ```gdscript
-# 所有怪物数值来自 monster_database.gd
-# 近战：攻击范围=40px，检测范围=400px
-# 远程：攻击范围=150-380px，检测范围=500px
+# level_select.gd
+# 显示10个关卡按钮，根据 Global.quest_max_unlocked_level 显示状态
+# 0 = 只有第1关解锁，1 = 第1-2关解锁，以此类推
+
+# 新游戏时重置
+Global.quest_max_unlocked_level = 0  # 只解锁第1关
+
+# 通关第1关后
+Global.quest_max_unlocked_level = 1  # 解锁第1-2关
 ```
 
-### 3. 技能属性分配（必须遵守）
-```
-basic:  magic_missile
-earth:  stone_enchanted, wrath_of_god, prayer, teleport, mistfog
-air:    holy_light, sacrifice, ball_lightning, chain_lightning, telekinesis
-fire:   fireball, fire_walk, meteor, armageddon, heal
-water:  freezing_spear, poison_cloud, dark_ritual, nova, fortuna
-```
-
-### 4. 技能按键绑定
-| 按键 | 技能 | 元素 |
-|------|------|------|
-| 鼠标左键 | Magic Missile | basic |
-| 鼠标右键 | Fireball | fire |
-| Z | Freezing Spear | water |
-| X | Prayer | earth |
-| C | Heal | fire |
-| 2 | Teleport | earth |
-| 3 | Mist Fog | earth |
-| 4 | Wrath of God | earth |
-| Q | Telekinesis | air |
-| R | Sacrifice | air |
-| E | Holy Light | air |
-| U | Fire Walk | fire |
-| F | Meteor | fire |
-| G | Armageddon | fire |
-| H | Poison Cloud | water |
-| V | Fortuna | water |
-| B | Dark Ritual | water |
-| N | Nova | water |
-| I | Ball Lightning | air |
-| O | Chain Lightning | air |
-
----
-
-## ⚠️ 重要注意事项
-
-### 1. 怪物脚本架构
-```
-monster_base.gd (核心：移动、受击、死亡、游荡)
-  ├── monster_melee.gd (近战：追击→攻击)
-  │     ├── monster_spider.gd
-  │     ├── monster_zombie.gd
-  │     ├── monster_bear.gd
-  │     ├── monster_demon.gd (追击加速+40%)
-  │     ├── monster_reaper.gd
-  │     ├── monster_troll.gd
-  │     └── monster_diablo.gd (Boss)
-  └── monster_ranged.gd (远程：保持距离、射箭、逃跑转身)
-        └── monster_mummy.gd (Archer，使用Mummy贴图)
-```
-
-### 2. 统一怪物行为（所有模式）
-- **生成**：从地图四边随机位置生成（边缘但不在墙里）
-- **游荡**：生成后向随机方向游荡，碰到墙壁像光线反射一样反弹（X/Y轴分别取反）
-- **发现玩家**：当玩家进入检测范围时，开始追击
-- **攻击**：靠近玩家后发动攻击（近战40px，远程150-380px）
-- **丢失目标**：玩家离开检测范围后，恢复游荡
-
-### 3. 怪物生成模式
+### 3. 存档系统（Quest模式）
 ```gdscript
-enum SpawnPattern { SINGLE, LINE, GROUP, ALL_SIDES }
+# 保存时机：只在通关时保存（不再频繁存档）
+# 保存内容：
+# - quest_progress.current_level = next_level
+# - quest_progress.monsters_killed = 0  # 从开头开始
+# - quest_progress.level_start_level = Global.hero_level  # 保留等级
+# - quest_max_unlocked_level = next_level  # 解锁下一关
 ```
-- **SINGLE**: 1~3秒间隔，1只
-- **LINE**: 18~22秒间隔，20只均匀铺开，排除reaper/diablo
-- **GROUP**: 8~12秒间隔，4/6/9只编组，排除diablo
-- **ALL_SIDES**: 38~42秒间隔，四边各15只共60只，需9级解锁，Quest模式17级前不触发
 
-### 4. 常见陷阱
-- **技能图标路径**：`res://Art/Placeholder/SkillName.png`，注意大小写
-- **节点引用**：修改场景后确保脚本中的 `@onready` 引用正确
-- **法力/生命修改后**：必须发射信号（如 `Global.mana_changed.emit()`）
-- **坐标系**：异步发射技能使用 `hero.get_global_mouse_position()` 获取世界坐标
-- **怪物生成位置**：所有模式均从边缘生成，不再从玩家周围生成
+### 4. 怪物种类限制
+```gdscript
+# quest_level_manager.gd 中的 level_configs
+var level_configs := [
+    { "name": "Ancient Way", "allowed_monsters": ["troll", "mummy"] },
+    { "name": "Burned Land", "allowed_monsters": ["troll", "mummy", "spider"] },
+    # ...
+]
+
+# quest_monster_spawner.gd 中使用
+allowed_monsters = config["allowed_monsters"]
+var monster_id = allowed_monsters[randi() % allowed_monsters.size()]
+```
 
 ---
 
 ## 🚀 快速开始
 
-1. 打开 Godot 4.6.2，导入项目 `d:\project\E_I_RMK_2\GodotReMake\`
+1. 打开 Godot 4.6.2，导入项目 `e:\EvilInvasion\GodotReMake\`
 2. 运行主场景 `Main.tscn`
 3. 按 F2 进入开发模式（获得100属性点+100技能点）
 4. 按 T 打开技能树面板
 5. 按 F5 保存游戏，F10 读取存档
+
+---
+
+## ⚠️ 重要注意事项
+
+### Quest模式流程
+```
+GameModeSelect.tscn
+    ↓ 选择 Quest Mode → Start
+LevelSelect.tscn（显示解锁状态）
+    ↓ 选择 Level 3
+QuestMain.tscn（开始第3关）
+    ↓ 达到经验上限 + 清除所有怪物
+LevelSelect.tscn（返回，Level 4 已解锁）
+```
+
+### 常见陷阱
+- **技能图标路径**：`res://Art/Placeholder/SkillName.png`，注意大小写
+- **节点引用**：修改场景后确保脚本中的 `@onready` 引用正确
+- **法力/生命修改后**：必须发射信号（如 `Global.mana_changed.emit()`）
+- **坐标系**：异步发射技能使用 `hero.get_global_mouse_position()` 获取世界坐标
+- **怪物生成位置**：所有模式均从边缘生成，不再从玩家周围生成
 
 ---
 

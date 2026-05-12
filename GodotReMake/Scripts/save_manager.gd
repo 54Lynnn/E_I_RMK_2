@@ -107,6 +107,8 @@ static func _build_save_data() -> Dictionary:
 			"free_spells": Global.free_spells,
 			"invulnerable": Global.invulnerable,
 		},
+		"quest_progress": Global.quest_progress.duplicate(),
+		"quest_max_unlocked_level": Global.quest_max_unlocked_level,
 	}
 	return data
 
@@ -250,6 +252,19 @@ static func _apply_save_data(data: Dictionary):
 		if buffs_data.has("invulnerable"):
 			Global.invulnerable = buffs_data.invulnerable
 	
+	# Quest 进度恢复
+	if data.has("quest_progress"):
+		var qp: Dictionary = data.quest_progress
+		Global.quest_progress.current_level = qp.get("current_level", 0)
+		Global.quest_progress.monsters_killed = qp.get("monsters_killed", 0)
+		Global.quest_progress.monsters_spawned = qp.get("monsters_spawned", 0)
+		Global.quest_progress.level_start_level = qp.get("level_start_level", 1)
+		Global.quest_progress.has_progress = qp.get("has_progress", false)
+	
+	# 关卡解锁进度恢复
+	if data.has("quest_max_unlocked_level"):
+		Global.quest_max_unlocked_level = data.quest_max_unlocked_level
+	
 	# 重新计算衍生属性
 	Global.apply_strength()
 	Global.apply_dexterity()
@@ -306,6 +321,8 @@ static func get_save_info(slot: int) -> Dictionary:
 		"level": 0,
 		"game_mode": 0,
 		"difficulty": 0,
+		"quest_level": 0,
+		"has_quest_progress": false,
 	}
 	
 	var path := _get_save_path(slot)
@@ -336,6 +353,15 @@ static func get_save_info(slot: int) -> Dictionary:
 		var game_data: Dictionary = save_data.game
 		info.game_mode = game_data.get("game_mode", 0)
 		info.difficulty = game_data.get("difficulty", 0)
+	
+	# Quest 进度信息
+	if save_data.has("quest_progress"):
+		var qp: Dictionary = save_data.quest_progress
+		info.quest_level = qp.get("current_level", 0)
+		info.has_quest_progress = qp.get("has_progress", false)
+	else:
+		info.quest_level = 0
+		info.has_quest_progress = false
 	
 	return info
 

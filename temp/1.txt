@@ -1,0 +1,216 @@
+int __thiscall sub_10036E20(_DWORD *this)
+{
+  int v2; // ebx
+  int *v3; // ecx
+  int v4; // edx
+  void (__thiscall ***v5)(_DWORD, char *, char *); // eax
+  int v6; // eax
+  void (__thiscall ***v7)(_DWORD, int); // ecx
+  void (__thiscall **v8)(_DWORD, int); // edx
+  int v9; // eax
+  int v10; // eax
+  int v11; // eax
+  int v12; // eax
+  int v13; // eax
+  int v14; // eax
+  int v15; // eax
+  int v17; // [esp+0h] [ebp-A4h] BYREF
+  char v18[8]; // [esp+Ch] [ebp-98h] BYREF
+  int v19; // [esp+14h] [ebp-90h]
+  char v20[52]; // [esp+18h] [ebp-8Ch] BYREF
+  char v21[28]; // [esp+50h] [ebp-54h] BYREF
+  void *v22; // [esp+6Ch] [ebp-38h]
+  int v23; // [esp+70h] [ebp-34h]
+  char v24[28]; // [esp+74h] [ebp-30h] BYREF
+  int v25; // [esp+90h] [ebp-14h]
+  int *v26; // [esp+94h] [ebp-10h]
+  int v27; // [esp+A0h] [ebp-4h]
+
+  v26 = &v17;
+  v2 = 0;
+  v25 = dword_10061E70;
+  v23 = 0;
+  std::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string<char,std::char_traits<char>,std::allocator<char>>(
+    v24,
+    "Scripts\\MonsterBalance.txt");
+  v3 = *(int **)(dword_10061E84 + 8);
+  v4 = *v3;
+  v27 = 0;
+  v5 = (void (__thiscall ***)(_DWORD, char *, char *))(*(int (__thiscall **)(int *))(v4 + 32))(v3);
+  (**v5)(v5, v18, v24);
+  LOBYTE(v27) = 1;
+  if ( !v19 )
+  {
+    v6 = sub_10001180(v21, "Could not find file: ", v24);
+    v7 = *(void (__thiscall ****)(_DWORD, int))(dword_10061E84 + 8);
+    v8 = *v7;
+    LOBYTE(v27) = 2;
+    (*v8)(v7, v6);
+    LOBYTE(v27) = 1;
+    std::basic_string<char,std::char_traits<char>,std::allocator<char>>::~basic_string<char,std::char_traits<char>,std::allocator<char>>(v21);
+  }
+  LOBYTE(v27) = 3;
+  v22 = operator new(0x30u);
+  LOBYTE(v27) = 4;
+  if ( v22 )
+  {
+    std::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string<char,std::char_traits<char>,std::allocator<char>>(
+      v21,
+      "MONSTER_RIG");
+    v2 = 1;
+    LOBYTE(v27) = 5;
+    v23 = 1;
+    v9 = sub_1002C8F0(0, v21, v18);
+  }
+  else
+  {
+    v9 = 0;
+  }
+  this[25] = v9;
+  v27 = 3;
+  if ( (v2 & 1) != 0 )
+  {
+    v2 &= ~1u;
+    std::basic_string<char,std::char_traits<char>,std::allocator<char>>::~basic_string<char,std::char_traits<char>,std::allocator<char>>(v21);
+  }
+  v22 = operator new(0x30u);
+  LOBYTE(v27) = 7;
+  if ( v22 )
+  {
+    std::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string<char,std::char_traits<char>,std::allocator<char>>(
+      v21,
+      "MONSTER_SPIDER");
+    v2 |= 2u;
+    LOBYTE(v27) = 8;
+    v23 = v2;
+    v10 = sub_1002C8F0(1, v21, v18);
+  }
+  else
+  {
+    v10 = 0;
+  }
+  this[26] = v10;
+  v27 = 3;
+  if ( (v2 & 2) != 0 )
+  {
+    v2 &= ~2u;
+    std::basic_string<char,std::char_traits<char>,std::allocator<char>>::~basic_string<char,std::char_traits<char>,std::allocator<char>>(v21);
+  }
+  v22 = operator new(0x30u);
+  LOBYTE(v27) = 10;
+  if ( v22 )
+  {
+    std::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string<char,std::char_traits<char>,std::allocator<char>>(
+      v21,
+      "MONSTER_DEMON");
+    v2 |= 4u;
+    LOBYTE(v27) = 11;
+    v23 = v2;
+    v11 = sub_1002C8F0(2, v21, v18);
+  }
+  else
+  {
+    v11 = 0;
+  }
+  this[27] = v11;
+  v27 = 3;
+  if ( (v2 & 4) != 0 )
+  {
+    v2 &= ~4u;
+    std::basic_string<char,std::char_traits<char>,std::allocator<char>>::~basic_string<char,std::char_traits<char>,std::allocator<char>>(v21);
+  }
+  v22 = operator new(0x30u);
+  LOBYTE(v27) = 13;
+  if ( v22 )
+  {
+    std::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string<char,std::char_traits<char>,std::allocator<char>>(
+      v21,
+      "MONSTER_BEAR");
+    v2 |= 8u;
+    LOBYTE(v27) = 14;
+    v23 = v2;
+    v12 = sub_1002C8F0(3, v21, v18);
+  }
+  else
+  {
+    v12 = 0;
+  }
+  this[28] = v12;
+  v27 = 3;
+  if ( (v2 & 8) != 0 )
+  {
+    v2 &= ~8u;
+    std::basic_string<char,std::char_traits<char>,std::allocator<char>>::~basic_string<char,std::char_traits<char>,std::allocator<char>>(v21);
+  }
+  v22 = operator new(0x30u);
+  LOBYTE(v27) = 16;
+  if ( v22 )
+  {
+    std::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string<char,std::char_traits<char>,std::allocator<char>>(
+      v21,
+      "MONSTER_ARCHER");
+    v2 |= 0x10u;
+    LOBYTE(v27) = 17;
+    v23 = v2;
+    v13 = sub_1002C8F0(4, v21, v18);
+  }
+  else
+  {
+    v13 = 0;
+  }
+  this[29] = v13;
+  v27 = 3;
+  if ( (v2 & 0x10) != 0 )
+  {
+    v2 &= ~0x10u;
+    std::basic_string<char,std::char_traits<char>,std::allocator<char>>::~basic_string<char,std::char_traits<char>,std::allocator<char>>(v21);
+  }
+  v22 = operator new(0x30u);
+  LOBYTE(v27) = 19;
+  if ( v22 )
+  {
+    std::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string<char,std::char_traits<char>,std::allocator<char>>(
+      v21,
+      "MONSTER_REAPER");
+    v2 |= 0x20u;
+    LOBYTE(v27) = 20;
+    v23 = v2;
+    v14 = sub_1002C8F0(5, v21, v18);
+  }
+  else
+  {
+    v14 = 0;
+  }
+  this[30] = v14;
+  v27 = 3;
+  if ( (v2 & 0x20) != 0 )
+  {
+    v2 &= ~0x20u;
+    std::basic_string<char,std::char_traits<char>,std::allocator<char>>::~basic_string<char,std::char_traits<char>,std::allocator<char>>(v21);
+  }
+  v22 = operator new(0x30u);
+  LOBYTE(v27) = 22;
+  if ( v22 )
+  {
+    std::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string<char,std::char_traits<char>,std::allocator<char>>(
+      v21,
+      "MONSTER_BOSS");
+    v2 |= 0x40u;
+    LOBYTE(v27) = 23;
+    v23 = v2;
+    v15 = sub_1002C8F0(6, v21, v18);
+  }
+  else
+  {
+    v15 = 0;
+  }
+  this[31] = v15;
+  v27 = 3;
+  if ( (v2 & 0x40) != 0 )
+    std::basic_string<char,std::char_traits<char>,std::allocator<char>>::~basic_string<char,std::char_traits<char>,std::allocator<char>>(v21);
+  v27 = 0;
+  sub_10002F70(v20);
+  std::basic_ios<char,std::char_traits<char>>::~basic_ios<char,std::char_traits<char>>(v20);
+  v27 = -1;
+  return std::basic_string<char,std::char_traits<char>,std::allocator<char>>::~basic_string<char,std::char_traits<char>,std::allocator<char>>(v24);
+}
