@@ -17,7 +17,7 @@
 
 ### 1. 文件命名
 
-- 技能脚本：`res://Scripts/<spell_name>.gd`
+- 技能脚本：`res://Scripts/Spells/<spell_name>.gd`
 - 场景文件（如需要）：`res://Scenes/<SpellName>.tscn`
 - 命名规则：
   - 脚本文件名：小写 + 下划线，如 `magic_missile.gd`
@@ -220,11 +220,11 @@ hero.add_child(zone)  # 这会导致火焰跟着玩家移动！
 ### 1. 导入技能脚本
 
 ```gdscript
-const MagicMissile = preload("res://Scripts/magic_missile.gd")
-const Fireball = preload("res://Scripts/fireball.gd")
-const FreezingSpear = preload("res://Scripts/freezing_spear.gd")
-const Prayer = preload("res://Scripts/prayer.gd")
-const Heal = preload("res://Scripts/heal.gd")
+const MagicMissile = preload("res://Scripts/Spells/magic_missile.gd")
+const Fireball = preload("res://Scripts/Spells/fireball.gd")
+const FreezingSpear = preload("res://Scripts/Spells/freezing_spear.gd")
+const Prayer = preload("res://Scripts/Spells/prayer.gd")
+const Heal = preload("res://Scripts/Spells/heal.gd")
 ```
 
 ### 2. 添加到 skill_cooldowns

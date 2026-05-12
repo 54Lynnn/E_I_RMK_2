@@ -3,7 +3,7 @@
 > **文档版本**: 1.1
 > **引擎版本**: Godot 4.6.2-stable
 > **语言**: GDScript
-> **最后更新**: 2026-05-12
+> **最后更新**: 2026-05-13
 
 ---
 
@@ -19,6 +19,7 @@
 8. [掉落物系统](#8-掉落物系统)
 9. [Buff/Debuff 系统](#9-buffdebuff-系统)
 10. [存档系统](#10-存档系统)
+11. [UI/UX 系统](#11-uiux-系统)
 
 ---
 
@@ -741,3 +742,128 @@ var time_stop_active := false    # 时间停止
 
 - 旧版本存档（无位置、无 buff 字段）也能正常读取
 - 缺失的字段自动忽略，使用当前默认值
+
+---
+
+## 11. UI/UX 系统
+
+### 11.1 HUD 布局（2026-05-13 重构）
+
+```
+┌──────────────────────────────────────┐
+│                                      │
+│         (游戏画面)                     │
+│                                      │
+│                                      │
+├──────────────────────────────────────┤
+│ [Buff/Debuff图标区域]                  │
+│                                      │
+│ ┌──────────────────────────────────┐ │
+│ │ Lv.10 ████████████░░ HP 280/280 │ │
+│ │       ██████░░░░░░░░ MP 150/150 │ │
+│ │ [技能栏: 图标1 图标2 ... 图标8]    │ │
+│ ├──────────────────────────────────┤ │
+│ │████████████████████████████████░░│ │
+│ │          LEVEL 10                │ │
+│ └──────────────────────────────────┘ │
+└──────────────────────────────────────┘
+```
+
+**节点结构**：
+```
+HUD (Control)
+├── DamageOverlay (ColorRect) — 受击红晕
+├── BuffContainer (HBoxContainer) — Buff/Debuff图标
+└── BottomBar (Panel) — 高度86px
+    ├── LeftInfo (VBoxContainer)
+    │   ├── LevelLabel — "Lv.X"
+    │   ├── HPBar — 血条
+    │   └── MPBar — 蓝条
+    ├── SkillBar (HBoxContainer) — 8个技能按钮（34×34px，间距2px）
+    ├── ExpBar (ProgressBar) — 通栏经验条（全宽）
+    └── ExpLabel (Label) — "LEVEL X" 居中文字
+```
+
+### 11.2 暂停菜单（PauseMenu）
+
+- **触发**: ESC 键（`pause_game` 输入动作）
+- **场景**: `Scenes/PauseMenu.tscn`
+- **脚本**: `Scripts/pause_menu.gd`
+- **功能**:
+  - Resume — 继续游戏
+  - Save Game — 保存游戏（F5）
+  - Load Game — 读取存档（F10）
+  - Return to Menu — 返回主菜单
+  - Quit Game — 退出游戏
+- **技术细节**:
+  - `process_mode = 3`（WHEN_PAUSED）确保暂停时仍能处理输入
+  - layer = 100，显示在最上层
+  - 与 HeroPanel 互斥（通过 Global 标志控制）
+
+### 11.3 死亡画面（GameOverScreen）
+
+- **触发**: 英雄死亡（`hero_died` 信号）
+- **场景**: `Scenes/GameOverScreen.tscn`（动态创建覆盖层）
+- **脚本**: `Scripts/game_over_screen.gd`
+- **显示内容**:
+  - Quest 模式: 关卡号、击杀数、等级
+  - Survival 模式: 等级、累积经验值（`Global.survival_total_exp_gained`）
+- **操作**: Retry（重试）/ Return to Menu（返回主菜单）
+
+### 11.4 关卡完成画面（LevelCompleteScreen）
+
+- **触发**: Quest 模式通关（达到经验上限 + 清除所有怪物）
+- **场景**: `Scenes/LevelCompleteScreen.tscn`（动态创建覆盖层）
+- **脚本**: `Scripts/level_complete_screen.gd`
+- **显示内容**: 关卡号、击杀数、等级
+- **操作**: Continue（进入下一关）
+- **特殊**: 第10关完成后跳转到 VictoryScreen
+
+### 11.5 通关画面（VictoryScreen）
+
+- **触发**: Quest 模式全部10关通关
+- **场景**: `Scenes/VictoryScreen.tscn`（独立场景）
+- **脚本**: `Scripts/victory_screen.gd`
+- **显示内容**: 祝贺文字
+- **操作**: Return to Menu（清除 Quest 进度，返回主菜单）
+
+### 11.6 技能栏冷却显示（CooldownOverlay）
+
+- **控件**: `Scripts/cooldown_overlay.gd`
+- **效果**: 灰色扇形遮罩覆盖在技能图标上
+- **实现**: 基于 Control 的 `draw_polygon` 绘制扇形
+- **峰值检测**: 首次观察到冷却值时记录为峰值，后续更高值更新峰值
+- **冷却结束**: 重置峰值为0，扇形消失
+- **映射**: HUD 技能ID到 hero.skill_cooldowns key 的映射在 `SKILL_COOLDOWN_KEY_MAP` 中
+
+### 11.7 怪物信息切换（Alt键）
+
+- **触发**: 左 Alt 键（`toggle_monster_health` 输入动作）
+- **状态**: `Global.show_monster_info`（布尔值）
+- **开启时**:
+  - 所有存活怪物的血条一直可见
+  - 怪物受到伤害时显示黄色伤害数字（向上飘动0.8秒后消失）
+- **关闭时**:
+  - 血条仅在怪物受伤时短暂显示
+  - 不显示伤害数字
+- **新怪物**: 根据当前 `Global.show_monster_info` 状态决定血条初始可见性
+
+### 11.8 受击红晕（Damage Vignette）
+
+- **触发**: 英雄血量低于50%
+- **实现**: ColorRect 定义在 HUD.tscn 中，运行时附加 ShaderMaterial
+- **Shader**: 内联在 hud.gd 的 GDScript 字符串中，不依赖外部文件
+- **效果**: 径向渐变（vignette）
+  - 画面中心半径 25% 范围内完全透明
+  - 从中间到边缘红色渐深
+  - `pow(distance, 2.0)` 曲线使过渡自然
+- **强度控制**: `_update_damage_overlay()` 控制 shader intensity 参数
+  - 血量 > 50%: intensity = 0（完全透明）
+  - 血量 ≤ 50%: intensity 从 0 → 1.0 线性增加
+
+### 11.9 Survival 模式经验追踪
+
+- **变量**: `Global.survival_total_exp_gained`
+- **累加**: 每次获得经验时在 hero.gd 中累加
+- **重置**: 新一局 Survival 开始时重置为0
+- **显示**: 死亡时 GameOverScreen 显示 "EXPERIENCE GAINED: X"

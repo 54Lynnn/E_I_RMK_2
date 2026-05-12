@@ -2,7 +2,7 @@
 
 > 基于 Godot 4.6 的 Evil Invasion (2006) 复刻项目
 > 计划版本：v1.0 | 目标平台：Windows
-> **最后更新：2026-05-07（v2 Agent: 所有文档修正+交接准备）**
+> **最后更新：2026-05-13（v3 Agent: UI/UX系统完善 + HUD重构 + 文档全面更新）**
 
 ---
 
@@ -49,7 +49,7 @@ Evil Invasion 是一款 2006 年发布的俯视角动作 RPG（Diablo-like），
 
 ## 2. 阶段零：当前状态
 
-### 2.1 项目结构（2026-05-11 更新）
+### 2.1 项目结构（2026-05-13 更新）
 
 ```
 GodotReMake/
@@ -57,13 +57,12 @@ GodotReMake/
 ├── Scenes/
 │   ├── Main.tscn              ← 主场景（地面 + 边界 + 怪物生成）
 │   ├── Hero.tscn              ← 英雄（移动 + 瞄准 + 施法）
+│   ├── Troll.tscn             ← Troll场景
 │   ├── Spider.tscn            ← 蜘蛛场景
-│   ├── Zombie.tscn            ← 僵尸场景
 │   ├── Bear.tscn              ← 熊场景
 │   ├── Mummy.tscn             ← 木乃伊/弓手场景
 │   ├── Reaper.tscn            ← 死神场景
 │   ├── Demon.tscn             ← 恶魔场景
-│   ├── Troll.tscn             ← 巨魔场景
 │   ├── Diablo.tscn            ← Boss场景
 │   ├── MonsterArrow.tscn      ← 怪物弓箭投射物
 │   ├── Projectile.tscn        ← 旧版通用投射物（逐步弃用）
@@ -78,19 +77,28 @@ GodotReMake/
 │   ├── HolyLight.tscn         ← Holy Light 独立场景
 │   ├── FireWalk.tscn          ← Fire Walk 独立场景
 │   ├── Meteor.tscn            ← Meteor 独立场景
+│   ├── MeteorSingle.tscn      ← 单颗陨石子场景
 │   ├── Armageddon.tscn        ← Armageddon 独立场景
+│   ├── ArmageddonZone.tscn    ← Armageddon 区域子场景
 │   ├── PoisonCloud.tscn       ← Poison Cloud 独立场景
 │   ├── Nova.tscn              ← Nova 独立场景
+│   ├── NovaProj.tscn          ← Nova 投射物子场景
 │   ├── DarkRitual.tscn        ← Dark Ritual 独立场景
 │   ├── BallLightning.tscn     ← Ball Lightning 独立场景
 │   ├── ChainLightningProj.tscn ← Chain Lightning 投射物场景
 │   ├── Explosion.tscn         ← 爆炸特效
 │   ├── PickupItem.tscn        ← 拾取物品
-│   ├── HUD.tscn               ← 底部状态栏
+│   ├── HUD.tscn               ← 底部状态栏（瘦底栏+通栏经验条）
 │   ├── HeroPanel.tscn         ← 英雄面板（技能树+属性）
 │   ├── SkillButton.tscn       ← 技能按钮UI
 │   ├── BuffIcon.tscn          ← Buff图标
-│   └── GameModeSelect.tscn    ← 游戏模式选择
+│   ├── GameModeSelect.tscn    ← 游戏模式选择
+│   ├── LevelSelect.tscn       ← Quest关卡选择器
+│   ├── QuestMain.tscn         ← Quest模式主场景
+│   ├── PauseMenu.tscn         ← 暂停菜单（ESC打开）
+│   ├── GameOverScreen.tscn    ← 死亡画面覆盖层
+│   ├── LevelCompleteScreen.tscn ← 关卡完成画面
+│   └── VictoryScreen.tscn     ← 全通通关画面
 ├── Scripts/
 │   ├── global.gd              ← 全局状态管理器
 │   ├── hero.gd                ← 英雄控制（技能调用入口，cooldown 管理）
@@ -100,9 +108,18 @@ GodotReMake/
 │   ├── loot_manager.gd        ← 掉落管理器（Autoload）
 │   ├── monster_spawner.gd     ← 怪物波次生成（支持多种怪物）
 │   ├── camera.gd              ← 相机跟随
-│   ├── hud.gd                 ← HUD 数据绑定
+│   ├── hud.gd                 ← HUD 数据绑定（含伤害红晕shader）
 │   ├── hero_panel.gd          ← 英雄面板逻辑
 │   ├── skill_button.gd        ← 技能按钮逻辑
+│   ├── buff_icon.gd           ← Buff图标逻辑
+│   ├── pause_menu.gd          ← 暂停菜单逻辑
+│   ├── game_over_screen.gd    ← 死亡画面逻辑
+│   ├── level_complete_screen.gd ← 关卡完成画面逻辑
+│   ├── victory_screen.gd      ← 通关画面逻辑
+│   ├── cooldown_overlay.gd    ← 技能冷却扇形遮罩控件
+│   ├── save_manager.gd        ← 存档管理器
+│   ├── level_select.gd        ← 关卡选择器逻辑
+│   ├── game_mode_select.gd    ← 游戏模式选择逻辑
 │   ├── Spells/                ← 技能脚本目录（21个）
 │   │   ├── magic_missile.gd
 │   │   ├── fireball.gd
@@ -117,32 +134,43 @@ GodotReMake/
 │   │   ├── holy_light.gd
 │   │   ├── fire_walk.gd
 │   │   ├── meteor.gd
+│   │   ├── meteor_single.gd
 │   │   ├── armageddon.gd
+│   │   ├── armageddon_zone.gd
 │   │   ├── poison_cloud.gd
 │   │   ├── fortuna.gd
 │   │   ├── dark_ritual.gd
 │   │   ├── nova.gd
+│   │   ├── nova_proj.gd
 │   │   ├── stone_enchanted.gd
 │   │   ├── ball_lightning.gd
-│   │   └── chain_lightning.gd
-│   └── Monsters/              ← 怪物脚本目录
-│       ├── monster_base.gd
-│       ├── monster_melee.gd
-│       ├── monster_ranged.gd
-│       ├── monster_spider.gd
-│       ├── monster_zombie.gd
-│       ├── monster_bear.gd
-│       ├── monster_mummy.gd
-│       ├── monster_reaper.gd
-│       ├── monster_demon.gd
-│       ├── monster_troll.gd
-│       ├── monster_diablo.gd
-│       ├── monster_arrow.gd
-│       └── monster_database.gd
+│   │   ├── chain_lightning.gd
+│   │   ├── chain_lightning_proj.gd
+│   │   ├── explosion.gd
+│   │   ├── projectile.gd
+│   │   └── skill_button.gd
+│   ├── Monsters/              ← 怪物脚本目录（7种）
+│   │   ├── monster_base.gd
+│   │   ├── monster_melee.gd
+│   │   ├── monster_ranged.gd
+│   │   ├── monster_troll.gd
+│   │   ├── monster_spider.gd
+│   │   ├── monster_bear.gd
+│   │   ├── monster_mummy.gd
+│   │   ├── monster_reaper.gd
+│   │   ├── monster_demon.gd
+│   │   ├── monster_diablo.gd
+│   │   ├── monster_arrow.gd
+│   │   └── monster_database.gd
+│   └── Quest/                 ← Quest模式相关脚本
+│       ├── quest_level_manager.gd
+│       ├── quest_monster_spawner.gd
+│       ├── quest_hud_manager.gd
+│       └── test_quest.gd
 └── Art/Placeholder/           ← 占位纹理（技能图标等）
 ```
 
-### 2.2 当前可玩的特性（2026-05-11 更新）
+### 2.2 当前可玩的特性（2026-05-13 更新）
 
 | 功能 | 按键 | 状态 |
 |------|------|------|
@@ -172,7 +200,7 @@ GodotReMake/
 | 独立技能冷却（可同时施放） | - | ✅ |
 | 长按持续施法 | 按住按键 | ✅ |
 | 技能数据封装（各技能脚本管理自身数据） | - | ✅ |
-| 8种怪物 AI（各有独特行为） | 自动 | ✅ |
+| 7种怪物 AI（各有独特行为） | 自动 | ✅ |
 | 怪物数据驱动（通过场景属性配置） | - | ✅ |
 | 怪物攻击英雄 | 近战碰撞 | ✅ |
 | 杀怪得经验 | 自动 | ✅ |
@@ -181,38 +209,45 @@ GodotReMake/
 | 技能树系统 | T | ✅ |
 | 属性分配系统 | T | ✅ |
 | DevMode（测试模式） | F2 | ✅ |
-| HUD 血/蓝/经验条 | 屏幕底部 | ✅ |
+| HUD 血/蓝/经验条（瘦底栏+通栏经验条） | 屏幕底部 | ✅ |
 | Buff/Debuff 图标显示 | 底部栏上方 | ✅ |
 | 相机跟随 | 自动 | ✅ |
 | 伤害类型系统（5种元素） | - | ✅ |
 | 掉落系统（12种物品） | - | ✅ |
 | Telekinesis悬停拾取 | 鼠标悬停 | ✅ |
-| **Quest模式基础系统** | - | ✅ |
-| **统一怪物生成（边缘生成）** | - | ✅ |
-| **统一怪物游荡（墙壁反弹）** | - | ✅ |
-| **统一英雄出生点** | - | ✅ |
+| Quest模式基础系统 | - | ✅ |
+| 统一怪物生成（边缘生成） | - | ✅ |
+| 统一怪物游荡（墙壁反弹） | - | ✅ |
+| 统一英雄出生点 | - | ✅ |
+| **暂停菜单（PauseMenu）** | ESC | ✅ 含Resume/Save/Load/Return/Quit |
+| **死亡画面（GameOverScreen）** | 死亡触发 | ✅ 显示统计+Retry/Return |
+| **关卡完成画面（LevelCompleteScreen）** | 通关触发 | ✅ 统计+Continue |
+| **通关画面（VictoryScreen）** | 全10关通关 | ✅ 祝贺+Return to Menu |
+| **技能栏冷却显示** | 自动 | ✅ 灰色扇形遮罩 |
+| **怪物信息切换（Alt键）** | 左Alt | ✅ 血条+伤害数字显示/隐藏 |
+| **受击红晕（Damage Vignette）** | 血量<50% | ✅ 径向渐变红色边缘效果 |
+| **存档系统** | F5保存/F10读取 | ✅ JSON格式 |
+| **受击恢复系统** | 被攻击触发 | ✅ 不能施法+减速20% |
 
 ### 2.3 待解决的问题 🔧
 
-- ✅ **技能重构已完成**（21/21 全部完成，原版21个技能含Ball Lightning和Chain Lightning）
-- ✅ **怪物系统已完成**（8/8 全部完成：Spider, Zombie, Bear, Mummy/Archer, Reaper, Demon, Troll, Boss/Diablo）
-- ✅ **经验值公式已简化**（level * 200）
-- ✅ **Quest模式基础系统**（10关线性推进、经验上限、边缘生成、游荡AI）
-- ✅ **Quest模式经验上限系统**（基于本关总经验值，达到后停止经验获取和怪物生成）
-- ✅ **Quest模式关卡选择器**（LevelSelect.tscn，显示解锁状态，Resume从选择器开始）
-- ✅ **Quest模式存档持久化**（通关时自动保存，解锁下一关）
-- ✅ **统一怪物生成与游荡**（所有模式边缘生成+墙壁反弹游荡）
-- ✅ **存档系统已实现**（F5保存/F10读取，JSON格式）
-- ✅ **受击恢复系统已实现**（不能施法+减速20%，力量减少恢复时间）
-- ✅ **怪物生成模式已实现**（四种模式：单个/整排/编组/全边界）
-- 怪物攻击冷却使用 `await` 可能导致协程问题
-- 没有音效和背景音乐
-- 地图系统尚未实现（目前只有一张测试地图）
-- Quest模式Boss战未特殊设计
-- Quest模式通关奖励未实现（通关后没有奖励结算画面）
-- 关卡选择器UI简陋，需要美化
-- 高等级技能测试不充分（仅Magic Missile和Freezing Spear测试了高等级）
-- 技能数值平衡需要参考Excel文件调整
+| 问题 | 优先级 | 说明 |
+|------|--------|------|
+| 怪物贴图缺失 | P0 | 所有怪物使用占位方块，需从原版 Data.pak 提取 DDS 纹理 |
+| 英雄贴图缺失 | P0 | 英雄使用蓝色方块，需替换为原版精灵 |
+| 音效缺失 | P0 | 整个游戏无音效，需从原版提取或重新制作 |
+| 地图系统 | P0 | 原版有8张地图，目前只有1张测试图（2560×2560绿色地面） |
+| 怪物寻路 | P1 | 目前直接追踪玩家，无 NavigationRegion2D 寻路 |
+| 主菜单 | P1 | 无主菜单，直接进入游戏 |
+| 选项设置 | P1 | 无音量/按键自定义/画面设置 |
+| 高分榜 | P2 | 无本地/在线排行 |
+| 多 Profile | P2 | 仅支持单存档 |
+| 对象池 | P2 | 子弹/怪物未使用对象池，大量生成时可能影响性能 |
+| 网络功能 | P3 | 原版有在线高分榜，复刻版暂未实现 |
+| 怪物特殊能力 | P1 | 部分怪物特殊能力标注为"待实现"（如Bear冲锋、Spider毒液） |
+| Quest模式关卡解锁持久化 | P1 | 当前Quest进度未持久化保存 |
+| Quest模式Boss战设计 | P1 | 第10关Boss战需特殊设计 |
+| 怪物碰撞伤害 | P2 | 怪物碰撞英雄时造成伤害，但无碰撞冷却 |
 
 ---
 
@@ -493,22 +528,21 @@ Fortuna加成: 乘法加成 (LV1: 11.5%, LV10: 16%)
 | **Troll** (巨魔) | 近战追踪 | 高血量，缓慢但坚韧 | ⭐⭐ | ✅ 已实现 |
 | **Diablo/Boss** (首领) | 召唤怪物 | 不直接攻击，每5秒召唤4只怪 | ⭐⭐⭐⭐ | ✅ 已实现 |
 
-### 5.2 怪物脚本架构
+### 5.2 怪物继承树（2026-05-13 更新）
 
 ```
-monster_base.gd (核心功能：移动、受击、死亡、元素光环)
-  ├── monster_melee.gd (近战行为：追击→攻击)
-  │     ├── monster_spider.gd
-  │     ├── monster_zombie.gd
-  │     ├── monster_bear.gd
-  │     ├── monster_demon.gd (追击加速+40%)
-  │     ├── monster_troll.gd
-  │     └── monster_diablo.gd (Boss，召唤行为)
-  └── monster_ranged.gd (远程行为：保持距离、射箭、逃跑转身)
-        └── monster_mummy.gd (Archer，使用Mummy贴图)
-        
+MonsterBase (monster_base.gd)
+├── monster_melee.gd (近战行为：追击→攻击)
+│     ├── monster_spider.gd
+│     ├── monster_bear.gd
+│     ├── monster_demon.gd (追击加速+40%)
+│     └── monster_troll.gd
+└── monster_ranged.gd (远程行为：保持距离、射箭、逃跑转身)
+      └── monster_mummy.gd (Archer，使用Mummy贴图)
+      
 特殊：
-  └── monster_reaper.gd (直接继承monster_base，远程火焰攻击)
+  ├── monster_reaper.gd (直接继承monster_base，远程火焰攻击)
+  └── monster_diablo.gd (直接继承monster_base，Boss，召唤行为)
 ```
 
 ### 5.3 怪物配置（数据驱动，来自 monster_database.gd）
@@ -566,7 +600,7 @@ monster_base.gd (核心功能：移动、受击、死亡、元素光环)
 ```
 
 **产出物**：
-- [x] 8 种怪物独立场景和脚本
+- [x] 7 种怪物独立场景和脚本
 - [x] 怪物远程攻击投射物（Arrow, Flame）
 - [x] 特殊能力（Demon追击加速、Reaper火焰、Diablo召唤）
 - [x] 波次生成系统（Quest模式10关）
@@ -717,7 +751,7 @@ func _physics_process(delta):
 
 **文件**：`Scenes/HeroPanel.tscn` ✅ 已实现
 
-### 7.3 游戏内 HUD（已实现）
+### 7.3 游戏内 HUD（已实现 - 2026-05-13 重构）
 
 ```
 ┌──────────────────────────────────────┐
@@ -726,14 +760,23 @@ func _physics_process(delta):
 │                                      │
 │                                      │
 ├──────────────────────────────────────┤
-│ Lv.10 ████████████░░ HP 280/280      │
-│       ██████░░░░░░░░ MP 150/150      │
-│       ████░░░░░░░░░░ EXP 340/1000    │
-│                                      │
 │ [Buff/Debuff图标区域]                  │
 │                                      │
-│ [操作提示文字]                         │
+│ ┌──────────────────────────────────┐ │
+│ │ Lv.10 ████████████░░ HP 280/280 │ │
+│ │       ██████░░░░░░░░ MP 150/150 │ │
+│ │ [技能栏: 图标1 图标2 ... 图标8]    │ │
+│ ├──────────────────────────────────┤ │
+│ │████████████████████████████████░░│ │
+│ │          LEVEL 10                │ │
+│ └──────────────────────────────────┘ │
 └──────────────────────────────────────┘
+
+布局说明：
+- 左侧信息区：等级 + HP/MP 条（垂直排列）
+- 右侧技能栏：8个技能图标（34×34px，间距2px）
+- 底部通栏经验条：全宽，居中显示 "LEVEL X"
+- 整体底栏高度：86px（比旧版更矮）
 ```
 
 **文件**：`Scenes/HUD.tscn` ✅ 已实现
@@ -745,9 +788,10 @@ func _physics_process(delta):
 | Options | 主菜单 / 游戏中暂停 | 音量、按键设置、画面 | 🔧 待实现 |
 | High Scores | 主菜单 | 本地 + 在线排行 | 🔧 待实现 |
 | Credits | 主菜单 | 制作人员名单 | 🔧 待实现 |
-| Pause Menu | 游戏中按 Esc | 继续 / 选项 / 返回主菜单 | 🔧 待实现 |
-| Game Over | 英雄死亡 | 重试 / 返回主菜单 | 🔧 待实现 |
-| Level Complete | 通关 | 评分 / 下一关 / 返回 | 🔧 待实现 |
+| Pause Menu | 游戏中按 Esc | 继续 / 保存 / 读取 / 返回主菜单 / 退出 | ✅ 已实现 |
+| Game Over | 英雄死亡 | 显示统计 / 重试 / 返回主菜单 | ✅ 已实现 |
+| Level Complete | 通关 | 统计 / 继续下一关 | ✅ 已实现 |
+| Victory Screen | 全10关通关 | 祝贺 / 返回主菜单 | ✅ 已实现 |
 
 ### 7.5 按键设置（当前实现）
 
@@ -781,11 +825,12 @@ func _physics_process(delta):
 
 **产出物**：
 - [x] 英雄面板（属性加点/技能树）
-- [x] 游戏内HUD（血/蓝/经验条 + Buff图标）
+- [x] 游戏内HUD（血/蓝/经验条 + Buff图标 + 伤害红晕shader）
 - [ ] 主菜单（新游戏/读档/设置/制作组）
-- [ ] 暂停菜单
-- [ ] 游戏结束界面
-- [ ] 关卡完成界面
+- [x] 暂停菜单
+- [x] 游戏结束界面
+- [x] 关卡完成界面
+- [x] 通关画面
 - [ ] 选项设置
 - [ ] 高分榜
 - [ ] 按键配置（可自定义）
@@ -797,23 +842,18 @@ func _physics_process(delta):
 > **目标**：完整的游戏循环
 > **预计时间**：4-6 天
 > **难度**：⭐⭐⭐
-> **状态**：🔧 待实现
+> **状态**：部分完成
 
 ### 8.1 游戏模式
 
 ```
-剧情模式 (Campaign)：
-  8 张地图顺序推进
+剧情模式 (Quest)：
+  10 关顺序推进 ✅ 已实现
   每关任务：清怪 / 生存 / 击杀 Boss
   通关后解锁下一关
 
-  地图树：
-  古道 → 沙漠之战 → 遗忘沙丘 → 剧毒沼泽
-     ↓                      ↓
-  雪域关隘 ← 骷髅海岸 ← 焦灼之地 ← 地狱之眼
-
 生存模式 (Survival)：
-  单张地图，无限波次
+  单张地图，无限波次 ✅ 已实现
   每 5 波出现一次 Boss
   记录生存波数 → 上传高分榜
 ```

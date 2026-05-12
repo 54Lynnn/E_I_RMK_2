@@ -170,6 +170,7 @@ func _on_start_game():
 	Global.quest_progress.monsters_killed = 0
 	Global.quest_progress.monsters_spawned = 0
 	Global.quest_progress.level_start_level = 1
+	Global.quest_total_monsters_killed = 0
 	
 	# 新游戏：重置英雄等级为1（Quest模式）
 	if selected_mode == Global.GameMode.QUEST:
@@ -179,6 +180,10 @@ func _on_start_game():
 		Global.attribute_points = 0
 		Global.skill_points = 0
 		print("Quest: 新游戏，重置英雄等级为1")
+	
+	# Survival模式：重置累积统计数据
+	if selected_mode == Global.GameMode.SURVIVAL:
+		Global.survival_total_exp_gained = 0
 	
 	print("Starting game with mode: %s, difficulty: %s" % [
 		"Quest" if selected_mode == Global.GameMode.QUEST else "Survival",

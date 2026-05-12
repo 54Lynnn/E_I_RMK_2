@@ -432,6 +432,18 @@ func _on_died():
 	set_process(false)
 	set_physics_process(false)
 	set_process_unhandled_input(false)
+	
+	# Survival模式：显示GameOverScreen
+	if Global.current_game_mode == Global.GameMode.SURVIVAL:
+		var game_over_scene = preload("res://Scenes/GameOverScreen.tscn")
+		var game_over = game_over_scene.instantiate()
+		get_tree().current_scene.add_child(game_over)
+		var stats = {
+			"monsters_killed": 0,
+			"hero_level": Global.hero_level,
+			"experience_gained": Global.survival_total_exp_gained
+		}
+		game_over.show_game_over("survival", stats)
 
 func respawn():
 	Global.reset()

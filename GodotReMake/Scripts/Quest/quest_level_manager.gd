@@ -88,10 +88,18 @@ func _on_hero_died():
 	if spawner:
 		spawner.stop_spawning()
 	
-	# 显示游戏结束（可以在这里添加UI提示）
-	# 延迟后返回主菜单
-	await get_tree().create_timer(3.0).timeout
-	get_tree().change_scene_to_file("res://Scenes/GameModeSelect.tscn")
+	# 创建 GameOverScreen 覆盖层
+	var game_over_scene = preload("res://Scenes/GameOverScreen.tscn")
+	var game_over = game_over_scene.instantiate()
+	get_tree().current_scene.add_child(game_over)
+	
+	var stats = {
+		"level_number": current_level + 1,
+		"level_name": level_configs[current_level]["name"],
+		"monsters_killed": monsters_killed,
+		"hero_level": Global.hero_level
+	}
+	game_over.show_game_over("quest", stats)
 
 # ============================================
 # 关卡控制
@@ -188,18 +196,21 @@ func complete_level():
 	# 保存进度：记录下一关，方便Resume
 	_save_next_level_progress()
 	
-	# 延迟后返回关卡选择器
-	await get_tree().create_timer(2.0).timeout
+	# 创建 LevelCompleteScreen 覆盖层
+	var complete_scene = preload("res://Scenes/LevelCompleteScreen.tscn")
+	var complete = complete_scene.instantiate()
+	get_tree().current_scene.add_child(complete)
 	
-	# 检查是否还有下一关
-	if current_level + 1 >= level_configs.size():
-		# 全部完成
+	var is_last = (current_level + 1 >= level_configs.size())
+	var stats = {
+		"monsters_killed": monsters_killed,
+		"hero_level": Global.hero_level
+	}
+	complete.show_level_complete(current_level + 1, level_configs[current_level]["name"], stats, is_last)
+	
+	if is_last:
 		all_levels_completed.emit()
 		print("Quest: 恭喜！所有关卡已完成！")
-		await get_tree().create_timer(5.0).timeout
-	
-	# 返回关卡选择器（解锁下一关）
-	get_tree().change_scene_to_file("res://Scenes/LevelSelect.tscn")
 
 # ============================================
 # 怪物管理
@@ -211,9 +222,10 @@ func on_monster_killed():
 		return
 	
 	monsters_killed += 1
+	Global.quest_total_monsters_killed += 1
 	_update_monster_count()
 	
-	print("Quest: 击杀 %d 只怪物" % monsters_killed)
+	print("Quest: 击杀 %d 只怪物（累计 %d）" % [monsters_killed, Global.quest_total_monsters_killed])
 	
 	# 检查通关（达到经验上限且清除所有怪物）
 	check_level_complete()

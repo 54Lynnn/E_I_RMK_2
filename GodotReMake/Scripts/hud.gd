@@ -10,7 +10,7 @@ extends CanvasLayer
 #
 # 节点结构（在HUD.tscn中定义）：
 # HUD (CanvasLayer)
-# └── BottomBar (Panel) - 底部栏背景
+# └── BottomBar (Panel) - 底部栏背景（高度86px）
 #     ├── LeftInfo (Control) - 左侧信息区（宽度230px）
 #     │   ├── PortraitBg (Panel) - 头像背景框
 #     │   ├── HeroPortrait (TextureRect) - 英雄头像（52×52）
@@ -18,27 +18,29 @@ extends CanvasLayer
 #     │   ├── HPLabel (Label) - 血量文字
 #     │   ├── MPBar (ProgressBar) - 蓝条（140×20）
 #     │   ├── MPLabel (Label) - 法力文字
-#     │   ├── ExpBar (ProgressBar) - 经验条（140×16）
-#     │   ├── ExpLabel (Label) - 经验文字
-#     │   └── LevelLabel (Label) - 等级标签
+#     │   └── LevelLabel (Label) - 等级标签（头像下方）
 #     ├── SkillSection (Control) - 技能区
 #     │   ├── SkillBarBg (Panel) - 技能栏背景
 #     │   └── SkillBarContainer (HBoxContainer) - 技能图标容器
-#     └── TipsLabel (Label) - 操作提示
+#     ├── ExpBar (ProgressBar) - 通栏经验条（底部24px）
+#     ├── ExpLabel (Label) - "LEVEL X" 居中显示
+#     └── TipsLabel (Label) - 操作提示（右下角）
 #
 # UI尺寸修改指南：
 # - 修改头像大小：调整HeroPortrait的offset_right/offset_bottom（当前52×52）
 # - 修改血条大小：调整HPBar的offset_right/offset_bottom（当前140×20）
-# - 修改技能图标：修改SKILL_ICON_SIZE常量（当前44）
-# - 修改技能间距：修改SkillBarContainer的separation（当前6）
+# - 修改技能图标：修改SKILL_ICON_SIZE常量（当前34）
+# - 修改技能间距：修改SkillBarContainer的separation（当前2）
 # - 修改底部栏高度：调整BottomBar的offset_top（当前-110）
+# - 注意：21个技能按钮总宽 = 21×34 + 20×2 = 754px，需小于SkillBarContainer宽度772px
 # ============================================
 
 # @onready 自动获取节点引用
 # 左侧信息区节点
 @onready var hp_bar := $BottomBar/LeftInfo/HPBar           # 血条进度条
 @onready var mp_bar := $BottomBar/LeftInfo/MPBar           # 蓝条进度条
-@onready var exp_bar := $BottomBar/LeftInfo/ExpBar         # 经验条进度条
+@onready var exp_bar := $BottomBar/ExpBar              # 通栏经验条进度条（底部）
+@onready var exp_label := $BottomBar/ExpLabel
 @onready var level_label := $BottomBar/LeftInfo/LevelLabel # 等级标签
 @onready var health_label := $BottomBar/LeftInfo/HPLabel   # 血量文字
 @onready var mana_label := $BottomBar/LeftInfo/MPLabel     # 法力文字
@@ -55,13 +57,16 @@ const BuffIconScene = preload("res://Scenes/BuffIcon.tscn")
 # 当前显示的 buff 图标
 var buff_icons := {}
 
+# 受击红晕遮罩（来自 HUD.tscn）
+@onready var damage_overlay := $DamageOverlay
+
 # ============================================
 # 技能栏配置
 # ============================================
 
 # 技能图标尺寸（像素）
 # 修改此值可改变技能图标大小
-const SKILL_ICON_SIZE := 44
+const SKILL_ICON_SIZE := 34
 
 # 技能数据字典
 # 每个技能包含：
@@ -95,6 +100,40 @@ const SKILL_BAR_SKILL_DATA := {
 # 存储技能按钮的字典，key=技能ID，value=Button节点
 var skill_bar_buttons := {}
 
+# 技能冷却多边形 overlay（key=技能ID，value=Polygon2D）
+var skill_cooldown_overlays := {}
+
+# 技能冷却峰值跟踪（key=hero cooldown key名，value=观测到的最大冷却值）
+var skill_cooldown_peaks := {}
+
+# HUD技能ID 到 hero.skill_cooldowns key 的映射
+const SKILL_COOLDOWN_KEY_MAP := {
+	"magic_missile": "magic_missile",
+	"prayer": "prayer",
+	"teleport": "teleport",
+	"mistfog": "mistfog",
+	"stone_enchanted": "stone_enchanted",
+	"wrath_of_god": "wrath_of_god",
+	"telekinesis": "telekinesis",
+	"sacrifice": "sacrifice",
+	"holy_light": "holy_light",
+	"fire_ball": "fireball",
+	"ball_lightning": "ball_lightning",
+	"chain_lightning": "chain_lightning",
+	"heal": "heal",
+	"fire_walk": "fire_walk",
+	"meteor": "meteor",
+	"armageddon": "armageddon",
+	"freezing_spear": "freezing_spear",
+	"poison_cloud": "poison_cloud",
+	"fortuna": "fortuna",
+	"dark_ritual": "dark_ritual",
+	"nova": "nova",
+}
+
+# Alt键状态跟踪（用于 _process 边缘检测）
+var _alt_was_pressed := false
+
 # ============================================
 # 生命周期函数
 # ============================================
@@ -120,12 +159,40 @@ func _ready():
 	# 创建技能栏按钮
 	setup_skill_bar()
 	
+	# 给 DamageOverlay 添加径向渐变 shader
+	_setup_damage_shader()
+	
 	# 初始化所有显示
 	update_all()
 
-func _process(_delta):
+func _process(delta):
 	# 每帧更新 buff 显示
 	_update_buff_display()
+	# 每帧更新技能冷却显示
+	_update_skill_cooldowns(delta)
+	# 每帧更新受击红晕
+	_update_damage_overlay(delta)
+	# _process 回退检测 Alt 键
+	_check_alt_toggle()
+
+func _input(event):
+	# Alt键切换怪物信息显示（血条+伤害数字）
+	if event.is_action_pressed("toggle_monster_health"):
+		_toggle_monster_info()
+		get_viewport().set_input_as_handled()
+
+func _check_alt_toggle():
+	var alt_down = Input.is_key_pressed(KEY_ALT)
+	if alt_down and not _alt_was_pressed:
+		_alt_was_pressed = true
+		_toggle_monster_info()
+	elif not alt_down:
+		_alt_was_pressed = false
+
+func _toggle_monster_info():
+	Global.show_monster_info = not Global.show_monster_info
+	print("HUD: 怪物信息显示 %s" % ["ON" if Global.show_monster_info else "OFF"])
+	_update_monster_hp_visibility()
 
 # ============================================
 # 技能栏设置
@@ -200,6 +267,15 @@ func setup_skill_bar():
 			bg.modulate = Color(0.0, 0.0, 0.0, 0.7)
 			btn.add_child(bg)
 			btn.add_child(key_label)
+
+		# 创建冷却扇形遮罩（Control-based）
+		var overlay = preload("res://Scripts/cooldown_overlay.gd").new()
+		overlay.name = "CooldownOverlay"
+		overlay.mouse_filter = Control.MOUSE_FILTER_PASS
+		overlay.size = Vector2(SKILL_ICON_SIZE, SKILL_ICON_SIZE)
+		overlay.set_progress(0.0)
+		btn.add_child(overlay)
+		skill_cooldown_overlays[skill_id] = overlay
 
 		# 存储元数据（用于后续访问）
 		btn.set_meta("skill_id", skill_id)
@@ -351,12 +427,11 @@ func _on_experience_changed(exp, exp_to_next):
 	# 计算百分比
 	exp_bar.value = float(exp) / float(exp_to_next) * 100.0
 	
-	# 更新文字（如 "EXP: 50/100"）
-	$BottomBar/LeftInfo/ExpLabel.text = "EXP: " + str(exp) + "/" + str(exp_to_next)
+	exp_label.text = "LEVEL %d" % Global.hero_level
 
 func _on_level_changed(lvl):
-	# 等级变化时更新等级标签
 	level_label.text = "Lv." + str(lvl)
+	exp_label.text = "LEVEL %d" % lvl
 
 func update_all():
 	# 初始化时更新所有显示
@@ -396,3 +471,69 @@ func _update_buff_display():
 	for buff_id in buff_icons.keys():
 		if Global.hero_buffs.has(buff_id):
 			buff_icons[buff_id].buff_data = Global.hero_buffs[buff_id]
+
+# ============================================
+# 技能冷却显示
+# ============================================
+
+func _update_skill_cooldowns(_delta: float):
+	var hero = get_tree().get_first_node_in_group("hero")
+	if not hero or not is_instance_valid(hero):
+		return
+	
+	var hero_cooldowns = hero.skill_cooldowns
+	if hero_cooldowns == null:
+		return
+	
+	for skill_id in skill_cooldown_overlays:
+		var overlay = skill_cooldown_overlays[skill_id]
+		if not is_instance_valid(overlay):
+			continue
+		
+		var cooldown_key = SKILL_COOLDOWN_KEY_MAP.get(skill_id, "")
+		if cooldown_key.is_empty():
+			continue
+		
+		var remaining = hero_cooldowns.get(cooldown_key, 0.0)
+		var peak = skill_cooldown_peaks.get(cooldown_key, 0.0)
+		
+		if remaining > peak:
+			skill_cooldown_peaks[cooldown_key] = remaining
+			peak = remaining
+		
+		if remaining <= 0.0:
+			overlay.set_progress(0.0)
+			skill_cooldown_peaks[cooldown_key] = 0.0
+		else:
+			var progress = 1.0 - (remaining / peak) if peak > 0 else 0.0
+			overlay.set_progress(progress)
+
+func _update_monster_hp_visibility():
+	var monsters = get_tree().get_nodes_in_group("monsters")
+	for monster in monsters:
+		if is_instance_valid(monster) and monster.has_node("HealthBar"):
+			var hp_bar = monster.get_node("HealthBar")
+			if Global.show_monster_info:
+				hp_bar.visible = monster.health > 0
+			else:
+				hp_bar.visible = false
+
+# ============================================
+# 受击红晕更新
+# ============================================
+
+func _setup_damage_shader():
+	var shader = Shader.new()
+	shader.code = "shader_type canvas_item;\nuniform float intensity : hint_range(0.0, 1.0) = 0.0;\nvoid fragment() {\n\tfloat d = distance(UV, vec2(0.5));\n\tfloat a = pow(max(d - 0.25, 0.0) / 0.75, 2.0) * intensity * 0.7;\n\tCOLOR = vec4(1.0, 0.0, 0.0, a);\n}"
+	var mat = ShaderMaterial.new()
+	mat.shader = shader
+	damage_overlay.material = mat
+
+func _update_damage_overlay(_delta: float):
+	if not is_instance_valid(damage_overlay):
+		return
+	var ratio = Global.health / Global.max_health
+	var intensity = 0.0 if ratio > 0.5 else (1.0 - ratio / 0.5) * 1.0
+	var mat = damage_overlay.material as ShaderMaterial
+	if mat:
+		mat.set_shader_parameter("intensity", intensity)

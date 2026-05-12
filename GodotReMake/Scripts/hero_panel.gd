@@ -66,6 +66,9 @@ func _input(event):
 	
 	# 按C键：切换面板显示/隐藏
 	if event.is_action_pressed("toggle_hero_panel"):
+		# 如果PauseMenu开着，不响应
+		if Global.is_pause_menu_open:
+			return
 		toggle()
 	
 	# 按F12：切换开发者模式
@@ -80,6 +83,7 @@ func toggle():
 	# 切换面板的打开/关闭状态
 	is_open = !is_open
 	visible = is_open
+	Global.hero_panel_is_open = is_open
 	
 	# 打开面板时暂停游戏，关闭时恢复
 	get_tree().paused = is_open
@@ -100,6 +104,7 @@ func toggle_dev_mode():
 		
 		# 自动打开面板
 		is_open = true
+		Global.hero_panel_is_open = true
 		visible = true
 		get_tree().paused = true
 		update_ui()

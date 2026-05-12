@@ -138,6 +138,9 @@ func _ready():
 	if health_bar:
 		health_bar.max_value = max_health
 		health_bar.value = health
+		# 如果Alt模式已开启，直接显示血条
+		if Global.show_monster_info:
+			health_bar.visible = true
 	
 	# 初始朝向
 	if sprite:
@@ -403,7 +406,16 @@ func take_damage(amount: float, damage_element: String = "basic"):
 	health -= amount
 	if health_bar:
 		health_bar.value = health
-		health_bar.visible = true  # 受伤时显示血条
+		if Global.show_monster_info:
+			health_bar.visible = health > 0
+		else:
+			health_bar.visible = true  # 受伤时临时显示血条
+			if health <= 0:
+				health_bar.visible = false
+	
+	# 显示伤害数字（Alt键开启时）
+	if Global.show_monster_info and amount > 0:
+		_show_damage_number(amount)
 	
 	# 受击闪烁效果：变红后0.1秒恢复
 	if sprite:
@@ -515,6 +527,23 @@ func _update_aura_color(aura: Sprite2D = null):
 			aura_color = Color(0.6, 0.2, 0.8)  # 默认紫色
 	
 	aura.modulate = aura_color
+
+func _show_damage_number(amount: float):
+	var label = Label.new()
+	label.text = str(int(amount))
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.add_theme_font_size_override("font_size", 18)
+	label.add_theme_color_override("font_color", Color(1, 0.9, 0.2, 1))
+	label.add_theme_color_override("font_outline_color", Color(0, 0, 0, 1))
+	label.add_theme_constant_override("outline_size", 3)
+	label.position = global_position + Vector2(-20, -40)
+	label.size = Vector2(40, 24)
+	get_parent().add_child(label)
+	var tween = get_tree().create_tween()
+	tween.tween_property(label, "position:y", label.position.y - 40, 0.8)
+	tween.parallel().tween_property(label, "modulate:a", 0.0, 0.8)
+	tween.tween_callback(label.queue_free)
 
 # ============================================
 # 死亡处理

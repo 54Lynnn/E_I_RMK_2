@@ -100,6 +100,11 @@ signal skill_level_changed(skill_id, level)     # 技能等级变化时发射
 signal hero_took_damage(amount, is_magic, attacker)  # 英雄受到伤害时发射（用于被动技能）
 signal load_game_started                        # 读档开始时发射（用于清理英雄状态）
 
+# PauseMenu 是否打开（用于 HeroPanel 互斥）
+var is_pause_menu_open := false
+# HeroPanel 是否打开（用于 PauseMenu 互斥）
+var hero_panel_is_open := false
+
 # ============================================
 # 基础属性 - 玩家等级和经验
 # ============================================
@@ -238,6 +243,15 @@ var quest_max_unlocked_level := 0
 
 # Resume Game 标志 - 用于通知 QuestLevelManager 恢复进度
 var is_resuming_quest := false
+
+# 整个 Quest 过程中累计击杀总数（用于通关画面统计）
+var quest_total_monsters_killed := 0
+
+# 显示怪物信息（血条+伤害数字）— Alt键切换
+var show_monster_info := false
+
+# Survival 模式本轮累积获得的经验值（用于死亡统计）
+var survival_total_exp_gained := 0
 
 # ============================================
 # Buff持续时间常量（原版数据）
@@ -469,6 +483,10 @@ func gain_experience(amount: int):
 		if level_manager:
 			level_manager.level_experience_gained += amount
 			print("Global: Quest模式记录经验 +%d，本关总计=%d" % [amount, level_manager.level_experience_gained])
+	
+	# Survival模式：记录累积经验值（用于死亡统计）
+	if current_game_mode == GameMode.SURVIVAL:
+		survival_total_exp_gained += amount
 	
 	hero_experience += final_amount
 	var exp_to_next = hero_level * 200  # 每级需要 等级×200 经验（简化公式）
@@ -719,6 +737,7 @@ func reset():
 	hero_wisdom = 10
 	attribute_points = 0
 	skill_points = 0
+	survival_total_exp_gained = 0
 	
 	# 重置所有技能等级为0，然后设置初始技能
 	for skill in skill_levels.keys():
