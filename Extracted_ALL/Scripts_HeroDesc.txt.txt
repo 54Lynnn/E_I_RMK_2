@@ -1,0 +1,25 @@
+"Hero Name";  "";                   
+"Level"; "";
+"Experience"; "";
+"Strength"; "";
+"Dexterity"; "";
+"Stamina"; "";
+"Health"; "1 strength point increases by 10 health points.";
+"Health regeneration"; "1 stamina point increases by 0.1 health point regeneration per second.";
+"Movement speed";   "1 dexterity point increases by 0.5 hero speed.\n1 stamina point increases by 0.35 hero speed.";
+"Hit recovery"; "1 strength points decreases by 0.004 seconds hit recovery time.\nBase hit recovery time is 0.5 seconds.";
+"Chance to be hit";"1 dexterity point decreases by 0.4% chance to be hit.";
+"Intelligence"; "";
+"Wisdom"; "";
+"Mana";   "1 intelligence point increases by 6 hero mana capacity.\n1 wisdom point increases by 2 hero mana capacity.";
+"Mana regeneration"; "1 intelligence point increases by 0.06 mana point regeneration per second.\n1 wisdom point increases by 0.18 mana point regeneration per second.";
+"Attribute Points"; "";
+"Skill Points"; "";
+
+"extra slow";
+"very slow";
+"slow";
+"normal";
+"fast";
+"very fast";
+"extra fast";

@@ -1,0 +1,134 @@
+WIDGET_HEALTH_MANA
+  -8.0; 9.0; 112.0; 160.0;
+
+WIDGET_BUTTON
+  3.0; 30.0; 40.0; 40.0;
+  "System"; "COLOR_GRAY"; ""; 5; 2;
+  "SmallButtonEnabled"; "SmallButtonDisabled"; "SmallButtonPressed"; "SmallButtonLight";
+  "IconButtonClick";
+
+WIDGET_BUTTON
+  47.0; 30.0; 40.0; 40.0;
+  "System"; "COLOR_GRAY"; ""; 5; 2;
+  "SmallButtonEnabled"; "SmallButtonDisabled"; "SmallButtonPressed"; "SmallButtonLight";
+  "IconButtonClick";
+
+WIDGET_BUTTON
+  25.0; 79.0; 40.0; 40.0;
+  "System"; "COLOR_GRAY"; ""; 5; 0;
+  "LevelUpButtonEnabled"; "LevelUpButtonDisabled"; "LevelUpButtonPressed"; "LevelUpButtonLight";
+  "IconButtonClick";
+
+WIDGET_PICTURE
+  92.0; 121.0; 526.0; 44.0;
+  "SpellPanel";
+
+WIDGET_BUTTON
+  100.0; 130.0; 28.0; 28.0;
+  "System_2"; "COLOR_YELLOW"; ""; 0; 2;
+  "SmallButtonEnabled"; "SmallButtonDisabled"; "SmallButtonPressed"; "SmallButtonLight";
+  "IconButtonClick";
+
+WIDGET_BUTTON
+  130.0; 130.0; 28.0; 28.0;
+  "System_2"; "COLOR_YELLOW"; ""; 0; 2;
+  "SmallButtonEnabled"; "SmallButtonDisabled"; "SmallButtonPressed"; "SmallButtonLight";
+  "IconButtonClick";
+
+WIDGET_BUTTON
+  160.0; 130.0; 28.0; 28.0;
+  "System_2"; "COLOR_YELLOW"; ""; 0; 2;
+  "SmallButtonEnabled"; "SmallButtonDisabled"; "SmallButtonPressed"; "SmallButtonLight";
+  "IconButtonClick";
+
+WIDGET_BUTTON
+  190.0; 130.0; 28.0; 28.0;
+  "System_2"; "COLOR_YELLOW"; ""; 0; 2;
+  "SmallButtonEnabled"; "SmallButtonDisabled"; "SmallButtonPressed"; "SmallButtonLight";
+  "IconButtonClick";
+
+WIDGET_BUTTON
+  220.0; 130.0; 28.0; 28.0;
+  "System_2"; "COLOR_YELLOW"; ""; 0; 2;
+  "SmallButtonEnabled"; "SmallButtonDisabled"; "SmallButtonPressed"; "SmallButtonLight";
+  "IconButtonClick";
+
+WIDGET_BUTTON
+  250.0; 130.0; 28.0; 28.0;
+  "System_2"; "COLOR_YELLOW"; ""; 0; 2;
+  "SmallButtonEnabled"; "SmallButtonDisabled"; "SmallButtonPressed"; "SmallButtonLight";
+  "IconButtonClick";
+
+WIDGET_BUTTON
+  280.0; 130.0; 28.0; 28.0;
+  "System_2"; "COLOR_YELLOW"; ""; 0; 2;
+  "SmallButtonEnabled"; "SmallButtonDisabled"; "SmallButtonPressed"; "SmallButtonLight";
+  "IconButtonClick";
+
+WIDGET_BUTTON
+  310.0; 130.0; 28.0; 28.0;
+  "System_2"; "COLOR_YELLOW"; ""; 0; 2;
+  "SmallButtonEnabled"; "SmallButtonDisabled"; "SmallButtonPressed"; "SmallButtonLight";
+  "IconButtonClick";
+
+WIDGET_BUTTON
+  340.0; 130.0; 28.0; 28.0;
+  "System_2"; "COLOR_YELLOW"; ""; 0; 2;
+  "SmallButtonEnabled"; "SmallButtonDisabled"; "SmallButtonPressed"; "SmallButtonLight";
+  "IconButtonClick";
+
+WIDGET_BUTTON
+  370.0; 130.0; 28.0; 28.0;
+  "System_2"; "COLOR_YELLOW"; ""; 0; 2;
+  "SmallButtonEnabled"; "SmallButtonDisabled"; "SmallButtonPressed"; "SmallButtonLight";
+  "IconButtonClick";
+
+WIDGET_BUTTON
+  400.0; 130.0; 28.0; 28.0;
+  "System_2"; "COLOR_YELLOW"; ""; 0; 2;
+  "SmallButtonEnabled"; "SmallButtonDisabled"; "SmallButtonPressed"; "SmallButtonLight";
+  "IconButtonClick";
+
+WIDGET_BUTTON
+  430.0; 130.0; 28.0; 28.0;
+  "System_2"; "COLOR_YELLOW"; ""; 0; 2;
+  "SmallButtonEnabled"; "SmallButtonDisabled"; "SmallButtonPressed"; "SmallButtonLight";
+  "IconButtonClick";
+
+WIDGET_BUTTON
+  460.0; 130.0; 28.0; 28.0;
+  "System_2"; "COLOR_YELLOW"; ""; 0; 2;
+  "SmallButtonEnabled"; "SmallButtonDisabled"; "SmallButtonPressed"; "SmallButtonLight";
+  "IconButtonClick";
+
+WIDGET_BUTTON
+  490.0; 130.0; 28.0; 28.0;
+  "System_2"; "COLOR_YELLOW"; ""; 0; 2;
+  "SmallButtonEnabled"; "SmallButtonDisabled"; "SmallButtonPressed"; "SmallButtonLight";
+  "IconButtonClick";
+
+WIDGET_BUTTON
+  520.0; 130.0; 28.0; 28.0;
+  "System_2"; "COLOR_YELLOW"; ""; 0; 2;
+  "SmallButtonEnabled"; "SmallButtonDisabled"; "SmallButtonPressed"; "SmallButtonLight";
+  "IconButtonClick";
+
+WIDGET_BUTTON
+  550.0; 130.0; 28.0; 28.0;
+  "System_2"; "COLOR_YELLOW"; ""; 0; 2;
+  "SmallButtonEnabled"; "SmallButtonDisabled"; "SmallButtonPressed"; "SmallButtonLight";
+  "IconButtonClick";
+
+WIDGET_BUTTON
+  580.0; 130.0; 28.0; 28.0;
+  "System_2"; "COLOR_YELLOW"; ""; 0; 2;
+  "SmallButtonEnabled"; "SmallButtonDisabled"; "SmallButtonPressed"; "SmallButtonLight";
+  "IconButtonClick";
+
+WIDGET_PICTURE
+  -80.0; -22.0; 160.0; 44.0;
+  "SmallPanel";
+
+WIDGET_LABEL
+  0.0; 0.0; 160.0; 44.0;
+  "System"; "COLOR_LIGHT_BROWN"; 5; "Paused";

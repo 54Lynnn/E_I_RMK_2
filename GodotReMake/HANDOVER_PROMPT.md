@@ -2,7 +2,7 @@
 
 > **发送给下一个 coding agent 的提示词**
 > **日期**: 2026-05-13
-> **最新更新**: v6 Agent — 地图比例修正v2 + 质感到位 + 数值统一管理
+> **最新更新**: v7 Agent — 对象池系统 + 刷怪修复 + Data.pak全量提取
 > **GitHub仓库**: https://github.com/54Lynnn/E_I_RMK_2
 
 ---
@@ -67,6 +67,27 @@
 - [x] **怪物行走/攻击/死亡**：7种怪物全部 16帧 spritesheet
 - [x] **动画状态机**：AnimState（WALK/ATTACK/DEATH）
 
+**性能优化 🚀（v7 新增）**：
+- [x] **对象池系统（ObjectPool）**：Autoload 单例，管理高频创建/销毁对象的复用
+- [x] **池化对象**：Projectile(20)、MagicMissile(15)、NovaProj(10)、ChainLightningProj(10)、MonsterArrow(15)、ArmageddonZone(5)
+- [x] **16个脚本已重构**使用对象池替代 instantiate/queue_free
+- [x] **短命特效不池化**：Explosion/Armageddon闪光/MeteorSingle恢复为 instantiate（寿命<1s，收益低）
+
+**怪物刷新修复 🎯（v7 新增）**：
+- [x] **移除怪物数量上限**：原 `max_monsters=15` 硬上限已彻底删除
+- [x] **4种生成模式无限制**：SINGLE/LINE/GROUP/ALL_SIDES 全部独立自由运转
+- [x] **Diablo追踪修复**：从名字字符串匹配改为数组精确追踪
+- [x] **计数器保护**：active_monsters 不会低于0，防存档加载时的延迟信号
+
+**原版数据提取 🔬（v7 新增）**：
+- [x] **Data.pak 全量提取**：92个文件全部通过 XOR 0xA5 解密
+- [x] **MonsterBalance.txt**：7种怪物属性（血量/伤害/速度等）
+- [x] **SpellBalance.txt**：21个技能数据（按玩家等级索引）
+- [x] **HeroBalance.txt**：英雄属性系数
+- [x] **ItemBalance.txt**：物品掉率/Buff持续时间
+- [x] **MapDesc.txt**：8张地图名
+- [x] **SpellDesc.txt**：技能描述英文原文
+
 **比例修正 📐（v6 最终版）**：
 - [x] **地图 1536×1536**（=1024×1.5，用户实测与原版速度相近）
 - [x] **摄像机 zoom=1.0**
@@ -82,27 +103,28 @@
 - [x] 清理废弃占位文件
 
 **Bug修复 🔧**：
-- [x] SpeedBoost速度加成重复应用两次（get_move_speed+移动计算各乘一次）
-- [x] 英雄面板速度显示基数 100→65（与实际一致）
-- [x] 英雄死亡动画重复播放（添加is_dying守卫）
-- [x] 蜘蛛攻击时身体消失（保留行走贴图，闪红代替）
-- [x] Mummy/Reaper侧面射击（前摇阶段持续转向玩家）
-- [x] 怪物死亡时Aura淡出（与死亡动画同步）
-- [x] 升级光圈 ColorRect→圆形Sprite2D（缩小尺寸）
+- [x] SpeedBoost速度加成重复应用两次
+- [x] 英雄面板速度显示基数 100→65
+- [x] 英雄死亡动画重复播放
+- [x] 蜘蛛攻击时身体消失
+- [x] Mummy/Reaper侧面射击
+- [x] 怪物死亡时Aura淡出
+- [x] 升级光圈 ColorRect→圆形Sprite2D
 - [x] 爆炸/受击反馈正方形→圆形
-- [x] Fireball爆炸半径 LV1=56（原版数据）
+- [x] Fireball爆炸半径 LV1=60→56
 - [x] Fireball/Firewalk技能ID命名不一致（fire_ball→fireball）
 - [x] 升级空指针（get_node_or_null安全访问）
-- [x] HeroPanel与底部HUD重叠（offset调整）
+- [x] HeroPanel与底部HUD重叠
+- [x] **怪物箭矢半路消失（_ready() 定时器残留）**
+- [x] **投射物/特效对象池复用后 _ready() 不执行导致行为异常**
 
 ### 🔧 待完成
 
 | 优先级 | 事项 | 说明 |
 |:------:|:-----|:------|
 | P1 | **主菜单** | 目前直接进入游戏模式选择 |
-| P1 | **高分榜** | 原版有在线高分榜 |
-| P1 | **对象池** | 大量投射物/怪物时性能优化 |
-| P2 | **选项设置** | 音量/按键自定义/画面设置（优先级低） |
+| P1 | **高分榜** | 原版有在线高分榜（对话框已提取参考） |
+| P2 | **选项设置** | 音量/按键自定义/画面设置 |
 | P3 | **地图纹理** | 6张 DDS 纹理已提取，最后做（纯美术资源） |
 | P3 | **音效系统** | 68个OGG已提取，最后做（纯音频资源） |
 
@@ -128,7 +150,47 @@ Ground: scale=12 (128×12=1536)
 - 生成器（Spawner）统一调用 `apply_database_data()` 应用数值
 - `_ready()` 中不再调用 `_load_data_from_database()`（避免重复加载）
 
-### 3. 摄像机设置（v6 更新！）
+### 3. 怪物刷怪系统（v7 重要更新！）
+- **场上怪物数量无上限**：所有4种生成模式完全独立自由运转
+- **唯一限制**：Diablo 同场最多3只（原版设定）
+- **SINGLE模式**：每1~3秒在边缘生成1只随机怪物
+- **LINE模式**：每18~22秒从某边生成20只同种怪物横扫
+- **GROUP模式**：每8~12秒从边缘生成4~9只（2×2/3×2/3×3）编组
+- **ALL_SIDES模式**：每38~42秒从四边各生成15只同种怪物（LV≥9解锁）
+- **注意**：以上刷怪参数（间隔/数量/解锁等级）**来源不确定**，基于之前开发者的反编译理解，Data.pak 中无对应配置文件。建议根据实际游戏体验调整。
+
+### 4. 对象池系统（v7 新增！）
+- **Autoload 脚本**: `Scripts/object_pool.gd`
+- **使用方法**：
+  ```gdscript
+  # 从池中获取对象
+  var obj = ObjectPool.get_object(MyScene)
+  obj.global_position = ...
+  get_parent().add_child(obj)
+  
+  # 归还对象到池中（替代 queue_free）
+  ObjectPool.return_to_pool(self)
+  ```
+- **池化规则**：
+  - 使用 `_process()` 或 `_physics_process()` 管理生命周期的对象适合池化
+  - 使用 `_ready()` 中 tween/timer 的短命特效（<1s）不适合池化
+  - 池化对象必须实现 `reset_for_pool()` 方法重置所有状态
+  - 不要依赖 `_ready()` 做状态初始化（复用后不执行），改用 `_process()` 首帧检测
+
+### 5. 原版数据提取（v7 新增！）
+- **提取工具**：`e:\EvilInvasion\extract_all.py`（Python脚本，XOR 0xA5解密）
+- **提取位置**：`e:\EvilInvasion\extracted_all/`（92个已解密文件）
+- **关键配置文件**：
+  - `Scripts_MonsterBalance.txt` → 7种怪物属性（✅ 可信）
+  - `Scripts_SpellBalance.txt` → 技能数据（⚠️ 按玩家等级索引，非技能等级）
+  - `Scripts_HeroBalance.txt` → 英雄属性系数
+  - `Scripts_ItemBalance.txt` → 物品掉落概率/持续时间
+  - `Scripts_MapDesc.txt` → 8张地图名
+- **注意**：
+  - 4种刷怪模式的参数（间隔/数量）**不在Data.pak中**，来源不确定
+  - 怪物权重系统（troll:25/mummy:22等）同样来源不确定
+
+### 6. 摄像机设置（v6 更新！）
 ```gdscript
 # camera.gd
 zoom = Vector2(1.0, 1.0)
@@ -138,7 +200,7 @@ viewport_padding = 100.0  # 边界 padding，怪物从画面外生成
 - **边界约束**：摄像机中心不会超出地图边界，画面不露空白
 - **受击震动**：shake(3.0)，持续0.1秒自动复位
 
-### 4. 远程怪物三层距离系统
+### 7. 远程怪物三层距离系统
 | 参数 | 含义 | Mummy/Reaper 当前值 |
 |:----|:-----|:------------------:|
 | detection_range | 索敌追击距离 | 500 |
@@ -147,14 +209,14 @@ viewport_padding = 100.0  # 边界 padding，怪物从画面外生成
 
 行为：500以外wander→500~400追击→400~150停下攻击→<150逃跑
 
-### 5. 近战怪物 detection_range
+### 8. 近战怪物 detection_range
 | 怪物 | 当前值 |
 |:----|:------:|
 | Troll/Spider/Bear | 350 |
 | Demon | 400 |
 | Mummy/Reaper/Diablo | 500 |
 
-### 6. 英雄/怪物尺寸
+### 9. 英雄/怪物尺寸
 ```
 英雄 Sprite2D: 原始 48×48，无额外 scale
 怪物 Sprite2D: 原始 48×48（Diablo 64×64），无额外 scale
@@ -162,34 +224,35 @@ viewport_padding = 100.0  # 边界 padding，怪物从画面外生成
 投射物 Sprite2D: 48×48 × scale(0.35) ≈ 17×17
 ```
 
-### 7. 技能数值来源
+### 10. 技能数值来源
 - **❌ 不要使用 `extracted.md` 的技能数据**（等级偏移错误）
+- **❌ 不要使用 `SpellBalance.txt` 的原始数值**（按玩家等级索引，不是技能等级）
 - **✅ 唯一可信来源**：`evil_invasion_spell.xlsx`
 - 所有技能脚本中的数值公式已按 xlsx 数据实现
 
-### 8. 文件路径
+### 11. 文件路径
 ```
 Scripts/
-├── Spells/          ← 所有技能脚本（21个）
-├── Monsters/        ← 所有怪物脚本（7种）
-│   ├── monster_base.gd        ← map_bounds = 1536
-│   └── monster_database.gd    ← ← 所有数值在这里改！
-├── Quest/           ← Quest模式相关脚本
+├── object_pool.gd      ← Autoload 对象池
+├── Spells/             ← 所有技能脚本（21个）
+├── Monsters/           ← 所有怪物脚本（7种）
+│   ├── monster_base.gd          ← map_bounds = 1536
+│   └── monster_database.gd      ← ← 所有数值在这里改！
+├── Quest/              ← Quest模式相关脚本
 └── ...
 ```
 
-### 9. 英雄待机动画（v6 新增）
+### 12. 英雄待机动画（v6 新增）
 - **站立不动时**：显示 `hero_idle_0.png`
 - **移动时**：切换为 `hero_walk.png` 16帧循环
 - 切换时机在 `_update_walk_animation()` 中处理
 
-### 10. hero.gd 速度计算（v6 修改！）
+### 13. hero.gd 速度计算（v6 修改！）
 ```gdscript
-# 不再重复乘以 speed_multiplier！
 var target_velocity = input_dir * get_move_speed()  # get_move_speed() 内部已乘
 ```
 
-### 11. 元素主题色（v6 统一）
+### 14. 元素主题色（v6 统一）
 | 元素 | 颜色 | 用途 |
 |:----|:----|:------|
 | Basic | #C084FC (紫粉) | 技能按钮条 + 怪物光圈 |
@@ -198,7 +261,7 @@ var target_velocity = input_dir * get_move_speed()  # get_move_speed() 内部已
 | Fire | #D94A2A (红) | 同上 |
 | Water | #3B7FFF (蓝) | 同上 |
 
-### 12. Ball Lightning 行为
+### 15. Ball Lightning 行为
 - 在鼠标光标位置生成
 - 生成点 130px 范围内随机游荡
 - 检测 100px 内的敌人
@@ -225,3 +288,8 @@ var target_velocity = input_dir * get_move_speed()  # get_move_speed() 内部已
 - `各怪物_frames/` — 怪物动画帧
 - `map_tex_0~5_1024x1024.dds` — 6张地图纹理
 - `sound_0~67.ogg` — 68个音效
+
+`extracted_all/` 目录中包含（v7 新增）：
+- 从 `Data.pak` 全量提取的92个解密文件
+- 包括怪物/技能/物品/英雄的所有平衡配置
+- 包括8个游戏界面的 UI 布局定义

@@ -4,8 +4,8 @@
 > **引擎**: Godot 4.6.2-stable
 > **语言**: GDScript
 > **作者**: [Previous Agent]
-> **日期**: 2026-05-06
-> **最后更新**: 2026-05-13（v6 Agent: 地图比例修正v2 + 质感到位 + 数值统一管理）
+> **日期**: 2026-05-13
+> **最后更新**: v7 Agent — 对象池系统 + 刷怪修复 + Data.pak全量提取
 > **GitHub仓库**: https://github.com/54Lynnn/E_I_RMK_2
 
 ---
@@ -145,11 +145,12 @@ GodotReMake/
 │   └── VictoryScreen.tscn     # 全通通关画面
 ├── Scripts/
 │   ├── global.gd              # 全局单例（自动加载）
+│   ├── object_pool.gd         # 对象池单例（自动加载）v7新增
 │   ├── hero.gd                # 英雄逻辑（移动、技能施放）
 │   ├── monster_spawner.gd     # 怪物生成器（Survival模式）
 │   ├── level_select.gd        # 关卡选择器逻辑
 │   ├── save_manager.gd        # 存档管理器
-│   ├── projectile.gd          # 旧版通用投射物逻辑（逐步弃用）
+│   ├── projectile.gd          # 通用投射物逻辑（对象池化）
 │   ├── pause_menu.gd          # 暂停菜单逻辑
 │   ├── game_over_screen.gd    # 死亡画面逻辑
 │   ├── level_complete_screen.gd # 关卡完成画面逻辑
@@ -396,7 +397,27 @@ monster_base.gd (核心功能：移动、受击、死亡、元素光环)
 - [x] 平滑跟随玩家
 - [x] zoom = 1.0（还原原版视野比例）
 
-### 3.12 开发模式 (DevMode)
+### 3.11 对象池系统（v7 新增）
+
+- [x] **ObjectPool Autoload**：`Scripts/object_pool.gd`，管理高频对象的复用
+- [x] **池化对象**：Projectile(20)/MagicMissile(15)/NovaProj(10)/ChainLightningProj(10)/MonsterArrow(15)/ArmageddonZone(5)
+- [x] **16个脚本已重构**使用 `ObjectPool.get_object()` / `ObjectPool.return_to_pool()`
+- [x] **短命特效不池化**：Explosion/Armageddon闪光/MeteorSingle寿命<1s，恢复 instantiate
+- [x] **`reset_for_pool()` 协议**：池化对象必须实现此方法重置状态
+- [x] **安全回退**：场景不在池中时自动 `queue_free()`
+
+### 3.12 怪物刷怪修复（v7 新增）
+
+- [x] **移除 max_monsters=15 硬上限**：所有4种生成模式无上限独立运转
+- [x] **Diablo 追踪修复**：从名字字符串匹配改为数组精确追踪
+- [x] **计数器保护**：active_monsters 不会低于0
+
+### 3.13 Data.pak 全量提取（v7 新增）
+
+- [x] **92个文件全部解密**：使用 XOR 0xA5 解密
+- [x] **提取工具**：`e:\EvilInvasion\extract_all.py`
+- [x] **提取位置**：`e:\EvilInvasion\extracted_all/`
+- [x] **关键配置**：MonsterBalance, SpellBalance, HeroBalance, ItemBalance, MapDesc, SpellDesc
 - [x] F2切换
 - [x] 自动+100属性点、+100技能点
 - [x] 游戏暂停

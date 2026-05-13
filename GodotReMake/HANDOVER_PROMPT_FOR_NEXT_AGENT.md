@@ -7,7 +7,7 @@
 > **项目**: Evil Invasion (2006年Flash游戏) Godot 4.6 重制版
 > **引擎**: Godot 4.6.2
 > **GitHub**: https://github.com/54Lynnn/E_I_RMK_2
-> **最新更新**: v6 Agent — 地图比例修正v2 + 质感到位 + 数值统一管理
+> **最新更新**: v7 Agent — 对象池系统 + 刷怪修复 + Data.pak全量提取
 
 ## 快速开始
 

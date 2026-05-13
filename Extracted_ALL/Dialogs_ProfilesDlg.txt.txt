@@ -1,0 +1,85 @@
+WIDGET_PICTURE
+  0.0; 0.0; 384.0; 384.0;
+  "Dialog";
+
+WIDGET_PICTURE
+  0.0; 32.0; 194.0; 320.0;
+  "HeroStatue";
+
+WIDGET_PICTURE
+  214.0; 40.0; 122.0; 32.0;
+  "LabelFrame";
+
+WIDGET_LABEL
+  275.0; 16.0; 10.0; 10.0;
+  "System"; "COLOR_LIGHT_BROWN"; 1; "Select Hero";
+
+WIDGET_LABEL
+  275.0; 42.0; 114.0; 26.0;
+  "System"; "COLOR_BROWN"; 1; "(Default)";
+
+WIDGET_LABEL
+  275.0; 70.0; 10.0; 10.0;
+  "System_2"; "COLOR_BROWN"; 1; "(normal difficulty, 1 level)";
+
+WIDGET_BUTTON
+  336.0; 40.0; 24.0; 32.0;
+  "System"; "COLOR_YELLOW"; ">"; 5; 0;
+  "ArrowButtonEnabled"; "ArrowButtonDisabled"; "ArrowButtonPressed"; "ArrowButtonLight";
+  "MenuButtonClick";
+
+WIDGET_BUTTON
+  190.0; 40.0; 24.0; 32.0;
+  "System"; "COLOR_YELLOW"; "<"; 5; 0;
+  "ArrowButtonEnabled"; "ArrowButtonDisabled"; "ArrowButtonPressed"; "ArrowButtonLight";
+  "MenuButtonClick";
+
+WIDGET_BUTTON
+  194; 100.0; 162.0; 32.0;
+  "System"; "COLOR_YELLOW"; "Remove"; 5; 0;
+  "ButtonEnabled"; "ButtonDisabled"; "ButtonPressed"; "ButtonLight";
+  "MenuButtonClick";
+
+WIDGET_LABEL
+  275.0; 160.0; 10.0; 10.0;
+  "System"; "COLOR_LIGHT_BROWN"; 1; "New Hero";
+
+WIDGET_EDIT
+  194.0; 184.0; 162.0; 32.0;
+  "System"; "COLOR_BROWN"; 4; "EditFrame"; "EditFrame";
+
+WIDGET_LABEL
+  275.0; 215.0; 10.0; 10.0;
+  "System"; "COLOR_LIGHT_BROWN"; 1; "Difficulty";
+
+WIDGET_PICTURE
+  214.0; 240.0; 122.0; 32.0;
+  "LabelFrame";
+
+WIDGET_LABEL
+  275.0; 243.0; 114.0; 26.0;
+  "System"; "COLOR_BROWN"; 1; "(Default)";
+
+WIDGET_BUTTON
+  336.0; 240.0; 24.0; 32.0;
+  "System"; "COLOR_YELLOW"; ">"; 5; 0;
+  "ArrowButtonEnabled"; "ArrowButtonDisabled"; "ArrowButtonPressed"; "ArrowButtonLight";
+  "MenuButtonClick";
+
+WIDGET_BUTTON
+  190.0; 240.0; 24.0; 32.0;
+  "System"; "COLOR_YELLOW"; "<"; 5; 0;
+  "ArrowButtonEnabled"; "ArrowButtonDisabled"; "ArrowButtonPressed"; "ArrowButtonLight";
+  "MenuButtonClick";
+
+WIDGET_BUTTON
+  194.0; 280.0; 162.0; 32.0;
+  "System"; "COLOR_YELLOW"; "Create"; 5; 0;
+  "ButtonEnabled"; "ButtonDisabled"; "ButtonPressed"; "ButtonLight";
+  "MenuButtonClick";
+
+WIDGET_BUTTON
+  194.0; 336.0; 162.0; 32.0;
+  "System"; "COLOR_YELLOW"; "OK"; 5; 0;
+  "ButtonEnabled"; "ButtonDisabled"; "ButtonPressed"; "ButtonLight";
+  "MenuButtonClick";

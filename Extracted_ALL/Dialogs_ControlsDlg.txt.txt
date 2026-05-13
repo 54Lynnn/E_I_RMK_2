@@ -1,0 +1,127 @@
+WIDGET_PICTURE
+  0.0; 0.0; 384.0; 384.0;
+  "Dialog";
+
+WIDGET_LABEL
+  192.0; 16.0; 10.0; 10.0;
+  "System"; "COLOR_LIGHT_BROWN"; 1; "General Keys";
+
+WIDGET_LABEL
+  192.0; 132.0; 10.0; 10.0;
+  "System"; "COLOR_LIGHT_BROWN"; 1; "Spells Keys";
+
+WIDGET_CONTROL
+  20.0; 42.0; 172.0; 16.0;
+  "System_2"; "COLOR_BROWN"; 0; "Move Up";
+
+WIDGET_CONTROL        
+  20.0; 58.0; 172.0; 16.0;
+  "System_2"; "COLOR_BROWN"; 0; "Move Down";
+
+WIDGET_CONTROL
+  20.0; 74.0; 172.0; 16.0; 
+  "System_2"; "COLOR_BROWN"; 0; "Move Left";
+
+WIDGET_CONTROL
+  20.0; 90.0; 172.0; 16.0;
+  "System_2"; "COLOR_BROWN"; 0; "Move Right";
+
+WIDGET_CONTROL
+  192.0; 42.0; 172.0; 16.0;
+  "System_2"; "COLOR_BROWN"; 0; "Primary Attack";
+
+WIDGET_CONTROL
+  192.0; 58.0; 172.0; 16.0;
+  "System_2"; "COLOR_BROWN"; 0; "Secondary Attack";
+
+WIDGET_CONTROL
+  192.0; 74.0; 172.0; 16.0;
+  "System_2"; "COLOR_BROWN"; 0; "Hero Dialog";
+
+WIDGET_CONTROL
+  192.0; 90.0; 172.0; 16.0;
+  "System_2"; "COLOR_BROWN"; 0; "Monsters Health";
+
+WIDGET_CONTROL
+  192.0; 106.0; 172.0; 16.0;
+  "System_2"; "COLOR_BROWN"; 0; "Pause";
+
+WIDGET_CONTROL
+  20.0; 158.0; 172.0; 16.0;
+  "System_2"; "COLOR_BROWN"; 0; "Magic Missile";
+
+WIDGET_CONTROL
+  20.0; 174.0; 172.0; 16.0;
+  "System_2"; "COLOR_BROWN"; 0; "Prayer";
+
+WIDGET_CONTROL
+  20.0; 190.0; 172.0; 16.0;
+  "System_2"; "COLOR_BROWN"; 0; "Slow";
+
+WIDGET_CONTROL
+  20.0; 206.0; 172.0; 16.0;
+  "System_2"; "COLOR_BROWN"; 0; "Teleport";
+
+WIDGET_CONTROL
+  20.0; 222.0; 172.0; 16.0;
+  "System_2"; "COLOR_BROWN"; 0; "Wrath Of God";
+
+WIDGET_CONTROL
+  20.0; 238.0; 172.0; 16.0;
+  "System_2"; "COLOR_BROWN"; 0; "Sacrifice";
+
+WIDGET_CONTROL
+  20.0; 254.0; 172.0; 16.0;
+  "System_2"; "COLOR_BROWN"; 0; "Holy Light";
+
+WIDGET_CONTROL
+  20.0; 270.0; 172.0; 16.0;
+  "System_2"; "COLOR_BROWN"; 0; "Ball Lightning";
+
+WIDGET_CONTROL
+  20.0; 286.0; 172.0; 16.0;
+  "System_2"; "COLOR_BROWN"; 0; "Lightning";
+
+WIDGET_CONTROL
+  192.0; 158.0; 172.0; 16.0;
+  "System_2"; "COLOR_BROWN"; 0; "Fire Ball";
+
+WIDGET_CONTROL
+  192.0; 174.0; 172.0; 16.0;
+  "System_2"; "COLOR_BROWN"; 0; "Heal";
+
+WIDGET_CONTROL
+  192.0; 190.0; 172.0; 16.0;
+  "System_2"; "COLOR_BROWN"; 0; "Meteor";
+
+WIDGET_CONTROL
+  192.0; 206.0; 172.0; 16.0;
+  "System_2"; "COLOR_BROWN"; 0; "Armageddon";
+
+WIDGET_CONTROL
+  192.0; 222.0; 172.0; 16.0;
+  "System_2"; "COLOR_BROWN"; 0; "Freezing Spear";
+
+WIDGET_CONTROL
+  192.0; 238.0; 172.0; 16.0;
+  "System_2"; "COLOR_BROWN"; 0; "Posion Cloud";
+
+WIDGET_CONTROL
+  192.0; 254.0; 172.0; 16.0;
+  "System_2"; "COLOR_BROWN"; 0; "Nova";
+
+WIDGET_CONTROL
+  192.0; 270.0; 172.0; 16.0;
+  "System_2"; "COLOR_BROWN"; 0; "Dark Ritual";
+
+WIDGET_BUTTON
+  20.0; 328.0; 162.0; 32.0;
+  "System"; "COLOR_YELLOW"; "Use Defaults"; 5; 0;
+  "ButtonEnabled"; "ButtonDisabled"; "ButtonPressed"; "ButtonLight";
+  "MenuButtonClick";
+
+WIDGET_BUTTON
+  202.0; 328.0; 162.0; 32.0;
+  "System"; "COLOR_YELLOW"; "OK"; 5; 0;
+  "ButtonEnabled"; "ButtonDisabled"; "ButtonPressed"; "ButtonLight";
+  "MenuButtonClick";

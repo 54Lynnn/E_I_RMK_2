@@ -1,0 +1,8 @@
+"Ancient Way";
+"Burned Land";
+"Desert Battle";
+"Fogotten Dunes";
+"Dark Swamp";
+"Skull Coast";
+"Snowy Pass";
+"Hell Eye";

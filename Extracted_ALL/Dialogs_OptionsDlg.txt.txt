@@ -1,0 +1,95 @@
+WIDGET_PICTURE
+  0.0; 0.0; 194.0; 256.0;
+  "MenuBackground";
+
+WIDGET_BUTTON
+  16.0; 208.0; 162.0; 32.0;
+  "System"; "COLOR_YELLOW"; "Back"; 5; 0;
+  "ButtonEnabled"; "ButtonDisabled"; "ButtonPressed"; "ButtonLight";
+  "MenuButtonClick";
+
+WIDGET_LABEL
+  96.0; 12.0; 10.0; 10.0;
+  "System"; "COLOR_LIGHT_BROWN"; 1; "Graphics";
+
+WIDGET_BUTTON
+  16.0; 37.0; 24.0; 24.0;
+  "System"; "COLOR_YELLOW"; "X"; 5; 0;
+  "SmallButtonEnabled"; "SmallButtonDisabled"; "SmallButtonPressed"; "SmallButtonLight";
+  "MenuButtonClick";
+
+WIDGET_LABEL
+  50.0; 37.0; 10.0; 10.0;
+  "System"; "COLOR_BROWN"; 0; "Tutorial Tips";
+
+WIDGET_BUTTON
+  16.0; 62.0; 24.0; 24.0;
+  "System"; "COLOR_YELLOW"; "X"; 5; 0;
+  "SmallButtonEnabled"; "SmallButtonDisabled"; "SmallButtonPressed"; "SmallButtonLight";
+  "MenuButtonClick";
+
+WIDGET_LABEL
+  50.0; 62.0; 10.0; 10.0;
+  "System"; "COLOR_BROWN"; 0; "Blood";
+
+WIDGET_BUTTON
+  16.0; 87.0; 24.0; 24.0;
+  "System"; "COLOR_YELLOW"; "X"; 5; 0;
+  "SmallButtonEnabled"; "SmallButtonDisabled"; "SmallButtonPressed"; "SmallButtonLight";
+  "MenuButtonClick";
+
+WIDGET_LABEL
+  50.0; 87.0; 10.0; 10.0;
+  "System"; "COLOR_BROWN"; 0; "Shadows";
+
+WIDGET_LABEL
+  96.0; 110.0; 10.0; 10.0;
+  "System"; "COLOR_LIGHT_BROWN"; 1; "Sounds";
+
+WIDGET_LABEL
+  12.0; 140.0; 10.0; 10.0;
+  "System"; "COLOR_BROWN"; 0; "Effects Vol.";
+
+WIDGET_BUTTON
+  98.0; 140.0; 24.0; 24.0;
+  "System"; "COLOR_YELLOW"; "<"; 5; 0;
+  "SmallButtonEnabled"; "SmallButtonDisabled"; "SmallButtonPressed"; "SmallButtonLight";
+  "MenuButtonClick";
+
+WIDGET_BUTTON
+  154.0; 140.0; 24.0; 24.0;
+  "System"; "COLOR_YELLOW"; ">"; 5; 0;
+  "SmallButtonEnabled"; "SmallButtonDisabled"; "SmallButtonPressed"; "SmallButtonLight";
+  "MenuButtonClick";
+
+WIDGET_PICTURE
+  122.0; 140.0; 32.0; 24.0;
+  "LabelFrameSmall";
+
+WIDGET_LABEL
+  138.0; 140.0; 10.0; 10.0;
+  "System"; "COLOR_BROWN"; 1; "1";
+
+WIDGET_LABEL
+  12.0; 170.0; 10.0; 10.0;
+  "System"; "COLOR_BROWN"; 0; "Music Vol.";
+
+WIDGET_BUTTON
+  98.0; 170.0; 24.0; 24.0;
+  "System"; "COLOR_YELLOW"; "<"; 5; 0;
+  "SmallButtonEnabled"; "SmallButtonDisabled"; "SmallButtonPressed"; "SmallButtonLight";
+  "MenuButtonClick";
+
+WIDGET_BUTTON
+  154.0; 170.0; 24.0; 24.0;
+  "System"; "COLOR_YELLOW"; ">"; 5; 0;
+  "SmallButtonEnabled"; "SmallButtonDisabled"; "SmallButtonPressed"; "SmallButtonLight";
+  "MenuButtonClick";
+
+WIDGET_PICTURE
+  122.0; 170.0; 32.0; 24.0;
+  "LabelFrameSmall";
+
+WIDGET_LABEL
+  138.0; 170.0; 10.0; 10.0;
+  "System"; "COLOR_BROWN"; 1; "10";

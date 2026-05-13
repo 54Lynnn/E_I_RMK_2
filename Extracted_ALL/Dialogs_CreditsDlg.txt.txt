@@ -1,0 +1,13 @@
+WIDGET_PICTURE
+  0.0; 0.0; 194.0; 256.0;
+  "MenuBackground";
+
+WIDGET_LABEL
+  16.0; 12.0; 10.0; 10.0;
+  "System_2"; "COLOR_BLACK"; 0; "#b     www.vhgames.com\n#lDesign & Programming\n  #bLesha VH\n#lArt\n  #bLesha Mas\n  Ivan Dribas\n  Alexander Yantchuk\n#lMusic & Sound\n  #bIgor Yakovishin";
+
+WIDGET_BUTTON
+  16.0; 208.0; 162.0; 32.0;
+  "System"; "COLOR_YELLOW"; "Back"; 5; 0;
+  "ButtonEnabled"; "ButtonDisabled"; "ButtonPressed"; "ButtonLight";
+  "MenuButtonClick";

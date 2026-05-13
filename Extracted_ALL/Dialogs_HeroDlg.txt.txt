@@ -1,0 +1,314 @@
+WIDGET_PICTURE
+  0.0; 0.0; 800.0; 600.0;
+  "HeroDialog";
+
+WIDGET_LABEL
+  127.0; 24.0; 120.0; 16.0;
+  "System"; "COLOR_BROWN"; 0; "";
+
+WIDGET_LABEL
+  118.0; 53.0; 55.0; 16.0;
+  "System"; "COLOR_BROWN"; 0; "Level";
+
+WIDGET_LABEL
+  145.0; 79.0; 55.0; 22.0;
+  "System"; "COLOR_BROWN"; 1; "";
+
+WIDGET_LABEL
+  183.0; 53.0; 108.0; 16.0;
+  "System"; "COLOR_BROWN"; 0; "Experience";
+
+WIDGET_LABEL
+  237.0; 79.0; 108.0; 22.0;
+  "System"; "COLOR_BROWN"; 1; "";
+
+WIDGET_LABEL
+  60.0; 123.0; 10.0; 10.0;
+  "System"; "COLOR_BROWN"; 0; "Strength";
+
+WIDGET_LABEL
+  222.0; 123.0; 50.0; 26.0;
+  "System"; "COLOR_BROWN"; 1; "";
+
+WIDGET_LABEL
+  60.0; 151.0; 10.0; 10.0;
+  "System"; "COLOR_BROWN"; 0; "Dexterity";
+
+WIDGET_LABEL
+  222.0; 151.0; 50.0; 26.0;
+  "System"; "COLOR_BROWN"; 1; "";
+
+WIDGET_LABEL
+  60.0; 179.0; 10.0; 10.0;
+  "System"; "COLOR_BROWN"; 0; "Stamina";
+
+WIDGET_LABEL
+  222.0; 179.0; 50.0; 26.0;
+  "System"; "COLOR_BROWN"; 1; "";
+
+WIDGET_LABEL
+  45.0; 207.0; 10.0; 10.0;
+  "System"; "COLOR_BROWN"; 0; "health";
+
+WIDGET_LABEL
+  245.0; 207.0; 92.0; 26.0;
+  "System"; "COLOR_BROWN"; 1; "";
+
+WIDGET_LABEL
+  45.0; 234.0; 10.0; 10.0;
+  "System"; "COLOR_BROWN"; 0; "health regeneration";
+
+WIDGET_LABEL
+  245.0; 234.0; 92.0; 26.0;
+  "System"; "COLOR_BROWN"; 1; "";
+
+WIDGET_LABEL
+  45.0; 261.0; 10.0; 10.0;
+  "System"; "COLOR_BROWN"; 0; "movement speed";
+
+WIDGET_LABEL
+  245.0; 261.0; 92.0; 26.0;
+  "System"; "COLOR_BROWN"; 1; "";
+
+WIDGET_LABEL
+  45.0; 288; 10.0; 10.0;
+  "System"; "COLOR_BROWN"; 0; "hit recovery";
+
+WIDGET_LABEL
+  245.0; 288.0; 92.0; 26.0;
+  "System"; "COLOR_BROWN"; 1; "";
+
+WIDGET_LABEL
+  45.0; 315.0; 10.0; 10.0;
+  "System"; "COLOR_BROWN"; 0; "chance to be hit";
+
+WIDGET_LABEL
+  245.0; 315.0; 92.0; 26.0;
+  "System"; "COLOR_BROWN"; 1; "";
+
+WIDGET_LABEL
+  60.0; 356.0; 10.0; 10.0;
+  "System"; "COLOR_BROWN"; 0; "Intelligence";
+
+WIDGET_LABEL
+  221.0; 356.0; 50.0; 26.0;
+  "System"; "COLOR_BROWN"; 1; "";
+
+WIDGET_LABEL
+  60.0; 384.0; 10.0; 10.0;
+  "System"; "COLOR_BROWN"; 0; "Wisdom";
+
+WIDGET_LABEL
+  221.0; 384.0; 50.0; 26.0;
+  "System"; "COLOR_BROWN"; 1; "";
+
+WIDGET_LABEL
+  45.0; 413; 10.0; 10.0;
+  "System"; "COLOR_BROWN"; 0; "mana";
+
+WIDGET_LABEL
+  245.0; 413.0; 92.0; 26.0;
+  "System"; "COLOR_BROWN"; 1; "";
+
+WIDGET_LABEL
+  45.0; 440.0; 10.0; 10.0;
+  "System"; "COLOR_BROWN"; 0; "mana regeneration";
+
+WIDGET_LABEL
+  245.0; 440.0; 92.0; 26.0;
+  "System"; "COLOR_BROWN"; 1; "";
+
+WIDGET_LABEL
+  82.0; 477.0; 10.0; 10.0;
+  "System"; "COLOR_BROWN"; 0; "Attribute Points";
+
+WIDGET_LABEL
+  254.0; 477.0; 50.0; 26.0;
+  "System"; "COLOR_BROWN"; 1; "";
+
+WIDGET_BUTTON
+  260.0; 124.0; 24.0; 24.0;
+  "System"; "COLOR_YELLOW"; "+"; 5; 0;
+  "SmallButtonEnabled"; "SmallButtonDisabled"; "SmallButtonPressed"; "SmallButtonLight";
+  "IconButtonClick";
+
+WIDGET_BUTTON
+  260.0; 152.0; 24.0; 24.0;
+  "System"; "COLOR_YELLOW"; "+"; 5; 0;
+  "SmallButtonEnabled"; "SmallButtonDisabled"; "SmallButtonPressed"; "SmallButtonLight";
+  "IconButtonClick";
+
+WIDGET_BUTTON
+  260.0; 180.0; 24.0; 24.0;
+  "System"; "COLOR_YELLOW"; "+"; 5; 0;
+  "SmallButtonEnabled"; "SmallButtonDisabled"; "SmallButtonPressed"; "SmallButtonLight";
+  "IconButtonClick";
+
+WIDGET_BUTTON
+  260.0; 357.0; 24.0; 24.0;
+  "System"; "COLOR_YELLOW"; "+"; 5; 0;
+  "SmallButtonEnabled"; "SmallButtonDisabled"; "SmallButtonPressed"; "SmallButtonLight";
+  "IconButtonClick";
+
+WIDGET_BUTTON
+  260.0; 385.0; 24.0; 24.0;
+  "System"; "COLOR_YELLOW"; "+"; 5; 0;
+  "SmallButtonEnabled"; "SmallButtonDisabled"; "SmallButtonPressed"; "SmallButtonLight";
+  "IconButtonClick";
+
+WIDGET_LABEL
+  552.0; 16.0; 10.0; 10.0;
+  "System"; "COLOR_BROWN"; 1; "Skills & Spells";
+
+WIDGET_LABEL
+  360.0; 477.0; 10.0; 10.0;
+  "System"; "COLOR_BROWN"; 0; "Skill Points";
+
+WIDGET_LABEL
+  494.0; 477.0; 50.0; 26.0;
+  "System"; "COLOR_BROWN"; 1; "";
+
+WIDGET_LABEL
+  64.0; 510.0; 10.0; 10.0;
+  "System"; "COLOR_BROWN"; 0; "Tool Tip";
+
+WIDGET_LABEL
+  36.0; 536.0; 10.0; 10.0;
+  "System_2"; "COLOR_BROWN"; 0; "Spell Description 1";
+
+WIDGET_LABEL
+  36.0; 556.0; 10.0; 10.0;
+  "System_2"; "COLOR_BROWN"; 0; "Spell Description 2";
+
+WIDGET_BUTTON
+  751.0; 555.0; 24.0; 24.0;
+  "System"; "COLOR_YELLOW"; "X"; 5; 0;
+  "SmallButtonEnabled"; "SmallButtonDisabled"; "SmallButtonPressed"; "SmallButtonLight";
+  "IconButtonClick";
+
+WIDGET_BUTTON
+  524.0; 422.0; 48.0; 48.0;
+  "System"; "COLOR_BROWN"; ""; 1; 1;
+  "SpellMagicMissileEnabled"; "SpellMagicMissileDisabled"; "SpellMagicMissilePressed"; "YellowButtonLight";
+  "IconButtonClick";
+
+WIDGET_BUTTON
+  388.0; 394.0; 48.0; 48.0;
+  "System"; "COLOR_BROWN"; ""; 1; 1;
+  "SpellPrayerEnabled"; "SpellPrayerDisabled"; "SpellPrayerPressed"; "YellowButtonLight";
+  "IconButtonClick";
+
+WIDGET_BUTTON
+  335.0; 339.0; 48.0; 48.0;
+  "System"; "COLOR_BROWN"; ""; 1; 1;
+  "SpellBlindingFogEnabled"; "SpellBlindingFogDisabled"; "SpellBlindingFogPressed"; "YellowButtonLight";
+  "IconButtonClick";
+
+WIDGET_BUTTON
+  388.0; 287.0; 48.0; 48.0;
+  "System"; "COLOR_BROWN"; ""; 1; 1;
+  "SpellTeleportEnabled"; "SpellTeleportDisabled"; "SpellTeleportPressed"; "YellowButtonLight";
+  "IconButtonClick";
+
+WIDGET_BUTTON
+  335.0; 234.0; 48.0; 48.0;
+  "System"; "COLOR_BROWN"; ""; 1; 1;
+  "SpellStoneEnchantedEnabled"; "SpellStoneEnchantedDisabled"; "SpellStoneEnchantedPressed"; "YellowButtonLight";
+  "IconButtonClick";
+
+WIDGET_BUTTON
+  388.0; 182.0; 48.0; 48.0;
+  "System"; "COLOR_BROWN"; ""; 1; 1;
+  "SpellWrathOfGodEnabled"; "SpellWrathOfGodDisabled"; "SpellWrathOfGodPressed"; "YellowButtonLight";
+  "IconButtonClick";
+
+WIDGET_BUTTON
+  495.0; 342.0; 48.0; 48.0;
+  "System"; "COLOR_BROWN"; ""; 1; 1;
+  "SpellTelekinesisEnabled"; "SpellTelekinesisDisabled"; "SpellTelekinesisPressed"; "YellowButtonLight";
+  "IconButtonClick";
+
+
+WIDGET_BUTTON
+  443.0; 287.0; 48.0; 48.0;
+  "System"; "COLOR_BROWN"; ""; 1; 1;
+  "SpellSacrificeEnabled"; "SpellSacrificeDisabled"; "SpellSacrificePressed"; "YellowButtonLight";
+  "IconButtonClick";
+
+WIDGET_BUTTON
+  495.0; 235.0; 48.0; 48.0;
+  "System"; "COLOR_BROWN"; ""; 1; 1;
+  "SpellHolyLightEnabled"; "SpellHolyLightDisabled"; "SpellHolyLightPressed"; "YellowButtonLight";
+  "IconButtonClick";
+
+WIDGET_BUTTON
+  443.0; 182.0; 48.0; 48.0;
+  "System"; "COLOR_BROWN"; ""; 1; 1;
+  "SpellBallLightningEnabled"; "SpellBallLightningDisabled"; "SpellBallLightningPressed"; "YellowButtonLight";
+  "IconButtonClick";
+
+WIDGET_BUTTON
+  495.0; 129.0; 48.0; 48.0;
+  "System"; "COLOR_BROWN"; ""; 1; 1;
+  "SpellLightningEnabled"; "SpellLightningDisabled"; "SpellLightningPressed"; "YellowButtonLight";
+  "IconButtonClick";
+
+WIDGET_BUTTON
+  557.0; 342.0; 48.0; 48.0;
+  "System"; "COLOR_BROWN"; ""; 1; 1;
+  "SpellFireBallEnabled"; "SpellFireBallDisabled"; "SpellFireBallPressed"; "YellowButtonLight";
+  "IconButtonClick";
+
+WIDGET_BUTTON
+  610.0; 287.0; 48.0; 48.0;
+  "System"; "COLOR_BROWN"; ""; 1; 1;
+  "SpellFireWalkEnabled"; "SpellFireWalkDisabled"; "SpellFireWalkPressed"; "YellowButtonLight";
+  "IconButtonClick";
+
+WIDGET_BUTTON
+  557.0; 235.0; 48.0; 48.0;
+  "System"; "COLOR_BROWN"; ""; 1; 1;
+  "SpellHealEnabled"; "SpellHealDisabled"; "SpellHealPressed"; "YellowButtonLight";
+  "IconButtonClick";
+
+WIDGET_BUTTON
+  610.0; 182.0; 48.0; 48.0;
+  "System"; "COLOR_BROWN"; ""; 1; 1;
+  "SpellMeteorEnabled"; "SpellMeteorDisabled"; "SpellMeteorPressed"; "YellowButtonLight";
+  "IconButtonClick";
+
+WIDGET_BUTTON
+  557.0; 129.0; 48.0; 48.0;
+  "System"; "COLOR_BROWN"; ""; 1; 1;
+  "SpellArmageddonEnabled"; "SpellArmageddonDisabled"; "SpellArmageddonPressed"; "YellowButtonLight";
+  "IconButtonClick";
+
+WIDGET_BUTTON
+  665.0; 394.0; 48.0; 48.0;
+  "System"; "COLOR_BROWN"; ""; 1; 1;
+  "SpellFreezingSpearEnabled"; "SpellFreezingSpearDisabled"; "SpellFreezingSpearPressed"; "YellowButtonLight";
+  "IconButtonClick";
+
+WIDGET_BUTTON
+  718.0; 339.0; 48.0; 48.0;
+  "System"; "COLOR_BROWN"; ""; 1; 1;
+  "SpellFortunaEnabled"; "SpellFortunaDisabled"; "SpellFortunaPressed"; "YellowButtonLight";
+  "IconButtonClick";
+
+WIDGET_BUTTON
+  665.0; 287.0; 48.0; 48.0;
+  "System"; "COLOR_BROWN"; ""; 1; 1;
+  "SpellPoisonCloudEnabled"; "SpellPoisonCloudDisabled"; "SpellPoisonCloudPressed"; "YellowButtonLight";
+  "IconButtonClick";
+
+WIDGET_BUTTON
+  718.0; 234.0; 48.0; 48.0;
+  "System"; "COLOR_BROWN"; ""; 1; 1;
+  "SpellNovaEnabled"; "SpellNovaDisabled"; "SpellNovaPressed"; "YellowButtonLight";
+  "IconButtonClick";
+
+WIDGET_BUTTON
+  665.0; 182.0; 48.0; 48.0;
+  "System"; "COLOR_BROWN"; ""; 1; 1;
+  "SpellDarkRitualEnabled"; "SpellDarkRitualDisabled"; "SpellDarkRitualPressed"; "YellowButtonLight";
+  "IconButtonClick";

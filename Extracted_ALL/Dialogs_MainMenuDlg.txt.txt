@@ -1,0 +1,39 @@
+WIDGET_PICTURE
+  0.0; 0.0; 194.0; 256.0;
+  "MenuBackground";
+
+WIDGET_BUTTON
+  16.0; 16.0; 162.0; 32.0;
+  "System"; "COLOR_YELLOW"; "New Game"; 5; 0;
+  "ButtonEnabled"; "ButtonDisabled"; "ButtonPressed"; "ButtonLight";
+  "MenuButtonClick";
+
+WIDGET_BUTTON
+  16.0; 52.0; 162.0; 32.0;
+  "System"; "COLOR_YELLOW"; "Hall of Fame"; 5; 0;
+  "ButtonEnabled"; "ButtonDisabled"; "ButtonPressed"; "ButtonLight";
+  "MenuButtonClick";
+
+WIDGET_BUTTON
+  16.0; 88.0; 162.0; 32.0;
+  "System"; "COLOR_YELLOW"; "Options"; 5; 0;
+  "ButtonEnabled"; "ButtonDisabled"; "ButtonPressed"; "ButtonLight";
+  "MenuButtonClick";
+
+WIDGET_BUTTON
+  16.0; 124.0; 162.0; 32.0;
+  "System"; "COLOR_YELLOW"; "Controls"; 5; 0; 
+  "ButtonEnabled"; "ButtonDisabled"; "ButtonPressed"; "ButtonLight";
+  "MenuButtonClick";
+
+WIDGET_BUTTON
+  16.0; 160.0; 162.0; 32.0;
+  "System"; "COLOR_YELLOW"; "Credits"; 5; 0;
+  "ButtonEnabled"; "ButtonDisabled"; "ButtonPressed"; "ButtonLight";
+  "MenuButtonClick";
+
+WIDGET_BUTTON
+  16.0; 208.0; 162.0; 32.0;
+  "System"; "COLOR_YELLOW"; "Exit"; 5; 0;
+  "ButtonEnabled"; "ButtonDisabled"; "ButtonPressed"; "ButtonLight";
+  "MenuButtonClick";

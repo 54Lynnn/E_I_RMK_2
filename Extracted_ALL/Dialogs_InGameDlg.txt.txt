@@ -1,0 +1,27 @@
+WIDGET_PICTURE
+  0.0; 0.0; 194.0; 256.0;
+  "MenuBackground";
+
+WIDGET_BUTTON
+  16.0; 16.0; 162.0; 32.0;
+  "System"; "COLOR_YELLOW"; "Resume"; 5; 0;
+  "ButtonEnabled"; "ButtonDisabled"; "ButtonPressed"; "ButtonLight";
+  "MenuButtonClick";
+
+WIDGET_BUTTON
+  16.0; 56.0; 162.0; 32.0;
+  "System"; "COLOR_YELLOW"; "Main Menu"; 5; 0; 
+  "ButtonEnabled"; "ButtonDisabled"; "ButtonPressed"; "ButtonLight";
+  "MenuButtonClick";
+
+WIDGET_BUTTON
+  16.0; 96.0; 162.0; 32.0;
+  "System"; "COLOR_YELLOW"; "Controls"; 5; 0; 
+  "ButtonEnabled"; "ButtonDisabled"; "ButtonPressed"; "ButtonLight";
+  "MenuButtonClick";
+
+WIDGET_BUTTON
+  16.0; 208.0; 162.0; 32.0;
+  "System"; "COLOR_YELLOW"; "Exit"; 5; 0;
+  "ButtonEnabled"; "ButtonDisabled"; "ButtonPressed"; "ButtonLight";
+  "MenuButtonClick";

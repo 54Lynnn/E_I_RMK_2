@@ -2,7 +2,7 @@
 
 > 基于 Godot 4.6 的 Evil Invasion (2006) 复刻项目
 > 计划版本：v1.0 | 目标平台：Windows
-> **最后更新：2026-05-13（v6 Agent: 地图比例修正v2 + 质感到位 + 数值统一管理）**
+> **最后更新：2026-05-13（v7 Agent: 对象池系统 + 刷怪修复 + Data.pak全量提取）**
 
 ---
 
@@ -102,7 +102,8 @@ GodotReMake/
 ├── Scripts/
 │   ├── global.gd              ← 全局状态管理器
 │   ├── hero.gd                ← 英雄控制（技能调用入口，cooldown 管理）
-│   ├── projectile.gd          ← 旧版通用投射物逻辑（逐步弃用）
+│   ├── object_pool.gd         ← 对象池（Autoload，v7新增）
+│   ├── projectile.gd          ← 通用投射物逻辑（已对象池化）
 │   ├── explosion.gd           ← 爆炸动画
 │   ├── pickup_item.gd         ← 拾取物品逻辑
 │   ├── loot_manager.gd        ← 掉落管理器（Autoload）
@@ -240,7 +241,6 @@ GodotReMake/
 | 怪物特殊能力 | P1 | 部分怪物特殊能力标注为"待实现"（如Bear冲锋、Spider毒液） |
 | Quest模式关卡解锁持久化 | P1 | 当前Quest进度未持久化保存 |
 | 高分榜 | P2 | 无本地/在线排行 |
-| 对象池 | P2 | 子弹/怪物未使用对象池，大量生成时可能影响性能 |
 | 多 Profile | P2 | 仅支持单存档 |
 | 选项设置 | P2 | 音量/按键自定义/画面设置（优先级低） |
 | 怪物碰撞伤害 | P2 | 怪物碰撞英雄时造成伤害，但无碰撞冷却 |

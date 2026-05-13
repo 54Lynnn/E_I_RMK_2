@@ -1,0 +1,21 @@
+WIDGET_PICTURE
+  0.0; 0.0; 384.0; 384.0;
+  "Dialog";
+
+WIDGET_LABEL
+  200.0; 160.0; 10.0; 10.0;
+  "System"; "COLOR_BROWN"; 0; "";
+
+WIDGET_BUTTON
+  344.0; 344.0; 24.0; 24.0;
+  "System"; "COLOR_YELLOW"; "X"; 5; 0;
+  "SmallButtonEnabled"; "SmallButtonDisabled"; "SmallButtonPressed"; "SmallButtonLight";
+  "MenuButtonClick";
+
+WIDGET_PICTURE
+  0.0; 32.0; 194.0; 320.0;
+  "HeroStatue";
+
+WIDGET_LABEL
+  180.0; 40.0; 10.0; 10.0;
+  "System"; "COLOR_BROWN"; 0; "Congratulations!";
