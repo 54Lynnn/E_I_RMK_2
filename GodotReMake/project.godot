@@ -25,6 +25,7 @@ config/icon="res://Art/Placeholder/icon.png"
 Global="*res://Scripts/global.gd"
 LootManager="*res://Scripts/loot_manager.gd"
 SaveManager="*res://Scripts/save_manager.gd"
+ObjectPool="*res://Scripts/object_pool.gd"
 
 [display]
 

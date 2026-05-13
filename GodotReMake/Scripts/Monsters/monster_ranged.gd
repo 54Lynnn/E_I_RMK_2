@@ -176,7 +176,7 @@ func _fire_arrow():
 		return
 	
 	# 创建弓箭实例
-	var arrow = arrow_scene.instantiate()
+	var arrow = ObjectPool.get_object(arrow_scene)
 	arrow.name = "monster_arrow"
 	arrow.global_position = global_position  # 从怪物位置发射
 	

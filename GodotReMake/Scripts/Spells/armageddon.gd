@@ -1,5 +1,8 @@
 extends Node2D
 
+const ArmageddonZoneScene = preload("res://Scenes/ArmageddonZone.tscn")
+const ArmageddonEffectScene = preload("res://Scenes/Armageddon.tscn")
+
 static var skill_name := "armageddon"
 static var skill_type := "active"
 static var base_cooldown := 20.0
@@ -22,7 +25,9 @@ static func get_explosion_radius(_level: int) -> float:
 func _ready():
 	var tween = create_tween()
 	tween.tween_property($Sprite2D, "modulate:a", 0.0, 1.0)
-	tween.tween_callback(queue_free)
+	tween.tween_callback(func():
+		ObjectPool.return_to_pool(self)
+	)
 
 static func cast(hero: Node, mouse_pos: Vector2, skill_cooldowns: Dictionary) -> bool:
 	var level = Global.skill_levels.get(skill_name, 0)
@@ -47,7 +52,7 @@ static func cast(hero: Node, mouse_pos: Vector2, skill_cooldowns: Dictionary) ->
 		var screen_size = viewport.get_visible_rect().size * camera.zoom
 		var spawn_range = screen_size * 1.5
 
-		var armageddon_zone = preload("res://Scenes/ArmageddonZone.tscn").instantiate()
+		var armageddon_zone = ObjectPool.get_object(ArmageddonZoneScene)
 		armageddon_zone.name = "armageddon_zone"
 		armageddon_zone.global_position = hero.global_position
 		armageddon_zone.damage = damage
@@ -55,7 +60,7 @@ static func cast(hero: Node, mouse_pos: Vector2, skill_cooldowns: Dictionary) ->
 		armageddon_zone.damage_element = damage_element
 		parent.add_child(armageddon_zone)
 
-		var effect = preload("res://Scenes/Armageddon.tscn").instantiate()
+		var effect = ObjectPool.get_object(ArmageddonEffectScene)
 		effect.global_position = hero.global_position
 		parent.add_child(effect)
 

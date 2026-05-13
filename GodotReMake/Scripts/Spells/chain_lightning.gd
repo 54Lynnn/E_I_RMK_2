@@ -1,5 +1,7 @@
 extends Node2D
 
+const LightningProjScene = preload("res://Scenes/ChainLightningProj.tscn")
+
 static var skill_name := "chain_lightning"
 static var skill_type := "active"
 static var base_cooldown := 1.0
@@ -37,7 +39,7 @@ static func cast(hero: Node, mouse_pos: Vector2, skill_cooldowns: Dictionary) ->
 	var direction = hero.global_position.direction_to(mouse_pos)
 
 	# 创建闪电投射物
-	var lightning = preload("res://Scenes/ChainLightningProj.tscn").instantiate()
+	var lightning = ObjectPool.get_object(LightningProjScene)
 	lightning.name = "chain_lightning_proj"
 	lightning.global_position = start_pos
 	lightning.direction = direction

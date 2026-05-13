@@ -1,5 +1,7 @@
 extends Area2D
 
+const NovaProjScene = preload("res://Scenes/NovaProj.tscn")
+
 static var skill_name := "nova"
 static var skill_type := "active"
 static var base_cooldown := 2.0
@@ -34,7 +36,7 @@ static func cast(hero: Node, mouse_pos: Vector2, skill_cooldowns: Dictionary) ->
 			Global.mana_changed.emit(Global.mana, Global.max_mana)
 
 		var muzzle = hero.get_node("Sprite2D/Muzzle")
-		var proj = preload("res://Scenes/NovaProj.tscn").instantiate()
+		var proj = ObjectPool.get_object(NovaProjScene)
 		proj.name = "nova_proj"
 		proj.global_position = muzzle.global_position
 		proj.direction = hero.global_position.direction_to(mouse_pos)

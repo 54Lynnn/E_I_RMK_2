@@ -12,7 +12,9 @@ func _ready():
 	var tween = create_tween()
 	tween.tween_property($Sprite2D, "scale", Vector2(0.7, 0.7), lifetime)
 	tween.parallel().tween_property($Sprite2D, "modulate:a", 0.0, lifetime)
-	tween.tween_callback(queue_free)
+	tween.tween_callback(func():
+		ObjectPool.return_to_pool(self)
+	)
 
 static func _create_circle_texture(radius: int, color: Color = Color.WHITE) -> ImageTexture:
 	var diameter = radius * 2

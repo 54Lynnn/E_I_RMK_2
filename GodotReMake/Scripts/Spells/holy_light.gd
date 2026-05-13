@@ -1,18 +1,13 @@
 extends Node2D
 
-# ============================================
-# Holy Light (圣光) - 技能配置
-# ============================================
-# 原版效果：从玩家位置向光标方向发射多道光线，呈扇形分布
-# 光线同时发射，每道光线只命中第一个敌人，不穿透
-# 伤害类型：air
+const ProjectileScene = preload("res://Scenes/Projectile.tscn")
 
-static var skill_name := "holy_light"      # 技能唯一标识（必须和全局名称一致）
-static var skill_type := "active"           # 技能类型: active, toggle, passive
-static var base_cooldown := 1.0             # 基础冷却时间（秒）
-static var base_mana_cost := 35.0           # 基础魔法消耗
-static var base_damage := 120.0             # 基础伤害值
-static var damage_element := "air"          # 伤害元素类型（air系技能）
+static var skill_name := "holy_light"
+static var skill_type := "active"
+static var base_cooldown := 1.0
+static var base_mana_cost := 35.0
+static var base_damage := 120.0
+static var damage_element := "air"
 
 # 光线数量配置
 # LV1=3道, LV4=4道, LV7=5道, LV10=6道（原版数据）
@@ -78,10 +73,8 @@ static func cast(hero: Node, mouse_pos: Vector2, skill_cooldowns: Dictionary) ->
 		
 		# 依次发射多道光线
 		for i in range(beam_count):
-			# 创建投射物
-			var beam = preload("res://Scenes/Projectile.tscn").instantiate()
-			
-			# 设置发射位置
+			var beam = ObjectPool.get_object(ProjectileScene)
+
 			beam.global_position = muzzle.global_position
 			
 			# 计算当前光线的方向（基础方向 + 扇形偏移）

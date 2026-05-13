@@ -1,5 +1,7 @@
 extends Node2D
 
+const ExplosionScene = preload("res://Scenes/Explosion.tscn")
+
 @export var damage := 250.0
 @export var explosion_radius := 56.0
 @export var fall_speed := 600.0
@@ -13,6 +15,14 @@ func _ready():
 	var tween = create_tween()
 	tween.tween_property(self, "global_position", target_position, fall_duration)
 	tween.tween_callback(_explode)
+
+func reset_for_pool():
+	damage = 250.0
+	explosion_radius = 56.0
+	fall_speed = 600.0
+	damage_element = "fire"
+	target_position = Vector2.ZERO
+	has_exploded = false
 
 func _explode():
 	if has_exploded:
@@ -28,10 +38,10 @@ func _explode():
 			if m.has_method("take_damage"):
 				m.take_damage(damage, damage_element)
 
-	var explosion = preload("res://Scenes/Explosion.tscn").instantiate()
+	var explosion = ObjectPool.get_object(ExplosionScene)
 	explosion.global_position = global_position
 	explosion.scale = Vector2(explosion_radius / 30.0, explosion_radius / 30.0)
 	get_parent().add_child(explosion)
 
 	await get_tree().create_timer(0.3).timeout
-	queue_free()
+	ObjectPool.return_to_pool(self)

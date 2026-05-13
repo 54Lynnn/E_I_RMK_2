@@ -183,7 +183,7 @@ func _fire_flame():
 		return
 	
 	# 创建火焰实例
-	var flame = flame_scene.instantiate()
+	var flame = ObjectPool.get_object(flame_scene)
 	flame.name = "reaper_flame"
 	flame.global_position = global_position
 	

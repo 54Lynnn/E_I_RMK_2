@@ -1,5 +1,7 @@
 extends Area2D
 
+const ExplosionScene = preload("res://Scenes/Explosion.tscn")
+
 @export var speed := 300.0
 @export var damage := 200.0
 @export var explosion_radius := 100.0
@@ -11,6 +13,15 @@ var has_exploded := false
 
 func _ready():
 	body_entered.connect(_on_body_entered)
+
+func reset_for_pool():
+	speed = 300.0
+	damage = 200.0
+	explosion_radius = 100.0
+	freeze_duration = 1.0
+	damage_element = "water"
+	direction = Vector2.RIGHT
+	has_exploded = false
 
 func _physics_process(delta):
 	if has_exploded:
@@ -39,9 +50,9 @@ func _explode():
 			if m.has_method("apply_debuff"):
 				m.apply_debuff("frozen", freeze_duration, {}, damage_element)
 
-	var explosion = preload("res://Scenes/Explosion.tscn").instantiate()
+	var explosion = ObjectPool.get_object(ExplosionScene)
 	explosion.global_position = global_position
 	explosion.scale = Vector2(explosion_radius / 30.0, explosion_radius / 30.0)
 	get_parent().add_child(explosion)
 
-	queue_free()
+	ObjectPool.return_to_pool(self)

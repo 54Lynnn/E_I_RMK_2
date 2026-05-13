@@ -4,21 +4,35 @@ const MonsterDatabase = preload("res://Scripts/Monsters/monster_database.gd")
 
 enum SpawnPattern { SINGLE, LINE, GROUP, ALL_SIDES }
 
-@export var max_monsters := 15
-
 @export var map_width := 1536.0
 @export var map_height := 1536.0
 @export var spawn_margin := 80.0
 
 var active_monsters := 0
+var diablo_monsters := []  # 追踪所有Diablo实例
 
-var active_diablo_count := 0
+# 四种生成模式的定时器
+var timer_target_single := 0.0
+var timer_target_line := 0.0
+var timer_target_group := 0.0
+var timer_target_all_sides := 0.0
 
-# 四种生成模式的定时器（仿原版游戏）
-var timer_single := 0.0
-var timer_line := 0.0
-var timer_group := 0.0
-var timer_all_sides := 0.0
+func _get_max_monsters() -> int:
+	var level = Global.hero_level
+	if level < 5:
+		return 25
+	elif level < 10:
+		return 30
+	elif level < 15:
+		return 35
+	elif level < 20:
+		return 40
+	elif level < 30:
+		return 45
+	elif level < 40:
+		return 50
+	else:
+		return 60
 
 var monster_scenes := {
 	"troll": preload("res://Scenes/Troll.tscn"),
@@ -39,38 +53,45 @@ func _ready():
 			to_remove.append(id)
 	for id in to_remove:
 		monster_scenes.erase(id)
+	_set_new_timer_targets()
+
+func _set_new_timer_targets():
+	timer_target_single = randf_range(1.0, 3.0)
+	timer_target_line = randf_range(18.0, 22.0)
+	timer_target_group = randf_range(8.0, 12.0)
+	timer_target_all_sides = randf_range(38.0, 42.0)
 
 func _process(delta):
-	if active_monsters >= max_monsters:
-		return
-	
-	# 定时器1：单个生成（间隔 1~3 秒）
-	timer_single += delta
-	if timer_single >= randf_range(1.0, 3.0):
-		timer_single = 0.0
-		_spawn_pattern(SpawnPattern.SINGLE)
-	
-	# 定时器2：整排生成（18~22 秒，20只均匀铺开）
-	timer_line += delta
-	if timer_line >= randf_range(18.0, 22.0):
-		timer_line = 0.0
+	var max_monsters = _get_max_monsters()
+	var at_cap = active_monsters >= max_monsters
+
+	# 单个生成（SINGLE）—— 只受软上限影响
+	timer_target_single -= delta
+	if timer_target_single <= 0:
+		timer_target_single = randf_range(1.0, 3.0)
+		if not at_cap:
+			_spawn_pattern(SpawnPattern.SINGLE)
+
+	# 整排生成（LINE）—— 不受上限影响，确保每轮都有大波怪物
+	timer_target_line -= delta
+	if timer_target_line <= 0:
+		timer_target_line = randf_range(18.0, 22.0)
 		_spawn_pattern(SpawnPattern.LINE)
-	
-	# 定时器3：编组生成（8~12 秒）
-	timer_group += delta
-	if timer_group >= randf_range(8.0, 12.0):
-		timer_group = 0.0
+
+	# 编组生成（GROUP）—— 不受上限影响
+	timer_target_group -= delta
+	if timer_target_group <= 0:
+		timer_target_group = randf_range(8.0, 12.0)
 		_spawn_pattern(SpawnPattern.GROUP)
-	
-	# 定时器4：全边界生成（38~42 秒）
-	# Quest 模式：关卡5（17级）前不触发
+
+	# 全边界生成（ALL_SIDES）—— 9级解锁，不受上限影响
 	var all_sides_unlocked := true
 	if Global.current_game_mode == Global.GameMode.QUEST and Global.hero_level < 17:
 		all_sides_unlocked = false
 	if all_sides_unlocked and Global.hero_level >= 9:
-		timer_all_sides += delta
-		if timer_all_sides >= randf_range(38.0, 42.0):
-			timer_all_sides = 0.0
+		timer_target_all_sides -= delta
+		if timer_target_all_sides <= 0:
+			timer_target_all_sides = randf_range(38.0, 42.0)
 			_spawn_pattern(SpawnPattern.ALL_SIDES)
 
 func _spawn_pattern(pattern: SpawnPattern):
@@ -87,16 +108,13 @@ func _spawn_pattern(pattern: SpawnPattern):
 func _create_monster(monster_id: String, spawn_pos: Vector2, wander_dir: Vector2) -> bool:
 	if not monster_scenes.has(monster_id):
 		return false
-	if active_monsters >= max_monsters:
+	if monster_id == "diablo" and diablo_monsters.size() >= 3:
 		return false
-	# 限制同场最多3只Diablo
-	if monster_id == "diablo" and active_diablo_count >= 3:
-		return false
-	
+
 	var scene = monster_scenes[monster_id]
 	var monster = scene.instantiate()
 	monster.global_position = spawn_pos
-	
+
 	var monster_data = MonsterDatabase.get_monster_data(
 		monster_id, Global.hero_level,
 		Global.current_difficulty,
@@ -108,65 +126,66 @@ func _create_monster(monster_id: String, spawn_pos: Vector2, wander_dir: Vector2
 		monster.set_quest_mode(true)
 	if monster.has_method("set_wander_direction"):
 		monster.set_wander_direction(wander_dir)
-	
+
 	get_parent().add_child(monster)
 	active_monsters += 1
 	if monster_id == "diablo":
-		active_diablo_count += 1
-	monster.tree_exited.connect(_on_monster_freed.bind(monster))
+		diablo_monsters.append(monster)
+		monster.tree_exited.connect(_on_diablo_freed.bind(monster))
+	else:
+		monster.tree_exited.connect(_on_monster_freed)
 	return true
 
-# ============================================
-# 模式1：单个生成（所有怪物都可能出现）
-# ============================================
+func _on_monster_freed():
+	if active_monsters > 0:
+		active_monsters -= 1
+
+func _on_diablo_freed(diablo: Node):
+	if active_monsters > 0:
+		active_monsters -= 1
+	diablo_monsters.erase(diablo)
+
 func _spawn_single():
 	var monster_id = MonsterDatabase.pick_monster_for_level(Global.hero_level)
 	var spawn_pos = get_random_edge_position()
 	var wander_dir = Vector2(randf_range(-1, 1), randf_range(-1, 1)).normalized()
 	_create_monster(monster_id, spawn_pos, wander_dir)
 
-# ============================================
-# 模式2：整排生成（20只均匀铺开，排除 reaper 和 diablo）
-# ============================================
 func _spawn_line():
 	var exclude_list = ["reaper", "diablo"]
 	var monster_id = MonsterDatabase.pick_monster_for_level(Global.hero_level, exclude_list)
 	var side = randi() % 4
 	var count = 20
-	
+
 	var edge_positions := _get_edge_line_positions(side, count)
 	var wander_dir := _get_edge_wander_direction(side)
-	
+
 	for pos in edge_positions:
 		_create_monster(monster_id, pos, wander_dir)
 
-# ============================================
-# 模式3：编组生成（排除 diablo）
-# ============================================
 func _spawn_group():
 	var exclude_list = ["diablo"]
 	var monster_id = MonsterDatabase.pick_monster_for_level(Global.hero_level, exclude_list)
 	var side = randi() % 4
-	# 概率分布：3×3 : 3×2 : 2×2 = 1 : 2 : 3
 	var roll = randi() % 6
 	var grid_size: Array
-	if roll < 1:       # 1/6 概率
+	if roll < 1:
 		grid_size = [3, 3]
-	elif roll < 3:     # 2/6 概率
+	elif roll < 3:
 		grid_size = [3, 2]
-	else:              # 3/6 概率
+	else:
 		grid_size = [2, 2]
 	var cols = grid_size[0]
 	var rows = grid_size[1]
-	
+
 	var anchor = get_random_edge_position()
 	var spawn_dir := Vector2.ZERO
 	match side:
-		0: spawn_dir = Vector2(0, 1)   # 上边→往下
-		1: spawn_dir = Vector2(-1, 0)  # 右边→往左
-		2: spawn_dir = Vector2(0, -1)  # 下边→往上
-		3: spawn_dir = Vector2(1, 0)   # 左边→往右
-	
+		0: spawn_dir = Vector2(0, 1)
+		1: spawn_dir = Vector2(-1, 0)
+		2: spawn_dir = Vector2(0, -1)
+		3: spawn_dir = Vector2(1, 0)
+
 	var spacing := 40.0
 	for row in range(rows):
 		for col in range(cols):
@@ -176,28 +195,20 @@ func _spawn_group():
 				offset.y * abs(spawn_dir.y) + offset.x * abs(spawn_dir.x)
 			)
 			var pos = anchor + rotated_offset
-			# 确保在边界内
 			pos.x = clamp(pos.x, spawn_margin, map_width - spawn_margin)
 			pos.y = clamp(pos.y, spawn_margin, map_height - spawn_margin)
 			_create_monster(monster_id, pos, spawn_dir)
 
-# ============================================
-# 模式4：全边界同时生成（排除 reaper 和 diablo）
-# ============================================
 func _spawn_all_sides():
 	var exclude_list = ["reaper", "diablo"]
 	var monster_id = MonsterDatabase.pick_monster_for_level(Global.hero_level, exclude_list)
-	var per_side := 15  # 每边 15 只
-	
+	var per_side := 15
+
 	for side in range(4):
 		var edge_positions := _get_edge_line_positions(side, per_side)
 		var wander_dir := _get_edge_wander_direction(side)
 		for pos in edge_positions:
 			_create_monster(monster_id, pos, wander_dir)
-
-# ============================================
-# 辅助函数
-# ============================================
 
 func get_random_edge_position() -> Vector2:
 	var side = randi() % 4
@@ -205,7 +216,7 @@ func get_random_edge_position() -> Vector2:
 	var safe_min = spawn_margin
 	var safe_max_x = map_width - spawn_margin
 	var safe_max_y = map_height - spawn_margin
-	
+
 	match side:
 		0:
 			pos.x = randf_range(safe_min, safe_max_x)
@@ -222,13 +233,12 @@ func get_random_edge_position() -> Vector2:
 	return pos
 
 func _get_edge_line_positions(side: int, count: int) -> Array:
-	"""沿指定边缘均匀生成一排位置"""
 	var positions := []
 	var spacing := 0.0
 	var start := 0.0
-	
+
 	match side:
-		0, 2:  # 上边、下边
+		0, 2:
 			var usable = map_width - spawn_margin * 2
 			spacing = usable / (count + 1)
 			start = spawn_margin + spacing
@@ -236,7 +246,7 @@ func _get_edge_line_positions(side: int, count: int) -> Array:
 				var x = start + spacing * i
 				var y = spawn_margin if side == 0 else map_height - spawn_margin
 				positions.append(Vector2(x, y))
-		1, 3:  # 右边、左边
+		1, 3:
 			var usable = map_height - spawn_margin * 2
 			spacing = usable / (count + 1)
 			start = spawn_margin + spacing
@@ -247,7 +257,6 @@ func _get_edge_line_positions(side: int, count: int) -> Array:
 	return positions
 
 func _get_edge_wander_direction(side: int) -> Vector2:
-	"""获取从某条边生成时对应的游荡方向（垂直于边缘指向地图内部）"""
 	match side:
 		0: return Vector2.DOWN
 		1: return Vector2.LEFT
@@ -255,16 +264,7 @@ func _get_edge_wander_direction(side: int) -> Vector2:
 		3: return Vector2.RIGHT
 		_: return Vector2(randf_range(-1, 1), randf_range(-1, 1)).normalized()
 
-func _on_monster_freed(monster: Node):
-	active_monsters -= 1
-	# 如果怪物名称包含 Diablo 字样（场景名可能叫 "Diablo"）
-	if monster.name.to_lower().contains("diablo"):
-		active_diablo_count -= 1
-
 func reset_spawner():
 	active_monsters = 0
-	active_diablo_count = 0
-	timer_single = 0.0
-	timer_line = 0.0
-	timer_group = 0.0
-	timer_all_sides = 0.0
+	diablo_monsters.clear()
+	_set_new_timer_targets()

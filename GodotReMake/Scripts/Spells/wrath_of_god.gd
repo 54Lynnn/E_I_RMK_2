@@ -1,5 +1,7 @@
 extends Node2D
 
+const ProjectileScene = preload("res://Scenes/Projectile.tscn")
+
 static var skill_name := "wrath_of_god"
 static var skill_type := "active"  # 技能类型: active, toggle, passive
 static var base_cooldown := 2.0
@@ -39,7 +41,7 @@ static func cast(hero: Node, mouse_pos: Vector2, skill_cooldowns: Dictionary) ->
 			var direction = Vector2(cos(angle), sin(angle))
 			
 			# 创建锤子投射物
-			var hammer = preload("res://Scenes/Projectile.tscn").instantiate()
+			var hammer = ObjectPool.get_object(ProjectileScene)
 			hammer.global_position = hero.global_position
 			hammer.direction = direction
 			hammer.speed = 1000.0  # 极快的速度

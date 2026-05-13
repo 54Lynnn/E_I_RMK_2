@@ -1,18 +1,13 @@
 extends Node2D
 
-# ============================================
-# Fireball (火球术) - 技能配置
-# ============================================
-# 原版效果：发射一个火球，命中敌人后爆炸，造成范围伤害
-# 伤害类型：fire
-# 使用 projectile.gd 实现投射物行为
+const ProjectileScene = preload("res://Scenes/Projectile.tscn")
 
-static var skill_name := "fireball"      # 技能唯一标识
-static var skill_type := "active"         # 技能类型: active, toggle, passive
-static var base_cooldown := 0.5           # 基础冷却时间（秒）
-static var base_mana_cost := 5.0          # 基础魔法消耗
-static var base_damage := 40.0            # 基础伤害值
-static var damage_element := "fire"       # 伤害元素类型（fire系技能）
+static var skill_name := "fireball"
+static var skill_type := "active"
+static var base_cooldown := 0.5
+static var base_mana_cost := 5.0
+static var base_damage := 40.0
+static var damage_element := "fire"
 
 # 爆炸半径配置
 # LV1=56, LV10=66（原版数据，每级+1）
@@ -56,8 +51,8 @@ static func cast(hero: Node, mouse_pos: Vector2, skill_cooldowns: Dictionary) ->
 		# 获取发射位置
 		var muzzle = hero.get_node("Sprite2D/Muzzle")
 		
-		# 创建投射物（使用 Projectile.tscn）
-		var fireball = preload("res://Scenes/Projectile.tscn").instantiate()
+		# 从对象池获取投射物
+		var fireball = ObjectPool.get_object(ProjectileScene)
 		fireball.global_position = muzzle.global_position
 		fireball.direction = hero.global_position.direction_to(mouse_pos)
 		fireball.speed = 300.0                     # 飞行速度

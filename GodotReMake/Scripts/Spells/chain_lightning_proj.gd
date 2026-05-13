@@ -15,6 +15,18 @@ var hit_monsters := []
 func _ready():
 	body_entered.connect(_on_body_entered)
 
+func reset_for_pool():
+	speed = 800.0
+	damage = 1000.0
+	damage_element = "air"
+	max_bounces = 10
+	bounce_range = 300.0
+	direction = Vector2.RIGHT
+	current_target = null
+	is_moving = true
+	bounce_count = 0
+	hit_monsters.clear()
+
 func _physics_process(delta):
 	if not is_moving:
 		return
@@ -52,12 +64,12 @@ func _reach_target():
 		_spawn_hit_effect(current_target.global_position)
 
 	if bounce_count >= max_bounces:
-		queue_free()
+		ObjectPool.return_to_pool(self)
 		return
 
 	var next_target = _find_next_target()
 	if next_target == null:
-		queue_free()
+		ObjectPool.return_to_pool(self)
 		return
 
 	if current_target != null and is_instance_valid(current_target):

@@ -1,5 +1,7 @@
 extends Node2D
 
+const ProjectileScene = preload("res://Scenes/Projectile.tscn")
+
 # ============================================
 # Freezing Spear (冰冻矛) - 技能配置
 # ============================================
@@ -90,8 +92,8 @@ static func _spawn_spears_async(hero: Node, mouse_pos: Vector2, damage: float, f
 		var current_mouse_pos = hero.get_global_mouse_position()
 		var base_direction = hero.global_position.direction_to(current_mouse_pos)
 		
-		# 创建投射物（使用 Projectile.tscn）
-		var spear = preload("res://Scenes/Projectile.tscn").instantiate()
+		# 从对象池获取投射物
+		var spear = ObjectPool.get_object(ProjectileScene)
 		spear.global_position = muzzle.global_position
 		
 		# 所有矛完全指向鼠标实时方向（无角度偏移）

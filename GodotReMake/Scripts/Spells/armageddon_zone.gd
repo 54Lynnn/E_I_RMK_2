@@ -1,5 +1,7 @@
 extends Node2D
 
+const MeteorSingleScene = preload("res://Scenes/MeteorSingle.tscn")
+
 @export var damage := 250.0
 @export var explosion_radius := 56.0
 @export var damage_element := "fire"
@@ -21,7 +23,7 @@ func _process(delta):
 			_spawn_meteor()
 
 	if life_time >= duration:
-		queue_free()
+		ObjectPool.return_to_pool(self)
 
 func _spawn_meteor():
 	var random_pos = Vector2(
@@ -29,7 +31,7 @@ func _spawn_meteor():
 		randf() * map_size.y - map_size.y * 0.5
 	)
 
-	var meteor = preload("res://Scenes/MeteorSingle.tscn").instantiate()
+	var meteor = ObjectPool.get_object(MeteorSingleScene)
 	meteor.name = "armageddon_proj"
 	meteor.global_position = random_pos + Vector2(0, -400)
 	meteor.target_position = random_pos
