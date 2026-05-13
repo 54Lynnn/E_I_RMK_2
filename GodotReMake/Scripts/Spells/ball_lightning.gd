@@ -49,7 +49,7 @@ var max_lifetime := 10.0
 var spawn_position := Vector2.ZERO
 var wander_target := Vector2.ZERO
 var wander_radius := 130.0
-var attack_range := 200.0
+var attack_range := 100.0
 var attack_interval := 1.0
 
 @onready var sprite := $Sprite2D
@@ -61,10 +61,11 @@ func _ready():
 
 func _apply_visual_style():
 	sprite.modulate = Color(0.5, 0.8, 1.0, 0.9)
+	var base = sprite.scale
 	var tween = create_tween()
 	tween.set_loops()
-	tween.tween_property(sprite, "scale", Vector2(0.8, 0.8), 0.5)
-	tween.tween_property(sprite, "scale", Vector2(1.2, 1.2), 0.5)
+	tween.tween_property(sprite, "scale", base * 0.9, 0.5)
+	tween.tween_property(sprite, "scale", base * 1.1, 0.5)
 
 func _process(delta):
 	if strikes_remaining <= 0 or life_time >= max_lifetime:
@@ -102,6 +103,8 @@ func _find_closest_enemy():
 	var closest_dist = attack_range
 	for m in monsters:
 		if not is_instance_valid(m):
+			continue
+		if m.current_state == m.State.DEATH:
 			continue
 		var dist = global_position.distance_to(m.global_position)
 		if dist < closest_dist:

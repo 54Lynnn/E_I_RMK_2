@@ -11,38 +11,38 @@
 [ext_resource type="Script" uid="uid://questhudmanager" path="res://Scripts/Quest/quest_hud_manager.gd" id="8"]
 
 [sub_resource type="RectangleShape2D" id="1"]
-size = Vector2(32, 2560)
+size = Vector2(32, 1536)
 
 [sub_resource type="RectangleShape2D" id="2"]
-size = Vector2(2560, 32)
+size = Vector2(1536, 32)
 
 [node name="QuestMain" type="Node2D" groups=["quest_main"]]
 
 [node name="Ground" type="Sprite2D" parent="."]
-scale = Vector2(20, 20)
+scale = Vector2(12, 12)
 texture = ExtResource("6")
 centered = false
 
 [node name="WorldBounds" type="StaticBody2D" parent="."]
 
 [node name="WallLeft" type="CollisionShape2D" parent="WorldBounds"]
-position = Vector2(-16, 1280)
+position = Vector2(-16, 768)
 shape = SubResource("1")
 
 [node name="WallRight" type="CollisionShape2D" parent="WorldBounds"]
-position = Vector2(2576, 1280)
+position = Vector2(1552, 768)
 shape = SubResource("1")
 
 [node name="WallTop" type="CollisionShape2D" parent="WorldBounds"]
-position = Vector2(1280, -16)
+position = Vector2(768, -16)
 shape = SubResource("2")
 
 [node name="WallBottom" type="CollisionShape2D" parent="WorldBounds"]
-position = Vector2(1280, 2576)
+position = Vector2(768, 1552)
 shape = SubResource("2")
 
 [node name="HeroUnit" parent="." instance=ExtResource("4")]
-position = Vector2(1280, 1280)
+position = Vector2(768, 768)
 
 [node name="QuestLevelManager" type="Node" parent="." groups=["quest_level_manager"]]
 script = ExtResource("2")

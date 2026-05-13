@@ -24,8 +24,8 @@ var monster_scenes := {
 }
 
 # 地图边界（怪物生成区域）
-@export var map_width := 2560.0
-@export var map_height := 2560.0
+@export var map_width := 1536.0
+@export var map_height := 1536.0
 @export var spawn_margin := 100.0  # 边缘留出的空白区域
 
 # 生成状态

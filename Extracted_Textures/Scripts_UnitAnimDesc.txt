@@ -1,0 +1,80 @@
+UNIT_HERO
+  ANIMATION_WALK_LEGS	"Hero\WalkLegs"	 28 16 16
+  ANIMATION_WALK_TORS	"Hero\WalkTors"	 28 16 16
+  ANIMATION_ATTACK1	"Hero\Attack1"   32 16 16
+  ANIMATION_ATTACK2     "Hero\Attack2"   48 16 16
+  ANIMATION_DEATH1      "Hero\Death1"    64 16 16
+  ANIMATION_DEATH2      "Hero\Death1"    64 16 16
+  FROZEN                "Hero\Frozen"
+  STONED                "Hero\Stoned"
+
+
+UNIT_RIG
+  ANIMATION_WALK_LEGS	"Troll\WalkLegs"   13 16 16
+  ANIMATION_WALK_TORS	"Troll\WalkTors"   13 16 16
+  ANIMATION_ATTACK1	"Troll\Attack1"    32 16 16
+  ANIMATION_ATTACK2     "Troll\Attack2"    48 16 16
+  ANIMATION_DEATH1      "Troll\Death1"     64 16 16
+  ANIMATION_DEATH2      "Troll\Death2"     80 16 16
+  FROZEN                "Troll\Frozen"
+  STONED                "Troll\Stoned"
+
+UNIT_SPIDER
+  ANIMATION_WALK_LEGS	"Spider\WalkLegs"   0  16 16
+  ANIMATION_WALK_TORS	"Spider\WalkTors"   0  16 16
+  ANIMATION_ATTACK1	"Spider\Attack1"    48 16 16
+  ANIMATION_ATTACK2     "Spider\Attack1"    48 16 16
+  ANIMATION_DEATH1      "Spider\Death1"     64 16 16
+  ANIMATION_DEATH2      "Spider\Death2"     80 16 16
+  FROZEN                "Spider\Frozen"
+  STONED                "Spider\Stoned"
+
+UNIT_DEMON
+  ANIMATION_WALK_LEGS	"Demon\WalkLegs"  0  16 16
+  ANIMATION_WALK_TORS	"Demon\WalkTors"  16 16 16
+  ANIMATION_ATTACK1	"Demon\Attack1"   32 16 16
+  ANIMATION_ATTACK2     "Demon\Attack2"   48 16 16
+  ANIMATION_DEATH1      "Demon\Death1"    64 16 16
+  ANIMATION_DEATH2      "Demon\Death2"    64 16 16
+  FROZEN                "Demon\Frozen"
+  STONED                "Demon\Stoned"
+
+UNIT_BEAR 
+  ANIMATION_WALK_LEGS	"Bear\WalkLegs"	 0 16 16
+  ANIMATION_WALK_TORS	"Bear\WalkTors"	 16 16 16
+  ANIMATION_ATTACK1	"Bear\Attack1"   32 16 16
+  ANIMATION_ATTACK2     "Bear\Attack2"   48 16 16
+  ANIMATION_DEATH1      "Bear\Death1"    64 16 16
+  ANIMATION_DEATH2      "Bear\Death2"    80 16 16
+  FROZEN                "Bear\Frozen"
+  STONED                "Bear\Stoned"
+
+UNIT_ARCHER
+  ANIMATION_WALK_LEGS	"Mummy\WalkLegs"   21 16 16
+  ANIMATION_WALK_TORS	"Mummy\WalkTors"   21 16 16
+  ANIMATION_ATTACK1	"Mummy\Attack1"    0 16 16
+  ANIMATION_ATTACK2	"Mummy\Attack1"    0 16 16
+  ANIMATION_DEATH1      "Mummy\Death1"     64 16 16
+  ANIMATION_DEATH2      "Mummy\Death2"     80 16 16
+  FROZEN                "Mummy\Frozen"
+  STONED                "Mummy\Stoned"
+
+UNIT_REAPER
+  ANIMATION_WALK_LEGS	"Reaper\WalkLegs"   21 16 16
+  ANIMATION_WALK_TORS	"Reaper\WalkTors"   21 16 16
+  ANIMATION_ATTACK1	"Reaper\Attack1"    32 16 16
+  ANIMATION_ATTACK2     "Reaper\Attack1"    32 16 16
+  ANIMATION_DEATH1      "Reaper\Death1"     64 16 16
+  ANIMATION_DEATH2      "Reaper\Death2"     80 16 16
+  FROZEN                "Reaper\Frozen"
+  STONED                "Reaper\Stoned"
+
+UNIT_BOSS
+  ANIMATION_WALK_LEGS	"Diablo\WalkLegs"   21 16 16
+  ANIMATION_WALK_TORS	"Diablo\WalkTors"   21 16 16
+  ANIMATION_ATTACK1	"Diablo\Attack1"    0 16 16
+  ANIMATION_ATTACK2     "Diablo\Attack1"    0 16 16
+  ANIMATION_DEATH1      "Diablo\Death1"     64 16 16
+  ANIMATION_DEATH2      "Diablo\Death1"     64 16 16
+  FROZEN                "Diablo\Frozen"
+  STONED                "Diablo\Stoned"

@@ -1,53 +1,27 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene format=3 uid="uid://c6se0xcvje3he"]
 
-[ext_resource type="Script" path="res://Scripts/hero.gd" id="1"]
-[ext_resource type="Texture2D" path="res://Art/Placeholder/hero_idle_0.png" id="2"]
+[ext_resource type="Script" uid="uid://c5uo3camrof4g" path="res://Scripts/hero.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://cvyhu3nd4smpr" path="res://Art/Placeholder/hero_walk.png" id="2"]
 
 [sub_resource type="RectangleShape2D" id="1"]
 size = Vector2(32, 32)
 
-[node name="Hero" type="CharacterBody2D" groups=["hero"]]
+[node name="Hero" type="CharacterBody2D" unique_id=2075353366 groups=["hero"]]
 collision_layer = 2
 collision_mask = 5
 script = ExtResource("1")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=477505227]
 shape = SubResource("1")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("2")
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1180808624]
 z_index = 5
+texture = ExtResource("2")
+region_enabled = true
+region_rect = Rect2(0, 0, 48, 48)
 
-[node name="Muzzle" type="Marker2D" parent="Sprite2D"]
-position = Vector2(40, 0)
+[node name="Muzzle" type="Marker2D" parent="Sprite2D" unique_id=1879987210]
 
-[node name="HealthBar" type="TextureProgressBar" parent="."]
-position = Vector2(-32, -40)
-size = Vector2(64, 6)
-z_index = 10
-fill_mode = 2
-value = 100.0
-texture_progress = ExtResource("2")
-tint_progress = Color(0, 1, 0, 1)
-tint_under = Color(0.3, 0, 0, 1)
-
-[node name="ManaBar" type="TextureProgressBar" parent="."]
-position = Vector2(-32, -33)
-size = Vector2(64, 4)
-z_index = 10
-fill_mode = 2
-value = 100.0
-texture_progress = ExtResource("2")
-tint_progress = Color(0, 0.3, 1, 1)
-tint_under = Color(0, 0, 0.3, 1)
-
-[node name="LevelLabel" type="Label" parent="."]
-position = Vector2(-8, -52)
-z_index = 10
-text = "Lv.1"
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 10
-
-[node name="CastCooldown" type="Timer" parent="."]
-one_shot = true
+[node name="CastCooldown" type="Timer" parent="." unique_id=536891999]
 wait_time = 0.3
+one_shot = true

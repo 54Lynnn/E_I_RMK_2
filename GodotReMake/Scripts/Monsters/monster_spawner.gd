@@ -6,8 +6,8 @@ enum SpawnPattern { SINGLE, LINE, GROUP, ALL_SIDES }
 
 @export var max_monsters := 15
 
-@export var map_width := 2560.0
-@export var map_height := 2560.0
+@export var map_width := 1536.0
+@export var map_height := 1536.0
 @export var spawn_margin := 80.0
 
 var active_monsters := 0

@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3]
 
 [ext_resource type="Script" path="res://Scripts/Monsters/monster_demon.gd" id="1_demon"]
-[ext_resource type="Texture2D" path="res://Art/Placeholder/monster_demon.png" id="2_demon"]
+[ext_resource type="Texture2D" path="res://Art/Placeholder/monster_demon_walk.png" id="2_demon"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_demon"]
 size = Vector2(32, 32)
@@ -10,21 +10,14 @@ size = Vector2(32, 32)
 collision_layer = 4
 collision_mask = 2
 script = ExtResource("1_demon")
-move_speed = 90.0
-health = 40.0
-max_health = 40.0
-damage = 8.0
-collision_damage = 3.0
-experience_reward = 50
-detection_range = 500.0
-attack_range = 40.0
-attack_cooldown = 1.2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_demon")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("2_demon")
+region_enabled = true
+region_rect = Rect2(0, 0, 48, 48)
 
 [node name="HealthBar" type="ProgressBar" parent="."]
 visible = false

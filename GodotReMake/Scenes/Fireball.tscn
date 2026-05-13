@@ -16,6 +16,7 @@ shape = SubResource("1")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("2")
+scale = Vector2(0.35, 0.35)
 
 [node name="Particles" type="CPUParticles2D" parent="."]
 amount = 6

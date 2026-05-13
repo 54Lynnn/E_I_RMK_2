@@ -385,8 +385,7 @@ var time_stop_active := false    # 时间停止状态
 # ============================================
 
 func _ready():
-	# 节点初始化时调用，当前无需特殊处理
-	pass
+	Engine.time_scale = 1.0
 
 func _process(delta):
 	# 每帧调用，处理生命和法力的自动恢复，以及buff更新

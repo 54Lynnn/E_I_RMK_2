@@ -22,7 +22,7 @@
 [ext_resource type="Script" path="res://Scripts/Monsters/monster_mummy.gd" id="1_archer"]
 ; 脚本：怪物行为逻辑（远程攻击、保持距离等）
 
-[ext_resource type="Texture2D" path="res://Art/Placeholder/monster_mummy.png" id="2_archer"]
+[ext_resource type="Texture2D" path="res://Art/Placeholder/monster_mummy_walk.png" id="2_archer"]
 ; 贴图：怪物外观（原版 Mummy 贴图）
 
 [ext_resource type="PackedScene" path="res://Scenes/MonsterArrow.tscn" id="3_arrow"]
@@ -46,43 +46,12 @@ collision_mask = 2
 script = ExtResource("1_archer")
 ; 绑定脚本：monster_archer.gd
 
-; ---------- 基础属性 ----------
-move_speed = 40.0
-; 移动速度：40像素/秒（较慢，因为要保持距离）
-
-health = 18.0
-; 当前血量：18点（较低）
-
-max_health = 18.0
-; 最大血量：18点
-
-damage = 6.0
-; 攻击力：6点（弓箭伤害）
-
-collision_damage = 0
-; 碰撞伤害：2点（撞到玩家时）
-
-experience_reward = 35
-; 经验奖励：击败后获得35点经验
-
-; ---------- 检测与攻击范围 ----------
-detection_range = 800.0
-; 检测范围：800像素（能发现玩家的最远距离）
-
-attack_cooldown = 2.0
-; 攻击冷却：2秒（两次攻击之间的间隔）
-
 ; ---------- 远程怪物特有属性 ----------
-optimal_range = 500.0
-; 最优攻击距离：250像素（在此距离内停止移动并攻击）
-; 行为逻辑：
-; - 距离 > 500：待机（不移动）
-; - 250 < 距离 <= 500：追击（向玩家移动）
-; - 150 < 距离 <= 250：攻击（停止移动，射箭）
-; - 距离 <= 150：逃跑（反向移动）
+optimal_range = 400.0
+; 最优攻击距离
 
 too_close_range = 150.0
-; 逃跑距离：150像素（小于此距离会反向逃跑）
+; 逃跑距离：小于此距离会反向逃跑
 
 arrow_scene = ExtResource("3_arrow")
 ; 弓箭场景：发射的投射物（MonsterArrow.tscn）
@@ -100,6 +69,8 @@ shape = SubResource("RectangleShape2D_archer")
 ; 精灵节点：显示怪物贴图
 texture = ExtResource("2_archer")
 ; 使用 mummy.png 贴图
+region_enabled = true
+region_rect = Rect2(0, 0, 48, 48)
 
 [node name="HealthBar" type="ProgressBar" parent="."]
 ; 血条：显示怪物当前血量

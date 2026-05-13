@@ -2,9 +2,8 @@
 
 > **发送给下一个 coding agent 的提示词**
 > **日期**: 2026-05-13
-> **项目位置**: `D:\project\E_I_RMK_2\GodotReMake\`（公司） / `e:\EvilInvasion\GodotReMake\`（家）
+> **最新更新**: v6 Agent — 地图比例修正v2 + 质感到位 + 数值统一管理
 > **GitHub仓库**: https://github.com/54Lynnn/E_I_RMK_2
-> **最新更新**: 快捷槽位系统（4槽位 2×2 网格 + 悬浮分配快捷键）
 
 ---
 
@@ -35,230 +34,194 @@
 
 **UI/UX增强**：
 - [x] **暂停菜单（PauseMenu）**：ESC打开，包含Resume/Save/Load/Return to Menu/Quit，游戏暂停
-- [x] **死亡画面（GameOverScreen）**：显示关卡、击杀数、等级，提供Retry/Return to Menu；Survival模式显示累积经验值
-- [x] **关卡完成画面（LevelCompleteScreen）**：本关统计，Continue进入下一关
-- [x] **通关画面（VictoryScreen）**：全10关通关祝贺，清除Quest进度，Return to Menu
-- [x] **技能栏冷却显示**：灰色扇形遮罩覆盖在技能图标上，显示冷却进度
-- [x] **怪物信息显示（Alt键切换）**：按左Alt显示/隐藏怪物血条和伤害数字
-- [x] **受击红晕（血量相关）**：血量低于50%时画面边缘出现径向红晕，血量越低越深
-- [x] **快捷槽位系统（4槽位）**：LMB/RMB/Shift/Space 四个快捷槽位，2×2网格布局，悬浮技能图标+按Shift/Space分配，存档持久化
+- [x] **死亡画面（GameOverScreen）**：显示关卡、击杀数、等级，提供Retry/Return to Menu
+- [x] **关卡完成画面（LevelCompleteScreen）**
+- [x] **通关画面（VictoryScreen）**
+- [x] **技能栏冷却显示**：灰色扇形遮罩覆盖在技能图标上
+- [x] **怪物信息显示（Alt键切换）**
+- [x] **受击红晕（血量相关）**
+- [x] **快捷槽位系统（4槽位）**：LMB/RMB/Shift/Space
+- [x] **英雄面板UI优化**：暗色奇幻风布局，属性数值+评价显示，技能按钮元素系别颜色支持
 
 **技能系统（21个，全部独立场景+独立脚本）**：
-- [x] **数值来源**：用户亲自在原版游戏中采集的 xlsx 数据（`evil_invasion_spell.xlsx`），所有技能 1-10 级完整数值
-- [x] **英雄技能**：Magic Missile(LMB), Fireball(RMB), Freezing Spear(Z), Prayer(X), Heal(C)
-- [x] **Earth系**：Teleport(2), MistFog(3), WrathOfGod(4), **StoneEnchanted(被动)**
-- [x] **Air系**：Telekinesis(Q), Sacrifice(R), HolyLight(E), **Ball Lightning(I)**, **Chain Lightning(O)**
-- [x] **Fire系**：FireWalk(U), Meteor(F), Armageddon(G)
-- [x] **Water系**：PoisonCloud(H), Fortune(V), DarkRitual(B), Nova(N)
-- [x] **Debuff系统**（monster.gd: frozen/slowed/petrified 统一管理）
-- [x] **Global.hero_took_damage信号**（用于StoneEnchanted等被动反击技能）
+- [x] **数值来源**：`evil_invasion_spell.xlsx`
+- [x] **全部 21 个技能已实现**
+- [x] **元素系统**：5种元素（basic/earth/air/fire/water），技能按钮有对应颜色条
+- [x] **Debuff系统**
+- [x] **Global.hero_took_damage信号**
 
 **怪物系统（7种）**：
-- [x] **数据驱动**：所有数值来自 `monster_database.gd`
-- [x] **统一边缘生成**：所有模式怪物均从地图四边生成
-- [x] **统一游荡**：墙壁反弹（碰到墙壁像光线反射）
-- [x] **近战怪物**：Troll, Bear, Spider, Demon（检测400px，攻击40px）
-- [x] **远程怪物**：Mummy(Archer)（检测500px，射箭保持距离）
-- [x] **特殊怪物**：Reaper（远程火焰攻击），Diablo（Boss，召唤其他怪物）
-- [x] **四种生成模式**：单个(1~3秒)/整排(18~22秒)/编组(8~12秒)/全边界(38~42秒)
+- [x] **数据驱动**：所有数值统一在 `monster_database.gd` 管理（⚠️ 不再在 .tscn 设重复参数）
+- [x] **统一边缘生成**：怪物从地图四边生成，游荡带墙壁反弹
+- [x] **近战怪物**：Troll/Spider/Bear（detection_range=350），Demon（400，追击加速40%）
+- [x] **远程怪物**：Mummy/Reaper（detection_range=500，optimal_range=400）
+- [x] **特殊怪物**：Diablo（召唤者，detection_range=500）
+- [x] **四种生成模式**：单个/整排/编组/全边界
+- [x] **元素光环系统**：5种颜色与技能元素统一（Basic紫粉/Earth黄棕/Air银白/Fire红/Water蓝）
+
+**动画系统 🎞️**：
+- [x] **英雄行走**：16帧 spritesheet
+- [x] **英雄待机**：hero_idle_0.png（站立不动时显示）
+- [x] **英雄攻击/施法**：16帧 Attack1
+- [x] **英雄死亡**：16帧 Death1，防重复播放
+- [x] **怪物行走/攻击/死亡**：7种怪物全部 16帧 spritesheet
+- [x] **动画状态机**：AnimState（WALK/ATTACK/DEATH）
+
+**比例修正 📐（v6 最终版）**：
+- [x] **地图 1536×1536**（=1024×1.5，用户实测与原版速度相近）
+- [x] **摄像机 zoom=1.0**
+- [x] **摄像机边界限制**：玩家走到地图边缘时摄像机停在地图边界
+- [x] **摄像机视口padding=100px**：怪物从画面外生成走入视野
+- [x] **摄像机受击震动**：被怪物攻击时轻微震动（强度3px，持续0.1s）
+- [x] **所有单位 scale=1**
+- [x] **英雄加速度**：700（原1200，降低起步惯性感）
+
+**原版贴图 🎨**：
+- [x] 英雄/怪物动画帧已从原版提取并合成
+- [x] Troll 绿色滤镜修复
+- [x] 清理废弃占位文件
+
+**Bug修复 🔧**：
+- [x] SpeedBoost速度加成重复应用两次（get_move_speed+移动计算各乘一次）
+- [x] 英雄面板速度显示基数 100→65（与实际一致）
+- [x] 英雄死亡动画重复播放（添加is_dying守卫）
+- [x] 蜘蛛攻击时身体消失（保留行走贴图，闪红代替）
+- [x] Mummy/Reaper侧面射击（前摇阶段持续转向玩家）
+- [x] 怪物死亡时Aura淡出（与死亡动画同步）
+- [x] 升级光圈 ColorRect→圆形Sprite2D（缩小尺寸）
+- [x] 爆炸/受击反馈正方形→圆形
+- [x] Fireball爆炸半径 LV1=56（原版数据）
+- [x] Fireball/Firewalk技能ID命名不一致（fire_ball→fireball）
+- [x] 升级空指针（get_node_or_null安全访问）
+- [x] HeroPanel与底部HUD重叠（offset调整）
 
 ### 🔧 待完成
 
-1. ~~**高等级技能测试**~~ ✅ **已完成**（所有技能全等级效果已确认）
-2. ~~**Quest模式完善**~~ ✅ **已完成**（通关结算/死亡/通关画面已完成）
-3. **音效系统**：用户打算最后添加
-4. **地图系统**：目前只有一张测试地图，原版有8张地图
-5. ~~**技能平衡**~~ ✅ **已完成**（参考 xlsx 数据已全部确认）
-6. **UI美化**：关卡选择器UI简陋（当前体验可接受，不优先）
+| 优先级 | 事项 | 说明 |
+|:------:|:-----|:------|
+| P1 | **主菜单** | 目前直接进入游戏模式选择 |
+| P1 | **高分榜** | 原版有在线高分榜 |
+| P1 | **对象池** | 大量投射物/怪物时性能优化 |
+| P2 | **选项设置** | 音量/按键自定义/画面设置（优先级低） |
+| P3 | **地图纹理** | 6张 DDS 纹理已提取，最后做（纯美术资源） |
+| P3 | **音效系统** | 68个OGG已提取，最后做（纯音频资源） |
 
 ---
 
 ## ⚠️ 关键注意事项
 
-### 1. 技能数值来源
-- **❌ 不要使用 `extracted.md` 的技能数据**（该数据有等级偏移错误）
-- **✅ 唯一可信来源**：`evil_invasion_spell.xlsx`（用户亲自采集）
+### 1. 地图与坐标系统（v6 更新！）
+```
+地图大小:  1536 × 1536 （=1024×1.5）
+英雄出生点: (768, 768) （地图中心）
+墙壁边界: 厚度32px
+   左墙: (-16, 768)  范围 32×1536
+   右墙: (1552, 768) 范围 32×1536
+   上墙: (768, -16)  范围 1536×32
+   下墙: (768, 1552) 范围 1536×32
+Ground: scale=12 (128×12=1536)
+```
+
+### 2. 怪物数值统一管理（v6 新增！）
+- **所有怪物数值在 `monster_database.gd` 中管理**（detection_range, health, damage, speed等）
+- **.tscn 文件中不再保留重复参数**（除了怪物特有字段，如 Mummy 的 arrow_scene）
+- 生成器（Spawner）统一调用 `apply_database_data()` 应用数值
+- `_ready()` 中不再调用 `_load_data_from_database()`（避免重复加载）
+
+### 3. 摄像机设置（v6 更新！）
+```gdscript
+# camera.gd
+zoom = Vector2(1.0, 1.0)
+viewport_padding = 100.0  # 边界 padding，怪物从画面外生成
+```
+- 摄像机跟随目标 = lerp 平滑跟随
+- **边界约束**：摄像机中心不会超出地图边界，画面不露空白
+- **受击震动**：shake(3.0)，持续0.1秒自动复位
+
+### 4. 远程怪物三层距离系统
+| 参数 | 含义 | Mummy/Reaper 当前值 |
+|:----|:-----|:------------------:|
+| detection_range | 索敌追击距离 | 500 |
+| optimal_range | 停下攻击的最远距离 | 400 |
+| too_close_range | 逃跑距离（太近反向跑） | 150 |
+
+行为：500以外wander→500~400追击→400~150停下攻击→<150逃跑
+
+### 5. 近战怪物 detection_range
+| 怪物 | 当前值 |
+|:----|:------:|
+| Troll/Spider/Bear | 350 |
+| Demon | 400 |
+| Mummy/Reaper/Diablo | 500 |
+
+### 6. 英雄/怪物尺寸
+```
+英雄 Sprite2D: 原始 48×48，无额外 scale
+怪物 Sprite2D: 原始 48×48（Diablo 64×64），无额外 scale
+拾取物 Sprite2D: 原始 34×34，无 scale
+投射物 Sprite2D: 48×48 × scale(0.35) ≈ 17×17
+```
+
+### 7. 技能数值来源
+- **❌ 不要使用 `extracted.md` 的技能数据**（等级偏移错误）
+- **✅ 唯一可信来源**：`evil_invasion_spell.xlsx`
 - 所有技能脚本中的数值公式已按 xlsx 数据实现
 
-### 2. 文件路径（重要！）
+### 8. 文件路径
 ```
 Scripts/
-├── Spells/          ← 所有技能脚本在这里（21个）
-│   ├── magic_missile.gd
-│   ├── ball_lightning.gd    # I键
-│   └── chain_lightning.gd   # O键
-├── Monsters/        ← 所有怪物脚本在这里（7种）
-│   ├── monster_base.gd
-│   ├── monster_melee.gd
-│   ├── monster_ranged.gd
-│   └── monster_database.gd
+├── Spells/          ← 所有技能脚本（21个）
+├── Monsters/        ← 所有怪物脚本（7种）
+│   ├── monster_base.gd        ← map_bounds = 1536
+│   └── monster_database.gd    ← ← 所有数值在这里改！
 ├── Quest/           ← Quest模式相关脚本
-├── pause_menu.gd    ← 暂停菜单（ESC打开）
-├── game_over_screen.gd  ← 死亡画面覆盖层
-├── level_complete_screen.gd  ← 关卡完成画面
-├── victory_screen.gd  ← 全通通关画面
-├── cooldown_overlay.gd  ← 技能冷却扇形遮罩控件
-├── hero.gd          ← 英雄控制（所有技能 import 路径为 `res://Scripts/Spells/xxx.gd`）
-├── global.gd        ← 全局单例（Autoload）
 └── ...
 ```
 
-注意：PauseMenu 被实例化在 Main.tscn 和 QuestMain.tscn 的 CanvasLayer 下。
-GameOverScreen 和 LevelCompleteScreen 是动态创建的覆盖层（death/completion 时 add_child 到当前场景）。
-VictoryScreen 是独立场景，由 LevelCompleteScreen 在最后一关时跳转进入。
+### 9. 英雄待机动画（v6 新增）
+- **站立不动时**：显示 `hero_idle_0.png`
+- **移动时**：切换为 `hero_walk.png` 16帧循环
+- 切换时机在 `_update_walk_animation()` 中处理
 
-### 3. 技能栏冷却显示
-- 每个技能按钮上覆盖一个 `CooldownOverlay`（基于 Control 的 `draw_polygon`）
-- 使用 `cooldown_overlay.gd` 脚本，通过 `set_progress(0.0~1.0)` 控制扇形显示
-- 峰值检测机制：首次观察到冷却值时记录为峰值，后续冷却值更高时更新峰值
-- 冷却结束时重置峰值为0，扇形消失
-- HUD 技能ID到 hero.skill_cooldowns key 的映射在 `SKILL_COOLDOWN_KEY_MAP` 中（注意 fire_ball → fireball）
-
-### 4. Alt键切换怪物信息
-- 绑定的操作名为 `toggle_monster_health`，物理键码为 `KEY_ALT`（131072）
-- 切换 `Global.show_monster_info` 布尔值
-- 开启时效果：
-  - 所有存活怪物的血条一直可见
-  - 怪物受到伤害时显示黄色伤害数字（向上飘动0.8秒后消失）
-- 关闭时效果：
-  - 血条仅在怪物受伤时短暂显示
-  - 不显示伤害数字
-- 新生成的怪物会根据当前 `Global.show_monster_info` 状态决定血条初始可见性
-
-### 5. 受击红晕（Damage Vignette）
-- ColorRect 直接定义在 `HUD.tscn` 中，确保 100% 被加载
-- 运行时 hud.gd 的 `_setup_damage_shader()` 为其附加 ShaderMaterial
-- shader 代码内联在 GDScript 字符串中，不依赖任何外部文件
-- **径向渐变效果**（vignette）：
-  - 画面中心半径 25% 范围内完全透明
-  - 从中间到边缘红色渐深
-  - `pow(distance, 2.0)` 曲线使过渡自然
-- hud.gd 的 `_update_damage_overlay()` 控制 shader 的 intensity 参数：
-  - 血量 > 50%：intensity = 0（完全透明）
-  - 血量 ≤ 50%：intensity 从 0 → 1.0 线性增加
-
-### 6. HUD 布局（2026-05-13 重构 + 快捷槽位）
-
-- **瘦底栏设计**：整体底栏高度 86px（比旧版更矮）
-- **左侧信息区**：等级标签 + HP条 + MP条（垂直排列，不再包含经验条）
-- **右侧技能栏**：8个技能图标（34×34px，间距2px），与左侧信息区上边缘平齐
-- **快捷槽位（2×2网格）**：位于技能栏右侧，4个槽位（46×30px面板）
-  - 上排：LMB（左键）、RMB（右键）
-  - 下排：Shift、Space
-  - 每个槽位右下角有半透明快捷键小字提示
-  - 图标 42×26px 居中显示，无技能名称文字
-  - 底部缩进 offset_bottom=-14，与 ExpBar 保持 2px 间距
-- **底部通栏经验条**：全宽 ProgressBar，居中显示 "LEVEL X" 文字
-- **Buff/Debuff 图标**：位于底栏上方
-- 节点结构：
-  ```
-  HUD (Control)
-  ├── DamageOverlay (ColorRect) — 受击红晕
-  ├── BuffContainer (HBoxContainer) — Buff/Debuff图标
-  └── BottomBar (Panel)
-      ├── LeftInfo (VBoxContainer)
-      │   ├── LevelLabel
-      │   ├── HPBar
-      │   └── MPBar
-      ├── SkillBar (HBoxContainer) — 8个技能按钮
-      ├── QuickSlots (Control) — 2×2快捷槽位网格
-      │   ├── SlotLMB (Panel) + SlotLMBIcon + SlotLMBLabel("LMB")
-      │   ├── SlotRMB (Panel) + SlotRMBIcon + SlotRMBLabel("RMB")
-      │   ├── SlotShift (Panel) + SlotShiftIcon + SlotShiftLabel("Shift")
-      │   └── SlotSpace (Panel) + SlotSpaceIcon + SlotSpaceLabel("Space")
-      ├── ExpBar (ProgressBar) — 通栏经验条
-      └── ExpLabel (Label) — "LEVEL X" 居中文字
-  ```
-
-### 7. Survival 模式死亡统计
-- `Global.survival_total_exp_gained`：Survival 模式本轮累积获得的经验值
-- 每次获得经验时累加（在 hero.gd 中）
-- 死亡时 GameOverScreen 显示 "EXPERIENCE GAINED: X" 而非击杀数
-- Quest 模式死亡仍显示击杀数
-
-### 8. 暂停菜单（PauseMenu）注意事项
-- 使用已存在的 `pause_game` 输入动作（ESC键）
-- HeroPanel 和 PauseMenu 互斥：通过 `Global.is_pause_menu_open` 和 `Global.hero_panel_is_open` 控制
-- 当 PauseMenu 打开时，HeroPanel 的 C 键不响应
-- PauseMenu 使用 `process_mode = 3`（WHEN_PAUSED）以在暂停时仍能处理输入
-- layer = 100，确保显示在最上层
-
-### 9. hero.gd 导入路径
+### 10. hero.gd 速度计算（v6 修改！）
 ```gdscript
-# ✅ 正确：所有技能导入使用子目录路径
-const BallLightning = preload("res://Scripts/Spells/ball_lightning.gd")
-# ❌ 错误：不要用 Scripts/ 根目录
-const BallLightning = preload("res://Scripts/ball_lightning.gd")
+# 不再重复乘以 speed_multiplier！
+var target_velocity = input_dir * get_move_speed()  # get_move_speed() 内部已乘
 ```
 
-### 10. Ball Lightning 行为
-- 在**鼠标光标位置**生成
-- 在生成点 **130px 范围内随机游荡**
-- 检测 **200px 内的敌人**，攻击最近的
-- 攻击时从闪电球到目标出现**蓝白色激光束**特效
-- 每次攻击间隔 **1 秒**，最多攻击 **5 次**
-- 最大存活时间 **10 秒**
+### 11. 元素主题色（v6 统一）
+| 元素 | 颜色 | 用途 |
+|:----|:----|:------|
+| Basic | #C084FC (紫粉) | 技能按钮条 + 怪物光圈 |
+| Earth | #A08420 (黄棕) | 同上 |
+| Air | #C8C8C8 (银白) | 同上 |
+| Fire | #D94A2A (红) | 同上 |
+| Water | #3B7FFF (蓝) | 同上 |
 
-### 11. Chain Lightning
-- 当前实现：从鼠标位置向最近敌人弹跳5次
-- 注意：用户还没有确认这个实现是否符合预期，可能需要修改
-
-### 12. Prayer 正确行为
-- **一次性消耗生命值**（Lv1=65%，Lv10=20%），不是逐秒扣血
-- 然后持续10秒回蓝
-
-### 13. 元素属性分配
-```
-basic:  magic_missile
-earth:  stone_enchanted, wrath_of_god, prayer, teleport, mistfog
-air:    holy_light, sacrifice, ball_lightning, chain_lightning, telekinesis
-fire:   fireball, fire_walk, meteor, armageddon, heal
-water:  freezing_spear, poison_cloud, dark_ritual, nova, fortuna
-```
-
-### 14. 按钮绑定
-
-| 按键 | 技能 | 按键 | 技能 |
-|:----:|:----|:----:|:----|
-| LMB | 快捷槽位LMB（默认Magic Missile） | RMB | 快捷槽位RMB（默认Fireball） |
-| Shift | 快捷槽位Shift | Space | 快捷槽位Space |
-| Z | Freezing Spear | X | Prayer |
-| C | Heal | 2 | Teleport |
-| 3 | Mist Fog | 4 | Wrath of God |
-| Q | Telekinesis | R | Sacrifice |
-| E | Holy Light | U | Fire Walk |
-| F | Meteor | G | Armageddon |
-| H | Poison Cloud | V | Fortuna |
-| B | Dark Ritual | N | Nova |
-| **I** | **Ball Lightning** | **O** | **Chain Lightning** |
-
-**快捷槽位说明**：
-- LMB/RMB/Shift/Space 不再是固定技能，而是可自定义的快捷槽位
-- **分配方式**：
-  - LMB/RMB：在技能栏图标上**点击鼠标左键/右键**即可分配
-  - Shift/Space：**鼠标悬浮**在技能图标上，按 Shift 或 Space 键分配
-- 分配后图标显示在对应槽位中，右下角有快捷键小字提示
-- 快捷槽位配置会随存档保存/读取
+### 12. Ball Lightning 行为
+- 在鼠标光标位置生成
+- 生成点 130px 范围内随机游荡
+- 检测 100px 内的敌人
+- 攻击时蓝白色激光束特效
+- 每次攻击间隔 1 秒，最多攻击 5 次
+- 最大存活时间 10 秒
 
 ---
 
-## 必读文档
+## 存档格式说明
 
-1. `DEVELOPER_HANDOVER.md` — 完整项目文档
-2. `SPELL_DEVELOPMENT_GUIDE.md` — 技能开发规范（必须遵守）
-3. `NAMING_CONVENTIONS.md` — 命名规范（文件、节点、代码）
-4. `evil_invasion_spell.xlsx` — 技能数值参考（唯一可信来源）
-
----
-
-## 用户偏好
-
-- 使用中文交流
-- 重视视觉效果还原
-- "一个技能一个场景"的架构
-- 数值以他采集的游戏数据为准，不要相信反编译提取的数据
-- 习惯逐个技能测试、逐个修改的方式
+- **存档位置**: `user://saves/save_X.json`
+- **保存**: F5
+- **读取**: F10
+- **自动存档**: Quest 模式通关时自动保存
 
 ---
 
-**祝开发顺利！**
+## 原版提取资源已就绪
+
+`Extracted_Textures/` 目录中包含：
+- `Textures_Scrap_RGBA.png` — 合成后的完整精灵图（2048×2048）
+- `hero_frames/` — 英雄所有动画帧（82帧）
+- `各怪物_frames/` — 怪物动画帧
+- `map_tex_0~5_1024x1024.dds` — 6张地图纹理
+- `sound_0~67.ogg` — 68个音效

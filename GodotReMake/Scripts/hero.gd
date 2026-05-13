@@ -14,8 +14,6 @@ extends CharacterBody2D
 # - Sprite2D: 角色精灵图
 #   - Muzzle: 发射口（技能从这里发射）
 # - CastCooldown: 计时器（控制技能冷却）
-# - HealthBar: 头顶血条
-# - ManaBar: 头顶蓝条
 # - LevelLabel: 头顶等级标签
 #
 # 技能施放流程：
@@ -49,13 +47,11 @@ const ChainLightning = preload("res://Scripts/Spells/chain_lightning.gd")
 
 # 基础移动速度（像素/秒）
 # 原版公式：DEXTERITY_ON_SPEED = 0.5, START_VALUE = 65
-# 原版公式：STAMINA_ON_SPEED = 0.35, START_VALUE = 0
-# 实际速度 = 65 + 敏捷×0.5 + 耐力×0.35
 const BASE_MOVE_SPEED := 65.0
 
 # 加速度和摩擦力（用于平滑移动）
 # 值越大，角色启动和停止越快
-@export var acceleration := 1200.0
+@export var acceleration := 700.0
 @export var friction := 800.0
 
 # @onready 表示在节点_ready()时自动获取这些子节点
@@ -102,13 +98,38 @@ var prayer_active := false      # 祈祷技能是否激活
 # 原版：被攻击后一段时间内不能施法，移动速度降低
 var hit_recovery_timer := 0.0   # 受击恢复剩余时间
 
+# 行走动画
+var walk_frame := 0             # 当前帧索引
+var walk_timer := 0.0           # 帧计时器
+var was_moving := false         # 上一帧是否在移动
+const FRAME_W := 48             # 每帧宽度
+const FRAME_H := 48             # 每帧高度
+const FRAME_GAP := 2            # 帧间距
+const ANIM_SPEED := 0.1         # 走步每帧间隔（秒）
+
+# 攻击动画
+var is_attacking := false
+var attack_frame := 0
+var attack_timer := 0.0
+const ATTACK_FRAME_COUNT := 16  # 攻击动画总帧数
+const ATTACK_SPEED := 0.06      # 攻击每帧间隔（秒）
+const ATTACK_TEXTURE := preload("res://Art/Placeholder/hero_attack.png")
+const WALK_TEXTURE := preload("res://Art/Placeholder/hero_walk.png")
+const IDLE_TEXTURE := preload("res://Art/Placeholder/hero_idle_0.png")
+const DEATH_TEXTURE := preload("res://Art/Placeholder/hero_death.png")
+
+# 死亡动画
+var is_dying := false
+var death_frame := 0
+var death_timer := 0.0
+const DEATH_FRAME_COUNT := 16
+const DEATH_SPEED := 0.08
+
 # ============================================
 # 生命周期函数
 # ============================================
 
 func _ready():
-	Global.health_changed.connect(_on_health_changed)
-	Global.mana_changed.connect(_on_mana_changed)
 	Global.level_changed.connect(_on_level_changed)
 	Global.hero_died.connect(_on_died)
 	Global.skill_level_changed.connect(_on_skill_level_changed)
@@ -129,7 +150,7 @@ func _process(delta):
 
 	sprite.rotation = global_position.angle_to_point(mouse_pos)
 
-	update_hud()
+	_update_walk_animation(delta)
 
 	# 处理受击恢复计时器
 	if hit_recovery_timer > 0:
@@ -220,7 +241,6 @@ func _restore_hero_state():
 	global_position = Global.hero_save_position
 	for skill in skill_cooldowns.keys():
 		skill_cooldowns[skill] = 0.0
-	update_hud()
 
 func _on_load_game_started():
 	for skill in skill_cooldowns.keys():
@@ -254,6 +274,60 @@ func get_move_speed() -> float:
 	
 	return base_speed
 
+func _update_walk_animation(delta):
+	if is_dying:
+		death_timer += delta
+		if death_timer >= DEATH_SPEED:
+			death_timer = 0.0
+			death_frame += 1
+			if death_frame >= DEATH_FRAME_COUNT:
+				is_dying = false
+				_die_finished()
+				return
+		var x = death_frame * (FRAME_W + FRAME_GAP)
+		sprite.region_rect = Rect2(x, 0, FRAME_W, FRAME_H)
+		return
+
+	if is_attacking:
+		attack_timer += delta
+		if attack_timer >= ATTACK_SPEED:
+			attack_timer = 0.0
+			attack_frame += 1
+			if attack_frame >= ATTACK_FRAME_COUNT:
+				is_attacking = false
+				attack_frame = 0
+				sprite.texture = WALK_TEXTURE
+		if is_attacking:
+			var x = attack_frame * (FRAME_W + FRAME_GAP)
+			sprite.region_rect = Rect2(x, 0, FRAME_W, FRAME_H)
+		return
+
+	var input_dir = Input.get_vector("move_left", "move_right", "move_up", "move_down")
+	var is_moving = input_dir.length() > 0
+	if is_moving:
+		if sprite.texture != WALK_TEXTURE:
+			sprite.texture = WALK_TEXTURE
+		walk_timer += delta
+		if walk_timer >= ANIM_SPEED:
+			walk_timer = 0.0
+			walk_frame = (walk_frame + 1) % 16
+		var x = walk_frame * (FRAME_W + FRAME_GAP)
+		sprite.region_rect = Rect2(x, 0, FRAME_W, FRAME_H)
+	else:
+		sprite.texture = IDLE_TEXTURE
+		sprite.region_rect = Rect2(0, 0, FRAME_W, FRAME_H)
+		walk_frame = 0
+		walk_timer = 0.0
+	was_moving = is_moving
+
+func start_attack():
+	if is_attacking:
+		return
+	is_attacking = true
+	attack_frame = 0
+	attack_timer = 0.0
+	sprite.texture = ATTACK_TEXTURE
+
 func _physics_process(delta):
 	# 物理帧执行：处理移动和碰撞
 	
@@ -261,8 +335,8 @@ func _physics_process(delta):
 	# 返回Vector2，例如按W返回(0, -1)
 	var input_dir = Input.get_vector("move_left", "move_right", "move_up", "move_down")
 	
-	# 计算目标速度 = 方向 × 移动速度 × 全局速度倍率（药水等）
-	var target_velocity = input_dir * get_move_speed() * Global.speed_multiplier
+	# 计算目标速度 = 方向 × 移动速度（get_move_speed 内部已含 speed_multiplier）
+	var target_velocity = input_dir * get_move_speed()
 	
 	# 平滑过渡到目标速度（加速度效果）
 	velocity = velocity.move_toward(target_velocity, acceleration * delta)
@@ -331,63 +405,80 @@ func _unhandled_input(event):
 		cast_chain_lightning()
 
 func cast_magic_missile():
+	start_attack()
 	MagicMissile.cast(self, mouse_pos, skill_cooldowns)
 
 func cast_fireball():
+	start_attack()
 	Fireball.cast(self, mouse_pos, skill_cooldowns)
 
 func cast_freezing_spear():
+	start_attack()
 	FreezingSpear.cast(self, mouse_pos, skill_cooldowns)
 
 func cast_prayer():
+	start_attack()
 	Prayer.cast(self, mouse_pos, skill_cooldowns)
 
 func cast_heal():
+	start_attack()
 	Heal.cast(self, mouse_pos, skill_cooldowns)
 
 func cast_teleport():
 	Teleport.cast(self, mouse_pos, skill_cooldowns)
 
 func cast_mistfog():
+	start_attack()
 	MistFog.cast(self, mouse_pos, skill_cooldowns)
 
 func cast_wrath_of_god():
+	start_attack()
 	WrathOfGod.cast(self, mouse_pos, skill_cooldowns)
 
 func cast_telekinesis():
 	Telekinesis.cast(self, mouse_pos, skill_cooldowns)
 
 func cast_sacrifice():
+	start_attack()
 	Sacrifice.cast(self, mouse_pos, skill_cooldowns)
 
 func cast_holy_light():
+	start_attack()
 	HolyLight.cast(self, mouse_pos, skill_cooldowns)
 
 func cast_fire_walk():
+	start_attack()
 	FireWalk.cast(self, mouse_pos, skill_cooldowns)
 
 func cast_meteor():
+	start_attack()
 	Meteor.cast(self, mouse_pos, skill_cooldowns)
 
 func cast_armageddon():
+	start_attack()
 	Armageddon.cast(self, mouse_pos, skill_cooldowns)
 
 func cast_poison_cloud():
+	start_attack()
 	PoisonCloud.cast(self, mouse_pos, skill_cooldowns)
 
 func cast_fortuna():
 	Fortuna.cast(self, mouse_pos, skill_cooldowns)
 
 func cast_dark_ritual():
+	start_attack()
 	DarkRitual.cast(self, mouse_pos, skill_cooldowns)
 
 func cast_nova():
+	start_attack()
 	Nova.cast(self, mouse_pos, skill_cooldowns)
 
 func cast_ball_lightning():
+	start_attack()
 	BallLightning.cast(self, mouse_pos, skill_cooldowns)
 
 func cast_chain_lightning():
+	start_attack()
 	ChainLightning.cast(self, mouse_pos, skill_cooldowns)
 
 func _cast_skill_by_id(skill_id: String):
@@ -430,19 +521,10 @@ func _get_quick_slot_skill(slot: String) -> String:
 			return s if not s.is_empty() else "heal"
 
 
-func update_hud():
-	$HealthBar.value = Global.health / Global.max_health * 100.0
-	$ManaBar.value = Global.mana / Global.max_mana * 100.0
-	$LevelLabel.text = "Lv." + str(Global.hero_level)
-
-func _on_health_changed(h, _mh):
-	$HealthBar.value = h / Global.max_health * 100.0
-
-func _on_mana_changed(m, _mm):
-	$ManaBar.value = m / Global.max_mana * 100.0
-
 func _on_level_changed(lvl):
-	$LevelLabel.text = "Lv." + str(lvl)
+	var level_label = get_node_or_null("LevelLabel")
+	if level_label:
+		level_label.text = "Lv." + str(lvl)
 	show_level_up_effect()
 
 func _on_skill_level_changed(skill_id: String, _level: int):
@@ -460,16 +542,21 @@ func _on_hero_took_damage(_amount: float, _is_magic: bool, attacker: Node):
 		# 每次受击刷新恢复时间
 		Global.is_in_hit_recovery = true
 		hit_recovery_timer = Global.hit_recovery_time
+		
+		var cam = get_viewport().get_camera_2d()
+		if cam and cam.has_method("shake"):
+			cam.shake(3.0)
 
 func show_level_up_effect():
-	var glow = ColorRect.new()
-	glow.color = Color(1.0, 0.9, 0.3, 0.5)
-	glow.size = Vector2(128, 128)
-	glow.position = Vector2(-64, -64)
+	var glow = Sprite2D.new()
+	glow.texture = _create_circle_texture(24, Color(1.0, 0.9, 0.3))
+	glow.modulate = Color(1.0, 0.9, 0.3, 0.5)
+	glow.scale = Vector2(1.0, 1.0)
 	add_child(glow)
 	
 	var tween = create_tween()
-	tween.tween_property(glow, "color:a", 0.0, 2.0)
+	tween.tween_property(glow, "modulate:a", 0.0, 2.0)
+	tween.parallel().tween_property(glow, "scale", Vector2(1.8, 1.8), 2.0)
 	tween.tween_callback(glow.queue_free)
 	
 	var label = Label.new()
@@ -483,13 +570,35 @@ func show_level_up_effect():
 	label_tween.parallel().tween_property(label, "modulate:a", 0.0, 2.0)
 	label_tween.tween_callback(label.queue_free)
 
+static func _create_circle_texture(radius: int, color: Color = Color.WHITE) -> ImageTexture:
+	var diameter = radius * 2
+	var image = Image.create(diameter, diameter, false, Image.FORMAT_RGBA8)
+	image.fill(Color(0, 0, 0, 0))
+	var center = Vector2(radius, radius)
+	var radius_sq = radius * radius
+	for y in range(diameter):
+		for x in range(diameter):
+			if Vector2(x, y).distance_squared_to(center) <= radius_sq:
+				image.set_pixel(x, y, color)
+	return ImageTexture.create_from_image(image)
+
 func _on_died():
-	visible = false
+	if is_dying:
+		return
 	set_process(false)
 	set_physics_process(false)
 	set_process_unhandled_input(false)
 	
-	# Survival模式：显示GameOverScreen
+	is_dying = true
+	death_frame = 0
+	death_timer = 0.0
+	sprite.texture = DEATH_TEXTURE
+	set_process(true)
+
+func _die_finished():
+	visible = false
+	set_process(false)
+	
 	if Global.current_game_mode == Global.GameMode.SURVIVAL:
 		var game_over_scene = preload("res://Scenes/GameOverScreen.tscn")
 		var game_over = game_over_scene.instantiate()
@@ -503,11 +612,9 @@ func _on_died():
 
 func respawn():
 	Global.reset()
-	# 重置受击恢复状态
 	hit_recovery_timer = 0.0
 	Global.is_in_hit_recovery = false
 	visible = true
 	set_process(true)
 	set_physics_process(true)
 	set_process_unhandled_input(true)
-	update_hud()

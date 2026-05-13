@@ -44,7 +44,7 @@ static func cast(hero: Node, mouse_pos: Vector2, skill_cooldowns: Dictionary) ->
 
 static func _is_valid_teleport_position(hero: Node, pos: Vector2) -> bool:
 	var margin = 32.0
-	if pos.x < margin or pos.x > 2560.0 - margin or pos.y < margin or pos.y > 2560.0 - margin:
+	if pos.x < margin or pos.x > 1024.0 - margin or pos.y < margin or pos.y > 1024.0 - margin:
 		return false
 	var space_state = hero.get_viewport().get_world_2d().direct_space_state
 	var shape = CircleShape2D.new()

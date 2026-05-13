@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3]
 
 [ext_resource type="Script" path="res://Scripts/Monsters/monster_reaper.gd" id="1_reaper"]
-[ext_resource type="Texture2D" path="res://Art/Placeholder/monster_reaper.png" id="2_reaper"]
+[ext_resource type="Texture2D" path="res://Art/Placeholder/monster_reaper_walk.png" id="2_reaper"]
 [ext_resource type="PackedScene" path="res://Scenes/MonsterArrow.tscn" id="3_flame"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_reaper"]
@@ -11,15 +11,7 @@ size = Vector2(32, 32)
 collision_layer = 4
 collision_mask = 2
 script = ExtResource("1_reaper")
-move_speed = 75.0
-health = 35.0
-max_health = 35.0
-damage = 6.0
-collision_damage = 2.0
-experience_reward = 70
-detection_range = 450.0
-attack_range = 40.0
-attack_cooldown = 1.8
+optimal_range = 400.0
 flame_scene = ExtResource("3_flame")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
@@ -27,6 +19,8 @@ shape = SubResource("RectangleShape2D_reaper")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("2_reaper")
+region_enabled = true
+region_rect = Rect2(0, 0, 48, 48)
 
 [node name="HealthBar" type="ProgressBar" parent="."]
 visible = false

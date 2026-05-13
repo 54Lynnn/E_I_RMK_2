@@ -125,6 +125,8 @@ func _process_attack_cycle(delta):
 		# 【前摇阶段】站定瞄准，不能移动
 		velocity = Vector2.ZERO
 		current_state = State.ATTACK
+		if target:
+			rotate_towards(global_position.direction_to(target.global_position), delta)
 		
 		# 前摇时间到，发射弓箭
 		if attack_timer >= ATTACK_WINDUP:
@@ -152,6 +154,7 @@ func _start_attack():
 	attack_phase = "windup"    # 进入前摇阶段
 	attack_timer = 0.0         # 重置计时器
 	can_attack = false         # 开始冷却
+	play_attack_animation()    # 播放攻击动画
 
 # ============================================
 # 取消攻击

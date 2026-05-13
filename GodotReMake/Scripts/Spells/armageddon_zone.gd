@@ -3,7 +3,7 @@ extends Node2D
 @export var damage := 250.0
 @export var explosion_radius := 56.0
 @export var damage_element := "fire"
-@export var map_size := Vector2(2560, 2560)
+@export var map_size := Vector2(1536, 1536)
 @export var drop_interval := 0.2
 @export var meteors_per_drop := 12
 @export var duration := 2.0

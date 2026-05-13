@@ -15,9 +15,9 @@ static var base_damage := 40.0            # 基础伤害值
 static var damage_element := "fire"       # 伤害元素类型（fire系技能）
 
 # 爆炸半径配置
-# LV1=60, LV10=70（原版数据，每级+1）
+# LV1=56, LV10=66（原版数据，每级+1）
 static func get_explosion_radius(level: int) -> float:
-	return 60.0 + level * 1.0
+	return 56.0 + level * 1.0
 
 # 伤害值配置
 # LV1=50, LV10=100（原版数据，每级+10）

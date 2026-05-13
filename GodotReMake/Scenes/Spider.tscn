@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3]
 
 [ext_resource type="Script" path="res://Scripts/Monsters/monster_spider.gd" id="1"]
-[ext_resource type="Texture2D" path="res://Art/Placeholder/monster_spider.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/Placeholder/monster_spider_walk.png" id="2"]
 
 [sub_resource type="RectangleShape2D" id="1"]
 size = Vector2(32, 32)
@@ -10,14 +10,14 @@ size = Vector2(32, 32)
 collision_layer = 4
 collision_mask = 2
 script = ExtResource("1")
-detection_range = 300.0
-attack_range = 40.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("1")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("2")
+region_enabled = true
+region_rect = Rect2(0, 0, 48, 48)
 
 [node name="HealthBar" type="ProgressBar" parent="."]
 visible = false

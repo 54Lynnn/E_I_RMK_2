@@ -120,6 +120,8 @@ func _process_attack_cycle(delta):
 		# 【前摇阶段】站定瞄准
 		velocity = Vector2.ZERO
 		current_state = State.ATTACK
+		if target:
+			rotate_towards(global_position.direction_to(target.global_position), delta)
 		
 		# 前摇时间到，开始发射3个火焰
 		if attack_timer >= ATTACK_WINDUP:

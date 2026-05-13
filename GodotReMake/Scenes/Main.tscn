@@ -9,38 +9,38 @@
 [ext_resource type="PackedScene" uid="uid://pausemenu" path="res://Scenes/PauseMenu.tscn" id="7"]
 
 [sub_resource type="RectangleShape2D" id="1"]
-size = Vector2(32, 2560)
+size = Vector2(32, 1536)
 
 [sub_resource type="RectangleShape2D" id="2"]
-size = Vector2(2560, 32)
+size = Vector2(1536, 32)
 
 [node name="Main" type="Node2D" unique_id=1226489388]
 
 [node name="Ground" type="Sprite2D" parent="." unique_id=1395125842]
-scale = Vector2(20, 20)
+scale = Vector2(12, 12)
 texture = ExtResource("5")
 centered = false
 
 [node name="WorldBounds" type="StaticBody2D" parent="." unique_id=1305429113]
 
 [node name="WallLeft" type="CollisionShape2D" parent="WorldBounds" unique_id=314023471]
-position = Vector2(-16, 1280)
+position = Vector2(-16, 768)
 shape = SubResource("1")
 
 [node name="WallRight" type="CollisionShape2D" parent="WorldBounds" unique_id=1985504645]
-position = Vector2(2576, 1280)
+position = Vector2(1552, 768)
 shape = SubResource("1")
 
 [node name="WallTop" type="CollisionShape2D" parent="WorldBounds" unique_id=800670782]
-position = Vector2(1280, -16)
+position = Vector2(768, -16)
 shape = SubResource("2")
 
 [node name="WallBottom" type="CollisionShape2D" parent="WorldBounds" unique_id=1882029871]
-position = Vector2(1280, 2576)
+position = Vector2(768, 1552)
 shape = SubResource("2")
 
 [node name="HeroUnit" parent="." unique_id=310441117 instance=ExtResource("3")]
-position = Vector2(1280, 1280)
+position = Vector2(768, 768)
 
 [node name="MonsterSpawner" type="Node2D" parent="." unique_id=1601615023]
 position = Vector2(640, 640)

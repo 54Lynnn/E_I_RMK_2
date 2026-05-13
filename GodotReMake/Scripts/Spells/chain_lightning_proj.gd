@@ -91,13 +91,31 @@ func _find_next_target() -> Node:
 
 func _spawn_hit_effect(pos: Vector2):
 	var bolt = Sprite2D.new()
+	bolt.texture = _get_hit_circle()
 	bolt.modulate = Color(1.0, 0.9, 0.3, 0.9)
-	bolt.scale = Vector2(1.0, 1.0)
+	bolt.scale = Vector2(0.5, 0.5)
 	bolt.global_position = pos
 	get_parent().add_child(bolt)
 	var btween = bolt.create_tween()
-	btween.tween_property(bolt, "modulate:a", 0.0, 0.3)
+	btween.tween_property(bolt, "scale", Vector2(1.0, 1.0), 0.3)
+	btween.parallel().tween_property(bolt, "modulate:a", 0.0, 0.3)
 	btween.tween_callback(bolt.queue_free)
+
+static var _hit_circle_tex: ImageTexture = null
+static func _get_hit_circle() -> ImageTexture:
+	if _hit_circle_tex == null:
+		var radius = 8
+		var diameter = radius * 2
+		var image = Image.create(diameter, diameter, false, Image.FORMAT_RGBA8)
+		image.fill(Color(0, 0, 0, 0))
+		var center = Vector2(radius, radius)
+		var radius_sq = radius * radius
+		for y in range(diameter):
+			for x in range(diameter):
+				if Vector2(x, y).distance_squared_to(center) <= radius_sq:
+					image.set_pixel(x, y, Color(1.0, 0.85, 0.1))
+		_hit_circle_tex = ImageTexture.create_from_image(image)
+	return _hit_circle_tex
 
 func _spawn_chain_effect(from_pos: Vector2, to_pos: Vector2):
 	var beam = Line2D.new()

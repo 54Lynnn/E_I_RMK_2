@@ -72,7 +72,7 @@ const MONSTER_DATA := {
 		"damage_base": 5.0,
 		"damage_per_level": 1.0,
 		"collision_damage": 2.0,
-		"detection_range": 400.0,
+		"detection_range": 350.0,
 		"min_distance": 40.0,
 		"rotation_speed": 0.5,
 		"description": "Weak melee fighter."
@@ -90,7 +90,7 @@ const MONSTER_DATA := {
 		"damage_base": 6.0,
 		"damage_per_level": 1.5,
 		"collision_damage": 2.0,
-		"detection_range": 400.0,
+		"detection_range": 350.0,
 		"min_distance": 40.0,
 		"rotation_speed": 0.75,
 		"description": "Tough though stupid insect."
@@ -144,7 +144,7 @@ const MONSTER_DATA := {
 		"damage_base": 10.0,
 		"damage_per_level": 2.5,
 		"collision_damage": 5.0,
-		"detection_range": 400.0,
+		"detection_range": 350.0,
 		"min_distance": 40.0,
 		"rotation_speed": 0.6,
 		"description": "Strong melee fighter."
