@@ -12,8 +12,6 @@ var _lifetime_timer := 0.0
 
 func _ready():
 	body_entered.connect(_on_body_entered)
-	var timer = get_tree().create_timer(lifetime)
-	timer.timeout.connect(_return_to_pool)
 
 func reset_for_pool():
 	speed = 300.0

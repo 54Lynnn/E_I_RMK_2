@@ -7,10 +7,6 @@ var _default_pool_sizes := {
 	"res://Scenes/MagicMissile.tscn": 15,
 	"res://Scenes/NovaProj.tscn": 10,
 	"res://Scenes/ChainLightningProj.tscn": 10,
-	"res://Scenes/Explosion.tscn": 20,
-	"res://Scenes/FireWalk.tscn": 5,
-	"res://Scenes/PoisonCloud.tscn": 5,
-	"res://Scenes/Meteor.tscn": 5,
 	"res://Scenes/ArmageddonZone.tscn": 5,
 	"res://Scenes/MonsterArrow.tscn": 15,
 }

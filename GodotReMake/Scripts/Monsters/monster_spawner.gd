@@ -9,30 +9,13 @@ enum SpawnPattern { SINGLE, LINE, GROUP, ALL_SIDES }
 @export var spawn_margin := 80.0
 
 var active_monsters := 0
-var diablo_monsters := []  # 追踪所有Diablo实例
+var diablo_monsters := []
 
 # 四种生成模式的定时器
 var timer_target_single := 0.0
 var timer_target_line := 0.0
 var timer_target_group := 0.0
 var timer_target_all_sides := 0.0
-
-func _get_max_monsters() -> int:
-	var level = Global.hero_level
-	if level < 5:
-		return 25
-	elif level < 10:
-		return 30
-	elif level < 15:
-		return 35
-	elif level < 20:
-		return 40
-	elif level < 30:
-		return 45
-	elif level < 40:
-		return 50
-	else:
-		return 60
 
 var monster_scenes := {
 	"troll": preload("res://Scenes/Troll.tscn"),
@@ -62,29 +45,21 @@ func _set_new_timer_targets():
 	timer_target_all_sides = randf_range(38.0, 42.0)
 
 func _process(delta):
-	var max_monsters = _get_max_monsters()
-	var at_cap = active_monsters >= max_monsters
-
-	# 单个生成（SINGLE）—— 只受软上限影响
 	timer_target_single -= delta
 	if timer_target_single <= 0:
 		timer_target_single = randf_range(1.0, 3.0)
-		if not at_cap:
-			_spawn_pattern(SpawnPattern.SINGLE)
+		_spawn_pattern(SpawnPattern.SINGLE)
 
-	# 整排生成（LINE）—— 不受上限影响，确保每轮都有大波怪物
 	timer_target_line -= delta
 	if timer_target_line <= 0:
 		timer_target_line = randf_range(18.0, 22.0)
 		_spawn_pattern(SpawnPattern.LINE)
 
-	# 编组生成（GROUP）—— 不受上限影响
 	timer_target_group -= delta
 	if timer_target_group <= 0:
 		timer_target_group = randf_range(8.0, 12.0)
 		_spawn_pattern(SpawnPattern.GROUP)
 
-	# 全边界生成（ALL_SIDES）—— 9级解锁，不受上限影响
 	var all_sides_unlocked := true
 	if Global.current_game_mode == Global.GameMode.QUEST and Global.hero_level < 17:
 		all_sides_unlocked = false
