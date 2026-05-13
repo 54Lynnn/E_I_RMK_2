@@ -22,10 +22,14 @@ func reset_for_pool():
 	damage_element = "water"
 	direction = Vector2.RIGHT
 	has_exploded = false
+	monitoring = false
 
 func _physics_process(delta):
 	if has_exploded:
 		return
+
+	if not monitoring:
+		monitoring = true
 	position += direction * speed * delta
 
 func _on_body_entered(body):

@@ -26,10 +26,14 @@ func reset_for_pool():
 	is_moving = true
 	bounce_count = 0
 	hit_monsters.clear()
+	monitoring = false
 
 func _physics_process(delta):
 	if not is_moving:
 		return
+
+	if not monitoring:
+		monitoring = true
 
 	if current_target != null and is_instance_valid(current_target):
 		var target_pos = current_target.global_position

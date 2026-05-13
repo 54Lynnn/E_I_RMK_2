@@ -370,7 +370,12 @@ func _on_skill_button_gui_input(event: InputEvent, skill_id: String):
 		return
 	
 	if event.button_index == MOUSE_BUTTON_LEFT:
-		Global.quick_slot_lmb = skill_id
+		if Input.is_key_pressed(KEY_SHIFT):
+			Global.quick_slot_shift = skill_id
+		elif Input.is_key_pressed(KEY_SPACE):
+			Global.quick_slot_space = skill_id
+		else:
+			Global.quick_slot_lmb = skill_id
 		_update_quick_slot_display()
 		get_viewport().set_input_as_handled()
 	elif event.button_index == MOUSE_BUTTON_RIGHT:

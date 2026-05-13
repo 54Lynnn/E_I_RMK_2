@@ -429,6 +429,85 @@ static func cast(hero: Node, mouse_pos: Vector2, skill_cooldowns: Dictionary) ->
 
 ---
 
+## 对象池使用规范（v8 新增）
+
+### 1. 何时使用对象池
+
+**适合池化的对象**：
+- 使用 `_process()` 或 `_physics_process()` 管理生命周期的对象（投射物、弹幕等）
+- 高频创建/销毁的对象（每秒多次）
+- 生命周期较长的对象（>1秒）
+
+**不适合池化的对象**：
+- 使用 `_ready()` 中 tween/timer 的短命特效（<1秒，如 Explosion、MeteorSingle）
+- 一次性使用的 UI 元素
+
+### 2. 池化对象必须实现的方法
+
+```gdscript
+func reset_for_pool():
+    # 重置所有 @export 变量到默认值
+    speed = 500
+    damage = 10.0
+    # ... 其他属性 ...
+    
+    # 重置运行时状态
+    direction = Vector2.RIGHT
+    start_position = Vector2.ZERO
+    life_time = 0.0
+    
+    # ⚠️ 重要：禁用碰撞检测，防止出生瞬间误触发
+    monitoring = false
+```
+
+### 3. 出生保护模式（重要！）
+
+所有池化的 Area2D 对象必须实现出生保护：
+
+```gdscript
+func _process(delta):
+    # 首帧启用碰撞检测（出生保护）
+    if not monitoring:
+        monitoring = true
+    
+    # ... 正常逻辑 ...
+```
+
+**原因**：对象从池中取出并 `add_child()` 后，如果出生位置与怪物重叠，`body_entered`/`area_entered` 信号会在第 0 帧立即触发，导致对象瞬间销毁。
+
+### 4. 获取和归还对象
+
+```gdscript
+# 获取（替代 instantiate）
+var obj = ObjectPool.get_object(MyScene)
+obj.global_position = muzzle.global_position
+obj.direction = direction
+obj.damage = damage
+get_parent().add_child(obj)
+
+# 归还（替代 queue_free）
+func destroy():
+    var explosion = ObjectPool.get_object(ExplosionScene)
+    explosion.global_position = global_position
+    get_parent().add_child(explosion)
+    ObjectPool.return_to_pool(self)
+```
+
+### 5. 注册新池化对象
+
+在 `object_pool.gd` 的 `_default_pool_sizes` 字典中添加：
+
+```gdscript
+var _default_pool_sizes := {
+    "res://Scenes/Projectile.tscn": 20,
+    "res://Scenes/MagicMissile.tscn": 15,
+    # 添加新对象
+    "res://Scenes/YourNewScene.tscn": 10,
+}
+```
+
+---
+
 ## 版本历史
 
 | 版本 | 日期 | 说明 |
@@ -438,3 +517,4 @@ static func cast(hero: Node, mouse_pos: Vector2, skill_cooldowns: Dictionary) ->
 | 1.2 | 2026-05-08 | 更新：新增 Prayer / Heal 技能规范，hero.gd 占位符模式说明 |
 | 1.3 | 2026-05-08 | 更新：全部21个技能重构完成，移除占位符模式说明，更新示例列表 |
 | 1.4 | 2026-05-08 | 更新：新增Ball Lightning和Chain Lightning技能，节点命名规范 |
+| 1.5 | 2026-05-14 | 更新：新增对象池使用规范，包括出生保护模式（monitoring = false） |

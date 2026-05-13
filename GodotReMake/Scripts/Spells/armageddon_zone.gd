@@ -13,6 +13,10 @@ const MeteorSingleScene = preload("res://Scenes/MeteorSingle.tscn")
 var life_time := 0.0
 var drop_timer := 0.0
 
+func reset_for_pool():
+	life_time = 0.0
+	drop_timer = 0.0
+
 func _process(delta):
 	life_time += delta
 	drop_timer += delta

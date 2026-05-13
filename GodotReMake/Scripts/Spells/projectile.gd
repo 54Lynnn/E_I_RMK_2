@@ -73,11 +73,15 @@ func reset_for_pool():
 	current_speed_factor = 0.0
 	life_time = 0.0
 	previous_direction = Vector2.RIGHT
+	monitoring = false
 
 func _process(delta):
 	if start_position == Vector2.ZERO:
 		start_position = global_position
 		direction = direction.normalized()
+
+	if not monitoring:
+		monitoring = true
 
 	life_time += delta
 

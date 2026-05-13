@@ -1,9 +1,9 @@
 # Evil Invasion (Godot 4.6 Remake) — 游戏系统设计文档
 
-> **文档版本**: 1.1
+> **文档版本**: 1.2
 > **引擎版本**: Godot 4.6.2-stable
 > **语言**: GDScript
-> **最后更新**: 2026-05-13（v6: 地图比例修正v2 + 质感到位 + 数值统一管理）
+> **最后更新**: 2026-05-14（v8: 快捷槽位修复 + 窗口分辨率调整 + 对象池出生保护）
 
 ---
 
@@ -899,12 +899,12 @@ HUD (Control)
 |:-----|:---------|:-----|
 | LMB | 点击技能图标（鼠标左键） | 在技能栏图标上点击左键 |
 | RMB | 点击技能图标（鼠标右键） | 在技能栏图标上点击右键 |
-| Shift | 悬浮 + 按 Shift 键 | 鼠标悬浮在技能图标上，按 Shift |
-| Space | 悬浮 + 按 Space 键 | 鼠标悬浮在技能图标上，按 Space |
+| Shift | Shift + 左键点击技能图标 | 按住 Shift 同时左键点击技能图标 |
+| Space | Space + 左键点击技能图标 | 按住 Space 同时左键点击技能图标 |
 
 **技术实现**：
 - `Global.gd`：`quick_slot_lmb/rmb/shift/space` 四个字符串变量存储技能ID
-- `hud.gd`：`hovered_skill_id` 追踪鼠标悬浮的技能，`_input()` 处理 Shift/Space 分配
+- `hud.gd`：`_on_skill_button_gui_input()` 中检测 `Input.is_key_pressed(KEY_SHIFT)` / `Input.is_key_pressed(KEY_SPACE)` 判断分配目标槽位
 - `hero.gd`：`_get_quick_slot_skill()` 根据槽位名获取技能ID，`_cast_skill_by_id()` 统一施法
 - `save_manager.gd`：快捷槽位配置随存档保存/读取
 - `project.godot`：`spell_shift` 和 `spell_space` 输入映射（物理键码 KEY_SHIFT / KEY_SPACE）

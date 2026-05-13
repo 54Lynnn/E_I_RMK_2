@@ -1,8 +1,8 @@
 # Evil Invasion Remake — 新 Agent 交接提示词
 
 > **发送给下一个 coding agent 的提示词**
-> **日期**: 2026-05-13
-> **最新更新**: v7 Agent — 对象池系统 + 刷怪修复 + Data.pak全量提取
+> **日期**: 2026-05-14
+> **最新更新**: v8 Agent — 对象池出生保护 + 快捷槽位修复 + 窗口分辨率调整
 > **GitHub仓库**: https://github.com/54Lynnn/E_I_RMK_2
 
 ---
@@ -16,7 +16,7 @@
 
 ---
 
-## 当前项目状态（2026-05-13）
+## 当前项目状态（2026-05-14）
 
 ### 已完成 ✅
 
@@ -40,8 +40,9 @@
 - [x] **技能栏冷却显示**：灰色扇形遮罩覆盖在技能图标上
 - [x] **怪物信息显示（Alt键切换）**
 - [x] **受击红晕（血量相关）**
-- [x] **快捷槽位系统（4槽位）**：LMB/RMB/Shift/Space
+- [x] **快捷槽位系统（4槽位）**：LMB/RMB/Shift/Space，Shift+左键/Space+左键分配
 - [x] **英雄面板UI优化**：暗色奇幻风布局，属性数值+评价显示，技能按钮元素系别颜色支持
+- [x] **窗口分辨率**：1024×960（底部HUD 86px + 游戏视口 874px）
 
 **技能系统（21个，全部独立场景+独立脚本）**：
 - [x] **数值来源**：`evil_invasion_spell.xlsx`
@@ -102,6 +103,13 @@
 - [x] Troll 绿色滤镜修复
 - [x] 清理废弃占位文件
 
+**Bug修复 🔧（v8 新增）**：
+- [x] **对象池出生保护**：所有池化 Area2D 对象（MagicMissile/Projectile/NovaProj/ChainLightningProj/MonsterArrow）在 `reset_for_pool()` 中设置 `monitoring = false`，首帧 `_process()` 再启用，防止出生瞬间与怪物碰撞体重叠导致立即销毁
+- [x] **Armageddon 重复施法修复**：`armageddon_zone.gd` 添加 `reset_for_pool()` 方法，重置 `life_time` 和 `drop_timer`，修复第二次施法不生成陨石的问题
+- [x] **快捷槽位 Shift/Space 分配修复**：从不可靠的"悬浮+按键"改为"Shift+左键点击"和"Space+左键点击"分配技能到对应槽位
+- [x] **窗口分辨率调整**：`viewport_height` 从 768 增加到 960，底部 HUD 不再挤压游戏视口
+- [x] **输入映射补充**：添加 `spell_shift` 和 `spell_space` 输入动作到 project.godot
+
 **Bug修复 🔧**：
 - [x] SpeedBoost速度加成重复应用两次
 - [x] 英雄面板速度显示基数 100→65
@@ -132,10 +140,11 @@
 
 ## ⚠️ 关键注意事项
 
-### 1. 地图与坐标系统（v6 更新！）
+### 1. 地图与坐标系统（v6 更新！v8 窗口调整）
 ```
 地图大小:  1536 × 1536 （=1024×1.5）
 英雄出生点: (768, 768) （地图中心）
+窗口分辨率: 1024 × 960 （v8: 从 768 增加到 960，底部 HUD 86px + 游戏视口 874px）
 墙壁边界: 厚度32px
    左墙: (-16, 768)  范围 32×1536
    右墙: (1552, 768) 范围 32×1536
@@ -159,7 +168,7 @@ Ground: scale=12 (128×12=1536)
 - **ALL_SIDES模式**：每38~42秒从四边各生成15只同种怪物（LV≥9解锁）
 - **注意**：以上刷怪参数（间隔/数量/解锁等级）**来源不确定**，基于之前开发者的反编译理解，Data.pak 中无对应配置文件。建议根据实际游戏体验调整。
 
-### 4. 对象池系统（v7 新增！）
+### 4. 对象池系统（v7 新增！v8 完善）
 - **Autoload 脚本**: `Scripts/object_pool.gd`
 - **使用方法**：
   ```gdscript
@@ -176,6 +185,21 @@ Ground: scale=12 (128×12=1536)
   - 使用 `_ready()` 中 tween/timer 的短命特效（<1s）不适合池化
   - 池化对象必须实现 `reset_for_pool()` 方法重置所有状态
   - 不要依赖 `_ready()` 做状态初始化（复用后不执行），改用 `_process()` 首帧检测
+- **⚠️ 出生保护（v8 新增）**：
+  - 所有池化的 Area2D 对象必须在 `reset_for_pool()` 中设置 `monitoring = false`
+  - 在首帧 `_process()` 中设置 `monitoring = true`
+  - 原因：对象从池中取出并 `add_child()` 后，如果出生位置与怪物重叠，`body_entered`/`area_entered` 信号会在第 0 帧立即触发，导致对象瞬间销毁
+  - 代码模式：
+    ```gdscript
+    func reset_for_pool():
+        # ... 重置其他属性 ...
+        monitoring = false
+    
+    func _process(delta):
+        if not monitoring:
+            monitoring = true
+        # ... 正常逻辑 ...
+    ```
 
 ### 5. 原版数据提取（v7 新增！）
 - **提取工具**：`e:\EvilInvasion\extract_all.py`（Python脚本，XOR 0xA5解密）

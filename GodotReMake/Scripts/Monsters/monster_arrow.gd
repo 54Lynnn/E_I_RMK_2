@@ -21,11 +21,15 @@ func reset_for_pool():
 	homing_target = null
 	homing_strength = 0.0
 	_lifetime_timer = 0.0
+	monitoring = false
 
 func _return_to_pool():
 	ObjectPool.return_to_pool(self)
 
 func _process(delta):
+	if not monitoring:
+		monitoring = true
+
 	if homing_target and homing_strength > 0:
 		var target_dir = global_position.direction_to(homing_target.global_position)
 		var current_angle = direction.angle()
