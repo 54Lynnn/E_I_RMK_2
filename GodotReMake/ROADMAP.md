@@ -2,7 +2,7 @@
 
 > 基于 Godot 4.6 的 Evil Invasion (2006) 复刻项目
 > 计划版本：v1.0 | 目标平台：Windows
-> **最后更新：2026-05-15（v10 Agent: Firewalk Toggle + 爆炸碰撞检测统一 + Controls Guide + 导出加密）**
+> **最后更新：2026-05-15（v10 Agent: Firewalk Toggle + 爆炸碰撞检测统一 + Controls Guide + 导出配置准备）**
 
 ---
 
@@ -237,7 +237,7 @@ GodotReMake/
 | **暂停时设置 Quickslot** | T+鼠标 | ✅ HeroPanel暂停时仍可设置 |
 | **Meteor/Armageddon 平衡** | F/G | ✅ 调整生成间隔/数量/贴图大小 |
 | **Autocast 间隔优化** | 右键设置 | ✅ 0.15s→0.1s |
-| **游戏导出加密配置** | - | ✅ export_presets.cfg 加密配置 |
+| **游戏导出配置准备** | - | ✅ export_presets.cfg 已配置加密参数（尚未实际导出exe） |
 
 ### 2.3 待解决的问题 🔧
 
@@ -1242,7 +1242,7 @@ Phase 6: 游戏模式与进度               🔧 部分完成
   ├── 🔧 关卡解锁持久化
   └── 🔧 Quest模式通关奖励
 Phase 7: 打磨与发布                   🔧 待实现
-  ├── ✅ 游戏导出加密配置（export_presets.cfg）
+  ├── ✅ 游戏导出配置准备（export_presets.cfg + export_game.ps1，尚未实际导出）
   ├── 🔧 下载导出模板完成导出
   └── 🔧 音效系统
 

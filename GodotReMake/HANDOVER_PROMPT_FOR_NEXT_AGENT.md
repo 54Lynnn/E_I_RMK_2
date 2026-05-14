@@ -3,7 +3,7 @@
 > **项目**: Evil Invasion (2006年Flash游戏) Godot 4.6 重制版
 > **引擎**: Godot 4.6.2
 > **GitHub**: https://github.com/54Lynnn/E_I_RMK_2
-> **最新更新**: v10 Agent — Firewalk Toggle重写 + 爆炸碰撞检测统一 + Controls Guide + 导出加密
+> **最新更新**: v10 Agent — Firewalk Toggle重写 + 爆炸碰撞检测统一 + Controls Guide + 导出配置准备
 
 ## 快速开始
 
@@ -29,7 +29,7 @@
 - **Controls Guide 操作指南**：主菜单和暂停菜单中增加操作指南图片浏览功能，玩家可查看所有快捷键说明
 - **Firewalk Toggle 重写**：将 firewalk 从普通技能重写为 toggle 类技能（按 U 开关），移动时每 30px 产生一团火焰，火焰使用 Area2D + CircleShape2D 物理碰撞检测伤害，每 0.1s 结算一次 DOT
 - **爆炸伤害检测统一**：将所有范围技能的伤害判定从"怪物节点原点距离"改为"物理碰撞体重叠检测"（Area2D.get_overlapping_bodies() / PhysicsShapeQueryParameters2D.intersect_shape()），怪物碰撞体接触到范围边缘即判伤
-- **游戏导出加密配置**：export_presets.cfg 配置加密（encrypt_pck=true, encrypt_directory=true, script_export_mode=1），创建一键导出脚本 export_game.ps1
+- **游戏导出配置准备**：export_presets.cfg 配置加密参数（encrypt_pck=true, encrypt_directory=true, script_export_mode=1），创建一键导出脚本 export_game.ps1。**注意：尚未实际导出 exe**，需下载 Godot 4.6.2 导出模板后执行脚本
 
 ### 🎯 技能与平衡调整
 - **Firewalk 参数**：无 mana cost，移动 30px 产生一团火焰，伤害半径 18px，火焰持续 2 秒（含 0.3s 渐隐），每 0.1s 结算一次 DOT
@@ -77,4 +77,4 @@
 2. **选项设置** — 音量/按键自定义/画面设置（优先级低）
 3. **地图纹理** — 6张 DDS 纹理已提取，替换当前绿色占位地面
 4. **音效系统** — 68个OGG已提取，需对接到各技能
-5. **游戏导出** — 已配置加密导出，需下载 Godot 4.6.2 导出模板后执行 export_game.ps1
+5. **游戏导出** — export_presets.cfg 已配置加密参数，export_game.ps1 已创建，需下载 Godot 4.6.2 导出模板后执行脚本完成导出

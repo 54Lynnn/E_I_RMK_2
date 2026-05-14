@@ -3,7 +3,7 @@
 > **文档版本**: 1.3
 > **引擎版本**: Godot 4.6.2-stable
 > **语言**: GDScript
-> **最后更新**: 2026-05-15（v10: Firewalk Toggle + 爆炸碰撞检测统一 + Controls Guide + 导出加密）
+> **最后更新**: 2026-05-15（v10: Firewalk Toggle + 爆炸碰撞检测统一 + Controls Guide + 导出配置准备）
 
 ---
 
