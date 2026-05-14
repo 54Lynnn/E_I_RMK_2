@@ -1,0 +1,120 @@
+[gd_scene format=3 uid="uid://dhnbyhp24ty1g"]
+
+[ext_resource type="Script" path="res://Scripts/high_scores.gd" id="1"]
+
+[node name="HighScores" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.08, 0.08, 0.12, 1.0)
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="TitleLabel" type="Label" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 36
+theme_override_colors/font_color = Color(0.85, 0.65, 0.2, 1.0)
+text = "Hall of Fame"
+horizontal_alignment = 1
+
+[node name="ModeTabs" type="HBoxContainer" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="SurvivalTab" type="Button" parent="CenterContainer/VBoxContainer/ModeTabs"]
+custom_minimum_size = Vector2(140, 36)
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Survival"
+
+[node name="QuestTab" type="Button" parent="CenterContainer/VBoxContainer/ModeTabs"]
+custom_minimum_size = Vector2(140, 36)
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Quest"
+
+[node name="HSeparator" type="HSeparator" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="ScoreList" type="VBoxContainer" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="HeaderRow" type="HBoxContainer" parent="CenterContainer/VBoxContainer/ScoreList"]
+layout_mode = 2
+
+[node name="RankHeader" type="Label" parent="CenterContainer/VBoxContainer/ScoreList/HeaderRow"]
+custom_minimum_size = Vector2(60, 30)
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+theme_override_colors/font_color = Color(0.7, 0.7, 0.5, 1.0)
+text = "Rank"
+horizontal_alignment = 1
+
+[node name="ScoreHeader" type="Label" parent="CenterContainer/VBoxContainer/ScoreList/HeaderRow"]
+custom_minimum_size = Vector2(120, 30)
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+theme_override_colors/font_color = Color(0.7, 0.7, 0.5, 1.0)
+text = "Score"
+horizontal_alignment = 1
+
+[node name="LevelHeader" type="Label" parent="CenterContainer/VBoxContainer/ScoreList/HeaderRow"]
+custom_minimum_size = Vector2(100, 30)
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+theme_override_colors/font_color = Color(0.7, 0.7, 0.5, 1.0)
+text = "Hero Level"
+horizontal_alignment = 1
+
+[node name="DateHeader" type="Label" parent="CenterContainer/VBoxContainer/ScoreList/HeaderRow"]
+custom_minimum_size = Vector2(120, 30)
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+theme_override_colors/font_color = Color(0.7, 0.7, 0.5, 1.0)
+text = "Date"
+horizontal_alignment = 1
+
+[node name="ScoreContainer" type="VBoxContainer" parent="CenterContainer/VBoxContainer/ScoreList"]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="EmptyLabel" type="Label" parent="CenterContainer/VBoxContainer/ScoreList/ScoreContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+theme_override_colors/font_color = Color(0.5, 0.5, 0.5, 1.0)
+text = "No scores yet!"
+horizontal_alignment = 1
+
+[node name="Spacer" type="Control" parent="CenterContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="BackButton" type="Button" parent="CenterContainer/VBoxContainer"]
+custom_minimum_size = Vector2(200, 40)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 22
+text = "Back"

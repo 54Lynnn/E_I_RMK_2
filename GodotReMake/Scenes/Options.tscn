@@ -1,0 +1,138 @@
+[gd_scene format=3 uid="uid://co1mkgqv6hcf6"]
+
+[ext_resource type="Script" path="res://Scripts/options.gd" id="1"]
+
+[node name="Options" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.08, 0.08, 0.12, 1.0)
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="TitleLabel" type="Label" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 36
+theme_override_colors/font_color = Color(0.85, 0.65, 0.2, 1.0)
+text = "Options"
+horizontal_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="GraphicsSection" type="VBoxContainer" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="GraphicsLabel" type="Label" parent="CenterContainer/VBoxContainer/GraphicsSection"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+theme_override_colors/font_color = Color(0.7, 0.7, 0.5, 1.0)
+text = "Graphics"
+
+[node name="ShowBloodRow" type="HBoxContainer" parent="CenterContainer/VBoxContainer/GraphicsSection"]
+layout_mode = 2
+
+[node name="ShowBloodLabel" type="Label" parent="CenterContainer/VBoxContainer/GraphicsSection/ShowBloodRow"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Show Blood"
+vertical_alignment = 1
+
+[node name="ShowBloodCheck" type="CheckBox" parent="CenterContainer/VBoxContainer/GraphicsSection/ShowBloodRow"]
+layout_mode = 2
+button_pressed = true
+
+[node name="HSeparator2" type="HSeparator" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="SoundSection" type="VBoxContainer" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="SoundLabel" type="Label" parent="CenterContainer/VBoxContainer/SoundSection"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+theme_override_colors/font_color = Color(0.7, 0.7, 0.5, 1.0)
+text = "Sound"
+
+[node name="EffectsVolRow" type="HBoxContainer" parent="CenterContainer/VBoxContainer/SoundSection"]
+layout_mode = 2
+
+[node name="EffectsVolLabel" type="Label" parent="CenterContainer/VBoxContainer/SoundSection/EffectsVolRow"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Effects Volume"
+vertical_alignment = 1
+
+[node name="EffectsVolSlider" type="HSlider" parent="CenterContainer/VBoxContainer/SoundSection/EffectsVolRow"]
+custom_minimum_size = Vector2(200, 30)
+layout_mode = 2
+max_value = 100
+value = 100
+step = 1
+
+[node name="EffectsVolValue" type="Label" parent="CenterContainer/VBoxContainer/SoundSection/EffectsVolRow"]
+custom_minimum_size = Vector2(40, 30)
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "100"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MusicVolRow" type="HBoxContainer" parent="CenterContainer/VBoxContainer/SoundSection"]
+layout_mode = 2
+
+[node name="MusicVolLabel" type="Label" parent="CenterContainer/VBoxContainer/SoundSection/MusicVolRow"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Music Volume"
+vertical_alignment = 1
+
+[node name="MusicVolSlider" type="HSlider" parent="CenterContainer/VBoxContainer/SoundSection/MusicVolRow"]
+custom_minimum_size = Vector2(200, 30)
+layout_mode = 2
+max_value = 100
+value = 100
+step = 1
+
+[node name="MusicVolValue" type="Label" parent="CenterContainer/VBoxContainer/SoundSection/MusicVolRow"]
+custom_minimum_size = Vector2(40, 30)
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "100"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Spacer" type="Control" parent="CenterContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="BackButton" type="Button" parent="CenterContainer/VBoxContainer"]
+custom_minimum_size = Vector2(200, 40)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 22
+text = "Back"
