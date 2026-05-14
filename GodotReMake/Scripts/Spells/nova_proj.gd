@@ -43,16 +43,20 @@ func _explode():
 		return
 	has_exploded = true
 
-	var monsters = get_tree().get_nodes_in_group("monsters")
-	for m in monsters:
-		if not is_instance_valid(m):
-			continue
-		var dist = global_position.distance_to(m.global_position)
-		if dist <= explosion_radius:
-			if m.has_method("take_damage"):
-				m.take_damage(damage, damage_element)
-			if m.has_method("apply_debuff"):
-				m.apply_debuff("frozen", freeze_duration, {}, damage_element)
+	var space_state = get_world_2d().direct_space_state
+	var query = PhysicsShapeQueryParameters2D.new()
+	var circle = CircleShape2D.new()
+	circle.radius = explosion_radius
+	query.shape = circle
+	query.transform = Transform2D(0, global_position)
+	query.collision_mask = 4
+	var results = space_state.intersect_shape(query)
+	for result in results:
+		var body = result.collider
+		if body and body.is_in_group("monsters") and body.has_method("take_damage"):
+			body.take_damage(damage, damage_element)
+		if body and body.is_in_group("monsters") and body.has_method("apply_debuff"):
+			body.apply_debuff("frozen", freeze_duration, {}, damage_element)
 
 	var explosion = ObjectPool.get_object(ExplosionScene)
 	explosion.global_position = global_position

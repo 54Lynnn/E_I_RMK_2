@@ -1,121 +1,51 @@
 extends Control
 
+signal guide_closed()
+
+const GUIDE_PREFIX := "res://Art/Guide/guide_"
+const GUIDE_COUNT := 3
+
+var _current_index := 0
+var _guide_textures := []
+
+@onready var _image := $CenterContainer/Panel/VBox/Image
+@onready var _prev_btn := $CenterContainer/Panel/Controls/PrevButton
+@onready var _next_btn := $CenterContainer/Panel/Controls/NextButton
+@onready var _close_btn := $CenterContainer/Panel/Controls/CloseButton
+@onready var _page_label := $CenterContainer/Panel/Controls/PageLabel
+
 func _ready():
-	_add_content()
+	_load_guides()
+	_prev_btn.pressed.connect(_on_prev)
+	_next_btn.pressed.connect(_on_next)
+	_close_btn.pressed.connect(_on_close)
+	_show_page(0)
 
-func _add_content():
-	var panel = $CenterContainer/Panel
-	var margin := MarginContainer.new()
-	margin.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	margin.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	margin.add_theme_constant_override("margin_left", 24)
-	margin.add_theme_constant_override("margin_right", 24)
-	margin.add_theme_constant_override("margin_top", 20)
-	margin.add_theme_constant_override("margin_bottom", 20)
-	panel.add_child(margin)
+func _load_guides():
+	for i in range(1, GUIDE_COUNT + 1):
+		var path := GUIDE_PREFIX + "%02d" % i + ".png"
+		if ResourceLoader.exists(path):
+			_guide_textures.append(load(path))
+		else:
+			_guide_textures.append(null)
 
-	var vbox := VBoxContainer.new()
-	vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	vbox.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	vbox.add_theme_constant_override("separation", 8)
-	margin.add_child(vbox)
+func _show_page(index: int):
+	if _guide_textures.is_empty():
+		return
+	_current_index = clampi(index, 0, _guide_textures.size() - 1)
+	_image.texture = _guide_textures[_current_index]
+	_page_label.text = "%d / %d" % [_current_index + 1, _guide_textures.size()]
+	_prev_btn.disabled = _current_index <= 0
+	_next_btn.disabled = _current_index >= _guide_textures.size() - 1
 
-	var title := Label.new()
-	title.text = "CONTROLS"
-	title.add_theme_font_size_override("font_size", 32)
-	title.add_theme_color_override("font_color", Color(0.85, 0.65, 0.2, 1.0))
-	title.add_theme_color_override("font_outline_color", Color(0, 0, 0, 0.5))
-	title.add_theme_constant_override("outline_size", 3)
-	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	vbox.add_child(title)
+func _on_prev():
+	_show_page(_current_index - 1)
 
-	var divider := ColorRect.new()
-	divider.custom_minimum_size = Vector2(0, 2)
-	divider.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	divider.color = Color(0.55, 0.35, 0.15, 0.6)
-	vbox.add_child(divider)
+func _on_next():
+	_show_page(_current_index + 1)
 
-	vbox.add_child(Control.new())
-
-	var sections := [
-		{"header": "MOVEMENT", "items": [
-			{"key": "W/A/S/D", "desc": "Move hero up/left/down/right"},
-			{"key": "Mouse", "desc": "Aim - hero faces the cursor"},
-		]},
-		{"header": "COMBAT", "items": [
-			{"key": "LMB (hold)", "desc": "Cast left quick slot skill (default: Magic Missile)"},
-			{"key": "RMB (hold)", "desc": "Cast right quick slot skill (default: Fireball)"},
-			{"key": "Shift (hold)", "desc": "Cast shift quick slot skill (default: Freezing Spear)"},
-			{"key": "Space (hold)", "desc": "Cast space quick slot skill (default: Heal)"},
-		]},
-		{"header": "QUICK SLOTS", "items": [
-			{"key": "T / F2", "desc": "Open Hero Panel (pause game)"},
-			{"key": "Right-click skill icon", "desc": "Set skill to a quick slot (LMB/RMB/Shift/Space)"},
-			{"key": "Middle-click skill icon", "desc": "Toggle auto-cast for that skill"},
-		]},
-		{"header": "INTERFACE", "items": [
-			{"key": "ESC", "desc": "Pause menu"},
-			{"key": "T / F2", "desc": "Hero Panel - level up attributes and skills"},
-			{"key": "ALT (hold)", "desc": "Show monster health bars and damage numbers"},
-			{"key": "F4", "desc": "Toggle fullscreen"},
-		]},
-	]
-
-	for section in sections:
-		var header_label := Label.new()
-		header_label.text = section.header
-		header_label.add_theme_font_size_override("font_size", 22)
-		header_label.add_theme_color_override("font_color", Color(0.85, 0.65, 0.2, 1.0))
-		vbox.add_child(header_label)
-
-		for item in section.items:
-			var row := HBoxContainer.new()
-			row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-			row.add_theme_constant_override("separation", 12)
-
-			var key_label := Label.new()
-			key_label.text = item.key
-			key_label.add_theme_font_size_override("font_size", 16)
-			key_label.add_theme_color_override("font_color", Color(1.0, 0.85, 0.5, 1.0))
-			key_label.custom_minimum_size = Vector2(180, 0)
-			row.add_child(key_label)
-
-			var desc_label := Label.new()
-			desc_label.text = item.desc
-			desc_label.add_theme_font_size_override("font_size", 16)
-			desc_label.add_theme_color_override("font_color", Color(0.8, 0.8, 0.8, 1.0))
-			desc_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-			desc_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-			row.add_child(desc_label)
-
-			vbox.add_child(row)
-
-		vbox.add_child(Control.new())
-
-	var bottom_spacer := Control.new()
-	bottom_spacer.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	vbox.add_child(bottom_spacer)
-
-	var close_btn := Button.new()
-	close_btn.text = "Back"
-	close_btn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	close_btn.custom_minimum_size = Vector2(0, 44)
-	close_btn.add_theme_font_size_override("font_size", 18)
-	var btn_style := StyleBoxFlat.new()
-	btn_style.bg_color = Color(0.3, 0.2, 0.1, 1.0)
-	btn_style.border_color = Color(0.55, 0.35, 0.15, 1.0)
-	btn_style.border_width_left = 1
-	btn_style.border_width_top = 1
-	btn_style.border_width_right = 1
-	btn_style.border_width_bottom = 1
-	btn_style.corner_radius_top_left = 6
-	btn_style.corner_radius_top_right = 6
-	btn_style.corner_radius_bottom_left = 6
-	btn_style.corner_radius_bottom_right = 6
-	close_btn.add_theme_stylebox_override("normal", btn_style)
-	close_btn.add_theme_color_override("font_color", Color(1.0, 1.0, 1.0, 1.0))
-	close_btn.pressed.connect(_on_back)
-	vbox.add_child(close_btn)
-
-func _on_back():
-	get_tree().change_scene_to_file("res://Scenes/MainMenu.tscn")
+func _on_close():
+	if guide_closed.get_connections().size() > 0:
+		guide_closed.emit()
+	else:
+		get_tree().change_scene_to_file("res://Scenes/MainMenu.tscn")

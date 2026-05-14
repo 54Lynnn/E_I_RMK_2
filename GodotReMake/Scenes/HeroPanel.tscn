@@ -76,6 +76,7 @@ offset_top = -3.0
 grow_horizontal = 2
 color = Color(0.7, 0.55, 0.2, 1.0)
 
+
 [node name="LeftBar" type="ColorRect" parent="Background"]
 layout_mode = 1
 anchors_preset = 9

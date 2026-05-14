@@ -188,17 +188,8 @@ func _on_area_entered(area):
 				destroy()
 
 func _explode():
-	var monsters = get_tree().get_nodes_in_group("monsters")
-	for m in monsters:
-		if not is_instance_valid(m):
-			continue
-		if m in hit_targets:
-			continue
-		var dist = global_position.distance_to(m.global_position)
-		if dist <= explosion_radius:
-			if m.has_method("take_damage"):
-				var final_damage = explosion_damage if explosion_damage > 0 else damage
-				m.take_damage(final_damage, damage_element)
+	var dmg = explosion_damage if explosion_damage > 0 else damage
+	_explosion_damage_at(global_position, explosion_radius, dmg, damage_element)
 
 	var explosion = ObjectPool.get_object(ExplosionScene)
 	explosion.global_position = global_position
@@ -208,18 +199,25 @@ func _explode():
 		ObjectPool.return_to_pool(self)
 
 func _do_explosion_at(pos: Vector2, dmg: float):
-	var monsters = get_tree().get_nodes_in_group("monsters")
-	for m in monsters:
-		if not is_instance_valid(m):
-			continue
-		var dist = pos.distance_to(m.global_position)
-		if dist <= explosion_radius:
-			if m.has_method("take_damage"):
-				m.take_damage(dmg, damage_element)
+	_explosion_damage_at(pos, explosion_radius, dmg, damage_element)
 	var explosion = ObjectPool.get_object(ExplosionScene)
 	explosion.global_position = pos
 	explosion.scale = Vector2(explosion_radius / 30.0, explosion_radius / 30.0)
 	get_parent().add_child(explosion)
+
+func _explosion_damage_at(pos: Vector2, radius: float, dmg: float, element: String):
+	var space_state = get_world_2d().direct_space_state
+	var query = PhysicsShapeQueryParameters2D.new()
+	var circle = CircleShape2D.new()
+	circle.radius = radius
+	query.shape = circle
+	query.transform = Transform2D(0, pos)
+	query.collision_mask = 4
+	var results = space_state.intersect_shape(query)
+	for result in results:
+		var body = result.collider
+		if body and body.is_in_group("monsters") and body not in hit_targets and body.has_method("take_damage"):
+			body.take_damage(dmg * Global.damage_multiplier, element)
 
 func destroy():
 	var explosion = ObjectPool.get_object(ExplosionScene)

@@ -7,7 +7,7 @@ const MeteorSingleScene = preload("res://Scenes/MeteorSingle.tscn")
 @export var damage_element := "fire"
 @export var map_size := Vector2(1536, 1536)
 @export var drop_interval := 0.2
-@export var meteors_per_drop := 15
+@export var meteors_per_drop := 12
 @export var duration := 2.0
 
 var life_time := 0.0

@@ -151,6 +151,8 @@ var _alt_was_pressed := false
 # ============================================
 
 func _ready():
+	add_to_group("hud")
+	skill_bar_container.process_mode = PROCESS_MODE_ALWAYS
 	# 初始化：连接全局信号
 	
 	# 当生命值变化时，更新血条显示
@@ -199,6 +201,8 @@ func _process(delta):
 	_update_damage_overlay(delta)
 	# _process 回退检测 Alt 键
 	_check_alt_toggle()
+	# 每帧更新 firewalk toggle 图标状态
+	_update_firewalk_toggle_icon()
 
 func _input(event):
 	if event.is_action_pressed("toggle_monster_health"):
@@ -352,17 +356,29 @@ func update_skill_bar_display():
 		var level = Global.skill_levels.get(skill_id, 0)
 
 		if level >= 1:
-			# 已学习：正常颜色
 			btn.modulate = Color(1.0, 1.0, 1.0, 1.0)
 			if icon:
 				icon.modulate = Color(1.0, 1.0, 1.0, 1.0)
 			btn.disabled = false
 		else:
-			# 未学习：灰色+70%透明度
 			btn.modulate = Color(0.5, 0.5, 0.5, 0.7)
 			if icon:
 				icon.modulate = Color(0.5, 0.5, 0.5, 0.7)
 			btn.disabled = true
+
+func _update_firewalk_toggle_icon():
+	if not skill_bar_buttons.has("fire_walk"):
+		return
+	var btn = skill_bar_buttons["fire_walk"]
+	var icon = btn.get_meta("icon_node") as TextureRect
+	if not icon:
+		return
+	var hero = get_tree().get_first_node_in_group("hero")
+	var active = hero and hero.get_node_or_null("FireWalkEffect") != null
+	if active:
+		icon.modulate = Color(1.0, 0.85, 0.3, 1.0)
+	else:
+		icon.modulate = Color(0.5, 0.5, 0.5, 1.0)
 
 # ============================================
 # 技能栏点击处理

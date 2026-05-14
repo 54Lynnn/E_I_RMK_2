@@ -1,6 +1,7 @@
 extends CanvasLayer
 
 var is_open := false
+var guide_open := false
 
 @onready var background := $Background
 @onready var buttons_container := $Background/CenterContainer/VBoxContainer
@@ -14,12 +15,14 @@ func _connect_buttons():
 	var resume_btn = buttons_container.get_node("ResumeButton")
 	var save_btn = buttons_container.get_node("SaveButton")
 	var load_btn = buttons_container.get_node("LoadButton")
+	var guide_btn = buttons_container.get_node("GuideButton")
 	var menu_btn = buttons_container.get_node("MenuButton")
 	var quit_btn = buttons_container.get_node("QuitButton")
 
 	resume_btn.pressed.connect(_on_resume)
 	save_btn.pressed.connect(_on_save)
 	load_btn.pressed.connect(_on_load)
+	guide_btn.pressed.connect(_on_guide)
 	menu_btn.pressed.connect(_on_return_to_menu)
 	quit_btn.pressed.connect(_on_quit)
 
@@ -35,7 +38,9 @@ func _check_save_exists(load_btn: Button):
 
 func _input(event):
 	if event.is_action_pressed("pause_game"):
-		if is_open:
+		if guide_open:
+			_close_guide()
+		elif is_open:
 			close()
 		else:
 			open()
@@ -76,6 +81,21 @@ func _on_load():
 	var hero = get_tree().get_first_node_in_group("hero")
 	if hero and hero.has_method("_load_game"):
 		hero._load_game()
+
+func _on_guide():
+	guide_open = true
+	buttons_container.visible = false
+	var guide = preload("res://Scenes/ControlsGuide.tscn").instantiate()
+	guide.name = "PauseGuide"
+	guide.guide_closed.connect(_close_guide)
+	add_child(guide)
+
+func _close_guide():
+	guide_open = false
+	var guide = get_node_or_null("PauseGuide")
+	if guide:
+		guide.queue_free()
+	buttons_container.visible = true
 
 func _on_return_to_menu():
 	get_tree().paused = false

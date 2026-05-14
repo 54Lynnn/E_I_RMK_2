@@ -179,7 +179,7 @@ func _process(delta):
 			_cast_skill_by_id(_get_quick_slot_skill("lmb"))
 		if Input.is_action_pressed("spell_fireball"):
 			_cast_skill_by_id(_get_quick_slot_skill("rmb"))
-		if Input.is_action_pressed("spell_shift"):
+		if Input.is_action_pressed("spell_shift") or Input.is_key_pressed(KEY_SHIFT):
 			_cast_skill_by_id(_get_quick_slot_skill("shift"))
 		if Input.is_action_pressed("spell_space"):
 			_cast_skill_by_id(_get_quick_slot_skill("space"))
@@ -189,8 +189,6 @@ func _process(delta):
 			cast_prayer()
 		if Input.is_action_pressed("spell_heal"):
 			cast_heal()
-		if Input.is_action_pressed("spell_teleport"):
-			cast_teleport()
 		if Input.is_action_pressed("spell_mistfog"):
 			cast_mistfog()
 		if Input.is_action_pressed("spell_wrath_of_god"):
@@ -201,7 +199,7 @@ func _process(delta):
 			cast_sacrifice()
 		if Input.is_action_pressed("spell_holy_light"):
 			cast_holy_light()
-		if Input.is_action_pressed("spell_fire_walk"):
+		if Input.is_action_just_pressed("spell_fire_walk"):
 			cast_fire_walk()
 		if Input.is_action_pressed("spell_meteor"):
 			cast_meteor()
@@ -373,7 +371,7 @@ func _unhandled_input(event):
 		_cast_skill_by_id(_get_quick_slot_skill("lmb"))
 	if event.is_action_pressed("spell_fireball"):
 		_cast_skill_by_id(_get_quick_slot_skill("rmb"))
-	if event.is_action_pressed("spell_shift"):
+	if event.is_action_pressed("spell_shift") or (event is InputEventKey and event.keycode == KEY_SHIFT and event.pressed):
 		_cast_skill_by_id(_get_quick_slot_skill("shift"))
 	if event.is_action_pressed("spell_space"):
 		_cast_skill_by_id(_get_quick_slot_skill("space"))
@@ -395,8 +393,6 @@ func _unhandled_input(event):
 		cast_sacrifice()
 	if event.is_action_pressed("spell_holy_light"):
 		cast_holy_light()
-	if event.is_action_pressed("spell_fire_walk"):
-		cast_fire_walk()
 	if event.is_action_pressed("spell_meteor"):
 		cast_meteor()
 	if event.is_action_pressed("spell_armageddon"):
@@ -457,7 +453,7 @@ func _get_quick_slot_skill(slot: String) -> String:
 # ============================================
 
 var _auto_cast_timer := 0.0
-var _auto_cast_interval := 0.15
+var _auto_cast_interval := 0.1
 
 func _process_auto_cast(_delta: float):
 	_auto_cast_timer += _delta
@@ -728,7 +724,7 @@ func cast_fire_walk():
 	start_attack()
 	if FireWalk.cast(self, mouse_pos, skill_cooldowns):
 		_update_shield_visual()
-		_try_multicast("fire_walk")
+		# 不调用 _try_multicast — toggle 类技能与多重施法不兼容
 
 func cast_meteor():
 	start_attack()

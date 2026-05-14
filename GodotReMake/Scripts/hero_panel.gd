@@ -42,6 +42,10 @@ func toggle():
 	if is_open:
 		update_ui()
 	else:
+		_hide_quickslot_menu()
+		var hud = get_tree().get_first_node_in_group("hud")
+		if hud and hud.has_method("_update_quick_slot_display"):
+			hud._update_quick_slot_display()
 		var dev_relic = get_tree().current_scene.get_node_or_null("DevRelicSelect")
 		if dev_relic:
 			dev_relic.queue_free()
@@ -209,6 +213,17 @@ func setup_attribute_buttons():
 		var btn = stats_container.get_node_or_null("AttrsSection/" + attr.capitalize() + "Row/AddButton")
 		if btn:
 			btn.pressed.connect(_on_attribute_added.bind(attr))
+		var row = stats_container.get_node_or_null("AttrsSection/" + attr.capitalize() + "Row")
+		if row:
+			# Prevent Label and Value child nodes from blocking mouse_entered on the row
+			var label_node = row.get_node_or_null("Label")
+			if label_node:
+				label_node.mouse_filter = Control.MOUSE_FILTER_IGNORE
+			var value_node = row.get_node_or_null("Value")
+			if value_node:
+				value_node.mouse_filter = Control.MOUSE_FILTER_IGNORE
+			row.mouse_entered.connect(_on_attribute_hovered.bind(attr))
+			row.mouse_exited.connect(_on_attribute_unhovered)
 
 func _on_attribute_added(attr: String):
 	if Global.attribute_points > 0:
@@ -226,6 +241,102 @@ func _on_attribute_added(attr: String):
 			"wisdom":
 				Global.apply_wisdom()
 		update_ui()
+
+var _hovered_attr := ""
+
+func _on_attribute_hovered(attr: String):
+	_hovered_attr = attr
+	get_tree().create_timer(0.2).timeout.connect(func():
+		if _hovered_attr == attr:
+			var tooltip = _create_attribute_tooltip(attr)
+			if tooltip:
+				background.add_child(tooltip)
+	)
+
+func _on_attribute_unhovered():
+	_hovered_attr = ""
+	var tooltip = background.get_node_or_null("AttrTooltip")
+	if tooltip:
+		tooltip.queue_free()
+
+func _create_attribute_tooltip(attr: String):
+	var attr_info = {
+		"strength": {
+			"name": "Strength",
+			"desc": "Increases maximum health and reduces hit recovery time",
+			"effects": [
+				"+10 Max Health per point",
+				"-0.004s Hit Recovery per point"
+			]
+		},
+		"dexterity": {
+			"name": "Dexterity",
+			"desc": "Increases movement speed and reduces chance to be hit",
+			"effects": [
+				"+0.5 Movement Speed per point",
+				"-0.4% Chance to be Hit per point"
+			]
+		},
+		"stamina": {
+			"name": "Stamina",
+			"desc": "Increases health regeneration and movement speed",
+			"effects": [
+				"+0.1 HP/s Regeneration per point",
+				"+0.35 Movement Speed per point"
+			]
+		},
+		"intelligence": {
+			"name": "Intelligence",
+			"desc": "Increases maximum mana and mana regeneration",
+			"effects": [
+				"+6 Max Mana per point",
+				"+0.06 Mana/s Regeneration per point"
+			]
+		},
+		"wisdom": {
+			"name": "Wisdom",
+			"desc": "Increases maximum mana and mana regeneration",
+			"effects": [
+				"+2 Max Mana per point",
+				"+0.18 Mana/s Regeneration per point"
+			]
+		}
+	}
+	
+	var info = attr_info.get(attr)
+	if not info:
+		return null
+	
+	var tooltip = RichTextLabel.new()
+	tooltip.name = "AttrTooltip"
+	tooltip.bbcode_enabled = true
+	tooltip.fit_content = true
+	tooltip.text = "[color=#D9A84A]" + info.name + "[/color]\n"
+	tooltip.text += "[color=#AAAAAA]" + info.desc + "[/color]\n\n"
+	tooltip.text += "[color=#CCCCCC]Effects:[/color]\n"
+	for effect in info.effects:
+		tooltip.text += "  " + effect + "\n"
+	
+	tooltip.custom_minimum_size = Vector2(250, 0)
+	tooltip.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	tooltip.position = Vector2(10, -150)
+	tooltip.add_theme_font_size_override("normal_font_size", 14)
+	tooltip.add_theme_stylebox_override("normal", _create_tooltip_bg())
+	return tooltip
+
+func _create_tooltip_bg() -> StyleBoxFlat:
+	var bg = StyleBoxFlat.new()
+	bg.bg_color = Color(0.12, 0.08, 0.05, 0.95)
+	bg.border_width_left = 2
+	bg.border_width_right = 2
+	bg.border_width_top = 2
+	bg.border_width_bottom = 2
+	bg.border_color = Color(0.7, 0.55, 0.2, 1.0)
+	bg.content_margin_left = 6
+	bg.content_margin_right = 6
+	bg.content_margin_top = 4
+	bg.content_margin_bottom = 4
+	return bg
 
 const SKILL_BUTTON_SIZE := 46
 const CELL_SIZE := 60
@@ -437,6 +548,7 @@ func create_skill_button(skill_id: String, skill_data: Dictionary, parent: Node,
 	btn.prereq_skill = skill_data.prereq
 	btn.element = skill_data.get("element", 0)
 	btn.skill_upgraded.connect(_on_skill_upgraded)
+	btn.right_clicked.connect(_on_skill_right_clicked.bind(btn))
 	btn.custom_minimum_size = Vector2(SKILL_BUTTON_SIZE, SKILL_BUTTON_SIZE)
 	btn.size = Vector2(SKILL_BUTTON_SIZE, SKILL_BUTTON_SIZE)
 	btn.position = pos
@@ -496,4 +608,61 @@ func update_skill_buttons():
 	call_deferred("draw_connection_lines")
 
 func _on_skill_upgraded(skill_id: String):
+	_hide_quickslot_menu()
 	update_ui()
+
+func _on_skill_right_clicked(btn: Button):
+	_hide_quickslot_menu()
+	var level = Global.skill_levels.get(btn.skill_id, 0)
+	if level <= 0:
+		return
+	var menu = Panel.new()
+	menu.name = "QuickSlotMenu"
+	menu.size = Vector2(160, 130)
+	var mouse_pos = get_global_mouse_position()
+	menu.position = mouse_pos - Vector2(80, 180)
+	menu.add_theme_stylebox_override("panel", _create_tooltip_bg())
+
+	var vbox = VBoxContainer.new()
+	vbox.position = Vector2(4, 4)
+	vbox.size = Vector2(152, 122)
+
+	var label = Label.new()
+	label.text = "Assign to:"
+	label.add_theme_color_override("font_color", Color(0.85, 0.72, 0.4))
+	label.add_theme_font_size_override("font_size", 13)
+	vbox.add_child(label)
+
+	var slots = ["lmb", "rmb", "shift", "space"]
+	var labels = ["LMB (Left Click)", "RMB (Right Click)", "Shift", "Space"]
+	for i in range(slots.size()):
+		var slot_btn = Button.new()
+		slot_btn.text = labels[i]
+		slot_btn.custom_minimum_size = Vector2(0, 24)
+		slot_btn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		slot_btn.add_theme_font_size_override("font_size", 13)
+		slot_btn.pressed.connect(_on_quickslot_assign.bind(btn.skill_id, slots[i], menu))
+		vbox.add_child(slot_btn)
+
+	menu.add_child(vbox)
+	background.add_child(menu)
+
+func _on_quickslot_assign(skill_id: String, slot: String, menu: Panel):
+	match slot:
+		"lmb":
+			Global.quick_slot_lmb = skill_id
+		"rmb":
+			Global.quick_slot_rmb = skill_id
+		"shift":
+			Global.quick_slot_shift = skill_id
+		"space":
+			Global.quick_slot_space = skill_id
+	_hide_quickslot_menu()
+	var hud = get_tree().get_first_node_in_group("hud")
+	if hud and hud.has_method("_update_quick_slot_display"):
+		hud._update_quick_slot_display()
+
+func _hide_quickslot_menu():
+	var existing = background.get_node_or_null("QuickSlotMenu")
+	if existing:
+		existing.queue_free()

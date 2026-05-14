@@ -1,9 +1,9 @@
 # Evil Invasion (Godot 4.6 Remake) — 游戏系统设计文档
 
-> **文档版本**: 1.2
+> **文档版本**: 1.3
 > **引擎版本**: Godot 4.6.2-stable
 > **语言**: GDScript
-> **最后更新**: 2026-05-14（v8: 快捷槽位修复 + 窗口分辨率调整 + 对象池出生保护）
+> **最后更新**: 2026-05-15（v10: Firewalk Toggle + 爆炸碰撞检测统一 + Controls Guide + 导出加密）
 
 ---
 
@@ -208,7 +208,7 @@ enum Difficulty { NORMAL, NIGHTMARE, HARDCORE }
 | Telekinesis | Q | 被动 | air | 隔空取物，鼠标悬停拾取 |
 | Sacrifice | R | 秒杀 | air | 消耗生命直接秒杀怪物 |
 | Holy Light | E | 射线 | air | 射线伤害 |
-| Fire Walk | U | 场地 | fire | 火焰轨迹持续伤害 |
+| Fire Walk | U | toggle | fire | 移动产生火焰轨迹，持续DOT |
 | Meteor | F | 延迟 AOE | fire | 延迟后陨石坠落 |
 | Armageddon | G | 全屏随机 | fire | 全屏随机落石 |
 | Poison Cloud | H | 场地 | water | 区域持续毒伤害 |
@@ -893,6 +893,22 @@ HUD (Control)
 - **面板尺寸**: 46×30px，图标 42×26px 居中
 - **快捷键提示**: 每个槽位右下角有半透明小字（LMB/RMB/Shift/Space）
 - **位置**: QuickSlots 底部缩进 offset_bottom=-14，与 ExpBar 保持 2px 间距
+- **暂停时可用**: skill_bar_container.process_mode = PROCESS_MODE_ALWAYS，按T打开HeroPanel时仍可设置quickslot
+
+### 11.11 Controls Guide 操作指南
+
+- **入口**: 主菜单（MainMenu）和暂停菜单（PauseMenu）均有按钮
+- **场景**: `Scenes/ControlsGuide.tscn`
+- **脚本**: `Scripts/controls_guide.gd`
+- **功能**: 显示操作指南图片，玩家可浏览所有快捷键说明
+- **信号**: `guide_closed` 通知父场景关闭完成
+
+### 11.12 Firewalk Toggle 图标指示
+
+- **功能**: hud.gd 每帧检查 firewalk toggle 状态
+- **开启时**: 技能图标彩色显示
+- **关闭时**: 技能图标灰色显示
+- **实现**: `_update_firewalk_toggle_icon()` 函数，通过 modulate 控制颜色
 
 **分配方式**：
 | 槽位 | 分配方式 | 说明 |

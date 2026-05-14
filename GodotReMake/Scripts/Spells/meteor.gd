@@ -48,7 +48,7 @@ static func cast(hero: Node, mouse_pos: Vector2, skill_cooldowns: Dictionary) ->
 @export var zone_radius := 130.0
 @export var meteor_explosion_radius := 56.0
 @export var duration := 3.0
-@export var drop_interval := 0.2
+@export var drop_interval := 0.4
 @export var meteors_per_drop := 2
 
 var life_time := 0.0
