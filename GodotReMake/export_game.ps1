@@ -1,41 +1,30 @@
-param(
-    [string]$GodotPath = "C:\Program Files\Godot\godot.exe",
-    [string]$OutputDir = ".\build"
-)
+# Evil Invasion Remake — 一键导出脚本
+# 用法：在 PowerShell 中运行本脚本
+# 前提：已安装 Godot 4.6.2 导出模板
 
-$ProjectPath = Resolve-Path "."
-$PresetName = "EI-RMK"
-$OutputPath = Join-Path $OutputDir "EI-RMK"
+$GodotPath = "C:\Users\Administrator\Desktop\Godot_v4.6.2-stable_win64.exe"
+$ProjectPath = "E:\EvilInvasion\GodotReMake"
 
-Write-Host "=== EI-RMK Export ===" -ForegroundColor Cyan
-Write-Host "Project: $ProjectPath"
-Write-Host "Preset: $PresetName"
-Write-Host "Output: $OutputPath"
+# 创建导出目录
+$BuildDir = Join-Path $ProjectPath "build"
+if (-not (Test-Path $BuildDir)) {
+    New-Item -ItemType Directory -Path $BuildDir | Out-Null
+}
+
+Write-Host "=== 开始导出 Evil Invasion Remake ===" -ForegroundColor Cyan
+Write-Host "项目路径: $ProjectPath"
+Write-Host "导出路径: $BuildDir"
 Write-Host ""
 
-if (-not (Test-Path $GodotPath)) {
-    Write-Host "Godot not found at '$GodotPath'" -ForegroundColor Yellow
-    $GodotPath = Read-Host "Enter path to Godot executable"
-    if (-not (Test-Path $GodotPath)) {
-        Write-Host "Invalid path. Aborting." -ForegroundColor Red
-        exit 1
-    }
-}
-
-if (-not (Test-Path $OutputDir)) {
-    New-Item -ItemType Directory -Path $OutputDir -Force | Out-Null
-}
-
-Write-Host "Exporting..." -ForegroundColor Green
-& $GodotPath --headless --path "$ProjectPath" --export-release "$PresetName" "$OutputPath.exe"
+# 执行导出（使用 Windows Desktop 预设）
+& $GodotPath --headless --path $ProjectPath --export-release "EI-RMK" (Join-Path $BuildDir "EvilInvasionRemake.exe")
 
 if ($LASTEXITCODE -eq 0) {
     Write-Host ""
-    Write-Host "=== Export successful! ===" -ForegroundColor Green
-    Write-Host "Output: $OutputPath.exe"
-    Write-Host "(and accompanying .pck file)"
+    Write-Host "=== 导出成功！===" -ForegroundColor Green
+    Write-Host "可执行文件位置: $BuildDir\EvilInvasionRemake.exe"
+    Write-Host "注意：分享给朋友时需要同时发送整个 build 文件夹中的所有文件" -ForegroundColor Yellow
 } else {
     Write-Host ""
-    Write-Host "Export failed (exit code: $LASTEXITCODE)" -ForegroundColor Red
-    Write-Host "Make sure you have generated the encryption key in the editor first."
+    Write-Host "=== 导出失败，请检查错误信息 ===" -ForegroundColor Red
 }
