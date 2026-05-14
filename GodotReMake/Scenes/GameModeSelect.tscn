@@ -18,7 +18,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.1, 0.1, 0.15, 1.0)
+color = Color(0.08, 0.08, 0.12, 1.0)
 
 [node name="CenterContainer" type="CenterContainer" parent="."]
 layout_mode = 1
@@ -30,32 +30,13 @@ grow_vertical = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer"]
 layout_mode = 2
-theme_override_constants/separation = 20
+theme_override_constants/separation = 16
 
 [node name="TitleLabel" type="Label" parent="CenterContainer/VBoxContainer"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 48
-text = "Evil Invasion"
-horizontal_alignment = 1
-
-[node name="SubtitleLabel" type="Label" parent="CenterContainer/VBoxContainer"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 20
-text = "Select Game Mode and Difficulty"
-horizontal_alignment = 1
-
-[node name="ResumeButton" type="Button" parent="CenterContainer/VBoxContainer"]
-custom_minimum_size = Vector2(250, 60)
-layout_mode = 2
-size_flags_horizontal = 4
-theme_override_font_sizes/font_size = 28
-text = "RESUME GAME"
-
-[node name="ResumeInfo" type="Label" parent="CenterContainer/VBoxContainer"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.7, 0.7, 0.7, 1)
-theme_override_font_sizes/font_size = 14
-text = ""
+theme_override_font_sizes/font_size = 40
+theme_override_colors/font_color = Color(0.85, 0.65, 0.2, 1.0)
+text = "New Game"
 horizontal_alignment = 1
 
 [node name="HSeparator" type="HSeparator" parent="CenterContainer/VBoxContainer"]
@@ -98,20 +79,20 @@ custom_minimum_size = Vector2(200, 40)
 layout_mode = 2
 size_flags_horizontal = 4
 
-[node name="Spacing" type="Control" parent="CenterContainer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 20)
+[node name="Spacer" type="Control" parent="CenterContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 10)
 layout_mode = 2
 
 [node name="StartButton" type="Button" parent="CenterContainer/VBoxContainer"]
-custom_minimum_size = Vector2(250, 60)
+custom_minimum_size = Vector2(250, 50)
 layout_mode = 2
 size_flags_horizontal = 4
-theme_override_font_sizes/font_size = 32
-text = "START GAME"
+theme_override_font_sizes/font_size = 26
+text = "START"
 
-[node name="QuitButton" type="Button" parent="CenterContainer/VBoxContainer"]
-custom_minimum_size = Vector2(200, 50)
+[node name="BackButton" type="Button" parent="CenterContainer/VBoxContainer"]
+custom_minimum_size = Vector2(250, 40)
 layout_mode = 2
 size_flags_horizontal = 4
-theme_override_font_sizes/font_size = 24
-text = "QUIT"
+theme_override_font_sizes/font_size = 20
+text = "Back"

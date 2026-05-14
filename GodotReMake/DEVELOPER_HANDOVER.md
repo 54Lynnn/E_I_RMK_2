@@ -4,8 +4,8 @@
 > **引擎**: Godot 4.6.2-stable
 > **语言**: GDScript
 > **作者**: [Previous Agent]
-> **日期**: 2026-05-13
-> **最后更新**: v7 Agent — 对象池系统 + 刷怪修复 + Data.pak全量提取
+> **日期**: 2026-05-14
+> **最后更新**: v9 Agent — 自动释放系统 + 技能数值校对 + 快捷槽位重做 + 移动修复
 > **GitHub仓库**: https://github.com/54Lynnn/E_I_RMK_2
 
 ---

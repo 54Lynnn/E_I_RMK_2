@@ -7,7 +7,7 @@ const MeteorSingleScene = preload("res://Scenes/MeteorSingle.tscn")
 @export var damage_element := "fire"
 @export var map_size := Vector2(1536, 1536)
 @export var drop_interval := 0.2
-@export var meteors_per_drop := 12
+@export var meteors_per_drop := 15
 @export var duration := 2.0
 
 var life_time := 0.0
@@ -31,8 +31,8 @@ func _process(delta):
 
 func _spawn_meteor():
 	var random_pos = Vector2(
-		randf() * map_size.x - map_size.x * 0.5,
-		randf() * map_size.y - map_size.y * 0.5
+		randf_range(0.0, map_size.x),
+		randf_range(0.0, map_size.y)
 	)
 
 	var meteor = ObjectPool.get_object(MeteorSingleScene)

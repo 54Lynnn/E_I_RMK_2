@@ -45,7 +45,7 @@ static func cast(hero: Node, mouse_pos: Vector2, skill_cooldowns: Dictionary) ->
 	lightning.direction = direction
 	lightning.damage = damage
 	lightning.max_bounces = 10
-	lightning.bounce_range = 300.0
+	lightning.bounce_range = 130.0
 	hero.get_parent().add_child(lightning)
 
 	skill_cooldowns[skill_name] = get_cooldown(level)

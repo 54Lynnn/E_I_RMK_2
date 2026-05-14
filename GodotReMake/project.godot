@@ -16,7 +16,7 @@ compatibility/default_parent_skeleton_in_mesh_instance_3d=true
 
 config/name="Evil Invasion Remake"
 config/description="Evil Invasion (2006) fan remake in Godot 4"
-run/main_scene="res://Scenes/GameModeSelect.tscn"
+run/main_scene="res://Scenes/MainMenu.tscn"
 config/features=PackedStringArray("4.6")
 config/icon="res://Art/Placeholder/icon.png"
 
@@ -26,6 +26,8 @@ Global="*res://Scripts/global.gd"
 LootManager="*res://Scripts/loot_manager.gd"
 SaveManager="*res://Scripts/save_manager.gd"
 ObjectPool="*res://Scripts/object_pool.gd"
+SoundManager="*res://Scripts/sound_manager.gd"
+RelicManager="*res://Scripts/relic_manager.gd"
 
 [display]
 

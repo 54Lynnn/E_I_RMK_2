@@ -18,8 +18,8 @@ static func get_damage(level: int) -> float:
 static func get_cooldown(level: int) -> float:
 	return max(20.0 - (level - 1) * 1.0, 11.0)
 
-static func get_explosion_radius(_level: int) -> float:
-	return 56.0
+static func get_explosion_radius(level: int) -> float:
+	return 56.0 + (level - 1) * 1.0
 
 func _ready():
 	var tween = create_tween()

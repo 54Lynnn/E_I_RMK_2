@@ -9,12 +9,22 @@ extends Control
 @onready var skill_points_label := $Background/RightPanel/SkillPointsRow/SkillPointsValue
 @onready var stats_container := $Background/LeftPanel/MarginContainer/ScrollContainer/VBoxContainer
 
+@onready var dev_relic_button := $Background/RightPanel/DevRelicButton
+@onready var _dev_exp1 := $Background/RightPanel/DevExp1000
+@onready var _dev_exp2 := $Background/RightPanel/DevExp5000
+
 var is_open := false
 
 func _ready():
 	visible = false
 	setup_skill_tree()
 	setup_attribute_buttons()
+	dev_relic_button.pressed.connect(_on_dev_relic)
+	dev_relic_button.visible = false
+	_dev_exp1.pressed.connect(_on_dev_exp_1000)
+	_dev_exp1.visible = false
+	_dev_exp2.pressed.connect(_on_dev_exp_5000)
+	_dev_exp2.visible = false
 
 func _input(event):
 	if event.is_action_pressed("toggle_hero_panel"):
@@ -31,12 +41,14 @@ func toggle():
 	get_tree().paused = is_open
 	if is_open:
 		update_ui()
+	else:
+		var dev_relic = get_tree().current_scene.get_node_or_null("DevRelicSelect")
+		if dev_relic:
+			dev_relic.queue_free()
 
 func toggle_dev_mode():
 	Global.dev_mode = !Global.dev_mode
 	if Global.dev_mode:
-		Global.attribute_points += 100
-		Global.skill_points += 100
 		is_open = true
 		Global.hero_panel_is_open = true
 		visible = true
@@ -46,10 +58,46 @@ func toggle_dev_mode():
 		is_open = false
 		visible = false
 		get_tree().paused = false
+		dev_relic_button.visible = false
+		_dev_exp1.visible = false
+		_dev_exp2.visible = false
+		var dev_relic = get_tree().current_scene.get_node_or_null("DevRelicSelect")
+		if dev_relic:
+			dev_relic.queue_free()
+
+func _on_dev_relic():
+	if not Global.dev_mode:
+		return
+	var existing = get_tree().current_scene.get_node_or_null("DevRelicSelect")
+	if existing:
+		existing.queue_free()
+	var relics = RelicManager.generate_choices(3, false)
+	if relics.is_empty():
+		return
+	var ui_scene = preload("res://Scenes/RelicSelectUI.tscn")
+	var ui = ui_scene.instantiate()
+	ui.name = "DevRelicSelect"
+	get_tree().current_scene.add_child(ui)
+	ui.show_choices_dev(relics)
+
+func _on_dev_exp_1000():
+	if not Global.dev_mode:
+		return
+	Global.gain_experience(1000)
+	update_ui()
+
+func _on_dev_exp_5000():
+	if not Global.dev_mode:
+		return
+	Global.gain_experience(5000)
+	update_ui()
 
 func update_ui():
 	if not is_inside_tree():
 		return
+	dev_relic_button.visible = Global.dev_mode
+	_dev_exp1.visible = Global.dev_mode
+	_dev_exp2.visible = Global.dev_mode
 	var level_node = get_node_or_null("Background/LeftPanel/MarginContainer/ScrollContainer/VBoxContainer/HeaderSection/LevelRow/LevelValue")
 	if level_node:
 		level_node.text = str(Global.hero_level)
@@ -90,12 +138,12 @@ func update_stats_display():
 	if mana_label:
 		mana_label.text = str(int(Global.mana)) + "/" + str(int(Global.max_mana))
 
-	var health_regen_rate = 1.0 + Global.hero_stamina * 0.1
+	var health_regen_rate = Global.hero_stamina * 0.1 + RelicManager.get_hp_regen_bonus()
 	var health_regen_label = stats_container.get_node_or_null("DerivedSection/HealthRegenRow/Value")
 	if health_regen_label:
 		health_regen_label.text = format_regen(health_regen_rate)
 
-	var mana_regen_rate = 1.0 + Global.hero_intelligence * 0.06 + Global.hero_wisdom * 0.18
+	var mana_regen_rate = Global.hero_intelligence * 0.06 + Global.hero_wisdom * 0.18 + RelicManager.get_mana_regen_bonus()
 	var mana_regen_label = stats_container.get_node_or_null("DerivedSection/ManaRegenRow/Value")
 	if mana_regen_label:
 		mana_regen_label.text = format_regen(mana_regen_rate)

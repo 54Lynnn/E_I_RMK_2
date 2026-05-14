@@ -532,3 +532,45 @@ layout_mode = 2
 theme_override_colors/font_color = Color(1.0, 1.0, 0.6, 1)
 theme_override_font_sizes/font_size = 16
 text = "0"
+
+[node name="DevRelicButton" type="Button" parent="Background/RightPanel"]
+layout_mode = 1
+anchors_preset = 12
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -100.0
+offset_top = -90.0
+offset_right = 100.0
+offset_bottom = -55.0
+theme_override_font_sizes/font_size = 14
+text = "Test Relic (Dev)"
+
+[node name="DevExp1000" type="Button" parent="Background/RightPanel"]
+layout_mode = 1
+anchors_preset = 12
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -100.0
+offset_top = -55.0
+offset_right = 100.0
+offset_bottom = -20.0
+theme_override_font_sizes/font_size = 14
+text = "+1000 EXP"
+
+[node name="DevExp5000" type="Button" parent="Background/RightPanel"]
+layout_mode = 1
+anchors_preset = 12
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -100.0
+offset_top = -20.0
+offset_right = 100.0
+offset_bottom = 15.0
+theme_override_font_sizes/font_size = 14
+text = "+5000 EXP"

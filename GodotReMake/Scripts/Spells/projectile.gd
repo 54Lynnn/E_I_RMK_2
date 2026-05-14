@@ -15,6 +15,9 @@ var hit_targets := []
 @export var explosion_radius := 50.0
 @export var explosion_damage := 0.0
 
+@export var pierce_explosion := false
+var pierce_explosion_count := 0
+
 @export var has_freeze := false
 @export var freeze_duration := 1.0
 
@@ -57,6 +60,8 @@ func reset_for_pool():
 	has_explosion = false
 	explosion_radius = 50.0
 	explosion_damage = 0.0
+	pierce_explosion = false
+	pierce_explosion_count = 0
 	has_freeze = false
 	freeze_duration = 1.0
 	has_homing = false
@@ -131,13 +136,28 @@ func _on_body_entered(body):
 			body.take_damage(damage * Global.damage_multiplier, damage_element)
 			if has_freeze and body.has_method("apply_debuff"):
 				body.apply_debuff("frozen", freeze_duration, {}, damage_element)
+		if is_piercing and not pierce_explosion:
+			return
+		if pierce_explosion:
+			pierce_explosion_count += 1
+			var dmg = explosion_damage if explosion_damage > 0 else damage
+			if pierce_explosion_count >= 2:
+				dmg *= 0.5
+			_do_explosion_at(global_position, dmg)
+			if pierce_explosion_count >= 2:
+				destroy()
+			return
 		if not is_piercing:
 			if has_explosion:
 				_explode()
 			else:
 				destroy()
 	elif body.is_in_group("walls"):
-		if has_explosion:
+		if pierce_explosion:
+			var dmg = explosion_damage if explosion_damage > 0 else damage
+			_do_explosion_at(global_position, dmg)
+			destroy()
+		elif has_explosion:
 			_explode()
 		else:
 			destroy()
@@ -150,6 +170,17 @@ func _on_area_entered(area):
 			target.take_damage(damage * Global.damage_multiplier, damage_element)
 			if has_freeze and target.has_method("apply_debuff"):
 				target.apply_debuff("frozen", freeze_duration, {}, damage_element)
+		if is_piercing and not pierce_explosion:
+			return
+		if pierce_explosion:
+			pierce_explosion_count += 1
+			var dmg = explosion_damage if explosion_damage > 0 else damage
+			if pierce_explosion_count >= 2:
+				dmg *= 0.5
+			_do_explosion_at(global_position, dmg)
+			if pierce_explosion_count >= 2:
+				destroy()
+			return
 		if not is_piercing:
 			if has_explosion:
 				_explode()
@@ -161,6 +192,8 @@ func _explode():
 	for m in monsters:
 		if not is_instance_valid(m):
 			continue
+		if m in hit_targets:
+			continue
 		var dist = global_position.distance_to(m.global_position)
 		if dist <= explosion_radius:
 			if m.has_method("take_damage"):
@@ -171,7 +204,22 @@ func _explode():
 	explosion.global_position = global_position
 	explosion.scale = Vector2(explosion_radius / 30.0, explosion_radius / 30.0)
 	get_parent().add_child(explosion)
-	ObjectPool.return_to_pool(self)
+	if not is_piercing and not pierce_explosion:
+		ObjectPool.return_to_pool(self)
+
+func _do_explosion_at(pos: Vector2, dmg: float):
+	var monsters = get_tree().get_nodes_in_group("monsters")
+	for m in monsters:
+		if not is_instance_valid(m):
+			continue
+		var dist = pos.distance_to(m.global_position)
+		if dist <= explosion_radius:
+			if m.has_method("take_damage"):
+				m.take_damage(dmg, damage_element)
+	var explosion = ObjectPool.get_object(ExplosionScene)
+	explosion.global_position = pos
+	explosion.scale = Vector2(explosion_radius / 30.0, explosion_radius / 30.0)
+	get_parent().add_child(explosion)
 
 func destroy():
 	var explosion = ObjectPool.get_object(ExplosionScene)

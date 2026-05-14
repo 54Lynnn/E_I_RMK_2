@@ -21,16 +21,16 @@ signal level_up_limited(max_level)                   # 达到等级上限提示
 # 每关包含：关卡名称、允许出现的怪物类型
 # 设计思路：逐渐引入新怪物，后期关卡包含所有怪物
 var level_configs := [
-	{ "name": "Ancient Way",       "allowed_monsters": ["troll", "mummy"] },
-	{ "name": "Burned Land",       "allowed_monsters": ["troll", "mummy", "spider"] },
-	{ "name": "Desert Battle",     "allowed_monsters": ["troll", "mummy", "spider"] },
-	{ "name": "Forgotten Dunes",   "allowed_monsters": ["troll", "mummy", "spider", "bear"] },
-	{ "name": "Dark Swamp",        "allowed_monsters": ["troll", "mummy", "spider", "bear", "demon"] },
-	{ "name": "Skull Coast",       "allowed_monsters": ["troll", "mummy", "spider", "bear", "demon"] },
-	{ "name": "Snowy Pass",        "allowed_monsters": ["troll", "mummy", "spider", "bear", "demon", "reaper"] },
-	{ "name": "Hell Eye",          "allowed_monsters": ["troll", "mummy", "spider", "bear", "demon", "reaper", "diablo"] },
-	{ "name": "Inferno",           "allowed_monsters": ["troll", "mummy", "spider", "bear", "demon", "reaper", "diablo"] },
-	{ "name": "Diablo's Lair",     "allowed_monsters": ["troll", "mummy", "spider", "bear", "demon", "reaper", "diablo"] }
+	{ "name": "Ancient Way",       "allowed_monsters": ["troll", "mummy"], "texture": "res://Art/Textures/map_tex_0_1024x1024.dds" },
+	{ "name": "Burned Land",       "allowed_monsters": ["troll", "mummy", "spider"], "texture": "res://Art/Textures/map_tex_1_1024x1024.dds" },
+	{ "name": "Desert Battle",     "allowed_monsters": ["troll", "mummy", "spider"], "texture": "res://Art/Textures/map_tex_2_1024x1024.dds" },
+	{ "name": "Forgotten Dunes",   "allowed_monsters": ["troll", "mummy", "spider", "bear"], "texture": "res://Art/Textures/map_tex_3_1024x1024.dds" },
+	{ "name": "Dark Swamp",        "allowed_monsters": ["troll", "mummy", "spider", "bear", "demon"], "texture": "res://Art/Textures/map_tex_4_1024x1024.dds" },
+	{ "name": "Skull Coast",       "allowed_monsters": ["troll", "mummy", "spider", "bear", "demon"], "texture": "res://Art/Textures/map_tex_5_1024x1024.dds" },
+	{ "name": "Snowy Pass",        "allowed_monsters": ["troll", "mummy", "spider", "bear", "demon", "reaper"], "texture": "res://Art/Textures/map_tex_0_1024x1024.dds" },
+	{ "name": "Hell Eye",          "allowed_monsters": ["troll", "mummy", "spider", "bear", "demon", "reaper", "diablo"], "texture": "res://Art/Textures/map_tex_1_1024x1024.dds" },
+	{ "name": "Inferno",           "allowed_monsters": ["troll", "mummy", "spider", "bear", "demon", "reaper", "diablo"], "texture": "res://Art/Textures/map_tex_2_1024x1024.dds" },
+	{ "name": "Diablo's Lair",     "allowed_monsters": ["troll", "mummy", "spider", "bear", "demon", "reaper", "diablo"], "texture": "res://Art/Textures/map_tex_3_1024x1024.dds" }
 ]
 
 # 当前状态
@@ -150,8 +150,10 @@ func start_level(level_index: int, resume_progress: bool = false):
 	
 	print("Quest: 开始关卡 %d - %s" % [level_index + 1, config["name"]])
 	
+	_update_map_texture(config.get("texture", ""))
+
 	level_started.emit(level_index + 1, config["name"])
-	
+
 	# 通知生成器开始生成
 	if spawner:
 		if resume_progress and Global.quest_progress.has_progress:
@@ -242,6 +244,15 @@ func _update_monster_count():
 # ============================================
 # 等级上限检查
 # ============================================
+
+func _update_map_texture(texture_path: String):
+	if texture_path.is_empty():
+		return
+	var ground = get_tree().get_first_node_in_group("ground")
+	if ground and "texture" in ground:
+		var tex = load(texture_path)
+		if tex:
+			ground.texture = tex
 
 func can_gain_experience(amount: int = 0) -> bool:
 	"""检查玩家是否还能获得经验

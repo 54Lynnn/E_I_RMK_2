@@ -5,7 +5,7 @@ const ProjectileScene = preload("res://Scenes/Projectile.tscn")
 static var skill_name := "fireball"
 static var skill_type := "active"
 static var base_cooldown := 0.5
-static var base_mana_cost := 5.0
+static var base_mana_cost := 7.0
 static var base_damage := 40.0
 static var damage_element := "fire"
 
@@ -63,8 +63,20 @@ static func cast(hero: Node, mouse_pos: Vector2, skill_cooldowns: Dictionary) ->
 		
 		# 爆炸效果配置
 		fireball.has_explosion = true              # 启用爆炸效果
-		fireball.explosion_radius = explosion_radius  # 爆炸半径
+		fireball.explosion_radius = explosion_radius * RelicManager.get_aoe_radius_multiplier()  # 爆炸半径
 		fireball.explosion_damage = damage         # 爆炸伤害
+
+		# 遗物：追踪火球术
+		if RelicManager.has_relic("tracking_fireball"):
+			fireball.has_homing = true
+			fireball.homing_strength = 0.8
+			fireball.homing_range = 350.0
+
+		# 遗物：穿透火球术
+		if RelicManager.has_relic("pierce_fireball"):
+			fireball.is_piercing = true
+			fireball.pierce_explosion = true
+			fireball.explosion_radius *= RelicManager.get_aoe_radius_multiplier()
 		
 		# 设置贴图
 		if fireball.has_node("Sprite2D") and ResourceLoader.exists("res://Art/Placeholder/Fireball.png"):

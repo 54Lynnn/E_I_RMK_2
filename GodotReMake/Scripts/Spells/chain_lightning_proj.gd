@@ -4,7 +4,7 @@ extends Area2D
 @export var damage := 1000.0
 @export var damage_element := "air"
 @export var max_bounces := 10
-@export var bounce_range := 300.0
+@export var bounce_range := 130.0
 
 var direction := Vector2.RIGHT
 var current_target = null
@@ -20,7 +20,7 @@ func reset_for_pool():
 	damage = 1000.0
 	damage_element = "air"
 	max_bounces = 10
-	bounce_range = 300.0
+	bounce_range = 130.0
 	direction = Vector2.RIGHT
 	current_target = null
 	is_moving = true

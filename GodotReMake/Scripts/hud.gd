@@ -61,6 +61,8 @@ var hovered_skill_id := ""
 # Buff/Debuff 显示区域
 @onready var buff_container := $BottomBar/BuffContainer
 
+@onready var relic_container := $RelicContainer
+
 # Buff 图标场景
 const BuffIconScene = preload("res://Scenes/BuffIcon.tscn")
 
@@ -180,6 +182,13 @@ func _ready():
 	update_all()
 	# 初始化快捷槽位显示
 	_update_quick_slot_display()
+	# 初始化自动释放显示
+	_update_auto_cast_display()
+	# 监听自动释放变化
+	Global.auto_cast_changed.connect(_on_auto_cast_changed)
+	# 监听遗物变化
+	RelicManager.active_relics_changed.connect(_update_relic_display)
+	_update_relic_display()
 
 func _process(delta):
 	# 每帧更新 buff 显示
@@ -195,18 +204,6 @@ func _input(event):
 	if event.is_action_pressed("toggle_monster_health"):
 		_toggle_monster_info()
 		get_viewport().set_input_as_handled()
-	
-	if not hovered_skill_id.is_empty():
-		var level = Global.skill_levels.get(hovered_skill_id, 0)
-		if level > 0 and event is InputEventKey and event.pressed and not event.echo:
-			if event.physical_keycode == KEY_SHIFT:
-				Global.quick_slot_shift = hovered_skill_id
-				_update_quick_slot_display()
-				get_viewport().set_input_as_handled()
-			elif event.physical_keycode == KEY_SPACE:
-				Global.quick_slot_space = hovered_skill_id
-				_update_quick_slot_display()
-				get_viewport().set_input_as_handled()
 
 func _check_alt_toggle():
 	var alt_down = Input.is_key_pressed(KEY_ALT)
@@ -315,6 +312,23 @@ func setup_skill_bar():
 		btn.set_meta("skill_id", skill_id)
 		btn.set_meta("icon_node", icon)
 
+		# 创建自动释放旋转蛇形光圈（默认隐藏）
+		var auto_cast_ring = TextureRect.new()
+		auto_cast_ring.name = "AutoCastRing"
+		auto_cast_ring.texture = _create_dashed_ring_texture(SKILL_ICON_SIZE)
+		auto_cast_ring.size = Vector2(SKILL_ICON_SIZE, SKILL_ICON_SIZE)
+		auto_cast_ring.pivot_offset = Vector2(SKILL_ICON_SIZE * 0.5, SKILL_ICON_SIZE * 0.5)
+		auto_cast_ring.mouse_filter = Control.MOUSE_FILTER_PASS
+		auto_cast_ring.visible = false
+		btn.add_child(auto_cast_ring)
+
+		# 创建持续旋转动画（初始为停止状态）
+		var ring_tween = btn.create_tween()
+		ring_tween.set_loops()
+		ring_tween.tween_property(auto_cast_ring, "rotation", TAU, 1.5).as_relative()
+		ring_tween.stop()
+		btn.set_meta("ring_tween", ring_tween)
+
 		# 连接点击信号（gui_input 可区分左键/右键）
 		btn.gui_input.connect(_on_skill_button_gui_input.bind(skill_id))
 		btn.mouse_entered.connect(_on_skill_button_hovered.bind(skill_id))
@@ -370,17 +384,20 @@ func _on_skill_button_gui_input(event: InputEvent, skill_id: String):
 		return
 	
 	if event.button_index == MOUSE_BUTTON_LEFT:
-		if Input.is_key_pressed(KEY_SHIFT):
-			Global.quick_slot_shift = skill_id
-		elif Input.is_key_pressed(KEY_SPACE):
+		if Input.is_key_pressed(KEY_SHIFT) and Input.is_key_pressed(KEY_SPACE):
 			Global.quick_slot_space = skill_id
+		elif Input.is_key_pressed(KEY_SHIFT):
+			Global.quick_slot_shift = skill_id
 		else:
 			Global.quick_slot_lmb = skill_id
 		_update_quick_slot_display()
 		get_viewport().set_input_as_handled()
 	elif event.button_index == MOUSE_BUTTON_RIGHT:
-		Global.quick_slot_rmb = skill_id
-		_update_quick_slot_display()
+		if Input.is_key_pressed(KEY_SHIFT):
+			Global.quick_slot_rmb = skill_id
+			_update_quick_slot_display()
+		else:
+			_toggle_auto_cast(skill_id)
 		get_viewport().set_input_as_handled()
 
 func _update_quick_slot_display():
@@ -401,8 +418,74 @@ func _update_single_slot(skill_id: String, icon_node: TextureRect):
 			icon_node.texture = null
 
 func _on_skill_level_changed(skill_id: String, _level: int):
-	# 当技能等级变化时，更新技能栏显示
 	update_skill_bar_display()
+
+# ============================================
+# 自动释放（Auto-Cast）系统
+# ============================================
+
+func _toggle_auto_cast(skill_id: String):
+	var enabled = not Global.auto_cast_skills.get(skill_id, false)
+	if enabled:
+		Global.auto_cast_skills[skill_id] = true
+	else:
+		Global.auto_cast_skills.erase(skill_id)
+	Global.auto_cast_changed.emit(skill_id, enabled)
+
+func _on_auto_cast_changed(skill_id: String, enabled: bool):
+	_update_single_auto_cast_ring(skill_id, enabled)
+
+func _update_auto_cast_display():
+	for skill_id in skill_bar_buttons:
+		var enabled = Global.auto_cast_skills.get(skill_id, false)
+		_update_single_auto_cast_ring(skill_id, enabled)
+
+func _update_single_auto_cast_ring(skill_id: String, enabled: bool):
+	var btn = skill_bar_buttons.get(skill_id)
+	if not btn:
+		return
+	var ring = btn.get_node_or_null("AutoCastRing")
+	if ring:
+		ring.visible = enabled
+		var tween = btn.get_meta("ring_tween")
+		if enabled:
+			ring.rotation = 0.0
+			tween.play()
+		else:
+			tween.stop()
+			ring.rotation = 0.0
+
+func _create_dashed_ring_texture(size: int) -> ImageTexture:
+	var image = Image.create(size, size, false, Image.FORMAT_RGBA8)
+	image.fill(Color(0, 0, 0, 0))
+	var center = Vector2(size * 0.5 - 0.5, size * 0.5 - 0.5)
+	var radius = size * 0.5 - 1.5
+	var num_dashes := 12
+
+	for i in range(num_dashes):
+		var angle = (float(i) / float(num_dashes)) * TAU - PI / 2
+		var progress = float(i) / float(num_dashes)
+		var dot_radius = lerp(2.0, 0.3, progress)
+
+		if dot_radius < 0.3:
+			continue
+
+		var pos = center + Vector2(cos(angle), sin(angle)) * radius
+		var cx = int(pos.x)
+		var cy = int(pos.y)
+		var r = int(ceil(dot_radius))
+
+		for dy in range(-r, r + 1):
+			for dx in range(-r, r + 1):
+				var dist = sqrt(dx * dx + dy * dy)
+				if dist <= dot_radius:
+					var alpha = 1.0 - (dist / max(dot_radius, 0.1)) * 0.3
+					var px = cx + dx
+					var py = cy + dy
+					if px >= 0 and px < size and py >= 0 and py < size:
+						image.set_pixel(px, py, Color(1.0, 0.84, 0.0, alpha))
+
+	return ImageTexture.create_from_image(image)
 
 # ============================================
 # 状态更新函数
@@ -544,3 +627,31 @@ func _update_damage_overlay(_delta: float):
 	var mat = damage_overlay.material as ShaderMaterial
 	if mat:
 		mat.set_shader_parameter("intensity", intensity)
+
+func _update_relic_display():
+	for child in relic_container.get_children():
+		child.queue_free()
+	var relic_ids = RelicManager.get_active_relic_ids()
+	for rid in relic_ids:
+		var relic = RelicManager.all_relics.get(rid)
+		if not relic:
+			continue
+		var icon := TextureRect.new()
+		icon.custom_minimum_size = Vector2(28, 28)
+		icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		var color = _get_relic_rarity_color(relic.rarity)
+		icon.modulate = color
+		if ResourceLoader.exists(relic.icon_path):
+			icon.texture = load(relic.icon_path)
+		icon.tooltip_text = relic.relic_name + "\n" + relic.description
+		relic_container.add_child(icon)
+
+func _get_relic_rarity_color(rarity: int) -> Color:
+	match rarity:
+		RelicData.Rarity.COMMON: return Color(0.7, 0.7, 0.7)
+		RelicData.Rarity.UNCOMMON: return Color(0.2, 0.8, 0.2)
+		RelicData.Rarity.UNIQUE: return Color(0.2, 0.5, 1.0)
+		RelicData.Rarity.RARE: return Color(0.7, 0.2, 0.9)
+		RelicData.Rarity.EXCEPTIONAL: return Color(1.0, 0.7, 0.1)
+		_: return Color.WHITE

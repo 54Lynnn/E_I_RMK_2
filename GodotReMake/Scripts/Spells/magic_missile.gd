@@ -14,7 +14,8 @@ static func get_mana_cost(level: int) -> float:
 	return base_mana_cost + level
 
 static func get_damage(level: int) -> float:
-	return base_damage + level * 5.0
+	var damage_per_level := [10.0, 10.0, 15.0, 20.0, 20.0, 25.0, 30.0, 30.0, 35.0, 35.0]
+	return damage_per_level[clampi(level - 1, 0, 9)]
 
 static func get_missile_count(level: int) -> int:
 	if level >= 10:
@@ -167,6 +168,8 @@ func _on_body_entered(body):
 		body.take_damage(damage, damage_element)
 		if body.has_method("apply_debuff"):
 			body.apply_debuff("slowed", 1.0, {"factor": 0.5}, "basic")
+		if RelicManager.has_relic("knockback_missile"):
+			_apply_knockback(body)
 		destroy()
 		return
 	if body.is_in_group("walls"):
@@ -178,8 +181,22 @@ func _on_area_entered(area):
 		monster.take_damage(damage, damage_element)
 		if monster.has_method("apply_debuff"):
 			monster.apply_debuff("slowed", 1.0, {"factor": 0.5}, "basic")
+		if RelicManager.has_relic("knockback_missile"):
+			_apply_knockback(monster)
 		destroy()
 		return
+
+func _apply_knockback(monster: Node):
+	if not monster or not is_instance_valid(monster):
+		return
+	var knock_dir = global_position.direction_to(monster.global_position) * -1.0
+	if knock_dir.length() < 0.1:
+		knock_dir = Vector2.RIGHT
+	var target_pos = monster.global_position + knock_dir * 50.0
+	if monster.has_method("apply_debuff"):
+		monster.apply_debuff("stunned", 0.1, {}, "basic")
+	if monster.has_method("set_knockback"):
+		monster.set_knockback(knock_dir * 50.0, 0.1)
 
 func destroy():
 	var explosion = ObjectPool.get_object(ExplosionScene)

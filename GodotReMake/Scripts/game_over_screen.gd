@@ -57,4 +57,4 @@ func _on_retry():
 
 func _on_return_to_menu():
 	get_tree().paused = false
-	get_tree().change_scene_to_file("res://Scenes/GameModeSelect.tscn")
+	get_tree().change_scene_to_file("res://Scenes/MainMenu.tscn")

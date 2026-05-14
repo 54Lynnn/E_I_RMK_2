@@ -12,7 +12,7 @@ const ProjectileScene = preload("res://Scenes/Projectile.tscn")
 static var skill_name := "freezing_spear"   # 技能唯一标识
 static var skill_type := "active"            # 技能类型: active, toggle, passive
 static var base_cooldown := 1.0              # 基础冷却时间（秒）
-static var base_mana_cost := 10.0            # 基础魔法消耗
+static var base_mana_cost := 15.0            # 基础魔法消耗 (LV1=15)
 static var base_damage := 5.0               # 基础伤害值
 static var damage_element := "water"         # 伤害元素类型（water系技能）
 
@@ -108,6 +108,12 @@ static func _spawn_spears_async(hero: Node, mouse_pos: Vector2, damage: float, f
 		spear.damage = damage                    # 伤害值
 		spear.damage_element = damage_element    # 伤害类型：water
 		spear.is_piercing = true                 # 穿透：命中后继续飞行
+		
+		# 遗物：追踪冰冻之矛
+		if RelicManager.has_relic("tracking_spear"):
+			spear.has_homing = true
+			spear.homing_strength = 1.0
+			spear.homing_range = 350.0
 		
 		# 冰冻效果配置
 		spear.has_freeze = true                  # 启用冰冻效果

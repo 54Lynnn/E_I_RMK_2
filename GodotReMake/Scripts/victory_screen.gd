@@ -27,4 +27,4 @@ func _input(event):
 		get_viewport().set_input_as_handled()
 
 func _on_return_to_menu():
-	get_tree().change_scene_to_file("res://Scenes/GameModeSelect.tscn")
+	get_tree().change_scene_to_file("res://Scenes/MainMenu.tscn")

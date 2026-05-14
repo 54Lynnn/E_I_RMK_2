@@ -33,8 +33,10 @@ func get_object(scene: PackedScene) -> Node:
 	var scene_path = scene.resource_path
 	if not _pools.has(scene_path):
 		_pools[scene_path] = []
-	if _pools[scene_path].size() > 0:
+	while _pools[scene_path].size() > 0:
 		var obj = _pools[scene_path].pop_back()
+		if not is_instance_valid(obj):
+			continue
 		remove_child(obj)
 		obj.visible = true
 		obj.set_process(true)

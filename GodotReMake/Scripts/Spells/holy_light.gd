@@ -23,7 +23,8 @@ static func get_beam_count(level: int) -> int:
 	return 3
 
 static func get_damage(level: int) -> float:
-	return 120.0 + (level - 1) * 5.56
+	var damage_per_level := [120.0, 120.0, 130.0, 130.0, 140.0, 150.0, 150.0, 160.0, 170.0, 170.0]
+	return damage_per_level[clampi(level - 1, 0, 9)]
 
 static func get_mana_cost(level: int) -> float:
 	return 35.0 + (level - 1) * 2.0

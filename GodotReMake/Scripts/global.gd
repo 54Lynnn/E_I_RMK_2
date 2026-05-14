@@ -253,6 +253,14 @@ var show_monster_info := false
 # Survival 模式本轮累积获得的经验值（用于死亡统计）
 var survival_total_exp_gained := 0
 
+# 遗物链式选择计数
+var _pending_relic_count := 0
+
+# 自动释放（auto-cast）系统
+# skill_id -> true/false，标记技能是否处于自动释放状态
+var auto_cast_skills := {}
+signal auto_cast_changed(skill_id: String, enabled: bool)
+
 # 快捷技能槽位（空字符串 = 使用默认技能）
 var quick_slot_lmb := ""   # 左键快捷槽位，默认 magic_missile
 var quick_slot_rmb := ""   # 右键快捷槽位，默认 fireball
@@ -386,6 +394,7 @@ var time_stop_active := false    # 时间停止状态
 
 func _ready():
 	Engine.time_scale = 1.0
+	level_changed.connect(_on_level_changed_for_relic)
 
 func _process(delta):
 	# 每帧调用，处理生命和法力的自动恢复，以及buff更新
@@ -401,6 +410,7 @@ func _process(delta):
 	# 计算实际恢复速率（受属性影响）
 	# 原版公式：耐力每点增加0.1生命恢复/秒，基础0
 	var health_regen_rate = hero_stamina * 0.1
+	health_regen_rate += RelicManager.get_hp_regen_bonus()
 	
 	# 当计时器达到1/恢复速率时，恢复1点生命
 	# 例如：恢复速率2.0，则每0.5秒恢复1点
@@ -411,6 +421,7 @@ func _process(delta):
 	
 	# 法力恢复：智力0.06/点，智慧0.18/秒，基础0
 	var mana_regen_rate = hero_intelligence * 0.06 + hero_wisdom * 0.18
+	mana_regen_rate += RelicManager.get_mana_regen_bonus()
 	if mana_regen_rate > 0 and mana_regen_timer >= 1.0 / mana_regen_rate and mana < max_mana:
 		mana = min(mana + 1.0, max_mana)
 		mana_regen_timer = 0.0
@@ -424,7 +435,7 @@ func apply_strength():
 	# 力量影响最大生命值
 	# 原版公式：STRENGTH_ON_HEALTH = 10, START_VALUE = 0
 	# max_health = strength * 10
-	max_health = hero_strength * 10.0
+	max_health = hero_strength * 10.0 + RelicManager.get_max_hp_bonus()
 	health = min(health, max_health)
 	health_changed.emit(health, max_health)
 	
@@ -524,12 +535,59 @@ func gain_experience(amount: int):
 	health_changed.emit(health, max_health)
 	mana_changed.emit(mana, max_mana)
 
+func _trigger_relic_selection():
+	_pending_relic_count += 1
+	_try_show_relic_ui()
+
+func _try_show_relic_ui():
+	if _pending_relic_count <= 0:
+		return
+	var scene = get_tree().current_scene
+	if not scene:
+		return
+	var existing = scene.get_node_or_null("RelicSelectUI")
+	if existing:
+		if is_instance_valid(existing) and existing.visible:
+			return
+		if is_instance_valid(existing):
+			existing.queue_free()
+	var is_first = RelicManager.active_relic_ids.is_empty()
+	var relics = RelicManager.generate_choices(3, is_first)
+	if relics.is_empty():
+		_pending_relic_count = 0
+		return
+	var ui_scene = preload("res://Scenes/RelicSelectUI.tscn")
+	var ui = ui_scene.instantiate()
+	ui.name = "RelicSelectUI"
+	ui.relic_ui_closed.connect(_on_relic_ui_closed)
+	scene.add_child(ui)
+	ui.show_choices(relics)
+
+func _on_relic_ui_closed():
+	_pending_relic_count -= 1
+	if _pending_relic_count > 0:
+		_try_show_relic_ui()
+
+func _on_level_changed_for_relic(new_level: int):
+	if RelicManager.is_relic_level(new_level):
+		_pending_relic_count += 1
+		_try_show_relic_ui()
+
+func start_first_relic_selection():
+	_trigger_relic_selection()
+
 # ============================================
 # 伤害和治疗系统
 # ============================================
 
 func take_damage(amount: float, is_magic: bool = false, attacker: Node = null):
 	if invulnerable:
+		return
+
+	if RelicManager.try_consume_shield():
+		var hero = get_tree().get_first_node_in_group("hero")
+		if hero and hero.has_method("shield_break_effect"):
+			hero.shield_break_effect()
 		return
 
 	if is_magic:
@@ -752,6 +810,8 @@ func reset():
 		skill_levels[skill] = 0
 	# 原版：初始magic missile为1级
 	skill_levels["magic_missile"] = 1
+
+	RelicManager.reset_run()
 	
 	# 重新计算基础属性
 	apply_strength()

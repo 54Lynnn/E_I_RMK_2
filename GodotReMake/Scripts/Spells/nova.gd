@@ -10,10 +10,10 @@ static var base_damage := 200.0
 static var damage_element := "water"
 
 static func get_mana_cost(level: int) -> float:
-	return base_mana_cost + level * 2.2
+	return 45.0 + (level - 1) * 2.0
 
 static func get_damage(level: int) -> float:
-	return base_damage + level * 10.0
+	return 200.0 + (level - 1) * 10.0
 
 static func get_radius(_level: int) -> float:
 	return 100.0
@@ -41,7 +41,7 @@ static func cast(hero: Node, mouse_pos: Vector2, skill_cooldowns: Dictionary) ->
 		proj.global_position = muzzle.global_position
 		proj.direction = hero.global_position.direction_to(mouse_pos)
 		proj.damage = get_damage(level)
-		proj.explosion_radius = get_radius(level)
+		proj.explosion_radius = get_radius(level) * RelicManager.get_aoe_radius_multiplier()
 		proj.freeze_duration = get_freeze_duration(level)
 		hero.get_parent().add_child(proj)
 

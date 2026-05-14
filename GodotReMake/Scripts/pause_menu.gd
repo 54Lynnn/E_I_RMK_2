@@ -80,7 +80,7 @@ func _on_load():
 func _on_return_to_menu():
 	get_tree().paused = false
 	Global.is_pause_menu_open = false
-	get_tree().change_scene_to_file("res://Scenes/GameModeSelect.tscn")
+	get_tree().change_scene_to_file("res://Scenes/MainMenu.tscn")
 
 func _on_quit():
 	get_tree().paused = false

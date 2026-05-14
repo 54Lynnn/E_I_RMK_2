@@ -9,7 +9,7 @@ static var damage_element := "water"
 static var base_duration := 10.0
 
 static func get_mana_cost(level: int) -> float:
-	return base_mana_cost + level * 2  # LV1=35, LV10=54 (原版数据)
+	return 35.0 + (level - 1) * 2.0  # LV1=35, LV10=53 (原版数据)
 
 static func get_damage(level: int) -> float:
 	return 50.0 + level * 10.0  # LV1=60, LV10=150 (原版数据)
@@ -34,9 +34,9 @@ static func cast(hero: Node, mouse_pos: Vector2, skill_cooldowns: Dictionary) ->
 		var cloud = preload("res://Scenes/PoisonCloud.tscn").instantiate()
 		cloud.name = "poison_cloud_zone"
 		cloud.global_position = mouse_pos
-		cloud.damage = get_damage(level)
+		cloud.damage = get_damage(level) * 0.1
 		cloud.duration = get_duration(level)
-		cloud.radius = 110.0  # 原版固定110
+		cloud.radius = 110.0 * RelicManager.get_aoe_radius_multiplier()  # 原版固定110
 		hero.get_parent().add_child(cloud)
 
 		skill_cooldowns[skill_name] = base_cooldown
@@ -48,7 +48,7 @@ static func cast(hero: Node, mouse_pos: Vector2, skill_cooldowns: Dictionary) ->
 @export var radius := 80.0
 
 var life_time := 0.0
-var damage_interval := 1.0
+var damage_interval := 0.1
 var damage_timer := 0.0
 var damaged_monsters := []
 

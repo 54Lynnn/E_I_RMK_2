@@ -5,7 +5,7 @@ static var skill_type := "passive"  # 技能类型: active, toggle, passive
 static var base_petrify_chance := 0.15
 
 static func get_petrify_chance(level: int) -> float:
-	return min(base_petrify_chance + level * 0.05, 0.60)
+	return min(0.15 + (level - 1) * 0.05, 0.60)
 
 static func get_petrify_duration(_level: int) -> float:
 	return 1.0

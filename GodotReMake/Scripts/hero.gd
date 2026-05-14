@@ -51,8 +51,8 @@ const BASE_MOVE_SPEED := 65.0
 
 # 加速度和摩擦力（用于平滑移动）
 # 值越大，角色启动和停止越快
-@export var acceleration := 700.0
-@export var friction := 800.0
+@export var acceleration := 3000.0
+@export var friction := 3000.0
 
 # @onready 表示在节点_ready()时自动获取这些子节点
 @onready var sprite := $Sprite2D          # 角色精灵图
@@ -135,9 +135,14 @@ func _ready():
 	Global.skill_level_changed.connect(_on_skill_level_changed)
 	Global.hero_took_damage.connect(_on_hero_took_damage)
 	Global.load_game_started.connect(_on_load_game_started)
+	RelicManager.active_relics_changed.connect(_on_active_relics_changed)
 
 	Global.apply_strength()
+
+	_setup_shield_visual()
 	Global.apply_intelligence()
+
+	call_deferred("_check_first_relic")
 
 	Global.health = Global.max_health
 	Global.mana = Global.max_mana
@@ -161,7 +166,7 @@ func _process(delta):
 
 	for skill in skill_cooldowns.keys():
 		if skill_cooldowns[skill] > 0:
-			skill_cooldowns[skill] -= delta
+			skill_cooldowns[skill] -= delta * RelicManager.get_cooldown_multiplier()
 			if skill_cooldowns[skill] < 0:
 				skill_cooldowns[skill] = 0
 
@@ -212,6 +217,11 @@ func _process(delta):
 			cast_ball_lightning()
 		if Input.is_action_pressed("spell_chain_lightning"):
 			cast_chain_lightning()
+	
+	# 自动释放（Auto-Cast）系统
+	# 遍历所有标记为自动释放的技能，在冷却就绪且有怪物时自动施法
+	if not Global.is_in_hit_recovery and not is_dying:
+		_process_auto_cast(delta)
 	
 	# 存档快捷键 (F5)
 	if Input.is_action_just_pressed("save_game"):
@@ -329,26 +339,24 @@ func start_attack():
 	sprite.texture = ATTACK_TEXTURE
 
 func _physics_process(delta):
-	# 物理帧执行：处理移动和碰撞
-	
 	# 获取输入方向（WASD）
-	# 返回Vector2，例如按W返回(0, -1)
 	var input_dir = Input.get_vector("move_left", "move_right", "move_up", "move_down")
 	
-	# 计算目标速度 = 方向 × 移动速度（get_move_speed 内部已含 speed_multiplier）
-	var target_velocity = input_dir * get_move_speed()
+	# 归一化输入向量，确保斜向移动速度与直线一致
+	if input_dir.length() > 1.0:
+		input_dir = input_dir.normalized()
 	
-	# 平滑过渡到目标速度（加速度效果）
-	velocity = velocity.move_toward(target_velocity, acceleration * delta)
+	var is_moving = input_dir.length() > 0
 	
-	# 执行移动并处理碰撞
+	if is_moving:
+		# 有输入时：加速到目标速度
+		var target_velocity = input_dir * get_move_speed()
+		velocity = velocity.move_toward(target_velocity, acceleration * delta)
+	else:
+		# 无输入时：减速停止（摩擦力）
+		velocity = velocity.move_toward(Vector2.ZERO, friction * delta)
+	
 	move_and_slide()
-	
-	# 检测与怪物的碰撞
-	for i in get_slide_collision_count():
-		var col = get_slide_collision(i)
-		if col.get_collider().is_in_group("monsters"):
-			pass  # 碰撞处理（预留）
 
 func _unhandled_input(event):
 	# 如果处于受击恢复状态，不能施法
@@ -404,83 +412,6 @@ func _unhandled_input(event):
 	if event.is_action_pressed("spell_chain_lightning"):
 		cast_chain_lightning()
 
-func cast_magic_missile():
-	start_attack()
-	MagicMissile.cast(self, mouse_pos, skill_cooldowns)
-
-func cast_fireball():
-	start_attack()
-	Fireball.cast(self, mouse_pos, skill_cooldowns)
-
-func cast_freezing_spear():
-	start_attack()
-	FreezingSpear.cast(self, mouse_pos, skill_cooldowns)
-
-func cast_prayer():
-	start_attack()
-	Prayer.cast(self, mouse_pos, skill_cooldowns)
-
-func cast_heal():
-	start_attack()
-	Heal.cast(self, mouse_pos, skill_cooldowns)
-
-func cast_teleport():
-	Teleport.cast(self, mouse_pos, skill_cooldowns)
-
-func cast_mistfog():
-	start_attack()
-	MistFog.cast(self, mouse_pos, skill_cooldowns)
-
-func cast_wrath_of_god():
-	start_attack()
-	WrathOfGod.cast(self, mouse_pos, skill_cooldowns)
-
-func cast_telekinesis():
-	Telekinesis.cast(self, mouse_pos, skill_cooldowns)
-
-func cast_sacrifice():
-	start_attack()
-	Sacrifice.cast(self, mouse_pos, skill_cooldowns)
-
-func cast_holy_light():
-	start_attack()
-	HolyLight.cast(self, mouse_pos, skill_cooldowns)
-
-func cast_fire_walk():
-	start_attack()
-	FireWalk.cast(self, mouse_pos, skill_cooldowns)
-
-func cast_meteor():
-	start_attack()
-	Meteor.cast(self, mouse_pos, skill_cooldowns)
-
-func cast_armageddon():
-	start_attack()
-	Armageddon.cast(self, mouse_pos, skill_cooldowns)
-
-func cast_poison_cloud():
-	start_attack()
-	PoisonCloud.cast(self, mouse_pos, skill_cooldowns)
-
-func cast_fortuna():
-	Fortuna.cast(self, mouse_pos, skill_cooldowns)
-
-func cast_dark_ritual():
-	start_attack()
-	DarkRitual.cast(self, mouse_pos, skill_cooldowns)
-
-func cast_nova():
-	start_attack()
-	Nova.cast(self, mouse_pos, skill_cooldowns)
-
-func cast_ball_lightning():
-	start_attack()
-	BallLightning.cast(self, mouse_pos, skill_cooldowns)
-
-func cast_chain_lightning():
-	start_attack()
-	ChainLightning.cast(self, mouse_pos, skill_cooldowns)
-
 func _cast_skill_by_id(skill_id: String):
 	# 根据技能ID调用对应的施法函数
 	match skill_id:
@@ -519,6 +450,63 @@ func _get_quick_slot_skill(slot: String) -> String:
 		_:
 			var s = Global.quick_slot_space
 			return s if not s.is_empty() else "heal"
+
+
+# ============================================
+# 自动释放（Auto-Cast）系统
+# ============================================
+
+var _auto_cast_timer := 0.0
+var _auto_cast_interval := 0.15
+
+func _process_auto_cast(_delta: float):
+	_auto_cast_timer += _delta
+	if _auto_cast_timer < _auto_cast_interval:
+		return
+	_auto_cast_timer = 0.0
+
+	for skill_id in Global.auto_cast_skills.keys():
+		if not Global.auto_cast_skills.get(skill_id, false):
+			continue
+
+		if skill_cooldowns.get(skill_id, 0.0) > 0:
+			continue
+
+		if not _auto_cast_check_mana(skill_id):
+			continue
+
+		_cast_skill_by_id(skill_id)
+
+func _auto_cast_check_mana(skill_id: String) -> bool:
+	if Global.free_spells:
+		return true
+	var level = Global.skill_levels.get(skill_id, 0)
+	if level <= 0:
+		return false
+	var mana_cost := 0.0
+	match skill_id:
+		"magic_missile": mana_cost = MagicMissile.get_mana_cost(level)
+		"fireball": mana_cost = Fireball.get_mana_cost(level)
+		"freezing_spear": mana_cost = FreezingSpear.get_mana_cost(level)
+		"prayer": mana_cost = 0.0
+		"heal": mana_cost = Heal.get_mana_cost(level)
+		"teleport": mana_cost = Teleport.get_mana_cost(level)
+		"mistfog": mana_cost = MistFog.get_mana_cost(level)
+		"wrath_of_god": mana_cost = WrathOfGod.get_mana_cost(level)
+		"telekinesis": mana_cost = Telekinesis.get_mana_cost(level)
+		"sacrifice": mana_cost = 0.0
+		"holy_light": mana_cost = HolyLight.get_mana_cost(level)
+		"fire_walk": mana_cost = FireWalk.get_mana_cost(level)
+		"meteor": mana_cost = Meteor.get_mana_cost(level)
+		"armageddon": mana_cost = Armageddon.get_mana_cost(level)
+		"poison_cloud": mana_cost = PoisonCloud.get_mana_cost(level)
+		"fortuna": mana_cost = 0.0
+		"dark_ritual": mana_cost = DarkRitual.get_mana_cost(level)
+		"nova": mana_cost = Nova.get_mana_cost(level)
+		"ball_lightning": mana_cost = BallLightning.get_mana_cost(level)
+		"chain_lightning": mana_cost = 55.0 + (level - 1) * 2.0
+		_: return false
+	return Global.mana >= mana_cost
 
 
 func _on_level_changed(lvl):
@@ -581,6 +569,213 @@ static func _create_circle_texture(radius: int, color: Color = Color.WHITE) -> I
 			if Vector2(x, y).distance_squared_to(center) <= radius_sq:
 				image.set_pixel(x, y, color)
 	return ImageTexture.create_from_image(image)
+
+var shield_sprite: Sprite2D = null
+
+func _setup_shield_visual():
+	if shield_sprite:
+		shield_sprite.queue_free()
+		shield_sprite = null
+	if not RelicManager.has_relic("shield"):
+		return
+	shield_sprite = Sprite2D.new()
+	shield_sprite.name = "ShieldBubble"
+	shield_sprite.texture = _create_shield_circle_texture(32)
+	shield_sprite.modulate = Color(0.3, 0.6, 1.0, 0.4)
+	shield_sprite.scale = Vector2(2.0, 2.0)
+	shield_sprite.z_index = 10
+	add_child(shield_sprite)
+
+func _on_active_relics_changed(_relic_ids: Array):
+	_setup_shield_visual()
+
+func _update_shield_visual():
+	if not shield_sprite:
+		return
+	if is_instance_valid(shield_sprite):
+		shield_sprite.visible = RelicManager.get_shield_active()
+
+func _create_shield_circle_texture(radius: int) -> ImageTexture:
+	var diameter = radius * 2
+	var image = Image.create(diameter, diameter, false, Image.FORMAT_RGBA8)
+	image.fill(Color(0, 0, 0, 0))
+	var center = Vector2(radius, radius)
+	for y in range(diameter):
+		for x in range(diameter):
+			var dist = Vector2(x, y).distance_squared_to(center)
+			var max_dist = radius * radius
+			var inner = (radius - 3) * (radius - 3)
+			if dist >= inner and dist <= max_dist:
+				var alpha = 1.0
+				if dist > (radius - 1) * (radius - 1):
+					alpha = 1.0 - (sqrt(dist) - (radius - 1)) * 0.5
+				image.set_pixel(x, y, Color(1, 1, 1, alpha * 0.8))
+	return ImageTexture.create_from_image(image)
+
+func shield_break_effect():
+	if not shield_sprite or not is_instance_valid(shield_sprite):
+		return
+	var original_modulate = shield_sprite.modulate
+	shield_sprite.modulate = Color(1, 1, 1, 0.8)
+	var tween = create_tween()
+	tween.tween_property(shield_sprite, "modulate", original_modulate, 0.3)
+
+func _try_multicast(skill_id: String):
+	if not RelicManager.has_relic("multicast"):
+		return
+	get_tree().create_timer(0.2).timeout.connect(func():
+		if not is_instance_valid(self):
+			return
+		if randf() < 0.15:
+			_show_multicast_text()
+			var saved_cd = skill_cooldowns.get(skill_id, 0.0)
+			var saved_free = Global.free_spells
+			skill_cooldowns[skill_id] = 0.0
+			Global.free_spells = true
+			_cast_skill_by_id(skill_id)
+			skill_cooldowns[skill_id] = saved_cd
+			Global.free_spells = saved_free
+	)
+
+func _show_multicast_text():
+	var label = Label.new()
+	label.text = "Multicast!"
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.add_theme_font_size_override("font_size", 20)
+	label.add_theme_color_override("font_color", Color(1, 0.4, 0.8, 1))
+	label.add_theme_color_override("font_outline_color", Color(0.3, 0, 0.2, 1))
+	label.add_theme_constant_override("outline_size", 4)
+	label.position = Vector2(-60, -80)
+	label.size = Vector2(120, 30)
+	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(label)
+	var tween = create_tween()
+	tween.tween_property(label, "position:y", label.position.y - 50, 1.0)
+	tween.parallel().tween_property(label, "modulate:a", 0.0, 1.0)
+	tween.tween_callback(label.queue_free)
+
+func _check_first_relic():
+	if RelicManager.active_relic_ids.is_empty() and RelicManager.is_relic_level(1):
+		Global.start_first_relic_selection()
+
+# 修改所有 cast 函数，添加护盾视觉更新和多倍施法
+func cast_magic_missile():
+	start_attack()
+	if MagicMissile.cast(self, mouse_pos, skill_cooldowns):
+		_update_shield_visual()
+		_try_multicast("magic_missile")
+
+func cast_fireball():
+	start_attack()
+	if Fireball.cast(self, mouse_pos, skill_cooldowns):
+		_update_shield_visual()
+		_try_multicast("fireball")
+
+func cast_freezing_spear():
+	start_attack()
+	if FreezingSpear.cast(self, mouse_pos, skill_cooldowns):
+		_update_shield_visual()
+		_try_multicast("freezing_spear")
+
+func cast_prayer():
+	start_attack()
+	if Prayer.cast(self, mouse_pos, skill_cooldowns):
+		_update_shield_visual()
+		_try_multicast("prayer")
+
+func cast_heal():
+	start_attack()
+	if Heal.cast(self, mouse_pos, skill_cooldowns):
+		_update_shield_visual()
+		_try_multicast("heal")
+
+func cast_teleport():
+	if Teleport.cast(self, mouse_pos, skill_cooldowns):
+		_update_shield_visual()
+		_try_multicast("teleport")
+
+func cast_mistfog():
+	start_attack()
+	if MistFog.cast(self, mouse_pos, skill_cooldowns):
+		_update_shield_visual()
+		_try_multicast("mistfog")
+
+func cast_wrath_of_god():
+	start_attack()
+	if WrathOfGod.cast(self, mouse_pos, skill_cooldowns):
+		_update_shield_visual()
+		_try_multicast("wrath_of_god")
+
+func cast_telekinesis():
+	if Telekinesis.cast(self, mouse_pos, skill_cooldowns):
+		_update_shield_visual()
+		_try_multicast("telekinesis")
+
+func cast_sacrifice():
+	start_attack()
+	if Sacrifice.cast(self, mouse_pos, skill_cooldowns):
+		_update_shield_visual()
+		_try_multicast("sacrifice")
+
+func cast_holy_light():
+	start_attack()
+	if HolyLight.cast(self, mouse_pos, skill_cooldowns):
+		_update_shield_visual()
+		_try_multicast("holy_light")
+
+func cast_fire_walk():
+	start_attack()
+	if FireWalk.cast(self, mouse_pos, skill_cooldowns):
+		_update_shield_visual()
+		_try_multicast("fire_walk")
+
+func cast_meteor():
+	start_attack()
+	if Meteor.cast(self, mouse_pos, skill_cooldowns):
+		_update_shield_visual()
+		_try_multicast("meteor")
+
+func cast_armageddon():
+	start_attack()
+	if Armageddon.cast(self, mouse_pos, skill_cooldowns):
+		_update_shield_visual()
+		_try_multicast("armageddon")
+
+func cast_poison_cloud():
+	start_attack()
+	if PoisonCloud.cast(self, mouse_pos, skill_cooldowns):
+		_update_shield_visual()
+		_try_multicast("poison_cloud")
+
+func cast_fortuna():
+	if Fortuna.cast(self, mouse_pos, skill_cooldowns):
+		_update_shield_visual()
+		_try_multicast("fortuna")
+
+func cast_dark_ritual():
+	start_attack()
+	if DarkRitual.cast(self, mouse_pos, skill_cooldowns):
+		_update_shield_visual()
+		_try_multicast("dark_ritual")
+
+func cast_nova():
+	start_attack()
+	if Nova.cast(self, mouse_pos, skill_cooldowns):
+		_update_shield_visual()
+		_try_multicast("nova")
+
+func cast_ball_lightning():
+	start_attack()
+	if BallLightning.cast(self, mouse_pos, skill_cooldowns):
+		_update_shield_visual()
+		_try_multicast("ball_lightning")
+
+func cast_chain_lightning():
+	start_attack()
+	if ChainLightning.cast(self, mouse_pos, skill_cooldowns):
+		_update_shield_visual()
+		_try_multicast("chain_lightning")
 
 func _on_died():
 	if is_dying:

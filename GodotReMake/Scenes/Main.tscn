@@ -4,7 +4,7 @@
 [ext_resource type="Script" uid="uid://5838oq0m3lqi" path="res://Scripts/Monsters/monster_spawner.gd" id="2"]
 [ext_resource type="PackedScene" path="res://Scenes/Hero.tscn" id="3"]
 [ext_resource type="PackedScene" path="res://Scenes/HUD.tscn" id="4"]
-[ext_resource type="Texture2D" uid="uid://chjoxpptbiphl" path="res://Art/Placeholder/ground.png" id="5"]
+[ext_resource type="Texture2D" path="res://Art/Textures/map_tex_0_1024x1024.dds" id="5"]
 [ext_resource type="PackedScene" path="res://Scenes/HeroPanel.tscn" id="6"]
 [ext_resource type="PackedScene" uid="uid://pausemenu" path="res://Scenes/PauseMenu.tscn" id="7"]
 
@@ -16,8 +16,8 @@ size = Vector2(1536, 32)
 
 [node name="Main" type="Node2D" unique_id=1226489388]
 
-[node name="Ground" type="Sprite2D" parent="." unique_id=1395125842]
-scale = Vector2(12, 12)
+[node name="Ground" type="Sprite2D" parent="." unique_id=1395125842 groups=["ground"]]
+scale = Vector2(1.5, 1.5)
 texture = ExtResource("5")
 centered = false
 
