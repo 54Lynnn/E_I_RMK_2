@@ -71,6 +71,42 @@
 - **所有怪物数值统一在 `monster_database.gd` 管理**，.tscn 中不再保留重复参数
 - **刷怪参数（间隔/数量/解锁等级）来源不确定**，建议根据游戏体验调整
 
+## ⚠️ 关键教训：暂停状态下 UI 面板的输入处理
+
+**HeroPanel（T键）和PauseMenu（ESC键）必须使用 `_input(event)` + `PROCESS_MODE_ALWAYS` 来实现。**
+
+### 正确写法（不可改动）
+```gdscript
+extends Control
+# 场景文件中必须设置 process_mode = 3（PROCESS_MODE_ALWAYS）
+
+func _input(event):                          # ← 必须用 _input，不能用 _process
+    if event.is_action_pressed("toggle_hero_panel"):  # ← 必须用 event 参数，不能用 Input 单例
+        toggle()
+```
+
+### ❌ 曾经踩过的坑
+
+有个 agent 把 `_input(event)` 改成了 `_process(_delta)` + `Input.is_action_just_pressed()`，结果：
+- 按 T 打不开 HeroPanel（按键被暂停状态吞掉）
+- 按 ESC 打不开 PauseMenu（连带影响）
+- 整个游戏无法正常交互
+- 最终需要通过 `git push --force origin master` 回滚修复
+
+### 为什么 `_input(event)` 不可替代？
+
+| 方案 | 暂停时能否工作 | 原理 |
+|------|:---:|------|
+| `_input(event)` + `PROCESS_MODE_ALWAYS` | ✅ | 每个输入事件独立传递到节点，不受暂停影响 |
+| `_process(_delta)` + `Input.is_action_just_pressed()` | ❌ | 依赖全局输入缓存，暂停时缓存刷新时机错乱 |
+| `_unhandled_input(event)` | ❌ | 暂停时停止分发 |
+
+### 适用范围
+- **HeroPanel**：`toggle_hero_panel`（T键）
+- **PauseMenu**：`pause_game`（ESC键）
+- **VictoryScreen / GameOverScreen / LevelCompleteScreen**：`pause_game`（阻止事件传播）
+- 所有需要在游戏暂停时接收输入的 UI 面板都必须用此模式
+
 ## 建议下一步工作（按优先级）
 
 1. **高分榜** — 原版有在线高分榜（对话框 UI 已从 Data.pak 提取参考）
