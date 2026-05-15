@@ -3,7 +3,7 @@
 > **项目**: Evil Invasion (2006年Flash游戏) Godot 4.6 重制版
 > **引擎**: Godot 4.6.2
 > **GitHub**: https://github.com/54Lynnn/E_I_RMK_2
-> **最新更新**: v10 Agent — Firewalk Toggle重写 + 爆炸碰撞检测统一 + Controls Guide + 导出配置准备
+> **最新更新**: v11 Agent — 加密导出完成 + 输入处理教训文档化 + GitHub回滚 + 全量文档更新
 
 ## 快速开始
 
@@ -29,7 +29,7 @@
 - **Controls Guide 操作指南**：主菜单和暂停菜单中增加操作指南图片浏览功能，玩家可查看所有快捷键说明
 - **Firewalk Toggle 重写**：将 firewalk 从普通技能重写为 toggle 类技能（按 U 开关），移动时每 30px 产生一团火焰，火焰使用 Area2D + CircleShape2D 物理碰撞检测伤害，每 0.1s 结算一次 DOT
 - **爆炸伤害检测统一**：将所有范围技能的伤害判定从"怪物节点原点距离"改为"物理碰撞体重叠检测"（Area2D.get_overlapping_bodies() / PhysicsShapeQueryParameters2D.intersect_shape()），怪物碰撞体接触到范围边缘即判伤
-- **游戏导出配置准备**：export_presets.cfg 配置加密参数（encrypt_pck=true, encrypt_directory=true, script_export_mode=1），创建一键导出脚本 export_game.ps1。**注意：尚未实际导出 exe**，需下载 Godot 4.6.2 导出模板后执行脚本
+- **游戏导出配置准备**：export_presets.cfg 配置加密参数（encrypt_pck=true, encrypt_directory=false, script_export_mode=2, embed_pck=true），创建一键导出脚本 export_game.ps1。**✅ 已成功导出加密版单 exe 文件（encrypt_pck + embed_pck 组合可用）**
 
 ### 🎯 技能与平衡调整
 - **Firewalk 参数**：无 mana cost，移动 30px 产生一团火焰，伤害半径 18px，火焰持续 2 秒（含 0.3s 渐隐），每 0.1s 结算一次 DOT
@@ -47,6 +47,36 @@
 - **暂停时设置 Quickslot**：skill_bar_container.process_mode = PROCESS_MODE_ALWAYS
 - **Controls Guide 场景加载失败**：移除 load_steps，使用 [gd_scene format=3]，信号名 closed → guide_closed
 - **PROCESS_MODE_WHEN_PAUSED 语义误解**：多次误用，实际语义是"只在暂停时运行"，非暂停时反而不运行 → 改为 PROCESS_MODE_ALWAYS
+
+---
+
+## v11 会话完成的工作（2026-05-16）
+
+### ✨ 导出与加密
+- **导出配置修正**：最终工作组合为 `encrypt_pck=true` + `encrypt_directory=false` + `embed_pck=true` + `script_export_mode=2`
+- **加密密钥**：在 project.godot 中添加 `[encryption] script_encryption_key`
+- **一键导出**：export_game.ps1 脚本可用于 Godot 控制台导出
+- **✅ 成功导出加密版单 exe**：build/EvilInvasion_Encrypted.exe，从桌面也能正常运行
+
+### 📝 关键教训文档化
+- **新增强制阅读章节**："⚠️ 关键教训：暂停状态下 UI 面板的输入处理"
+  - 正确写法：`_input(event)` + `PROCESS_MODE_ALWAYS` + `event.is_action_pressed()`
+  - 错误写法对比：`_process(_delta)` + `Input.is_action_just_pressed()` 在暂停时失效
+  - 三种方案对比表格（`_input` ✅ vs `_process` ❌ vs `_unhandled_input` ❌）
+  - **T/ESC 与技能键（ZXC）的本质区别**：元按键 vs 功能按键，事件流上游 vs 下游
+  - 事件流路线图：Input → `_input()`(T/ESC) → UI → `_unhandled_input()`(技能键)
+- **踩坑经过**：laptop agent 改坏 → force push 回滚 → 知识沉淀
+
+### 🔧 GitHub 管理
+- **force push 回滚**：远程 master 被改坏后，使用 `git push --force origin master` 将远程分支恢复到正常版本
+- **全量文档更新**：所有 .md 文档审查、更新、废弃、删除
+
+### 🐛 修复
+- **暂停时面板输入处理**：HeroPanel 和 PauseMenu 必须使用 `_input(event)` 而非 `_process(_delta)`，且场景文件必须设置 `process_mode = 3`（PROCESS_MODE_ALWAYS）
+- **HANDOVER_PROMPT.md / NEXT_AGENT_PROMPT.md**：标记为废弃，重定向到 HANDOVER_PROMPT_FOR_NEXT_AGENT.md
+- **HANDOVER_MESSAGE.md**：已删除（完全过时）
+
+---
 
 ### 🔍 Relic 与 Firewalk 交互审计
 - 检查所有 relic 与 firewalk 的交互路径
@@ -67,7 +97,7 @@
 - 技能数值以 `evil_invasion_spell.xlsx` 为准
 - 一个技能一个场景的架构
 - snake_case 命名变量/函数，PascalCase 命名场景文件
-- **所有 .md 文档已更新到最新状态（2026-05-15）**
+- **所有 .md 文档已更新到最新状态（2026-05-16）**
 - **所有怪物数值统一在 `monster_database.gd` 管理**，.tscn 中不再保留重复参数
 - **刷怪参数（间隔/数量/解锁等级）来源不确定**，建议根据游戏体验调整
 
@@ -151,4 +181,4 @@ Input 事件进入 Godot
 2. **选项设置** — 音量/按键自定义/画面设置（优先级低）
 3. **地图纹理** — 6张 DDS 纹理已提取，替换当前绿色占位地面
 4. **音效系统** — 68个OGG已提取，需对接到各技能
-5. **游戏导出** — export_presets.cfg 已配置加密参数，export_game.ps1 已创建，需下载 Godot 4.6.2 导出模板后执行脚本完成导出
+5. **游戏导出** — export_presets.cfg 已配置加密参数，已成功导出加密版单 exe（build/EvilInvasion_Encrypted.exe），后续导出可直接运行 export_game.ps1 或使用 Godot → Export 菜单
