@@ -46,8 +46,7 @@ func _on_game_mode_changed(index: int):
 		quest_warning.modulate = Color.YELLOW
 
 func _on_difficulty_changed(index: int):
-	var difficulty_name = difficulty_dropdown.get_item_text(index)
-	print("Selected difficulty: " + difficulty_name)
+	pass
 
 func _on_start_game():
 	var mode_index = game_mode_dropdown.selected

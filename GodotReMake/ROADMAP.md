@@ -2,7 +2,7 @@
 
 > 基于 Godot 4.6 的 Evil Invasion (2006) 复刻项目
 > 计划版本：v1.0 | 目标平台：Windows
-> **最后更新：2026-05-16（v11 Agent: 加密导出完成 + 输入处理教训文档化 + GitHub回滚 + 全量文档更新）**
+> **最后更新：2026-05-16（v12 Agent: hero.gd全面重构 + 统一施法调度 + 冷却缩减遗物修正 + 全项目性能优化）**
 
 ---
 
@@ -233,11 +233,19 @@ GodotReMake/
 | **Controls Guide 操作指南** | 主菜单/暂停菜单 | ✅ 快捷键说明浏览 |
 | **Firewalk Toggle 重写** | U | ✅ toggle类技能，移动产生火焰DOT |
 | **爆炸伤害碰撞检测** | 自动 | ✅ 所有范围技能使用物理碰撞检测 |
-| **Teleport 输入修复** | 2 | ✅ 修复按"2"键无效 |
+| **Teleport 输入修复** | 2 | ✅ 修复按"2"键无效（v12在 _process 中处理） |
 | **暂停时设置 Quickslot** | T+鼠标 | ✅ HeroPanel暂停时仍可设置 |
 | **Meteor/Armageddon 平衡** | F/G | ✅ 调整生成间隔/数量/贴图大小 |
 | **Autocast 间隔优化** | 右键设置 | ✅ 0.15s→0.1s |
 | **游戏导出配置准备** | - | ✅ export_presets.cfg 已配置加密参数，已成功导出加密版单 exe |
+| **统一施法调度** | - | ✅ 全部21个 cast_xxx() 合并为 _cast_skill(skill_id)，删除 ~200 行重复代码 |
+| **技能输入检测去重** | - | ✅ 移除 _unhandled_input()，消除双重输入检测 |
+| **冷却缩减遗物修正** | - | ✅ 从"减慢冷却"改为"技能加速"，并影响自动火球/护盾充能 |
+| **全局代码清理** | 12文件 | ✅ 移除60+条遗留 print 调试语句 |
+| **HUD性能优化** | hud.gd | ✅ StyleBoxFlat缓存 + 冷却UI节流（10次/秒代替60次/秒） |
+| **击退遗物修复** | magic_missile.gd | ✅ 方向修正为弹道方向，速度100px/s实现50px击退效果 |
+| **Quickslot修正** | hero.gd, global.gd | ✅ 死亡重置清空，Shift/Space无默认技能 |
+| **Dev按钮位置修复** | HeroPanel.tscn | ✅ 按钮宽度从200缩至110px，避免超出面板 |
 
 ### 2.3 待解决的问题 🔧
 

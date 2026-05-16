@@ -189,14 +189,13 @@ func _on_area_entered(area):
 func _apply_knockback(monster: Node):
 	if not monster or not is_instance_valid(monster):
 		return
-	var knock_dir = global_position.direction_to(monster.global_position) * -1.0
+	var knock_dir = direction
 	if knock_dir.length() < 0.1:
 		knock_dir = Vector2.RIGHT
-	var target_pos = monster.global_position + knock_dir * 50.0
 	if monster.has_method("apply_debuff"):
 		monster.apply_debuff("stunned", 0.1, {}, "basic")
 	if monster.has_method("set_knockback"):
-		monster.set_knockback(knock_dir * 50.0, 0.1)
+		monster.set_knockback(knock_dir * 100.0, 0.1)
 
 func destroy():
 	var explosion = ObjectPool.get_object(ExplosionScene)

@@ -31,16 +31,9 @@ var level_buttons := []
 @onready var back_button = $CenterContainer/VBoxContainer/BackButton
 
 func _ready():
-	# 创建关卡按钮
 	_create_level_buttons()
-	
-	# 更新按钮状态
 	_update_button_states()
-	
-	# 连接返回按钮
 	back_button.pressed.connect(_on_back_pressed)
-	
-	print("LevelSelect: 关卡选择器已加载，最大解锁关卡=%d" % Global.quest_max_unlocked_level)
 
 func _create_level_buttons():
 	"""创建10个关卡按钮"""
@@ -51,13 +44,11 @@ func _create_level_buttons():
 		button.alignment = HORIZONTAL_ALIGNMENT_CENTER
 		
 		# 连接点击信号
-		var level_index = i  # 捕获当前索引
+		var level_index = i
 		button.pressed.connect(func(): _on_level_selected(level_index))
 		
 		grid_container.add_child(button)
 		level_buttons.append(button)
-		
-		print("LevelSelect: 创建按钮 Level %d - %s" % [i + 1, level_configs[i]["name"]])
 
 func _update_button_states():
 	"""更新按钮状态（已解锁/未解锁）"""
@@ -74,16 +65,10 @@ func _update_button_states():
 			else:
 				button.text = "Level %d\n%s\n[当前]" % [i + 1, level_configs[i]["name"]]
 		else:
-			button.modulate = Color(0.5, 0.5, 0.5, 1)  # 灰色
+			button.modulate = Color(0.5, 0.5, 0.5, 1)
 			button.text = "Level %d\n%s\n[锁定]" % [i + 1, level_configs[i]["name"]]
-		
-		print("LevelSelect: Level %d 状态=%s" % [i + 1, "已解锁" if is_unlocked else "锁定"])
 
 func _on_level_selected(level_index: int):
-	"""选择关卡"""
-	print("LevelSelect: 选择关卡 %d - %s" % [level_index + 1, level_configs[level_index]["name"]])
-	
-	# 设置当前关卡
 	Global.quest_progress.current_level = level_index
 	Global.quest_progress.monsters_killed = 0
 	Global.quest_progress.monsters_spawned = 0
@@ -101,6 +86,4 @@ func _on_level_selected(level_index: int):
 	get_tree().change_scene_to_file("res://Scenes/QuestMain.tscn")
 
 func _on_back_pressed():
-	"""返回模式选择"""
-	print("LevelSelect: 返回模式选择")
 	get_tree().change_scene_to_file("res://Scenes/GameModeSelect.tscn")

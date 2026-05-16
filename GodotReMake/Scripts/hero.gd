@@ -45,6 +45,41 @@ const Nova = preload("res://Scripts/Spells/nova.gd")
 const BallLightning = preload("res://Scripts/Spells/ball_lightning.gd")
 const ChainLightning = preload("res://Scripts/Spells/chain_lightning.gd")
 
+# 技能脚本字典（用于统一施法调度）
+const SKILL_SCRIPTS := {
+	"magic_missile": MagicMissile,
+	"fireball": Fireball,
+	"freezing_spear": FreezingSpear,
+	"prayer": Prayer,
+	"heal": Heal,
+	"teleport": Teleport,
+	"mistfog": MistFog,
+	"stone_enchanted": StoneEnchanted,
+	"wrath_of_god": WrathOfGod,
+	"telekinesis": Telekinesis,
+	"sacrifice": Sacrifice,
+	"holy_light": HolyLight,
+	"fire_walk": FireWalk,
+	"meteor": Meteor,
+	"armageddon": Armageddon,
+	"poison_cloud": PoisonCloud,
+	"fortuna": Fortuna,
+	"dark_ritual": DarkRitual,
+	"nova": Nova,
+	"ball_lightning": BallLightning,
+	"chain_lightning": ChainLightning,
+}
+
+const SKILLS_NO_ATTACK := {
+	"teleport": true,
+	"telekinesis": true,
+	"fortuna": true,
+}
+
+const SKILLS_NO_MULTICAST := {
+	"fire_walk": true,
+}
+
 # 基础移动速度（像素/秒）
 # 原版公式：DEXTERITY_ON_SPEED = 0.5, START_VALUE = 65
 const BASE_MOVE_SPEED := 65.0
@@ -184,37 +219,39 @@ func _process(delta):
 		if Input.is_action_pressed("spell_space"):
 			_cast_skill_by_id(_get_quick_slot_skill("space"))
 		if Input.is_action_pressed("spell_freezing_spear"):
-			cast_freezing_spear()
+			_cast_skill_by_id("freezing_spear")
 		if Input.is_action_pressed("spell_prayer"):
-			cast_prayer()
+			_cast_skill_by_id("prayer")
 		if Input.is_action_pressed("spell_heal"):
-			cast_heal()
+			_cast_skill_by_id("heal")
 		if Input.is_action_pressed("spell_mistfog"):
-			cast_mistfog()
+			_cast_skill_by_id("mistfog")
 		if Input.is_action_pressed("spell_wrath_of_god"):
-			cast_wrath_of_god()
+			_cast_skill_by_id("wrath_of_god")
 		if Input.is_action_pressed("spell_telekinesis"):
-			cast_telekinesis()
+			_cast_skill_by_id("telekinesis")
 		if Input.is_action_pressed("spell_sacrifice"):
-			cast_sacrifice()
+			_cast_skill_by_id("sacrifice")
 		if Input.is_action_pressed("spell_holy_light"):
-			cast_holy_light()
+			_cast_skill_by_id("holy_light")
+		if Input.is_action_just_pressed("spell_teleport"):
+			_cast_skill_by_id("teleport")
 		if Input.is_action_just_pressed("spell_fire_walk"):
-			cast_fire_walk()
+			_cast_skill_by_id("fire_walk")
 		if Input.is_action_pressed("spell_meteor"):
-			cast_meteor()
+			_cast_skill_by_id("meteor")
 		if Input.is_action_pressed("spell_armageddon"):
-			cast_armageddon()
+			_cast_skill_by_id("armageddon")
 		if Input.is_action_pressed("spell_poison_cloud"):
-			cast_poison_cloud()
+			_cast_skill_by_id("poison_cloud")
 		if Input.is_action_pressed("spell_dark_ritual"):
-			cast_dark_ritual()
+			_cast_skill_by_id("dark_ritual")
 		if Input.is_action_pressed("spell_nova"):
-			cast_nova()
+			_cast_skill_by_id("nova")
 		if Input.is_action_pressed("spell_ball_lightning"):
-			cast_ball_lightning()
+			_cast_skill_by_id("ball_lightning")
 		if Input.is_action_pressed("spell_chain_lightning"):
-			cast_chain_lightning()
+			_cast_skill_by_id("chain_lightning")
 	
 	# 自动释放（Auto-Cast）系统
 	# 遍历所有标记为自动释放的技能，在冷却就绪且有怪物时自动施法
@@ -356,81 +393,29 @@ func _physics_process(delta):
 	
 	move_and_slide()
 
-func _unhandled_input(event):
-	# 如果处于受击恢复状态，不能施法
-	if Global.is_in_hit_recovery:
-		return
-	
-	# 如果鼠标在底部 HUD 区域，不施法
-	var mouse_y = get_viewport().get_mouse_position().y
-	var hud_top = get_viewport().get_visible_rect().size.y - 100
-	if mouse_y >= hud_top:
-		return
-	
-	if event.is_action_pressed("spell_magic_missile"):
-		_cast_skill_by_id(_get_quick_slot_skill("lmb"))
-	if event.is_action_pressed("spell_fireball"):
-		_cast_skill_by_id(_get_quick_slot_skill("rmb"))
-	if event.is_action_pressed("spell_shift") or (event is InputEventKey and event.keycode == KEY_SHIFT and event.pressed):
-		_cast_skill_by_id(_get_quick_slot_skill("shift"))
-	if event.is_action_pressed("spell_space"):
-		_cast_skill_by_id(_get_quick_slot_skill("space"))
-	if event.is_action_pressed("spell_freezing_spear"):
-		cast_freezing_spear()
-	if event.is_action_pressed("spell_prayer"):
-		cast_prayer()
-	if event.is_action_pressed("spell_heal"):
-		cast_heal()
-	if event.is_action_pressed("spell_teleport"):
-		cast_teleport()
-	if event.is_action_pressed("spell_mistfog"):
-		cast_mistfog()
-	if event.is_action_pressed("spell_wrath_of_god"):
-		cast_wrath_of_god()
-	if event.is_action_pressed("spell_telekinesis"):
-		cast_telekinesis()
-	if event.is_action_pressed("spell_sacrifice"):
-		cast_sacrifice()
-	if event.is_action_pressed("spell_holy_light"):
-		cast_holy_light()
-	if event.is_action_pressed("spell_meteor"):
-		cast_meteor()
-	if event.is_action_pressed("spell_armageddon"):
-		cast_armageddon()
-	if event.is_action_pressed("spell_poison_cloud"):
-		cast_poison_cloud()
-	if event.is_action_pressed("spell_dark_ritual"):
-		cast_dark_ritual()
-	if event.is_action_pressed("spell_nova"):
-		cast_nova()
-	if event.is_action_pressed("spell_ball_lightning"):
-		cast_ball_lightning()
-	if event.is_action_pressed("spell_chain_lightning"):
-		cast_chain_lightning()
+
 
 func _cast_skill_by_id(skill_id: String):
-	# 根据技能ID调用对应的施法函数
-	match skill_id:
-		"magic_missile": cast_magic_missile()
-		"fireball": cast_fireball()
-		"freezing_spear": cast_freezing_spear()
-		"prayer": cast_prayer()
-		"heal": cast_heal()
-		"teleport": cast_teleport()
-		"mistfog": cast_mistfog()
-		"wrath_of_god": cast_wrath_of_god()
-		"telekinesis": cast_telekinesis()
-		"sacrifice": cast_sacrifice()
-		"holy_light": cast_holy_light()
-		"fire_walk": cast_fire_walk()
-		"meteor": cast_meteor()
-		"armageddon": cast_armageddon()
-		"poison_cloud": cast_poison_cloud()
-		"fortuna": cast_fortuna()
-		"dark_ritual": cast_dark_ritual()
-		"nova": cast_nova()
-		"ball_lightning": cast_ball_lightning()
-		"chain_lightning": cast_chain_lightning()
+	_cast_skill(skill_id)
+
+
+func _cast_skill(skill_id: String) -> bool:
+	var script = SKILL_SCRIPTS.get(skill_id)
+	if not script:
+		return false
+
+	if not SKILLS_NO_ATTACK.has(skill_id):
+		start_attack()
+
+	if not script.cast(self, mouse_pos, skill_cooldowns):
+		return false
+
+	_update_shield_visual()
+
+	if not SKILLS_NO_MULTICAST.has(skill_id):
+		_try_multicast(skill_id)
+
+	return true
 
 func _get_quick_slot_skill(slot: String) -> String:
 	match slot:
@@ -441,11 +426,9 @@ func _get_quick_slot_skill(slot: String) -> String:
 			var s = Global.quick_slot_rmb
 			return s if not s.is_empty() else "fireball"
 		"shift":
-			var s = Global.quick_slot_shift
-			return s if not s.is_empty() else "freezing_spear"
+			return Global.quick_slot_shift
 		_:
-			var s = Global.quick_slot_space
-			return s if not s.is_empty() else "heal"
+			return Global.quick_slot_space
 
 
 # ============================================
@@ -479,30 +462,10 @@ func _auto_cast_check_mana(skill_id: String) -> bool:
 	var level = Global.skill_levels.get(skill_id, 0)
 	if level <= 0:
 		return false
-	var mana_cost := 0.0
-	match skill_id:
-		"magic_missile": mana_cost = MagicMissile.get_mana_cost(level)
-		"fireball": mana_cost = Fireball.get_mana_cost(level)
-		"freezing_spear": mana_cost = FreezingSpear.get_mana_cost(level)
-		"prayer": mana_cost = 0.0
-		"heal": mana_cost = Heal.get_mana_cost(level)
-		"teleport": mana_cost = Teleport.get_mana_cost(level)
-		"mistfog": mana_cost = MistFog.get_mana_cost(level)
-		"wrath_of_god": mana_cost = WrathOfGod.get_mana_cost(level)
-		"telekinesis": mana_cost = Telekinesis.get_mana_cost(level)
-		"sacrifice": mana_cost = 0.0
-		"holy_light": mana_cost = HolyLight.get_mana_cost(level)
-		"fire_walk": mana_cost = FireWalk.get_mana_cost(level)
-		"meteor": mana_cost = Meteor.get_mana_cost(level)
-		"armageddon": mana_cost = Armageddon.get_mana_cost(level)
-		"poison_cloud": mana_cost = PoisonCloud.get_mana_cost(level)
-		"fortuna": mana_cost = 0.0
-		"dark_ritual": mana_cost = DarkRitual.get_mana_cost(level)
-		"nova": mana_cost = Nova.get_mana_cost(level)
-		"ball_lightning": mana_cost = BallLightning.get_mana_cost(level)
-		"chain_lightning": mana_cost = 55.0 + (level - 1) * 2.0
-		_: return false
-	return Global.mana >= mana_cost
+	var script = SKILL_SCRIPTS.get(skill_id)
+	if not script or not script.has_method("get_mana_cost"):
+		return true
+	return Global.mana >= script.get_mana_cost(level)
 
 
 func _on_level_changed(lvl):
@@ -655,123 +618,8 @@ func _check_first_relic():
 	if RelicManager.active_relic_ids.is_empty() and RelicManager.is_relic_level(1):
 		Global.start_first_relic_selection()
 
-# 修改所有 cast 函数，添加护盾视觉更新和多倍施法
-func cast_magic_missile():
-	start_attack()
-	if MagicMissile.cast(self, mouse_pos, skill_cooldowns):
-		_update_shield_visual()
-		_try_multicast("magic_missile")
-
-func cast_fireball():
-	start_attack()
-	if Fireball.cast(self, mouse_pos, skill_cooldowns):
-		_update_shield_visual()
-		_try_multicast("fireball")
-
-func cast_freezing_spear():
-	start_attack()
-	if FreezingSpear.cast(self, mouse_pos, skill_cooldowns):
-		_update_shield_visual()
-		_try_multicast("freezing_spear")
-
-func cast_prayer():
-	start_attack()
-	if Prayer.cast(self, mouse_pos, skill_cooldowns):
-		_update_shield_visual()
-		_try_multicast("prayer")
-
-func cast_heal():
-	start_attack()
-	if Heal.cast(self, mouse_pos, skill_cooldowns):
-		_update_shield_visual()
-		_try_multicast("heal")
-
-func cast_teleport():
-	if Teleport.cast(self, mouse_pos, skill_cooldowns):
-		_update_shield_visual()
-		_try_multicast("teleport")
-
-func cast_mistfog():
-	start_attack()
-	if MistFog.cast(self, mouse_pos, skill_cooldowns):
-		_update_shield_visual()
-		_try_multicast("mistfog")
-
-func cast_wrath_of_god():
-	start_attack()
-	if WrathOfGod.cast(self, mouse_pos, skill_cooldowns):
-		_update_shield_visual()
-		_try_multicast("wrath_of_god")
-
-func cast_telekinesis():
-	if Telekinesis.cast(self, mouse_pos, skill_cooldowns):
-		_update_shield_visual()
-		_try_multicast("telekinesis")
-
-func cast_sacrifice():
-	start_attack()
-	if Sacrifice.cast(self, mouse_pos, skill_cooldowns):
-		_update_shield_visual()
-		_try_multicast("sacrifice")
-
-func cast_holy_light():
-	start_attack()
-	if HolyLight.cast(self, mouse_pos, skill_cooldowns):
-		_update_shield_visual()
-		_try_multicast("holy_light")
-
-func cast_fire_walk():
-	start_attack()
-	if FireWalk.cast(self, mouse_pos, skill_cooldowns):
-		_update_shield_visual()
-		# 不调用 _try_multicast — toggle 类技能与多重施法不兼容
-
-func cast_meteor():
-	start_attack()
-	if Meteor.cast(self, mouse_pos, skill_cooldowns):
-		_update_shield_visual()
-		_try_multicast("meteor")
-
-func cast_armageddon():
-	start_attack()
-	if Armageddon.cast(self, mouse_pos, skill_cooldowns):
-		_update_shield_visual()
-		_try_multicast("armageddon")
-
-func cast_poison_cloud():
-	start_attack()
-	if PoisonCloud.cast(self, mouse_pos, skill_cooldowns):
-		_update_shield_visual()
-		_try_multicast("poison_cloud")
-
-func cast_fortuna():
-	if Fortuna.cast(self, mouse_pos, skill_cooldowns):
-		_update_shield_visual()
-		_try_multicast("fortuna")
-
-func cast_dark_ritual():
-	start_attack()
-	if DarkRitual.cast(self, mouse_pos, skill_cooldowns):
-		_update_shield_visual()
-		_try_multicast("dark_ritual")
-
-func cast_nova():
-	start_attack()
-	if Nova.cast(self, mouse_pos, skill_cooldowns):
-		_update_shield_visual()
-		_try_multicast("nova")
-
-func cast_ball_lightning():
-	start_attack()
-	if BallLightning.cast(self, mouse_pos, skill_cooldowns):
-		_update_shield_visual()
-		_try_multicast("ball_lightning")
-
-func cast_chain_lightning():
-	start_attack()
-	if ChainLightning.cast(self, mouse_pos, skill_cooldowns):
-		_update_shield_visual()
-		_try_multicast("chain_lightning")
+# 所有 cast 函数已统一为 _cast_skill(skill_id) 通过 _cast_skill_by_id 分发
+# 特殊行为（无攻击动画 / 无多重施法）通过 SKILLS_NO_ATTACK / SKILLS_NO_MULTICAST 控制
 
 func _on_died():
 	if is_dying:

@@ -14,8 +14,6 @@ func _clear_quest_progress():
 	Global.quest_progress.monsters_spawned = 0
 	Global.quest_max_unlocked_level = 0
 	var success = SaveManager.save_game(2)
-	if success:
-		print("VictoryScreen: Quest 进度已清除")
 
 func _display_stats():
 	var stats_label = $CenterContainer/VBoxContainer/StatsLabel

@@ -240,46 +240,61 @@ var skill_cooldowns := {
 }
 ```
 
-### 3. 创建施法包装方法
+### 3. 创建 SKILL_SCRIPTS 统一调度字典（v12 新模式）
+
+**不再需要**为每个技能写单独的 `cast_xxx()` 包装方法。使用 `SKILL_SCRIPTS` 字典统一调度：
 
 ```gdscript
-func cast_magic_missile():
-    MagicMissile.cast(self, mouse_pos, skill_cooldowns)
+const SKILL_SCRIPTS := {
+    "magic_missile": MagicMissile,
+    "fireball": Fireball,
+    "freezing_spear": FreezingSpear,
+    # ... 全部21个技能
+}
 
-func cast_fireball():
-    Fireball.cast(self, mouse_pos, skill_cooldowns)
+const SKILLS_NO_ATTACK := {
+    "teleport": true,
+    "telekinesis": true,
+    "fortuna": true,
+}
 
-func cast_prayer():
-    Prayer.cast(self, mouse_pos, skill_cooldowns)
-
-func cast_heal():
-    Heal.cast(self, mouse_pos, skill_cooldowns)
+const SKILLS_NO_MULTICAST := {
+    "fire_walk": true,
+}
 ```
 
-### 4. 输入处理
+### 4. 统一施法函数
 
-在 `_process` 和 `_unhandled_input` 中调用：
+```gdscript
+func _cast_skill(skill_id: String) -> bool:
+    var script = SKILL_SCRIPTS.get(skill_id)
+    if not script:
+        return false
+    if not SKILLS_NO_ATTACK.has(skill_id):
+        start_attack()
+    if not script.cast(self, mouse_pos, skill_cooldowns):
+        return false
+    _update_shield_visual()
+    if not SKILLS_NO_MULTICAST.has(skill_id):
+        _try_multicast(skill_id)
+    return true
+```
+
+### 5. 输入处理（v12 更新：仅用 _process，已移除 _unhandled_input）
 
 ```gdscript
 func _process(delta):
-    if Input.is_action_pressed("spell_magic_missile"):
-        cast_magic_missile()
-    if Input.is_action_pressed("spell_fireball"):
-        cast_fireball()
-    if Input.is_action_pressed("spell_prayer"):
-        cast_prayer()
-    if Input.is_action_pressed("spell_heal"):
-        cast_heal()
-
-func _unhandled_input(event):
-    if event.is_action_pressed("spell_magic_missile"):
-        cast_magic_missile()
-    if event.is_action_pressed("spell_fireball"):
-        cast_fireball()
-    if event.is_action_pressed("spell_prayer"):
-        cast_prayer()
-    if event.is_action_pressed("spell_heal"):
-        cast_heal()
+    for skill in skill_cooldowns.keys():
+        if skill_cooldowns[skill] > 0:
+            skill_cooldowns[skill] -= delta * RelicManager.get_cooldown_multiplier()
+    
+    if not Global.is_in_hit_recovery and mouse_y < hud_top:
+        if Input.is_action_pressed("spell_magic_missile"):
+            _cast_skill("magic_missile")
+        if Input.is_action_just_pressed("spell_teleport"):
+            _cast_skill("teleport")
+        if Input.is_action_just_pressed("spell_fire_walk"):
+            _cast_skill("fire_walk")
 ```
 
 ---

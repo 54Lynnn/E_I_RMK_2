@@ -1,65 +1,53 @@
 [gd_scene format=3 uid="uid://crlipyqsby2lw"]
 
 [ext_resource type="Script" uid="uid://dxjlaq0r5qlql" path="res://Scripts/hud.gd" id="1"]
-[ext_resource type="Texture2D" uid="uid://chjoxpptbiphl" path="res://Art/Placeholder/ground.png" id="2"]
 
-[sub_resource type="StyleBoxFlat" id="1"]
-bg_color = Color(0.1, 0.06, 0.03, 0.92)
-corner_radius_top_left = 8
-corner_radius_top_right = 8
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
+[sub_resource type="StyleBoxFlat" id="bottom_bar_bg"]
+bg_color = Color(0.157, 0.039, 0.02, 0.92)
+border_width_top = 2
+border_color = Color(0.533, 0.067, 0, 1)
 
-[sub_resource type="StyleBoxFlat" id="7"]
-bg_color = Color(0.12, 0.1, 0.07, 0.95)
+[sub_resource type="StyleBoxFlat" id="hp_fill"]
+bg_color = Color(0.8, 0.133, 0, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="StyleBoxFlat" id="mp_fill"]
+bg_color = Color(0.133, 0.267, 0.8, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="StyleBoxFlat" id="transparent_btn_bg"]
+bg_color = Color(0, 0, 0, 0)
+
+[sub_resource type="StyleBoxFlat" id="slot_bg"]
+bg_color = Color(0.784, 0.196, 0, 0.15)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(0.45, 0.35, 0.25, 1)
-corner_radius_top_left = 3
-corner_radius_top_right = 3
-corner_radius_bottom_right = 3
-corner_radius_bottom_left = 3
+border_color = Color(0.667, 0.267, 0.133, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
 
-[sub_resource type="StyleBoxFlat" id="2"]
-bg_color = Color(0.65, 0.05, 0.05, 1)
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
+[sub_resource type="StyleBoxFlat" id="exp_fill"]
+bg_color = Color(0.8, 0.267, 0, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
 
-[sub_resource type="StyleBoxFlat" id="3"]
-bg_color = Color(0.05, 0.12, 0.6, 1)
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
-
-[sub_resource type="StyleBoxFlat" id="5"]
-bg_color = Color(0.2, 0.15, 0.1, 0.95)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.55, 0.45, 0.3, 1)
-corner_radius_top_left = 6
-corner_radius_top_right = 6
-corner_radius_bottom_right = 6
-corner_radius_bottom_left = 6
-
-[sub_resource type="StyleBoxFlat" id="4"]
-bg_color = Color(0.75, 0.65, 0.1, 1)
-corner_radius_top_left = 3
-corner_radius_top_right = 3
-corner_radius_bottom_right = 3
-corner_radius_bottom_left = 3
-
-[node name="HUD" type="CanvasLayer" unique_id=1014843251]
+[node name="HUD" type="CanvasLayer" unique_id=1642272432]
 layer = 10
 script = ExtResource("1")
 
-[node name="DamageOverlay" type="ColorRect" parent="." unique_id=1994574408]
+[node name="DamageOverlay" type="ColorRect" parent="." unique_id=760824978]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -68,130 +56,101 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(1, 1, 1, 0)
 
-[node name="BottomBar" type="Panel" parent="." unique_id=1173775396]
+[node name="BottomBar" type="Panel" parent="." unique_id=63418586]
 anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -86.0
+offset_top = -68.0
 grow_horizontal = 2
 grow_vertical = 0
-theme_override_styles/panel = SubResource("1")
+theme_override_styles/panel = SubResource("bottom_bar_bg")
 
-[node name="LeftInfo" type="Control" parent="BottomBar" unique_id=561746110]
+[node name="LeftInfo" type="Control" parent="BottomBar" unique_id=12585000]
 layout_mode = 1
 anchors_preset = 9
 anchor_bottom = 1.0
-offset_right = 230.0
+offset_right = 120.0
 offset_bottom = -12.0
 grow_vertical = 2
 
-[node name="PortraitBg" type="Panel" parent="BottomBar/LeftInfo" unique_id=2115041776]
+[node name="HPBar" type="ProgressBar" parent="BottomBar/LeftInfo" unique_id=882335034]
 layout_mode = 0
-offset_left = 12.0
-offset_top = 12.0
-offset_right = 68.0
-offset_bottom = 68.0
-theme_override_styles/panel = SubResource("7")
-
-[node name="HeroPortrait" type="TextureRect" parent="BottomBar/LeftInfo" unique_id=1720406774]
-layout_mode = 0
-offset_left = 14.0
+offset_left = 8.0
 offset_top = 14.0
-offset_right = 66.0
-offset_bottom = 66.0
-texture = ExtResource("2")
-expand_mode = 1
-stretch_mode = 5
-
-[node name="HPBar" type="ProgressBar" parent="BottomBar/LeftInfo" unique_id=300084342]
-layout_mode = 0
-offset_left = 76.0
-offset_top = 12.0
-offset_right = 216.0
-offset_bottom = 37.0
-theme_override_styles/fill = SubResource("2")
+offset_right = 84.0
+offset_bottom = 24.0
+theme_override_styles/fill = SubResource("hp_fill")
 value = 100.0
 show_percentage = false
 
-[node name="HPLabel" type="Label" parent="BottomBar/LeftInfo" unique_id=1717067732]
+[node name="HPPercentLabel" type="Label" parent="BottomBar/LeftInfo" unique_id=470042140]
 layout_mode = 0
-offset_left = 77.0
-offset_top = 14.0
-offset_right = 168.0
-offset_bottom = 34.0
+offset_left = 8.0
+offset_top = 12.0
+offset_right = 84.0
+offset_bottom = 25.0
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 3
-theme_override_font_sizes/font_size = 13
-text = "100/100"
-vertical_alignment = 1
-
-[node name="HPPercentLabel" type="Label" parent="BottomBar/LeftInfo" unique_id=287270500]
-layout_mode = 0
-offset_left = 167.0
-offset_top = 14.0
-offset_right = 215.0
-offset_bottom = 34.0
-theme_override_colors/font_color = Color(0.7, 0.7, 0.7, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 3
-theme_override_font_sizes/font_size = 13
+theme_override_constants/outline_size = 1
+theme_override_font_sizes/font_size = 9
 text = "(100%)"
-horizontal_alignment = 2
-vertical_alignment = 1
-
-[node name="MPBar" type="ProgressBar" parent="BottomBar/LeftInfo" unique_id=1329929734]
-layout_mode = 0
-offset_left = 76.0
-offset_top = 42.0
-offset_right = 216.0
-offset_bottom = 67.0
-theme_override_styles/fill = SubResource("3")
-value = 100.0
-show_percentage = false
-
-[node name="MPLabel" type="Label" parent="BottomBar/LeftInfo" unique_id=1238483957]
-layout_mode = 0
-offset_left = 77.0
-offset_top = 44.0
-offset_right = 168.0
-offset_bottom = 64.0
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 3
-theme_override_font_sizes/font_size = 13
-text = "50/50"
-vertical_alignment = 1
-
-[node name="MPPercentLabel" type="Label" parent="BottomBar/LeftInfo" unique_id=1387559445]
-layout_mode = 0
-offset_left = 167.0
-offset_top = 43.0
-offset_right = 215.0
-offset_bottom = 63.0
-theme_override_colors/font_color = Color(0.7, 0.7, 0.7, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 3
-theme_override_font_sizes/font_size = 13
-text = "(100%)"
-horizontal_alignment = 2
-vertical_alignment = 1
-
-[node name="LevelLabel" type="Label" parent="BottomBar/LeftInfo" unique_id=829547924]
-layout_mode = 0
-offset_left = 12.0
-offset_top = 68.0
-offset_right = 68.0
-offset_bottom = 84.0
-theme_override_colors/font_color = Color(1, 0.9, 0.3, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 3
-theme_override_font_sizes/font_size = 16
-text = "Lv.1"
 horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="BuffContainer" type="HBoxContainer" parent="BottomBar" unique_id=999999999]
+[node name="HPLabel" type="Label" parent="BottomBar/LeftInfo" unique_id=2115120684]
+layout_mode = 0
+offset_left = 88.0
+offset_top = 12.0
+offset_right = 116.0
+offset_bottom = 28.0
+theme_override_colors/font_color = Color(0.8, 0.4, 0.267, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 2
+theme_override_font_sizes/font_size = 11
+text = "280"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="MPBar" type="ProgressBar" parent="BottomBar/LeftInfo" unique_id=1997986946]
+layout_mode = 0
+offset_left = 8.0
+offset_top = 37.0
+offset_right = 84.0
+offset_bottom = 47.0
+theme_override_styles/fill = SubResource("mp_fill")
+value = 100.0
+show_percentage = false
+
+[node name="MPPercentLabel" type="Label" parent="BottomBar/LeftInfo" unique_id=1742631555]
+layout_mode = 0
+offset_left = 8.0
+offset_top = 35.0
+offset_right = 84.0
+offset_bottom = 48.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 1
+theme_override_font_sizes/font_size = 9
+text = "(100%)"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MPLabel" type="Label" parent="BottomBar/LeftInfo" unique_id=1874287130]
+layout_mode = 0
+offset_left = 88.0
+offset_top = 35.0
+offset_right = 116.0
+offset_bottom = 51.0
+theme_override_colors/font_color = Color(0.4, 0.533, 0.8, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 2
+theme_override_font_sizes/font_size = 11
+text = "150"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="BuffContainer" type="HBoxContainer" parent="BottomBar" unique_id=1275416508]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -204,236 +163,834 @@ grow_horizontal = 2
 theme_override_constants/separation = 4
 alignment = 1
 
-[node name="SkillSection" type="Control" parent="BottomBar" unique_id=50256658]
+[node name="SkillSection" type="Control" parent="BottomBar" unique_id=1193662387]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 370.0
-offset_top = 6.0
-offset_right = -10.0
+offset_left = 128.0
+offset_top = 4.0
+offset_right = -90.0
 offset_bottom = -12.0
 grow_horizontal = 2
 grow_vertical = 2
-clip_contents = true
 
-[node name="SkillBarBg" type="Panel" parent="BottomBar/SkillSection" unique_id=844400107]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 4.0
-offset_top = 4.0
-offset_right = -4.0
-offset_bottom = -4.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-theme_override_styles/panel = SubResource("5")
-
-[node name="SkillBarContainer" type="HBoxContainer" parent="BottomBar/SkillSection" unique_id=67015529]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 8.0
-offset_top = 8.0
-offset_right = -8.0
-offset_bottom = -8.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/separation = 2
-alignment = 0
-
-[node name="QuickSlots" type="Control" parent="BottomBar"]
-layout_mode = 1
-anchors_preset = 9
-anchor_bottom = 1.0
-offset_left = 230.0
-offset_right = 360.0
-offset_bottom = -14.0
-grow_vertical = 2
-
-[node name="SlotLMB" type="Panel" parent="BottomBar/QuickSlots"]
+[node name="SkillRow1" type="HBoxContainer" parent="BottomBar/SkillSection" unique_id=1642081411]
 layout_mode = 0
-offset_left = 11.0
-offset_top = 4.0
-offset_right = 57.0
-offset_bottom = 34.0
-theme_override_styles/panel = SubResource("7")
-
-[node name="SlotLMBIcon" type="TextureRect" parent="BottomBar/QuickSlots"]
-layout_mode = 0
-offset_left = 13.0
 offset_top = 6.0
-offset_right = 55.0
-offset_bottom = 32.0
+offset_right = 699.0
+offset_bottom = 48.0
+theme_override_constants/separation = 3
+
+[node name="SkillBtn_magic_missile" type="Button" parent="BottomBar/SkillSection/SkillRow1" unique_id=3000001]
+clip_contents = true
+custom_minimum_size = Vector2(36, 36)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 1
+theme_override_styles/normal = SubResource("transparent_btn_bg")
+theme_override_styles/pressed = SubResource("transparent_btn_bg")
+theme_override_styles/hover = SubResource("transparent_btn_bg")
+theme_override_styles/disabled = SubResource("transparent_btn_bg")
+theme_override_styles/focus = SubResource("transparent_btn_bg")
+metadata/skill_id = "magic_missile"
+
+[node name="Icon" type="TextureRect" parent="BottomBar/SkillSection/SkillRow1/SkillBtn_magic_missile" unique_id=3000002]
+layout_mode = 0
+offset_left = 1.0
+offset_top = 1.0
+offset_right = 35.0
+offset_bottom = 35.0
+mouse_filter = 2
 expand_mode = 1
 stretch_mode = 5
 
-[node name="SlotLMBLabel" type="Label" parent="BottomBar/QuickSlots"]
+[node name="HotkeyLabel" type="Label" parent="BottomBar/SkillSection/SkillRow1/SkillBtn_magic_missile" unique_id=3000003]
 layout_mode = 0
-offset_left = 27.0
-offset_top = 24.0
-offset_right = 55.0
-offset_bottom = 32.0
-mouse_filter = 2
-theme_override_colors/font_color = Color(1, 1, 1, 0.85)
+offset_top = 21.0
+offset_right = 28.0
+offset_bottom = 30.0
+theme_override_colors/font_color = Color(1, 0.85, 0.4, 0.9)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 1
 theme_override_font_sizes/font_size = 7
 text = "LMB"
 horizontal_alignment = 2
 
-[node name="SlotRMB" type="Panel" parent="BottomBar/QuickSlots"]
-layout_mode = 0
-offset_left = 69.0
-offset_top = 4.0
-offset_right = 115.0
-offset_bottom = 34.0
-theme_override_styles/panel = SubResource("7")
+[node name="SkillBtn_prayer" type="Button" parent="BottomBar/SkillSection/SkillRow1" unique_id=3000004]
+clip_contents = true
+custom_minimum_size = Vector2(36, 36)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 1
+theme_override_styles/normal = SubResource("transparent_btn_bg")
+theme_override_styles/pressed = SubResource("transparent_btn_bg")
+theme_override_styles/hover = SubResource("transparent_btn_bg")
+theme_override_styles/disabled = SubResource("transparent_btn_bg")
+theme_override_styles/focus = SubResource("transparent_btn_bg")
+metadata/skill_id = "prayer"
 
-[node name="SlotRMBIcon" type="TextureRect" parent="BottomBar/QuickSlots"]
+[node name="Icon" type="TextureRect" parent="BottomBar/SkillSection/SkillRow1/SkillBtn_prayer" unique_id=3000005]
 layout_mode = 0
-offset_left = 71.0
-offset_top = 6.0
-offset_right = 113.0
-offset_bottom = 32.0
+offset_left = 1.0
+offset_top = 1.0
+offset_right = 35.0
+offset_bottom = 35.0
+mouse_filter = 2
 expand_mode = 1
 stretch_mode = 5
 
-[node name="SlotRMBLabel" type="Label" parent="BottomBar/QuickSlots"]
+[node name="HotkeyLabel" type="Label" parent="BottomBar/SkillSection/SkillRow1/SkillBtn_prayer" unique_id=3000006]
 layout_mode = 0
-offset_left = 85.0
-offset_top = 24.0
-offset_right = 113.0
+offset_left = 2.0
+offset_top = 21.0
+offset_right = 30.0
 offset_bottom = 32.0
+theme_override_colors/font_color = Color(1, 0.85, 0.4, 0.9)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 1
+theme_override_font_sizes/font_size = 7
+text = "X"
+horizontal_alignment = 2
+
+[node name="SkillBtn_teleport" type="Button" parent="BottomBar/SkillSection/SkillRow1" unique_id=3000007]
+clip_contents = true
+custom_minimum_size = Vector2(36, 36)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 1
+theme_override_styles/normal = SubResource("transparent_btn_bg")
+theme_override_styles/pressed = SubResource("transparent_btn_bg")
+theme_override_styles/hover = SubResource("transparent_btn_bg")
+theme_override_styles/disabled = SubResource("transparent_btn_bg")
+theme_override_styles/focus = SubResource("transparent_btn_bg")
+metadata/skill_id = "teleport"
+
+[node name="Icon" type="TextureRect" parent="BottomBar/SkillSection/SkillRow1/SkillBtn_teleport" unique_id=3000008]
+layout_mode = 0
+offset_left = 1.0
+offset_top = 1.0
+offset_right = 35.0
+offset_bottom = 35.0
 mouse_filter = 2
-theme_override_colors/font_color = Color(1, 1, 1, 0.85)
+expand_mode = 1
+stretch_mode = 5
+
+[node name="HotkeyLabel" type="Label" parent="BottomBar/SkillSection/SkillRow1/SkillBtn_teleport" unique_id=3000009]
+layout_mode = 0
+offset_left = 2.0
+offset_top = 21.0
+offset_right = 30.0
+offset_bottom = 32.0
+theme_override_colors/font_color = Color(1, 0.85, 0.4, 0.9)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 1
+theme_override_font_sizes/font_size = 7
+text = "2"
+horizontal_alignment = 2
+
+[node name="SkillBtn_mistfog" type="Button" parent="BottomBar/SkillSection/SkillRow1" unique_id=3000010]
+clip_contents = true
+custom_minimum_size = Vector2(36, 36)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 1
+theme_override_styles/normal = SubResource("transparent_btn_bg")
+theme_override_styles/pressed = SubResource("transparent_btn_bg")
+theme_override_styles/hover = SubResource("transparent_btn_bg")
+theme_override_styles/disabled = SubResource("transparent_btn_bg")
+theme_override_styles/focus = SubResource("transparent_btn_bg")
+metadata/skill_id = "mistfog"
+
+[node name="Icon" type="TextureRect" parent="BottomBar/SkillSection/SkillRow1/SkillBtn_mistfog" unique_id=3000011]
+layout_mode = 0
+offset_left = 1.0
+offset_top = 1.0
+offset_right = 35.0
+offset_bottom = 35.0
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="HotkeyLabel" type="Label" parent="BottomBar/SkillSection/SkillRow1/SkillBtn_mistfog" unique_id=3000012]
+layout_mode = 0
+offset_left = 2.0
+offset_top = 21.0
+offset_right = 30.0
+offset_bottom = 32.0
+theme_override_colors/font_color = Color(1, 0.85, 0.4, 0.9)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 1
+theme_override_font_sizes/font_size = 7
+text = "3"
+horizontal_alignment = 2
+
+[node name="SkillBtn_wrath_of_god" type="Button" parent="BottomBar/SkillSection/SkillRow1" unique_id=3000013]
+clip_contents = true
+custom_minimum_size = Vector2(36, 36)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 1
+theme_override_styles/normal = SubResource("transparent_btn_bg")
+theme_override_styles/pressed = SubResource("transparent_btn_bg")
+theme_override_styles/hover = SubResource("transparent_btn_bg")
+theme_override_styles/disabled = SubResource("transparent_btn_bg")
+theme_override_styles/focus = SubResource("transparent_btn_bg")
+metadata/skill_id = "wrath_of_god"
+
+[node name="Icon" type="TextureRect" parent="BottomBar/SkillSection/SkillRow1/SkillBtn_wrath_of_god" unique_id=3000014]
+layout_mode = 0
+offset_left = 1.0
+offset_top = 1.0
+offset_right = 35.0
+offset_bottom = 35.0
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="HotkeyLabel" type="Label" parent="BottomBar/SkillSection/SkillRow1/SkillBtn_wrath_of_god" unique_id=3000015]
+layout_mode = 0
+offset_left = 2.0
+offset_top = 21.0
+offset_right = 30.0
+offset_bottom = 32.0
+theme_override_colors/font_color = Color(1, 0.85, 0.4, 0.9)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 1
+theme_override_font_sizes/font_size = 7
+text = "4"
+horizontal_alignment = 2
+
+[node name="SkillBtn_sacrifice" type="Button" parent="BottomBar/SkillSection/SkillRow1" unique_id=3000016]
+clip_contents = true
+custom_minimum_size = Vector2(36, 36)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 1
+theme_override_styles/normal = SubResource("transparent_btn_bg")
+theme_override_styles/pressed = SubResource("transparent_btn_bg")
+theme_override_styles/hover = SubResource("transparent_btn_bg")
+theme_override_styles/disabled = SubResource("transparent_btn_bg")
+theme_override_styles/focus = SubResource("transparent_btn_bg")
+metadata/skill_id = "sacrifice"
+
+[node name="Icon" type="TextureRect" parent="BottomBar/SkillSection/SkillRow1/SkillBtn_sacrifice" unique_id=3000017]
+layout_mode = 0
+offset_left = 1.0
+offset_top = 1.0
+offset_right = 35.0
+offset_bottom = 35.0
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="HotkeyLabel" type="Label" parent="BottomBar/SkillSection/SkillRow1/SkillBtn_sacrifice" unique_id=3000018]
+layout_mode = 0
+offset_left = 2.0
+offset_top = 21.0
+offset_right = 30.0
+offset_bottom = 32.0
+theme_override_colors/font_color = Color(1, 0.85, 0.4, 0.9)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 1
+theme_override_font_sizes/font_size = 7
+text = "R"
+horizontal_alignment = 2
+
+[node name="SkillBtn_holy_light" type="Button" parent="BottomBar/SkillSection/SkillRow1" unique_id=3000019]
+clip_contents = true
+custom_minimum_size = Vector2(36, 36)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 1
+theme_override_styles/normal = SubResource("transparent_btn_bg")
+theme_override_styles/pressed = SubResource("transparent_btn_bg")
+theme_override_styles/hover = SubResource("transparent_btn_bg")
+theme_override_styles/disabled = SubResource("transparent_btn_bg")
+theme_override_styles/focus = SubResource("transparent_btn_bg")
+metadata/skill_id = "holy_light"
+
+[node name="Icon" type="TextureRect" parent="BottomBar/SkillSection/SkillRow1/SkillBtn_holy_light" unique_id=3000020]
+layout_mode = 0
+offset_left = 1.0
+offset_top = 1.0
+offset_right = 35.0
+offset_bottom = 35.0
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="HotkeyLabel" type="Label" parent="BottomBar/SkillSection/SkillRow1/SkillBtn_holy_light" unique_id=3000021]
+layout_mode = 0
+offset_left = 2.0
+offset_top = 21.0
+offset_right = 30.0
+offset_bottom = 32.0
+theme_override_colors/font_color = Color(1, 0.85, 0.4, 0.9)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 1
+theme_override_font_sizes/font_size = 7
+text = "E"
+horizontal_alignment = 2
+
+[node name="SkillBtn_ball_lightning" type="Button" parent="BottomBar/SkillSection/SkillRow1" unique_id=3000022]
+clip_contents = true
+custom_minimum_size = Vector2(36, 36)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 1
+theme_override_styles/normal = SubResource("transparent_btn_bg")
+theme_override_styles/pressed = SubResource("transparent_btn_bg")
+theme_override_styles/hover = SubResource("transparent_btn_bg")
+theme_override_styles/disabled = SubResource("transparent_btn_bg")
+theme_override_styles/focus = SubResource("transparent_btn_bg")
+metadata/skill_id = "ball_lightning"
+
+[node name="Icon" type="TextureRect" parent="BottomBar/SkillSection/SkillRow1/SkillBtn_ball_lightning" unique_id=3000023]
+layout_mode = 0
+offset_left = 1.0
+offset_top = 1.0
+offset_right = 35.0
+offset_bottom = 35.0
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="HotkeyLabel" type="Label" parent="BottomBar/SkillSection/SkillRow1/SkillBtn_ball_lightning" unique_id=3000024]
+layout_mode = 0
+offset_left = 2.0
+offset_top = 21.0
+offset_right = 30.0
+offset_bottom = 32.0
+theme_override_colors/font_color = Color(1, 0.85, 0.4, 0.9)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 1
+theme_override_font_sizes/font_size = 7
+text = "I"
+horizontal_alignment = 2
+
+[node name="SkillBtn_chain_lightning" type="Button" parent="BottomBar/SkillSection/SkillRow1" unique_id=3000025]
+clip_contents = true
+custom_minimum_size = Vector2(36, 36)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 1
+theme_override_styles/normal = SubResource("transparent_btn_bg")
+theme_override_styles/pressed = SubResource("transparent_btn_bg")
+theme_override_styles/hover = SubResource("transparent_btn_bg")
+theme_override_styles/disabled = SubResource("transparent_btn_bg")
+theme_override_styles/focus = SubResource("transparent_btn_bg")
+metadata/skill_id = "chain_lightning"
+
+[node name="Icon" type="TextureRect" parent="BottomBar/SkillSection/SkillRow1/SkillBtn_chain_lightning" unique_id=3000026]
+layout_mode = 0
+offset_left = 1.0
+offset_top = 1.0
+offset_right = 35.0
+offset_bottom = 35.0
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="HotkeyLabel" type="Label" parent="BottomBar/SkillSection/SkillRow1/SkillBtn_chain_lightning" unique_id=3000027]
+layout_mode = 0
+offset_left = 2.0
+offset_top = 21.0
+offset_right = 30.0
+offset_bottom = 32.0
+theme_override_colors/font_color = Color(1, 0.85, 0.4, 0.9)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 1
+theme_override_font_sizes/font_size = 7
+text = "O"
+horizontal_alignment = 2
+
+[node name="SkillBtn_fireball" type="Button" parent="BottomBar/SkillSection/SkillRow1" unique_id=3000028]
+clip_contents = true
+custom_minimum_size = Vector2(36, 36)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 1
+theme_override_styles/normal = SubResource("transparent_btn_bg")
+theme_override_styles/pressed = SubResource("transparent_btn_bg")
+theme_override_styles/hover = SubResource("transparent_btn_bg")
+theme_override_styles/disabled = SubResource("transparent_btn_bg")
+theme_override_styles/focus = SubResource("transparent_btn_bg")
+metadata/skill_id = "fireball"
+
+[node name="Icon" type="TextureRect" parent="BottomBar/SkillSection/SkillRow1/SkillBtn_fireball" unique_id=3000029]
+layout_mode = 0
+offset_left = 1.0
+offset_top = 1.0
+offset_right = 35.0
+offset_bottom = 35.0
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="HotkeyLabel" type="Label" parent="BottomBar/SkillSection/SkillRow1/SkillBtn_fireball" unique_id=3000030]
+layout_mode = 0
+offset_left = 2.0
+offset_top = 21.0
+offset_right = 30.0
+offset_bottom = 32.0
+theme_override_colors/font_color = Color(1, 0.85, 0.4, 0.9)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 1
 theme_override_font_sizes/font_size = 7
 text = "RMB"
 horizontal_alignment = 2
 
-[node name="SlotShift" type="Panel" parent="BottomBar/QuickSlots"]
-layout_mode = 0
-offset_left = 11.0
-offset_top = 38.0
-offset_right = 57.0
-offset_bottom = 68.0
-theme_override_styles/panel = SubResource("7")
+[node name="SkillBtn_heal" type="Button" parent="BottomBar/SkillSection/SkillRow1" unique_id=3000031]
+clip_contents = true
+custom_minimum_size = Vector2(36, 36)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 1
+theme_override_styles/normal = SubResource("transparent_btn_bg")
+theme_override_styles/pressed = SubResource("transparent_btn_bg")
+theme_override_styles/hover = SubResource("transparent_btn_bg")
+theme_override_styles/disabled = SubResource("transparent_btn_bg")
+theme_override_styles/focus = SubResource("transparent_btn_bg")
+metadata/skill_id = "heal"
 
-[node name="SlotShiftIcon" type="TextureRect" parent="BottomBar/QuickSlots"]
+[node name="Icon" type="TextureRect" parent="BottomBar/SkillSection/SkillRow1/SkillBtn_heal" unique_id=3000032]
 layout_mode = 0
-offset_left = 13.0
-offset_top = 40.0
-offset_right = 55.0
-offset_bottom = 66.0
+offset_left = 1.0
+offset_top = 1.0
+offset_right = 35.0
+offset_bottom = 35.0
+mouse_filter = 2
 expand_mode = 1
 stretch_mode = 5
 
-[node name="SlotShiftLabel" type="Label" parent="BottomBar/QuickSlots"]
+[node name="HotkeyLabel" type="Label" parent="BottomBar/SkillSection/SkillRow1/SkillBtn_heal" unique_id=3000033]
 layout_mode = 0
-offset_left = 27.0
-offset_top = 58.0
-offset_right = 55.0
-offset_bottom = 66.0
+offset_left = 2.0
+offset_top = 21.0
+offset_right = 30.0
+offset_bottom = 32.0
+theme_override_colors/font_color = Color(1, 0.85, 0.4, 0.9)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 1
+theme_override_font_sizes/font_size = 7
+text = "C"
+horizontal_alignment = 2
+
+[node name="SkillBtn_fire_walk" type="Button" parent="BottomBar/SkillSection/SkillRow1" unique_id=3000034]
+clip_contents = true
+custom_minimum_size = Vector2(36, 36)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 1
+theme_override_styles/normal = SubResource("transparent_btn_bg")
+theme_override_styles/pressed = SubResource("transparent_btn_bg")
+theme_override_styles/hover = SubResource("transparent_btn_bg")
+theme_override_styles/disabled = SubResource("transparent_btn_bg")
+theme_override_styles/focus = SubResource("transparent_btn_bg")
+metadata/skill_id = "fire_walk"
+
+[node name="Icon" type="TextureRect" parent="BottomBar/SkillSection/SkillRow1/SkillBtn_fire_walk" unique_id=3000035]
+layout_mode = 0
+offset_left = 1.0
+offset_top = 1.0
+offset_right = 35.0
+offset_bottom = 35.0
 mouse_filter = 2
-theme_override_colors/font_color = Color(1, 1, 1, 0.85)
+expand_mode = 1
+stretch_mode = 5
+
+[node name="HotkeyLabel" type="Label" parent="BottomBar/SkillSection/SkillRow1/SkillBtn_fire_walk" unique_id=3000036]
+layout_mode = 0
+offset_left = 2.0
+offset_top = 21.0
+offset_right = 30.0
+offset_bottom = 32.0
+theme_override_colors/font_color = Color(1, 0.85, 0.4, 0.9)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 1
+theme_override_font_sizes/font_size = 7
+text = "U"
+horizontal_alignment = 2
+
+[node name="SkillBtn_meteor" type="Button" parent="BottomBar/SkillSection/SkillRow1" unique_id=3000037]
+clip_contents = true
+custom_minimum_size = Vector2(36, 36)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 1
+theme_override_styles/normal = SubResource("transparent_btn_bg")
+theme_override_styles/pressed = SubResource("transparent_btn_bg")
+theme_override_styles/hover = SubResource("transparent_btn_bg")
+theme_override_styles/disabled = SubResource("transparent_btn_bg")
+theme_override_styles/focus = SubResource("transparent_btn_bg")
+metadata/skill_id = "meteor"
+
+[node name="Icon" type="TextureRect" parent="BottomBar/SkillSection/SkillRow1/SkillBtn_meteor" unique_id=3000038]
+layout_mode = 0
+offset_left = 1.0
+offset_top = 1.0
+offset_right = 35.0
+offset_bottom = 35.0
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="HotkeyLabel" type="Label" parent="BottomBar/SkillSection/SkillRow1/SkillBtn_meteor" unique_id=3000039]
+layout_mode = 0
+offset_left = 2.0
+offset_top = 21.0
+offset_right = 30.0
+offset_bottom = 32.0
+theme_override_colors/font_color = Color(1, 0.85, 0.4, 0.9)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 1
+theme_override_font_sizes/font_size = 7
+text = "F"
+horizontal_alignment = 2
+
+[node name="SkillBtn_armageddon" type="Button" parent="BottomBar/SkillSection/SkillRow1" unique_id=3000040]
+clip_contents = true
+custom_minimum_size = Vector2(36, 36)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 1
+theme_override_styles/normal = SubResource("transparent_btn_bg")
+theme_override_styles/pressed = SubResource("transparent_btn_bg")
+theme_override_styles/hover = SubResource("transparent_btn_bg")
+theme_override_styles/disabled = SubResource("transparent_btn_bg")
+theme_override_styles/focus = SubResource("transparent_btn_bg")
+metadata/skill_id = "armageddon"
+
+[node name="Icon" type="TextureRect" parent="BottomBar/SkillSection/SkillRow1/SkillBtn_armageddon" unique_id=3000041]
+layout_mode = 0
+offset_left = 1.0
+offset_top = 1.0
+offset_right = 35.0
+offset_bottom = 35.0
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="HotkeyLabel" type="Label" parent="BottomBar/SkillSection/SkillRow1/SkillBtn_armageddon" unique_id=3000042]
+layout_mode = 0
+offset_left = 2.0
+offset_top = 21.0
+offset_right = 30.0
+offset_bottom = 32.0
+theme_override_colors/font_color = Color(1, 0.85, 0.4, 0.9)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 1
+theme_override_font_sizes/font_size = 7
+text = "G"
+horizontal_alignment = 2
+
+[node name="SkillBtn_freezing_spear" type="Button" parent="BottomBar/SkillSection/SkillRow1" unique_id=3000043]
+clip_contents = true
+custom_minimum_size = Vector2(36, 36)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 1
+theme_override_styles/normal = SubResource("transparent_btn_bg")
+theme_override_styles/pressed = SubResource("transparent_btn_bg")
+theme_override_styles/hover = SubResource("transparent_btn_bg")
+theme_override_styles/disabled = SubResource("transparent_btn_bg")
+theme_override_styles/focus = SubResource("transparent_btn_bg")
+metadata/skill_id = "freezing_spear"
+
+[node name="Icon" type="TextureRect" parent="BottomBar/SkillSection/SkillRow1/SkillBtn_freezing_spear" unique_id=3000044]
+layout_mode = 0
+offset_left = 1.0
+offset_top = 1.0
+offset_right = 35.0
+offset_bottom = 35.0
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="HotkeyLabel" type="Label" parent="BottomBar/SkillSection/SkillRow1/SkillBtn_freezing_spear" unique_id=3000045]
+layout_mode = 0
+offset_left = 2.0
+offset_top = 21.0
+offset_right = 30.0
+offset_bottom = 32.0
+theme_override_colors/font_color = Color(1, 0.85, 0.4, 0.9)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 1
+theme_override_font_sizes/font_size = 7
+text = "Z"
+horizontal_alignment = 2
+
+[node name="SkillBtn_poison_cloud" type="Button" parent="BottomBar/SkillSection/SkillRow1" unique_id=3000046]
+clip_contents = true
+custom_minimum_size = Vector2(36, 36)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 1
+theme_override_styles/normal = SubResource("transparent_btn_bg")
+theme_override_styles/pressed = SubResource("transparent_btn_bg")
+theme_override_styles/hover = SubResource("transparent_btn_bg")
+theme_override_styles/disabled = SubResource("transparent_btn_bg")
+theme_override_styles/focus = SubResource("transparent_btn_bg")
+metadata/skill_id = "poison_cloud"
+
+[node name="Icon" type="TextureRect" parent="BottomBar/SkillSection/SkillRow1/SkillBtn_poison_cloud" unique_id=3000047]
+layout_mode = 0
+offset_left = 1.0
+offset_top = 1.0
+offset_right = 35.0
+offset_bottom = 35.0
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="HotkeyLabel" type="Label" parent="BottomBar/SkillSection/SkillRow1/SkillBtn_poison_cloud" unique_id=3000048]
+layout_mode = 0
+offset_left = 2.0
+offset_top = 21.0
+offset_right = 30.0
+offset_bottom = 32.0
+theme_override_colors/font_color = Color(1, 0.85, 0.4, 0.9)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 1
+theme_override_font_sizes/font_size = 7
+text = "H"
+horizontal_alignment = 2
+
+[node name="SkillBtn_dark_ritual" type="Button" parent="BottomBar/SkillSection/SkillRow1" unique_id=3000049]
+clip_contents = true
+custom_minimum_size = Vector2(36, 36)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 1
+theme_override_styles/normal = SubResource("transparent_btn_bg")
+theme_override_styles/pressed = SubResource("transparent_btn_bg")
+theme_override_styles/hover = SubResource("transparent_btn_bg")
+theme_override_styles/disabled = SubResource("transparent_btn_bg")
+theme_override_styles/focus = SubResource("transparent_btn_bg")
+metadata/skill_id = "dark_ritual"
+
+[node name="Icon" type="TextureRect" parent="BottomBar/SkillSection/SkillRow1/SkillBtn_dark_ritual" unique_id=3000050]
+layout_mode = 0
+offset_left = 1.0
+offset_top = 1.0
+offset_right = 35.0
+offset_bottom = 35.0
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="HotkeyLabel" type="Label" parent="BottomBar/SkillSection/SkillRow1/SkillBtn_dark_ritual" unique_id=3000051]
+layout_mode = 0
+offset_left = 2.0
+offset_top = 21.0
+offset_right = 30.0
+offset_bottom = 32.0
+theme_override_colors/font_color = Color(1, 0.85, 0.4, 0.9)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 1
+theme_override_font_sizes/font_size = 7
+text = "B"
+horizontal_alignment = 2
+
+[node name="SkillBtn_nova" type="Button" parent="BottomBar/SkillSection/SkillRow1" unique_id=3000052]
+clip_contents = true
+custom_minimum_size = Vector2(36, 36)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 1
+theme_override_styles/normal = SubResource("transparent_btn_bg")
+theme_override_styles/pressed = SubResource("transparent_btn_bg")
+theme_override_styles/hover = SubResource("transparent_btn_bg")
+theme_override_styles/disabled = SubResource("transparent_btn_bg")
+theme_override_styles/focus = SubResource("transparent_btn_bg")
+metadata/skill_id = "nova"
+
+[node name="Icon" type="TextureRect" parent="BottomBar/SkillSection/SkillRow1/SkillBtn_nova" unique_id=3000053]
+layout_mode = 0
+offset_left = 1.0
+offset_top = 1.0
+offset_right = 35.0
+offset_bottom = 35.0
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="HotkeyLabel" type="Label" parent="BottomBar/SkillSection/SkillRow1/SkillBtn_nova" unique_id=3000054]
+layout_mode = 0
+offset_left = 2.0
+offset_top = 21.0
+offset_right = 30.0
+offset_bottom = 32.0
+theme_override_colors/font_color = Color(1, 0.85, 0.4, 0.9)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 1
+theme_override_font_sizes/font_size = 7
+text = "N"
+horizontal_alignment = 2
+
+[node name="QuickSlots" type="GridContainer" parent="BottomBar" unique_id=602649306]
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -186.0
+offset_top = 10.0
+offset_right = -10.0
+offset_bottom = -10.0
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_constants/h_separation = 2
+theme_override_constants/v_separation = 2
+columns = 4
+
+[node name="SlotLMB" type="Panel" parent="BottomBar/QuickSlots" unique_id=1093992311]
+custom_minimum_size = Vector2(44, 32)
+layout_mode = 2
+theme_override_styles/panel = SubResource("slot_bg")
+
+[node name="SlotLMBIcon" type="TextureRect" parent="BottomBar/QuickSlots/SlotLMB" unique_id=1840002347]
+layout_mode = 0
+offset_left = 3.0
+offset_top = 2.0
+offset_right = 41.0
+offset_bottom = 26.0
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="SlotLMBLabel" type="Label" parent="BottomBar/QuickSlots/SlotLMB" unique_id=563790049]
+layout_mode = 0
+offset_left = -1.0
+offset_top = 22.0
+offset_right = 43.0
+offset_bottom = 33.0
+theme_override_colors/font_color = Color(1, 0.667, 0.267, 0.85)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 1
+theme_override_font_sizes/font_size = 7
+text = "LMB"
+horizontal_alignment = 2
+
+[node name="SlotRMB" type="Panel" parent="BottomBar/QuickSlots" unique_id=2000010455]
+custom_minimum_size = Vector2(44, 32)
+layout_mode = 2
+theme_override_styles/panel = SubResource("slot_bg")
+
+[node name="SlotRMBIcon" type="TextureRect" parent="BottomBar/QuickSlots/SlotRMB" unique_id=5868030]
+layout_mode = 0
+offset_left = 3.0
+offset_top = 2.0
+offset_right = 41.0
+offset_bottom = 26.0
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="SlotRMBLabel" type="Label" parent="BottomBar/QuickSlots/SlotRMB" unique_id=919638243]
+layout_mode = 0
+offset_left = -1.0
+offset_top = 22.0
+offset_right = 43.0
+offset_bottom = 33.0
+theme_override_colors/font_color = Color(1, 0.667, 0.267, 0.85)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 1
+theme_override_font_sizes/font_size = 7
+text = "RMB"
+horizontal_alignment = 2
+
+[node name="SlotShift" type="Panel" parent="BottomBar/QuickSlots" unique_id=1044290664]
+custom_minimum_size = Vector2(44, 32)
+layout_mode = 2
+theme_override_styles/panel = SubResource("slot_bg")
+
+[node name="SlotShiftIcon" type="TextureRect" parent="BottomBar/QuickSlots/SlotShift" unique_id=2135334791]
+layout_mode = 0
+offset_left = 3.0
+offset_top = 2.0
+offset_right = 41.0
+offset_bottom = 26.0
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="SlotShiftLabel" type="Label" parent="BottomBar/QuickSlots/SlotShift" unique_id=1527300294]
+layout_mode = 0
+offset_left = -1.0
+offset_top = 22.0
+offset_right = 43.0
+offset_bottom = 33.0
+theme_override_colors/font_color = Color(1, 0.667, 0.267, 0.85)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 1
 theme_override_font_sizes/font_size = 7
 text = "Shift"
 horizontal_alignment = 2
 
-[node name="SlotSpace" type="Panel" parent="BottomBar/QuickSlots"]
-layout_mode = 0
-offset_left = 69.0
-offset_top = 38.0
-offset_right = 115.0
-offset_bottom = 68.0
-theme_override_styles/panel = SubResource("7")
+[node name="SlotSpace" type="Panel" parent="BottomBar/QuickSlots" unique_id=777401931]
+custom_minimum_size = Vector2(44, 32)
+layout_mode = 2
+theme_override_styles/panel = SubResource("slot_bg")
 
-[node name="SlotSpaceIcon" type="TextureRect" parent="BottomBar/QuickSlots"]
+[node name="SlotSpaceIcon" type="TextureRect" parent="BottomBar/QuickSlots/SlotSpace" unique_id=908252572]
 layout_mode = 0
-offset_left = 71.0
-offset_top = 40.0
-offset_right = 113.0
-offset_bottom = 66.0
+offset_left = 3.0
+offset_top = 2.0
+offset_right = 41.0
+offset_bottom = 26.0
+mouse_filter = 2
 expand_mode = 1
 stretch_mode = 5
 
-[node name="SlotSpaceLabel" type="Label" parent="BottomBar/QuickSlots"]
+[node name="SlotSpaceLabel" type="Label" parent="BottomBar/QuickSlots/SlotSpace" unique_id=1293471921]
 layout_mode = 0
-offset_left = 85.0
-offset_top = 58.0
-offset_right = 113.0
-offset_bottom = 66.0
-mouse_filter = 2
-theme_override_colors/font_color = Color(1, 1, 1, 0.85)
+offset_left = -1.0
+offset_top = 22.0
+offset_right = 43.0
+offset_bottom = 33.0
+theme_override_colors/font_color = Color(1, 0.667, 0.267, 0.85)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 1
 theme_override_font_sizes/font_size = 7
 text = "Space"
 horizontal_alignment = 2
 
-[node name="ExpBar" type="ProgressBar" parent="BottomBar" unique_id=202595451]
+[node name="ExpBar" type="ProgressBar" parent="BottomBar" unique_id=306887346]
 layout_mode = 1
 anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -12.0
+offset_top = -10.0
 grow_horizontal = 2
 grow_vertical = 0
-theme_override_styles/fill = SubResource("4")
+theme_override_styles/fill = SubResource("exp_fill")
 value = 100.0
 show_percentage = false
 
-[node name="ExpLabel" type="Label" parent="BottomBar" unique_id=687849293]
+[node name="ExpLabel" type="Label" parent="BottomBar" unique_id=1478050288]
 layout_mode = 1
 anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -12.0
+offset_top = -13.0
+offset_bottom = 3.0
 grow_horizontal = 2
 grow_vertical = 0
-theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_color = Color(1, 0.8, 0.533, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 3
-theme_override_font_sizes/font_size = 13
+theme_override_constants/outline_size = 2
+theme_override_font_sizes/font_size = 11
 text = "LEVEL 1"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="TipsLabel" type="Label" parent="BottomBar" unique_id=1268021438]
-layout_mode = 1
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -326.0
-offset_top = -15.0
-offset_right = -12.0
-offset_bottom = 1.0
-grow_horizontal = 0
-grow_vertical = 0
-theme_override_colors/font_color = Color(0.75, 0.75, 0.7, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 2
-theme_override_font_sizes/font_size = 11
-
-[node name="RelicContainer" type="HBoxContainer" parent="."]
-layout_mode = 1
-anchors_preset = 0
-offset_left = 8
-offset_top = 8
-offset_right = 8
-offset_bottom = 8
+[node name="RelicContainer" type="HBoxContainer" parent="." unique_id=964426444]
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 8.0
+offset_bottom = 8.0
 theme_override_constants/separation = 4
-text = "WASD:Move  LMB:Missile  RMB:Lightning  F:Fireball  T:Panel"
-horizontal_alignment = 2
-vertical_alignment = 2

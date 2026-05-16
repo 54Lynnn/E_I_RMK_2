@@ -40,6 +40,9 @@ func toggle():
 	Global.hero_panel_is_open = is_open
 	get_tree().paused = is_open
 	if is_open:
+		var hud = get_tree().get_first_node_in_group("hud")
+		if hud:
+			hud.process_mode = Node.PROCESS_MODE_ALWAYS
 		update_ui()
 	else:
 		_hide_quickslot_menu()
@@ -57,6 +60,9 @@ func toggle_dev_mode():
 		Global.hero_panel_is_open = true
 		visible = true
 		get_tree().paused = true
+		var hud = get_tree().get_first_node_in_group("hud")
+		if hud:
+			hud.process_mode = Node.PROCESS_MODE_ALWAYS
 		update_ui()
 	else:
 		is_open = false

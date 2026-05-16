@@ -203,7 +203,6 @@ func _create_card(relic: RelicData) -> Control:
 	return card
 
 func _on_relic_selected(relic_id: String, relic_name: String):
-	print("RelicSelectUI: 选择了遗物:", relic_name, " id:", relic_id)
 	RelicManager.select_relic(relic_id)
 	hide_ui()
 

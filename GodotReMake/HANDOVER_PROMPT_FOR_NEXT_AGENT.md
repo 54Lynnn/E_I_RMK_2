@@ -3,7 +3,7 @@
 > **项目**: Evil Invasion (2006年Flash游戏) Godot 4.6 重制版
 > **引擎**: Godot 4.6.2
 > **GitHub**: https://github.com/54Lynnn/E_I_RMK_2
-> **最新更新**: v11 Agent — 加密导出完成 + 输入处理教训文档化 + GitHub回滚 + 全量文档更新
+> **最新更新**: v12 Agent — hero.gd全面重构 + 统一施法调度 + 冷却缩减遗物修正 + 全项目性能优化
 
 ## 快速开始
 
@@ -39,7 +39,7 @@
 - **Telekinesis 数据修正**：从实际代码（pickup_item.gd）提取真实 hold_time 数据，1 级 1.0s，满级 0.55s
 
 ### 🐛 Bug修复
-- **Teleport 按"2"键无效**：从 `_process` 移除 teleport 的 `is_action_pressed` 检测（受 `mouse_y < hud_top` 限制），仅保留在 `_unhandled_input`
+- **Teleport 按"2"键无效**：从 `_process` 移除 teleport 的 `is_action_pressed` 检测（受 `mouse_y < hud_top` 限制），仅保留在 `_unhandled_input`（**注意：v12 已改为仅用 _process，移除了 _unhandled_input**，详见下方 v12 章节）
 - **Firewalk 火焰残留**：lambda 闭包捕获 self 导致 queue_free 后回调不执行 → 所有成员值提前复制到局部变量
 - **Firewalk 无伤害**：PROCESS_MODE_WHEN_PAUSED 误用 → 改为 PROCESS_MODE_ALWAYS
 - **Multicast 导致 firewalk 自动关闭**：cast_fire_walk() 中移除 _try_multicast("fire_walk")
@@ -88,6 +88,78 @@
 ### 🎨 HUD 改进
 - **Firewalk toggle 图标**：hud.gd 新增 _update_firewalk_toggle_icon()，每帧检查 firewalk toggle 状态，开启时图标彩色，关闭时灰色
 - **技能 tooltip 数据修正**：所有技能调用实际静态方法（get_damage/get_mana_cost 等），firewalk 显示无 mana cost + toggle 描述
+
+## v12 会话完成的工作（2026-05-16）
+
+### 🏗️ hero.gd 架构重构（重大变更）
+
+**变更一：移除 `_unhandled_input()`，仅用 `_process()` 处理所有技能输入**
+
+旧架构中 `_process()` 和 `_unhandled_input()` **同时**检测全部21个技能的按键状态，导致每按一次技能键被施放两次（一次来自 `_process` 的 `is_action_pressed()`，一次来自 `_unhandled_input` 的 `event.is_action_pressed()`）。
+
+现在：
+- 删除了整个 `_unhandled_input()` 函数（约70行）
+- `_process` 是唯一的技能输入处理器（使用 `Input.is_action_pressed()` 支持按住连发）
+- 一次性技能（传送、Fire Walk toggle）使用 `Input.is_action_just_pressed()`
+
+**变更二：21个 cast_xxx() 函数合并为统一调度**
+
+旧架构：
+```gdscript
+func cast_magic_missile():
+    MagicMissile.cast(self, mouse_pos, skill_cooldowns)
+func cast_fireball():
+    Fireball.cast(self, mouse_pos, skill_cooldowns)
+# ... 21个这样的函数
+```
+
+新架构（[hero.gd](file:///e:/EvilInvasion/GodotReMake/Scripts/hero.gd)）：
+```gdscript
+const SKILL_SCRIPTS := {
+    "magic_missile": MagicMissile,
+    "fireball": Fireball,
+    # ... 全部21个技能
+}
+
+func _cast_skill(skill_id: String) -> bool:
+    var script = SKILL_SCRIPTS.get(skill_id)
+    if not script:
+        return false
+    if not SKILLS_NO_ATTACK.has(skill_id):
+        start_attack()
+    if not script.cast(self, mouse_pos, skill_cooldowns):
+        return false
+    _update_shield_visual()
+    if not SKILLS_NO_MULTICAST.has(skill_id):
+        _try_multicast(skill_id)
+    return true
+```
+
+效果：**净减少约200行重复代码**，所有技能通过 `_cast_skill("skill_id")` 统一调用。
+
+### 🐛 Bug修复
+- **冷却缩减遗物反向生效**：`relic_manager.gd` 中 `get_cooldown_multiplier()` 原用 `-=` 导致冷却倒计时变慢，改为 `+=` 后实现真正的"技能加速"效果
+- **遗物影响范围扩大**：冷却遗物现在正确影响自动火球间隔、自动飞弹间隔和护盾充能速度
+- **击退方向修复**：从 `global_position.direction_to(monster) * -1`（随机方向）改为 `direction`（弹道飞行方向）
+- **击退距离修正**：速度从 50→100（50px/s × 0.1s = 5px → 100px/s × 0.1s = 10px）
+- **传送键修复**：`spell_teleport`（键2）重新添加到 `_process()` 的输入检测中
+- **死亡重试清空快捷键**：`Global.reset()` 中清空 quick_slot_lmb/rmb/shift/space，新局恢复默认
+- **Shift/Space默认技能修正**：从错误默认值（freezing_spear/heal）改为空，无快捷键绑定
+
+### ⚡ 性能优化
+- **StyleBoxFlat 缓存**：`hud.gd` 中 `_update_single_slot()` 不再每次创建 StyleBoxFlat 实例
+- **冷却更新节流**：冷却UI从每帧更新改为每6帧更新一次（~10次/秒），减少83% UI重绘
+- **Buff图标缓存**：`buff_icon.gd` 添加进度值缓存，变化<1%时跳过多边形重建
+- **全局清理**：移除60+条调试 print 语句（12个文件）
+
+### 🎨 UI 修复
+- **冷却扇形居中**：`cooldown_overlay` 改用 `PRESET_FULL_RECT` 填满按钮，中心自动对齐图标
+- **Dev按钮位置**：HeroPanel.tscn 中按钮宽度从200缩至110px，位置上移避免与SkillPointsRow重叠
+
+### 📝 文档更新
+- **`SPELL_DEVELOPMENT_GUIDE.md`**：全面更新 Hero.gd 集成规范章节，移除旧的 cast_xxx() 模式，替换为 SKILL_SCRIPTS 字典 + 统一 `_cast_skill()` 模式，移除 `_unhandled_input` 输入处理示例
+- **`ROADMAP.md`**：新增 v12 优化/修复清单，更新最后更新日期
+- **`HANDOVER_PROMPT_FOR_NEXT_AGENT.md`**：新增本会话工作记录
 
 ---
 
@@ -182,3 +254,22 @@ Input 事件进入 Godot
 3. **地图纹理** — 6张 DDS 纹理已提取，替换当前绿色占位地面
 4. **音效系统** — 68个OGG已提取，需对接到各技能
 5. **游戏导出** — export_presets.cfg 已配置加密参数，已成功导出加密版单 exe（build/EvilInvasion_Encrypted.exe），后续导出可直接运行 export_game.ps1 或使用 Godot → Export 菜单
+
+---
+
+## ⚠️ v12 关键架构变更提醒
+
+### 1. hero.gd 不再有 `_unhandled_input()`
+所有技能输入仅在 `_process()` 中使用 `Input.is_action_pressed()` / `Input.is_action_just_pressed()` 检测。
+如果需要添加新的技能快捷键，只需在 `_process()` 中添加一行调用 `_cast_skill("skill_id")` 即可，**不需要重复添加 cast_xxx() 包装函数**。
+
+### 2. 冷却缩减 == 技能加速
+`get_cooldown_multiplier()` 返回 >1.0 的值。原理：`skill_cooldowns[skill] -= delta * multiplier`。
+- `multiplier = 1.0`：正常速度
+- `multiplier = 1.05`：快5%（cd_small）
+- 需要某系统受冷却影响时，在计时器累加时乘以 `cd_mult` 即可
+
+### 3. Quickslot 默认值
+- LMB 空时默认 Magic Missile
+- RMB 空时默认 Fireball
+- Shift/Space 空时无默认技能（Z=Freezing Spear, C=Heal 有独立快捷键）

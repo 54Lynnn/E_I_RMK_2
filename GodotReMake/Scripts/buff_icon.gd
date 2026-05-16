@@ -22,6 +22,9 @@ extends Control
 var buff_id: String = ""
 var buff_data: Dictionary = {}
 
+# 缓存上次进度，避免不必要的多边形重建
+var _last_progress := -1.0
+
 # 图标尺寸
 const ICON_SIZE := 36
 
@@ -91,9 +94,12 @@ func _process(_delta):
 		duration_label.text = ""
 
 func _update_cooldown_polygon(remaining: float, duration: float):
-	# 计算冷却进度（0.0 = 刚开始，1.0 = 结束）
 	var progress = 1.0 - (remaining / duration)
 	progress = clamp(progress, 0.0, 1.0)
+
+	if abs(progress - _last_progress) < 0.01:
+		return
+	_last_progress = progress
 
 	if progress <= 0:
 		# 刚开始，不显示扇形

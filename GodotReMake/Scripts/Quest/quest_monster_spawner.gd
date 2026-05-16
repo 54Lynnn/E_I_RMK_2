@@ -84,14 +84,11 @@ func start_level(config: Dictionary, skip_spawned: int = 0):
 	allowed_monsters = config["allowed_monsters"]
 	spawned_count = skip_spawned
 	is_spawning = true
-	spawn_timer = spawn_interval  # 第一只立即生成
-	
-	print("QuestSpawner: 开始生成，允许怪物: %s" % str(allowed_monsters))
+	spawn_timer = spawn_interval
 
 func stop_spawning():
 	"""停止生成（达到等级上限时调用）"""
 	is_spawning = false
-	print("QuestSpawner: 停止刷怪")
 
 func get_remaining_monsters() -> int:
 	"""获取剩余需要生成的怪物数（Quest模式：返回-1表示无限）"""

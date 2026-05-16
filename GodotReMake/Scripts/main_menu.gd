@@ -45,11 +45,9 @@ func _on_new_game():
 func _on_continue():
 	var save_info = SaveManager.get_save_info(2)
 	if not save_info.exists or not save_info.has_quest_progress:
-		print("Continue: 没有可恢复的进度")
 		return
 	var success = SaveManager.load_game(2)
 	if not success:
-		push_error("Continue: 读取存档失败")
 		return
 	Global.current_game_mode = Global.GameMode.QUEST
 	Global.is_resuming_quest = true

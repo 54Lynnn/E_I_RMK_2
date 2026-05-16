@@ -485,11 +485,9 @@ func gain_experience(amount: int):
 		var level_manager = get_tree().get_first_node_in_group("quest_level_manager")
 		if level_manager:
 			if not level_manager.can_gain_experience(amount):
-				# 已达到等级上限，不再获得经验
-				print("Global: 已达到本关经验上限，不再获得经验！")
 				return
 		else:
-			print("Global: gain_experience() - 未找到 level_manager！")
+			pass
 	
 	# Quest模式：经验值减半
 	var final_amount = amount
@@ -501,7 +499,6 @@ func gain_experience(amount: int):
 		var level_manager = get_tree().get_first_node_in_group("quest_level_manager")
 		if level_manager:
 			level_manager.level_experience_gained += amount
-			print("Global: Quest模式记录经验 +%d，本关总计=%d" % [amount, level_manager.level_experience_gained])
 	
 	# Survival模式：记录累积经验值（用于死亡统计）
 	if current_game_mode == GameMode.SURVIVAL:
@@ -519,7 +516,6 @@ func gain_experience(amount: int):
 		# 原版：升级时自动回满血和蓝
 		health = max_health
 		mana = max_mana
-		print("Global: 升级！当前等级: %d" % hero_level)
 		level_changed.emit(hero_level)
 		exp_to_next = hero_level * 200
 		
@@ -527,7 +523,6 @@ func gain_experience(amount: int):
 		if current_game_mode == GameMode.QUEST:
 			var level_manager = get_tree().get_first_node_in_group("quest_level_manager")
 			if level_manager and level_manager.has_method("check_level_limit"):
-				print("Global: 升级后检查经验上限... 当前等级=%d" % hero_level)
 				level_manager.check_level_limit()
 	
 	# 发射信号通知UI更新
@@ -833,6 +828,12 @@ func reset():
 	
 	# 重置受击恢复状态
 	is_in_hit_recovery = false
+	
+	# 清空快捷栏设置（新一局重新开始）
+	quick_slot_lmb = ""
+	quick_slot_rmb = ""
+	quick_slot_shift = ""
+	quick_slot_space = ""
 	
 	# 重新应用被动技能效果
 	Fortuna.update_drop_rate()

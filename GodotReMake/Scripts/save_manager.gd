@@ -65,8 +65,6 @@ static func save_game(slot: int) -> bool:
 	
 	file.store_string(json_text)
 	file.close()
-	
-	print("SaveManager: 游戏已保存到槽位 ", slot)
 	return true
 
 # ============================================
@@ -155,8 +153,6 @@ static func load_game(slot: int) -> bool:
 	
 	# 应用存档数据
 	_apply_save_data(save_data)
-	
-	print("SaveManager: 游戏已从槽位 ", slot, " 加载")
 	return true
 
 # ============================================

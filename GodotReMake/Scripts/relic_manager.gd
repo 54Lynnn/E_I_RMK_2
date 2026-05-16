@@ -153,12 +153,12 @@ func has_relic(relic_id: String) -> bool:
 func get_cooldown_multiplier() -> float:
 	var mult = 1.0
 	if has_relic("cd_small"):
-		mult -= 0.05
+		mult += 0.05
 	if has_relic("cd_medium"):
-		mult -= 0.10
+		mult += 0.10
 	if has_relic("cd_large"):
-		mult -= 0.20
-	return max(mult, 0.1)
+		mult += 0.20
+	return mult
 
 func get_aoe_radius_multiplier() -> float:
 	var mult = 1.0
@@ -228,8 +228,10 @@ static func is_relic_level(level: int) -> bool:
 	return level == 1 or level % 5 == 0
 
 func _process(delta):
+	var cd_mult = get_cooldown_multiplier()
+
 	if has_relic("shield"):
-		_shield_timer += delta
+		_shield_timer += delta * cd_mult
 		if _shield_remaining <= 0 and _shield_timer >= _shield_cooldown:
 			_shield_remaining = 1
 			_shield_timer = 0.0
@@ -253,14 +255,16 @@ func _process_auto_cast():
 	if Global.is_in_hit_recovery:
 		return
 
+	var cd_mult = get_cooldown_multiplier()
+
 	if has_relic("auto_magic_missile"):
-		_auto_mm_timer -= 0.15
+		_auto_mm_timer -= 0.15 * cd_mult
 		if _auto_mm_timer <= 0:
 			_auto_mm_timer = 5.0
 			_try_auto_cast_skill(hero, "magic_missile")
 
 	if has_relic("auto_fireball"):
-		_auto_fb_timer -= 0.15
+		_auto_fb_timer -= 0.15 * cd_mult
 		if _auto_fb_timer <= 0:
 			_auto_fb_timer = 3.5
 			_try_auto_cast_skill(hero, "fireball")

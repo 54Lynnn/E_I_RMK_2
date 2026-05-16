@@ -71,18 +71,15 @@ func _ready():
 	
 	# 检查是否是 Resume Game 模式
 	if Global.is_resuming_quest and Global.quest_progress.has_progress:
-		Global.is_resuming_quest = false  # 重置标志
+		Global.is_resuming_quest = false
 		var resume_level = Global.quest_progress.current_level
-		print("QuestLevelManager: Resume 模式，恢复到关卡 %d" % (resume_level + 1))
-		start_level(resume_level, true)  # true = 恢复进度
+		start_level(resume_level, true)
 	else:
-		# 正常开始第1关
 		start_level(0)
 
 func _on_hero_died():
 	"""玩家死亡处理"""
 	is_level_active = false
-	print("Quest: 玩家死亡，游戏结束！")
 	
 	# 停止生成怪物
 	if spawner:
@@ -106,18 +103,6 @@ func _on_hero_died():
 # ============================================
 
 func start_level(level_index: int, resume_progress: bool = false):
-	"""开始指定关卡
-	
-	参数:
-		level_index: 关卡索引（0-9）
-		resume_progress: 是否恢复之前的进度（用于Resume Game）
-	"""
-	print("QuestLevelManager: start_level() 被调用 - level_index=%d, resume_progress=%s" % [level_index, str(resume_progress)])
-	print("QuestLevelManager: 调用堆栈:")
-	var stack = get_stack()
-	for i in range(min(5, stack.size())):
-		print("  %s:%d" % [stack[i].source, stack[i].line])
-	
 	if level_index >= level_configs.size():
 		all_levels_completed.emit()
 		return
@@ -135,20 +120,14 @@ func start_level(level_index: int, resume_progress: bool = false):
 		monsters_killed = Global.quest_progress.monsters_killed
 		monsters_spawned = Global.quest_progress.monsters_spawned
 		level_start_level = Global.quest_progress.level_start_level
-		print("Quest: 恢复关卡 %d 进度 - 已击杀 %d, 起始等级=%d" % [level_index + 1, monsters_killed, level_start_level])
 	else:
 		monsters_killed = 0
 		monsters_spawned = 0
-		print("QuestLevelManager: start_level() - Global.hero_level=%d" % Global.hero_level)
 		level_start_level = Global.hero_level
-		print("Quest: 新关卡 %d，设置起始等级=%d" % [level_index + 1, level_start_level])
 		
-		# 确保 Global.quest_progress 也被更新
 		Global.quest_progress.level_start_level = level_start_level
 	
 	is_level_active = true
-	
-	print("Quest: 开始关卡 %d - %s" % [level_index + 1, config["name"]])
 	
 	_update_map_texture(config.get("texture", ""))
 
@@ -179,11 +158,7 @@ func check_level_complete():
 			if monster.get_current_health() > 0:
 				alive_monsters += 1
 	
-	print("Quest: 通关检查 - 存活怪物=%d, 经验上限=%s" % [alive_monsters, str(is_level_cap_reached)])
-	
-	# 通关条件：达到经验上限 且 没有存活怪物
 	if is_level_cap_reached and alive_monsters <= 0:
-		print("Quest: 通关检查通过 - 所有怪物已清除")
 		complete_level()
 
 func complete_level():
@@ -192,7 +167,6 @@ func complete_level():
 		return
 	is_completing_level = true
 	is_level_active = false
-	print("Quest: 关卡 %d 完成！" % (current_level + 1))
 	level_completed.emit(current_level + 1)
 	
 	# 保存进度：记录下一关，方便Resume
@@ -212,7 +186,6 @@ func complete_level():
 	
 	if is_last:
 		all_levels_completed.emit()
-		print("Quest: 恭喜！所有关卡已完成！")
 
 # ============================================
 # 怪物管理
@@ -227,9 +200,6 @@ func on_monster_killed():
 	Global.quest_total_monsters_killed += 1
 	_update_monster_count()
 	
-	print("Quest: 击杀 %d 只怪物（累计 %d）" % [monsters_killed, Global.quest_total_monsters_killed])
-	
-	# 检查通关（达到经验上限且清除所有怪物）
 	check_level_complete()
 
 func on_monster_spawned():
@@ -267,19 +237,13 @@ func can_gain_experience(amount: int = 0) -> bool:
 		return true
 	
 	if is_level_cap_reached:
-		print("QuestLevelManager: can_gain_experience() - is_level_cap_reached=true，不能获得经验")
 		return false
 	
-	# 检查是否达到本关经验上限
 	var exp_limit = LEVEL_EXP_REQUIREMENTS[current_level]
 	var new_total = level_experience_gained + amount
 	var would_exceed = new_total > exp_limit
 	
-	print("QuestLevelManager: can_gain_experience() - 本关经验=%d, 本次=%d, 新总计=%d, 上限=%d, 会超额=%s" % [level_experience_gained, amount, new_total, exp_limit, str(would_exceed)])
-	
 	if would_exceed:
-		print("QuestLevelManager: 达到本关经验上限！")
-		# 达到上限，触发停止刷怪
 		check_level_limit()
 		return false
 	
@@ -306,33 +270,21 @@ func check_level_limit():
 		return true
 	
 	var exp_limit = LEVEL_EXP_REQUIREMENTS[current_level]
-	print("QuestLevelManager: check_level_limit() - 本关经验=%d, 上限=%d" % [level_experience_gained, exp_limit])
 	
 	if level_experience_gained >= exp_limit:
-		print("QuestLevelManager: 达到本关经验上限！本关经验=%d, 上限=%d" % [level_experience_gained, exp_limit])
 		is_level_cap_reached = true
 		level_up_limited.emit(get_max_level_this_level())
 		
-		# 1. 停止刷怪
 		if spawner:
-			print("QuestLevelManager: spawner 存在，is_spawning=%s" % str(spawner.is_spawning))
 			if spawner.is_spawning:
 				spawner.stop_spawning()
-				print("Quest: 达到经验上限，停止刷怪！")
-		else:
-			print("QuestLevelManager: spawner 为 null！")
 		
-		# 2. 设置所有现有怪物的经验值为0
 		_set_all_monsters_exp_to_zero()
-		
-		print("Quest: 达到经验上限！清除剩余怪物以通关。")
 		
 		return true
 	return false
 
 func _set_all_monsters_exp_to_zero():
-	"""将所有现有怪物的经验值设置为0"""
-	print("QuestLevelManager: 设置所有怪物经验值为0...")
 	var monsters = get_tree().get_nodes_in_group("monsters")
 	var count = 0
 	for monster in monsters:
@@ -342,7 +294,6 @@ func _set_all_monsters_exp_to_zero():
 		elif "experience_reward" in monster:
 			monster.experience_reward = 0
 			count += 1
-	print("QuestLevelManager: 已设置 %d 只怪物的经验值为0" % count)
 
 # ============================================
 # Quest 进度存档管理
@@ -370,11 +321,7 @@ func _save_next_level_progress():
 	# 更新关卡解锁进度（解锁下一关）
 	if next_level > Global.quest_max_unlocked_level:
 		Global.quest_max_unlocked_level = next_level
-		print("Quest: 解锁新关卡 %d！最大解锁=%d" % [next_level + 1, Global.quest_max_unlocked_level + 1])
 	
-	print("Quest: 保存进度 - 下一关=%d, 玩家等级=%d" % [next_level + 1, Global.hero_level])
-	
-	# 同时保存到存档文件
 	_save_to_auto_slot()
 
 func _clear_quest_progress():
@@ -397,5 +344,3 @@ func _save_to_auto_slot():
 	
 	# 调用SaveManager保存到槽位2
 	var result = SaveManager.save_game(2)
-	if result:
-		print("Quest: 自动存档已保存到槽位2")
