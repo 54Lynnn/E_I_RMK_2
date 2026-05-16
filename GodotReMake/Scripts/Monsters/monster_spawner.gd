@@ -2,11 +2,11 @@ extends Node2D
 
 const MonsterDatabase = preload("res://Scripts/Monsters/monster_database.gd")
 
-enum SpawnPattern { SINGLE, LINE, GROUP, ALL_SIDES }
+enum SpawnPattern { SINGLE, LINE, GROUP, ALL_SIDES, HORDE }
 
 @export var map_width := 1536.0
 @export var map_height := 1536.0
-@export var spawn_margin := 80.0
+@export var spawn_margin := 10.0
 
 var active_monsters := 0
 var diablo_monsters := []
@@ -16,6 +16,15 @@ var timer_target_single := 0.0
 var timer_target_line := 0.0
 var timer_target_group := 0.0
 var timer_target_all_sides := 0.0
+
+# HORDE 兽群模式状态
+var timer_target_horde := 0.0
+var horde_active := false
+var horde_elapsed := 0.0
+var horde_duration := 5.0
+var horde_monster_id := ""
+var horde_spawn_timer := 0.0
+const HORDE_SPAWN_INTERVAL := 0.5
 
 var monster_scenes := {
 	"troll": preload("res://Scenes/Troll.tscn"),
@@ -39,25 +48,54 @@ func _ready():
 	_set_new_timer_targets()
 
 func _set_new_timer_targets():
-	timer_target_single = randf_range(1.0, 3.0)
-	timer_target_line = randf_range(18.0, 22.0)
-	timer_target_group = randf_range(8.0, 12.0)
-	timer_target_all_sides = randf_range(38.0, 42.0)
+	timer_target_single = _get_single_interval()
+	timer_target_line = _get_line_interval()
+	timer_target_group = _get_group_interval()
+	timer_target_all_sides = _get_all_sides_interval()
+	timer_target_horde = _get_horde_interval()
+
+func _get_single_interval() -> float:
+	var avg = max(0.3, 2.0 - (Global.hero_level - 1) * 0.05)
+	return randf_range(avg * 0.5, avg * 1.5)
+
+func _get_group_interval() -> float:
+	var reduction = min(3.9, (Global.hero_level - 1) * 0.1)
+	return randf_range(max(4.0, 8.0 - reduction), max(8.0, 12.0 - reduction))
+
+func _get_line_interval() -> float:
+	var reduction = min(3.9, (Global.hero_level - 1) * 0.1)
+	return randf_range(max(14.0, 18.0 - reduction), max(18.0, 22.0 - reduction))
+
+func _get_all_sides_interval() -> float:
+	var effective = max(0, Global.hero_level - 9)
+	var reduction = min(6.2, effective * 0.2)
+	return randf_range(max(32.0, 38.0 - reduction), max(36.0, 42.0 - reduction))
+
+func _get_horde_interval() -> float:
+	var effective = max(0, Global.hero_level - 15)
+	var reduction = min(5.0, effective * 0.2)
+	return randf_range(max(23.0, 28.0 - reduction), max(27.0, 32.0 - reduction))
+
+func _get_center_direction(from_pos: Vector2) -> Vector2:
+	var center = Vector2(map_width * 0.5, map_height * 0.5)
+	var to_center = (center - from_pos).normalized()
+	var angle_offset = deg_to_rad(randf_range(-60, 60))
+	return to_center.rotated(angle_offset)
 
 func _process(delta):
 	timer_target_single -= delta
 	if timer_target_single <= 0:
-		timer_target_single = randf_range(1.0, 3.0)
+		timer_target_single = _get_single_interval()
 		_spawn_pattern(SpawnPattern.SINGLE)
 
 	timer_target_line -= delta
 	if timer_target_line <= 0:
-		timer_target_line = randf_range(18.0, 22.0)
+		timer_target_line = _get_line_interval()
 		_spawn_pattern(SpawnPattern.LINE)
 
 	timer_target_group -= delta
 	if timer_target_group <= 0:
-		timer_target_group = randf_range(8.0, 12.0)
+		timer_target_group = _get_group_interval()
 		_spawn_pattern(SpawnPattern.GROUP)
 
 	var all_sides_unlocked := true
@@ -66,8 +104,24 @@ func _process(delta):
 	if all_sides_unlocked and Global.hero_level >= 9:
 		timer_target_all_sides -= delta
 		if timer_target_all_sides <= 0:
-			timer_target_all_sides = randf_range(38.0, 42.0)
+			timer_target_all_sides = _get_all_sides_interval()
 			_spawn_pattern(SpawnPattern.ALL_SIDES)
+
+	if Global.hero_level >= 15:
+		if horde_active:
+			horde_elapsed += delta
+			if horde_elapsed >= horde_duration:
+				horde_active = false
+				timer_target_horde = _get_horde_interval()
+			else:
+				horde_spawn_timer += delta
+				if horde_spawn_timer >= HORDE_SPAWN_INTERVAL:
+					horde_spawn_timer = 0.0
+					_spawn_horde_batch()
+		else:
+			timer_target_horde -= delta
+			if timer_target_horde <= 0:
+				_spawn_pattern(SpawnPattern.HORDE)
 
 func _spawn_pattern(pattern: SpawnPattern):
 	match pattern:
@@ -79,6 +133,8 @@ func _spawn_pattern(pattern: SpawnPattern):
 			_spawn_group()
 		SpawnPattern.ALL_SIDES:
 			_spawn_all_sides()
+		SpawnPattern.HORDE:
+			_spawn_horde()
 
 func _create_monster(monster_id: String, spawn_pos: Vector2, wander_dir: Vector2) -> bool:
 	if not monster_scenes.has(monster_id):
@@ -99,10 +155,15 @@ func _create_monster(monster_id: String, spawn_pos: Vector2, wander_dir: Vector2
 		monster.apply_database_data(monster_data)
 	if monster.has_method("set_quest_mode"):
 		monster.set_quest_mode(true)
-	if monster.has_method("set_wander_direction"):
-		monster.set_wander_direction(wander_dir)
 
 	get_parent().add_child(monster)
+
+	monster.modulate.a = 0.0
+	var fade_tween = monster.create_tween()
+	fade_tween.tween_property(monster, "modulate:a", 1.0, 0.5)
+
+	if monster.has_method("set_wander_direction"):
+		monster.set_wander_direction(wander_dir)
 	active_monsters += 1
 	if monster_id == "diablo":
 		diablo_monsters.append(monster)
@@ -123,14 +184,14 @@ func _on_diablo_freed(diablo: Node):
 func _spawn_single():
 	var monster_id = MonsterDatabase.pick_monster_for_level(Global.hero_level)
 	var spawn_pos = get_random_edge_position()
-	var wander_dir = Vector2(randf_range(-1, 1), randf_range(-1, 1)).normalized()
+	var wander_dir = _get_center_direction(spawn_pos)
 	_create_monster(monster_id, spawn_pos, wander_dir)
 
 func _spawn_line():
 	var exclude_list = ["reaper", "diablo"]
 	var monster_id = MonsterDatabase.pick_monster_for_level(Global.hero_level, exclude_list)
 	var side = randi() % 4
-	var count = 20
+	var count = 15
 
 	var edge_positions := _get_edge_line_positions(side, count)
 	var wander_dir := _get_edge_wander_direction(side)
@@ -154,20 +215,23 @@ func _spawn_group():
 	var rows = grid_size[1]
 
 	var anchor = get_random_edge_position()
-	var spawn_dir := Vector2.ZERO
+
+	var layout_dir := Vector2.ZERO
 	match side:
-		0: spawn_dir = Vector2(0, 1)
-		1: spawn_dir = Vector2(-1, 0)
-		2: spawn_dir = Vector2(0, -1)
-		3: spawn_dir = Vector2(1, 0)
+		0: layout_dir = Vector2(0, 1)
+		1: layout_dir = Vector2(-1, 0)
+		2: layout_dir = Vector2(0, -1)
+		3: layout_dir = Vector2(1, 0)
+
+	var spawn_dir = _get_center_direction(anchor)
 
 	var spacing := 40.0
 	for row in range(rows):
 		for col in range(cols):
 			var offset = Vector2(col * spacing, row * spacing)
 			var rotated_offset = Vector2(
-				offset.x * abs(spawn_dir.y) + offset.y * abs(spawn_dir.x),
-				offset.y * abs(spawn_dir.y) + offset.x * abs(spawn_dir.x)
+				offset.x * abs(layout_dir.y) + offset.y * abs(layout_dir.x),
+				offset.y * abs(layout_dir.y) + offset.x * abs(layout_dir.x)
 			)
 			var pos = anchor + rotated_offset
 			pos.x = clamp(pos.x, spawn_margin, map_width - spawn_margin)
@@ -177,13 +241,34 @@ func _spawn_group():
 func _spawn_all_sides():
 	var exclude_list = ["reaper", "diablo"]
 	var monster_id = MonsterDatabase.pick_monster_for_level(Global.hero_level, exclude_list)
-	var per_side := 15
+	var per_side := 12
 
 	for side in range(4):
 		var edge_positions := _get_edge_line_positions(side, per_side)
 		var wander_dir := _get_edge_wander_direction(side)
 		for pos in edge_positions:
 			_create_monster(monster_id, pos, wander_dir)
+
+func _spawn_horde():
+	var exclude_list = ["reaper", "diablo"]
+	horde_monster_id = MonsterDatabase.pick_monster_for_level(Global.hero_level, exclude_list)
+	horde_active = true
+	horde_elapsed = 0.0
+	horde_spawn_timer = 0.0
+	var extra_duration = floor(max(0, Global.hero_level - 15) / 10) * 1.0
+	horde_duration = 5.0 + extra_duration
+
+func _spawn_horde_batch():
+	var corners = [
+		Vector2(spawn_margin, spawn_margin),
+		Vector2(map_width - spawn_margin, spawn_margin),
+		Vector2(spawn_margin, map_height - spawn_margin),
+		Vector2(map_width - spawn_margin, map_height - spawn_margin)
+	]
+	var center = Vector2(map_width * 0.5, map_height * 0.5)
+	for corner in corners:
+		var dir = (center - corner).normalized()
+		_create_monster(horde_monster_id, corner, dir)
 
 func get_random_edge_position() -> Vector2:
 	var side = randi() % 4
@@ -242,4 +327,5 @@ func _get_edge_wander_direction(side: int) -> Vector2:
 func reset_spawner():
 	active_monsters = 0
 	diablo_monsters.clear()
+	horde_active = false
 	_set_new_timer_targets()

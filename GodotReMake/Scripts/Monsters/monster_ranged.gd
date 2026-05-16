@@ -180,9 +180,9 @@ func _fire_arrow():
 	arrow.name = "monster_arrow"
 	arrow.global_position = global_position  # 从怪物位置发射
 	
-	# 计算发射方向：指向玩家，±15度随机偏移
+	# 计算发射方向：指向玩家，±20度随机偏移
 	var base_dir = global_position.direction_to(target.global_position)
-	var angle_offset = deg_to_rad(randf() * 30.0 - 15.0)  # -15到+15度随机
+	var angle_offset = deg_to_rad(randf_range(-20.0, 20.0))
 	var arrow_dir = base_dir.rotated(angle_offset)
 	
 	# 设置弓箭属性

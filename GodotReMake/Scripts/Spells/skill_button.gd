@@ -95,16 +95,24 @@ func _on_pressed():
 		update_display()
 
 var _tooltip_hovering := false
+var _tooltip_timer: SceneTreeTimer = null
 
 func _on_mouse_entered():
 	_tooltip_hovering = true
-	get_tree().create_timer(0.2).timeout.connect(func():
-		if is_instance_valid(self) and _tooltip_hovering:
-			show_tooltip()
-	)
+	if _tooltip_timer:
+		_tooltip_timer.timeout.disconnect(_on_tooltip_timer_timeout)
+	_tooltip_timer = get_tree().create_timer(0.2)
+	_tooltip_timer.timeout.connect(_on_tooltip_timer_timeout)
+
+func _on_tooltip_timer_timeout():
+	if is_instance_valid(self) and _tooltip_hovering:
+		show_tooltip()
 
 func _on_mouse_exited():
 	_tooltip_hovering = false
+	if _tooltip_timer:
+		_tooltip_timer.timeout.disconnect(_on_tooltip_timer_timeout)
+		_tooltip_timer = null
 	_hide_skill_tooltip()
 
 func show_tooltip():
@@ -136,6 +144,7 @@ func show_tooltip():
 	tooltip.add_theme_font_size_override("normal_font_size", 14)
 	tooltip.add_theme_stylebox_override("normal", _create_tooltip_bg())
 	tooltip.z_index = 100
+	tooltip.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	tooltip.position = get_local_mouse_position() - Vector2(145, -20)
 	add_child(tooltip)
 

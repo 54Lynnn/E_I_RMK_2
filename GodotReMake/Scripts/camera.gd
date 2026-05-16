@@ -3,7 +3,7 @@ extends Camera2D
 @export var follow_speed := 5.0
 @export var map_size := Vector2(1536, 1536)
 @export var shake_intensity := 0.0
-@export var viewport_padding := 100.0
+@export var viewport_padding := 0.0
 
 var target: Node2D = null
 var base_position := Vector2.ZERO

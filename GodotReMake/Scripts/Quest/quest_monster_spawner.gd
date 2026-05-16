@@ -26,7 +26,7 @@ var monster_scenes := {
 # 地图边界（怪物生成区域）
 @export var map_width := 1536.0
 @export var map_height := 1536.0
-@export var spawn_margin := 100.0  # 边缘留出的空白区域
+@export var spawn_margin := 10.0  # 边缘留出的空白区域
 
 # 生成状态
 var allowed_monsters := []
@@ -140,7 +140,11 @@ func spawn_monster_at_edge():
 		quest_main.add_child(monster)
 	else:
 		get_parent().add_child(monster)
-	
+
+	monster.modulate.a = 0.0
+	var fade_tween = monster.create_tween()
+	fade_tween.tween_property(monster, "modulate:a", 1.0, 0.5)
+
 	# 增加生成计数
 	spawned_count += 1
 	
