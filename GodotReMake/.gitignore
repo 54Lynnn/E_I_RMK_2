@@ -5,6 +5,9 @@ build/
 .superpowers/
 ../.superpowers/
 
+# Godot auto-generated import cache
+.godot/
+
 # OS files
 Thumbs.db
 .DS_Store
